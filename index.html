@@ -36,8 +36,25 @@
         }
         .hero h1 { color: white; font-size: 3rem; margin-bottom: 10px; }
         .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px auto; }
-        .btn { background: var(--accent); color: white; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: bold; transition: 0.3s; }
+        
+        /* Button Styles */
+        .btn { 
+            background: var(--accent); 
+            color: white; 
+            padding: 12px 30px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            margin: 10px; /* Added spacing between buttons */
+            display: inline-block;
+        }
         .btn:hover { background: #a38855; }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+        .btn-outline:hover { background: white; color: var(--primary); }
 
         /* Services Section */
         .section { padding: 60px 5%; text-align: center; }
@@ -80,7 +97,10 @@
         <div>
             <h1>Find Your Sanctuary</h1>
             <p>Expert real estate guidance for buyers, sellers, and investors. Let AI assist you in finding the perfect match.</p>
+            
             <a href="#contact" class="btn">Start Your Search</a>
+            
+            <a href="https://www.zillow.com/homes/Yarrow-Point,-WA_rb/" target="_blank" class="btn btn-outline">Search Local Homes</a>
         </div>
     </header>
 
@@ -109,10 +129,11 @@
     <footer id="contact">
         <h3>Contact Us</h3>
         <p>Ready to move? We are here to help.</p>
-        <p>Email: <a href="mailto:YOUR_REAL_EMAIL@gmail.com">YOUR_REAL_EMAIL@gmail.com</a></p>
+        <p>Email: <a href="mailto:info@vdirealty.com">info@vdirealty.com</a></p>
         <p>Phone: (206) 880-0637</p>
         <p>&copy; 2025 VDI Realty. All rights reserved.</p>
-    </footer>    
+    </footer>
+    
     <script src="//code.tidio.co/k4bjnmca0qmwzlyrwirpnn71ksajdiqj.js" async></script>
     </body>
 </html>
