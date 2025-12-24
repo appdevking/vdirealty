@@ -3,137 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VDI Realty | Premium Real Estate Services</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>VDI Realty | Residential, Development, & Relocation</title>
     <style>
-        /* --- CSS STYLES --- */
+        /* --- 1. CORE VARIABLES & RESET --- */
         :root {
-            --primary: #1a252f; /* Dark Navy */
-            --accent: #c0a375;  /* Gold/Beige */
-            --light: #f8f9fa;
+            --primary: #2c3e50;  /* Navy: Professionalism */
+            --accent: #d35400;   /* Burnt Orange: Energy/Construction */
+            --bg-light: #f4f7f6; /* Light Grey: Cleanliness */
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
         }
-        body { margin: 0; font-family: 'Lato', sans-serif; color: #333; line-height: 1.6; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--primary); }
-        
-        /* Navigation */
-        nav { background: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); text-decoration: none; }
-        .nav-links a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 700; }
-        .nav-links a:hover { color: var(--accent); }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        img { max-width: 100%; display: block; }
 
-        /* Hero Section */
+        /* --- 2. NAVIGATION --- */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: auto;
+            padding: 1rem 20px;
+        }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .cta-button {
+            background: var(--accent);
+            color: white !important;
+            padding: 10px 25px;
+            border-radius: 50px;
+            transition: transform 0.2s;
+        }
+        .cta-button:hover { transform: translateY(-2px); }
+
+        /* --- 3. HERO SECTION --- */
         .hero {
-            background: linear-gradient(rgba(26, 37, 47, 0.7), rgba(26, 37, 47, 0.7)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* Placeholder gradient until you add a real photo */
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), 
+                        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
             background-position: center;
-            height: 80vh;
+            height: 85vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             text-align: center;
             color: white;
             padding: 0 20px;
         }
-        .hero h1 { color: white; font-size: 3rem; margin-bottom: 10px; }
-        .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px auto; }
-        
-        /* Button Styles */
-        .btn { 
-            background: var(--accent); 
-            color: white; 
-            padding: 12px 30px; 
-            text-decoration: none; 
-            border-radius: 4px; 
-            font-weight: bold; 
-            transition: 0.3s; 
-            margin: 10px; /* Added spacing between buttons */
-            display: inline-block;
+        .hero h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 1rem; 
+            line-height: 1.2;
         }
-        .btn:hover { background: #a38855; }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid white;
+        .hero p { font-size: 1.25rem; max-width: 600px; margin-bottom: 2rem; opacity: 0.9; }
+
+        /* --- 4. THE THREE BUCKETS (Services) --- */
+        .services-overlap {
+            max-width: 1200px;
+            margin: -80px auto 80px; /* Overlaps with Hero */
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 10;
         }
-        .btn-outline:hover { background: white; color: var(--primary); }
-
-        /* Services Section */
-        .section { padding: 60px 5%; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
-        .card { background: white; padding: 30px; border: 1px solid #eee; border-radius: 8px; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .icon { font-size: 2rem; color: var(--accent); margin-bottom: 15px; display: block; }
-
-        /* Footer */
-        footer { background: var(--primary); color: white; padding: 40px 5%; text-align: center; margin-top: 50px; }
-        footer a { color: var(--accent); text-decoration: none; }
-        
-        /* Chatbot Placeholder Styling */
-        .chatbot-note {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+        .service-card {
             background: white;
-            padding: 15px;
+            padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            font-size: 0.9rem;
-            max-width: 250px;
-            z-index: 1000;
-            border-left: 5px solid var(--accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .service-card:hover { transform: translateY(-10px); }
+        .icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+        .service-card h3 { margin-bottom: 15px; color: var(--primary); }
+        .card-link {
+            color: var(--accent);
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            border-bottom: 2px solid transparent;
+        }
+        .card-link:hover { border-bottom: 2px solid var(--accent); }
+
+        /* --- 5. CONTENT SECTIONS --- */
+        .section { padding: 80px 20px; }
+        .section-light { background: var(--bg-light); }
+        .container { max-width: 1000px; margin: auto; }
+        
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        .section-header .line { width: 60px; height: 4px; background: var(--accent); margin: auto; }
+
+        .split-layout {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .split-text { flex: 1; min-width: 300px; }
+        .split-image { 
+            flex: 1; 
+            min-width: 300px; 
+            background: #ddd; 
+            height: 300px; 
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+        }
+
+        /* --- 6. BUILDER & RELO LISTS --- */
+        ul.benefits-list { list-style: none; padding: 0; }
+        ul.benefits-list li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        ul.benefits-list li::before {
+            content: "✔";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* --- 7. CONTACT FORM --- */
+        .contact-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: auto;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Fixes padding issues */
+            font-family: inherit;
+        }
+        button[type="submit"] {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        button[type="submit"]:hover { background: #34495e; }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #1a252f;
+            color: #7f8c8d;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .footer-links { margin: 20px 0; }
+        .footer-links a { color: white; margin: 0 10px; text-decoration: none; }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* In a real site, you'd add a hamburger menu */
+            .logo { margin: auto; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="#" class="logo">VDI REALTY</a>
-        <div class="nav-links">
-            <a href="#services">Services</a>
-            <a href="#contact">Contact</a>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div>
-            <h1>Find Your Sanctuary</h1>
-            <p>Expert real estate guidance for buyers, sellers, and investors. Let AI assist you in finding the perfect match.</p>
-            
-            <a href="#contact" class="btn">Start Your Search</a>
-            
-            <a href="https://www.zillow.com/homes/Yarrow-Point,-WA_rb/" target="_blank" class="btn btn-outline">Search Local Homes</a>
+    <header>
+        <div class="nav-container">
+            <div class="logo">VDI Realty</div>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#builders">For Builders</a>
+                <a href="#relocation">Relocation</a>
+                <a href="#contact" class="cta-button">Contact</a>
+            </nav>
         </div>
     </header>
 
-    <section id="services" class="section">
-        <h2>Our Services</h2>
-        <p>Combining market expertise with modern technology.</p>
-        <div class="grid">
-            <div class="card">
-                <span class="icon">🏠</span>
-                <h3>Buying</h3>
-                <p>We help you navigate the market to find a home that meets your lifestyle and budget.</p>
+    <section class="hero">
+        <h1>Building Futures.<br>Connecting Communities.</h1>
+        <p>The premier partner for homebuyers, developers, and relocation clients in the Greater Metro Area.</p>
+        <a href="#contact" class="cta-button" style="margin-top: 20px;">Start Your Journey</a>
+    </section>
+
+    <div class="services-overlap">
+        <div class="service-card">
+            <span class="icon">🏡</span>
+            <h3>Buy & Sell</h3>
+            <p>From first-time starters to luxury estates, we guide you through every step of the transaction.</p>
+            <a href="#contact" class="card-link">Search Homes →</a>
+        </div>
+        <div class="service-card">
+            <span class="icon">🏗️</span>
+            <h3>Builders & Developers</h3>
+            <p>Land acquisition, ROI analysis, and pre-sale marketing for your next big project.</p>
+            <a href="#builders" class="card-link">Partner With Us →</a>
+        </div>
+        <div class="service-card">
+            <span class="icon">✈️</span>
+            <h3>Relocation</h3>
+            <p>New to the area? We provide school ratings, commute guides, and neighborhood tours.</p>
+            <a href="#relocation" class="card-link">Get the Guide →</a>
+        </div>
+    </div>
+
+    <section class="section section-light" id="builders">
+        <div class="container">
+            <div class="section-header">
+                <h2>Builder Services</h2>
+                <div class="line"></div>
             </div>
-            <div class="card">
-                <span class="icon">📈</span>
-                <h3>Selling</h3>
-                <p>Maximize your property's value with our strategic marketing and expert negotiation.</p>
-            </div>
-            <div class="card">
-                <span class="icon">🤖</span>
-                <h3>AI Consultation</h3>
-                <p>Use our 24/7 AI chatbot to get instant answers about listings, processes, and market trends.</p>
+            <div class="split-layout">
+                <div class="split-text">
+                    <h3>We Speak Construction</h3>
+                    <p>You don't need a salesperson; you need a partner who understands zoning, permits, and margins.</p>
+                    <ul class="benefits-list">
+                        <li><strong>Land Acquisition:</strong> Access to off-market dirt and tear-downs.</li>
+                        <li><strong>Pro-Forma Analysis:</strong> Accurate resale projections before you break ground.</li>
+                        <li><strong>Staffing:</strong> Licensed agents to man your model homes weekends and holidays.</li>
+                    </ul>
+                </div>
+                <div class="split-image" style="background: #e67e22; color: white;">
+                    
+
+[Image of Construction Site]
+
+                </div>
             </div>
         </div>
     </section>
 
-    <footer id="contact">
-        <h3>Contact Us</h3>
-        <p>Ready to move? We are here to help.</p>
-        <p>Email: <a href="mailto:info@vdirealty.com">info@vdirealty.com</a></p>
-        <p>Phone: (206) 880-0637</p>
-        <p>&copy; 2025 VDI Realty. All rights reserved.</p>
+    <section class="section" id="relocation">
+        <div class="container">
+            <div class="section-header">
+                <h2>Relocation Services</h2>
+                <div class="line"></div>
+            </div>
+            <div class="split-layout">
+                <div class="split-image" style="background: #2980b9; color: white;">
+                     
+                </div>
+                <div class="split-text">
+                    <h3>Moving Made Simple</h3>
+                    <p>Relocating is stressful. We handle the logistics so you can focus on your new job and life.</p>
+                    <ul class="benefits-list">
+                        <li><strong>Virtual Tours:</strong> FaceTime walkthroughs so you can buy from afar.</li>
+                        <li><strong>School District Guides:</strong> Honest data on the best schools for your kids.</li>
+                        <li><strong>Vendor Network:</strong> Our list of trusted movers, painters, and cleaners.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-light" id="about">
+        <div class="container" style="text-align: center;">
+            <h2>Why VDI Realty?</h2>
+            <p style="max-width: 700px; margin: 20px auto;">
+                We combine technical precision with local market expertise. Whether analyzing investment yields for builders or negotiating terms for families, we bring data-driven confidence to every deal.
+            </p>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <div class="section-header">
+            <h2>Let's Talk</h2>
+            <p>Tell us who you are, and we'll tell you how we can help.</p>
+        </div>
+        <div class="contact-box">
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <label>Name</label>
+                <input type="text" name="name" required>
+                
+                <label>Email</label>
+                <input type="email" name="email" required>
+                
+                <label>I am a...</label>
+                <select name="type">
+                    <option value="Buyer/Seller">Home Buyer / Seller</option>
+                    <option value="Builder">Builder / Developer</option>
+                    <option value="Relocation">Relocation Client</option>
+                </select>
+                
+                <label>Message</label>
+                <textarea name="message" rows="5" required></textarea>
+                
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <h3>VDI Realty</h3>
+        <p>123 Main Street, Suite 100, Your City, ST 12345</p>
+        <div class="footer-links">
+            <a href="#">Facebook</a> • <a href="#">LinkedIn</a> • <a href="#">Instagram</a>
+        </div>
+        <p>&copy; 2025 VDI Realty. License #12345678.</p>
     </footer>
-    
-    <script src="//code.tidio.co/k4bjnmca0qmwzlyrwirpnn71ksajdiqj.js" async></script>
-    </body>
+
+</body>
 </html>
