@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VDI Realty | Premier Real Estate Solutions</title>
+    <title>VDI Realty | Residential, Commercial, & Investment</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 2. GLOBAL STYLES --- */
+        /* --- GLOBAL STYLES --- */
         :root {
             --primary: #0F2027;   /* Deep Dark Blue */
             --secondary: #203A43; /* Teal-Grey */
-            --accent: #C5A059;    /* Gold/Brass - Luxury feel */
+            --accent: #C5A059;    /* Gold/Brass */
             --white: #ffffff;
             --light-gray: #f8f9fa;
             --text-main: #333333;
@@ -29,12 +29,9 @@
             line-height: 1.7;
         }
         
-        h1, h2, h3, h4 {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; }
 
-        /* --- 3. HEADER & NAV --- */
+        /* --- HEADER & NAV --- */
         header {
             background: rgba(255, 255, 255, 0.98);
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
@@ -74,16 +71,16 @@
             background: var(--primary);
             color: white !important;
             padding: 10px 25px;
-            border-radius: 2px; /* Square corners look more corporate */
+            border-radius: 2px;
         }
 
-        /* --- 4. HERO SECTION WITH PARALLAX --- */
+        /* --- HERO SECTION --- */
         .hero {
             background: linear-gradient(rgba(15, 32, 39, 0.7), rgba(15, 32, 39, 0.7)),
                         url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Creates the parallax effect */
+            background-attachment: fixed;
             height: 90vh;
             display: flex;
             align-items: center;
@@ -107,21 +104,21 @@
         }
         .hero-btn:hover { background: #b08d4b; }
 
-        /* --- 5. STATS BAR (Social Proof) --- */
+        /* --- CORE VALUES --- */
         .stats-bar {
             background: var(--primary);
             color: white;
-            padding: 40px 0;
+            padding: 50px 0;
             display: flex;
             justify-content: center;
-            gap: 50px;
+            gap: 80px;
             flex-wrap: wrap;
         }
-        .stat-item { text-align: center; min-width: 150px; }
-        .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--accent); display: block; }
-        .stat-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2.5rem; color: var(--accent); display: block; margin-bottom: 10px; }
+        .stat-label { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* --- 6. SERVICES GRID --- */
+        /* --- SERVICES GRID --- */
         .services-section { padding: 100px 20px; background: var(--light-gray); }
         .section-title { text-align: center; margin-bottom: 60px; }
         .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
@@ -146,7 +143,7 @@
         .service-card h3 { margin-bottom: 15px; color: var(--primary); }
         .link-text { color: var(--primary); font-weight: 700; text-decoration: none; display: inline-block; margin-top: 20px; border-bottom: 1px solid var(--accent); }
 
-        /* --- 7. IMMERSIVE CONTENT SECTIONS --- */
+        /* --- SPLIT SECTIONS --- */
         .split-section { display: flex; flex-wrap: wrap; }
         .split-content {
             flex: 1;
@@ -171,7 +168,7 @@
         .check-list li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .check-list i { color: var(--accent); }
 
-        /* --- 8. PROFESSIONAL FORM --- */
+        /* --- CONTACT FORM --- */
         .contact-section { padding: 100px 20px; background: var(--light-gray); text-align: center; }
         .form-container {
             background: white;
@@ -221,6 +218,7 @@
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
             .split-content { padding: 40px 20px; }
+            .stats-bar { gap: 40px; }
         }
     </style>
 </head>
@@ -232,7 +230,7 @@
             <nav class="nav-links">
                 <a href="#services">Services</a>
                 <a href="#builders">For Builders</a>
-                <a href="#relocation">Relocation</a>
+                <a href="#network">Investors & Network</a>
                 <a href="#contact" class="btn-nav">Contact Us</a>
             </nav>
         </div>
@@ -240,24 +238,24 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Precision in Real Estate</h1>
-            <p>Bridging the gap between residential dreams and development realities.</p>
+            <h1>Building Wealth Through Real Estate</h1>
+            <p>Connecting Homeowners, Investors, and Developers to the opportunities that matter.</p>
             <a href="#contact" class="hero-btn">Start a Conversation</a>
         </div>
     </section>
 
     <div class="stats-bar">
         <div class="stat-item">
-            <span class="stat-number">15+</span>
-            <span class="stat-label">Years Experience</span>
+            <span class="stat-number"><i class="fas fa-handshake"></i></span>
+            <span class="stat-label">Well Connected</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number">$120M</span>
-            <span class="stat-label">Volume Sold</span>
+            <span class="stat-number"><i class="fas fa-chart-line"></i></span>
+            <span class="stat-label">Market Insight</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number">300+</span>
-            <span class="stat-label">Families Moved</span>
+            <span class="stat-number"><i class="fas fa-star"></i></span>
+            <span class="stat-label">Expert Guidance</span>
         </div>
     </div>
 
@@ -269,9 +267,9 @@
         <div class="grid-container">
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-home"></i></div>
-                <h3>Residential Sales</h3>
-                <p>Data-driven market analysis for buyers and sellers who demand the best value.</p>
-                <a href="#contact" class="link-text">Find Your Home</a>
+                <h3>Home & Investment</h3>
+                <p>We help homeowners, AirBnB hosts, and investors identify properties that generate long-term value.</p>
+                <a href="#contact" class="link-text">View Opportunities</a>
             </div>
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-city"></i></div>
@@ -314,10 +312,23 @@
         <div class="split-image" style="background-image: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');"></div>
     </section>
 
+    <section class="split-section" id="network">
+        <div class="split-image" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');"></div>
+        <div class="split-content bg-dark">
+            <h2>The VDI Network</h2>
+            <p>We are well-connected so you don't have to be. We refer and introduce our clients to trusted experts to help them grow their business.</p>
+            <ul class="check-list">
+                <li><i class="fas fa-users"></i> <strong>Trusted Referrals:</strong> Direct introductions to vetted contractors, CPAs, and legal experts.</li>
+                <li><i class="fas fa-suitcase"></i> <strong>AirBnB Specialists:</strong> Connect with property managers who understand short-term rentals.</li>
+                <li><i class="fas fa-arrow-up"></i> <strong>Business Growth:</strong> We bring the team you need to scale your real estate portfolio.</li>
+            </ul>
+        </div>
+    </section>
+
     <section class="contact-section" id="contact">
         <div class="section-title">
             <h2>Get In Touch</h2>
-            <p>Tell us about your project or move.</p>
+            <p>Tell us about your project or investment goals.</p>
         </div>
         <div class="form-container">
             <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
@@ -325,8 +336,9 @@
                 <input type="email" name="email" placeholder="Email Address" required>
                 <select name="interest">
                     <option value="" disabled selected>I am interested in...</option>
-                    <option value="Buying/Selling">Buying or Selling a Home</option>
-                    <option value="Development">Land & Development</option>
+                    <option value="Homeowner">Buying or Selling a Home</option>
+                    <option value="Investor">Investing / AirBnB Strategy</option>
+                    <option value="Builder">Builder / Development</option>
                     <option value="Relocation">Relocation Services</option>
                 </select>
                 <textarea name="message" rows="5" placeholder="How can we help?" required></textarea>
