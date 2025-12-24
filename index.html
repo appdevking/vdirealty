@@ -6,7 +6,7 @@
     <title>VDI Realty | Residential, Commercial, & Investment</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- GLOBAL STYLES --- */
@@ -21,15 +21,48 @@
         
         html { scroll-behavior: smooth; }
         
+        * { box-sizing: border-box; }
+        
         body {
             font-family: 'Lato', sans-serif;
             margin: 0;
             padding: 0;
             color: var(--text-main);
             line-height: 1.7;
+            overflow-x: hidden;
         }
         
-        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; }
+        h1, h2, h3, h4 { 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            font-weight: 700;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        .slide-in-left { animation: slideInLeft 0.8s ease-out; }
+        .slide-in-right { animation: slideInRight 0.8s ease-out; }
+        .scale-in { animation: scaleIn 0.6s ease-out; }
 
         /* --- HEADER & NAV --- */
         header {
@@ -50,28 +83,96 @@
         }
         .logo {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--primary);
             letter-spacing: 1px;
             text-transform: uppercase;
             border: 2px solid var(--primary);
-            padding: 5px 10px;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
         }
-        .nav-links { display: flex; gap: 30px; }
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-links a {
             text-decoration: none;
             color: var(--primary);
             font-weight: 600;
             font-size: 0.9rem;
             text-transform: uppercase;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
         }
+        .nav-links a:not(.btn-nav):before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:not(.btn-nav):hover:before { width: 100%; }
         .nav-links a:hover { color: var(--accent); }
         .btn-nav {
             background: var(--primary);
             color: white !important;
-            padding: 10px 25px;
-            border-radius: 2px;
+            padding: 12px 28px;
+            border-radius: 3px;
+            box-shadow: 0 2px 10px rgba(15, 32, 39, 0.2);
+        }
+        .btn-nav:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+        }
+        
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 15px rgba(0,0,0,0.1);
+            padding: 80px 30px 30px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .mobile-menu.active { right: 0; }
+        
+        .mobile-menu a {
+            display: block;
+            padding: 15px 0;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu a:hover {
+            color: var(--accent);
+            padding-left: 10px;
         }
 
         /* --- HERO SECTION --- */
@@ -89,20 +190,46 @@
             color: white;
             padding: 0 20px;
         }
-        .hero-content { max-width: 800px; animation: fadeIn 1.5s ease-out; }
-        .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 20px; line-height: 1.1; }
-        .hero p { font-size: 1.3rem; margin-bottom: 40px; font-weight: 300; }
+        .hero-content { 
+            max-width: 800px; 
+            animation: fadeIn 1.5s ease-out; 
+        }
+        .hero h1 { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            margin-bottom: 20px; 
+            line-height: 1.1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
+        }
+        .hero p { 
+            font-size: 1.3rem; 
+            margin-bottom: 40px; 
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.3s forwards;
+        }
         .hero-btn {
             background: var(--accent);
             color: white;
             text-decoration: none;
-            padding: 15px 40px;
+            padding: 18px 45px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background 0.3s;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border-radius: 3px;
+            box-shadow: 0 4px 20px rgba(197, 160, 89, 0.4);
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.6s forwards;
         }
-        .hero-btn:hover { background: #b08d4b; }
+        .hero-btn:hover { 
+            background: #b08d4b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(197, 160, 89, 0.5);
+        }
 
         /* --- CORE VALUES --- */
         .stats-bar {
@@ -114,9 +241,25 @@
             gap: 80px;
             flex-wrap: wrap;
         }
-        .stat-item { text-align: center; }
-        .stat-number { font-size: 2.5rem; color: var(--accent); display: block; margin-bottom: 10px; }
-        .stat-label { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .stat-item { 
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .stat-item:hover { transform: translateY(-5px); }
+        .stat-number { 
+            font-size: 2.5rem; 
+            color: var(--accent); 
+            display: block; 
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+        .stat-item:hover .stat-number { transform: scale(1.1); }
+        .stat-label { 
+            font-size: 1rem; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+        }
 
         /* --- SERVICES GRID --- */
         .services-section { padding: 100px 20px; background: var(--light-gray); }
@@ -135,10 +278,27 @@
             background: white;
             padding: 40px;
             border-bottom: 3px solid transparent;
-            transition: 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
         }
-        .service-card:hover { transform: translateY(-10px); border-bottom: 3px solid var(--accent); }
+        .service-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            transition: left 0.4s ease;
+        }
+        .service-card:hover { 
+            transform: translateY(-10px); 
+            border-bottom: 3px solid var(--accent);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        .service-card:hover:before { left: 0; }
         .icon-box { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
         .service-card h3 { margin-bottom: 15px; color: var(--primary); }
         .link-text { color: var(--primary); font-weight: 700; text-decoration: none; display: inline-block; margin-top: 20px; border-bottom: 1px solid var(--accent); }
@@ -252,25 +412,69 @@
             width: 100%;
             padding: 15px;
             margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
+            border: 2px solid #e0e0e0;
             background: #f9f9f9;
             font-family: 'Lato', sans-serif;
             box-sizing: border-box;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
         }
-        input:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: var(--accent); 
+            background: white;
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+            transform: translateY(-2px);
+        }
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
         .btn-submit {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 18px 40px;
             font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             cursor: pointer;
             width: 100%;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-submit:hover { background: var(--accent); }
+        .btn-submit:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn-submit:hover:before {
+            width: 300px;
+            height: 300px;
+        }
+        .btn-submit:hover { 
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
 
         /* --- FOOTER --- */
         footer {
@@ -282,12 +486,44 @@
         }
         .footer-logo { font-size: 1.5rem; color: white; margin-bottom: 20px; display: inline-block; font-weight: 700; }
 
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Improved section spacing */
+        section { position: relative; }
+        
+        @media (max-width: 968px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.1rem; }
+        }
+        
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
             .nav-links { display: none; }
-            .split-content { padding: 40px 20px; }
-            .stats-bar { gap: 40px; }
+            .menu-toggle { display: block; }
+            .mobile-menu { display: block; }
+            .split-content { padding: 40px 20px; min-width: 100%; }
+            .split-image { min-width: 100%; min-height: 300px; }
+            .stats-bar { gap: 40px; padding: 40px 20px; }
             .market-grid { grid-template-columns: 1fr; }
+            .grid-container { grid-template-columns: 1fr; }
+            .form-container { padding: 30px 20px; }
+            .section-title h2 { font-size: 2rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .stat-card-grid { grid-template-columns: 1fr; }
+            .logo { font-size: 1.2rem; padding: 6px 12px; }
         }
     </style>
 </head>
@@ -303,8 +539,19 @@
                 <a href="#stats">Market Pulse</a>
                 <a href="#contact" class="btn-nav">Contact Us</a>
             </nav>
+            <button class="menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+    
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="#services" onclick="toggleMobileMenu()">Services</a>
+        <a href="#builders" onclick="toggleMobileMenu()">For Builders</a>
+        <a href="#network" onclick="toggleMobileMenu()">Network</a>
+        <a href="#stats" onclick="toggleMobileMenu()">Market Pulse</a>
+        <a href="#contact" onclick="toggleMobileMenu()">Contact Us</a>
+    </nav>
 
     <section class="hero">
         <div class="hero-content">
@@ -329,7 +576,7 @@
         </div>
     </div>
 
-    <section class="services-section" id="services">
+    <section class="services-section reveal" id="services">
         <div class="section-title">
             <h2>Our Expertise</h2>
             <div class="underline"></div>
@@ -339,24 +586,24 @@
                 <div class="icon-box"><i class="fas fa-home"></i></div>
                 <h3>Home & Investment</h3>
                 <p>We help homeowners, AirBnB hosts, and investors identify properties that generate long-term value.</p>
-                <a href="#contact" class="link-text">View Opportunities</a>
+                <a href="#contact" class="link-text">View Opportunities →</a>
             </div>
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-city"></i></div>
                 <h3>Builder Services</h3>
                 <p>Comprehensive land acquisition and pre-sale marketing for developers.</p>
-                <a href="#builders" class="link-text">Partner With Us</a>
+                <a href="#builders" class="link-text">Partner With Us →</a>
             </div>
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-plane-departure"></i></div>
                 <h3>Corporate Relocation</h3>
                 <p>Concierge-level service for executives moving to the Greater Metro area.</p>
-                <a href="#relocation" class="link-text">Get the Guide</a>
+                <a href="#relocation" class="link-text">Get the Guide →</a>
             </div>
         </div>
     </section>
 
-    <section class="market-section" id="stats">
+    <section class="market-section reveal" id="stats">
         <div class="section-title">
             <h2>Market Pulse</h2>
             <div class="underline"></div>
@@ -492,37 +739,149 @@
         </div>
     </section>
 
-    <section class="contact-section" id="contact">
+    <section class="contact-section reveal" id="contact">
         <div class="section-title">
             <h2>Get In Touch</h2>
-            <p>Tell us about your project or investment goals.</p>
+            <p style="margin-top: 10px; font-size: 1.1rem; color: #666;">Tell us about your project or investment goals.</p>
         </div>
         <div class="form-container">
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="email" name="email" placeholder="Email Address" required>
-                <select name="interest">
-                    <option value="" disabled selected>I am interested in...</option>
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="return validateForm()">
+                <input type="text" name="name" id="name" placeholder="Full Name *" required>
+                <input type="email" name="email" id="email" placeholder="Email Address *" required>
+                <input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)">
+                <select name="interest" id="interest" required>
+                    <option value="" disabled selected>I am interested in... *</option>
                     <option value="Homeowner">Buying or Selling a Home</option>
                     <option value="Investor">Investing / AirBnB Strategy</option>
                     <option value="Builder">Builder / Development</option>
                     <option value="Relocation">Relocation Services</option>
                 </select>
-                <textarea name="message" rows="5" placeholder="How can we help?" required></textarea>
-                <button type="submit" class="btn-submit">Send Message</button>
+                <textarea name="message" id="message" rows="5" placeholder="How can we help? *" required></textarea>
+                <button type="submit" class="btn-submit">
+                    <span>Send Message</span>
+                </button>
             </form>
         </div>
     </section>
 
     <footer>
         <div class="footer-logo">VDI REALTY</div>
-        <p>123 Business Park Blvd, Suite 400<br>Your City, ST 90210</p>
-        <p style="margin-top: 20px;">
-            <a href="#" style="color:#666; margin:0 10px;">Privacy Policy</a> | 
-            <a href="#" style="color:#666; margin:0 10px;">Terms of Service</a>
+        <p style="margin-top: 15px;"><i class="fas fa-map-marker-alt"></i> 123 Business Park Blvd, Suite 400<br>Your City, ST 90210</p>
+        <p style="margin-top: 10px;">
+            <i class="fas fa-phone"></i> (555) 123-4567 | 
+            <i class="fas fa-envelope"></i> info@vdirealty.com
         </p>
-        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <div style="margin: 25px 0; font-size: 1.5rem;">
+            <a href="#" style="color:#888; margin:0 10px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'"><i class="fab fa-linkedin"></i></a>
+            <a href="#" style="color:#888; margin:0 10px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color:#888; margin:0 10px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p style="margin-top: 20px;">
+            <a href="#" style="color:#666; margin:0 10px; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#666'">Privacy Policy</a> | 
+            <a href="#" style="color:#666; margin:0 10px; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#666'">Terms of Service</a>
+        </p>
+        <p style="margin-top: 20px; font-size: 0.85rem;">&copy; 2025 VDI Realty. All Rights Reserved.</p>
     </footer>
+    
+    <script>
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle i');
+            menu.classList.toggle('active');
+            
+            // Toggle icon
+            if (menu.classList.contains('active')) {
+                toggle.classList.remove('fa-bars');
+                toggle.classList.add('fa-times');
+            } else {
+                toggle.classList.remove('fa-times');
+                toggle.classList.add('fa-bars');
+            }
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            
+            if (menu && menu.classList.contains('active')) {
+                if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+                    toggleMobileMenu();
+                }
+            }
+        });
+        
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        
+        window.addEventListener('scroll', reveal);
+        
+        // Initial check for elements already in view
+        document.addEventListener('DOMContentLoaded', function() {
+            reveal();
+            
+            // Smooth scroll for all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Form Validation
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const interest = document.getElementById('interest').value;
+            const message = document.getElementById('message').value.trim();
+            
+            if (!name || !email || !interest || !message) {
+                alert('Please fill in all required fields.');
+                return false;
+            }
+            
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Add loading state to submit button
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.form-container form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const btn = this.querySelector('.btn-submit');
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    btn.disabled = true;
+                });
+            }
+        });
+    </script>
     
     <script src="//code.tidio.co/k4bjnmca0qmwzlyrwirpnn71ksajdiqj.js" async></script>
 
