@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 800" width="1920" height="800">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0F2027;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#203A43;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="800" fill="url(#skyGradient)"/>
+  
+  <!-- Buildings -->
+  <rect x="100" y="400" width="150" height="400" fill="#1a3a4a" opacity="0.8"/>
+  <rect x="270" y="350" width="120" height="450" fill="#1a3a4a" opacity="0.7"/>
+  <rect x="410" y="300" width="180" height="500" fill="#0F2027" opacity="0.9"/>
+  <rect x="610" y="380" width="140" height="420" fill="#1a3a4a" opacity="0.75"/>
+  <rect x="770" y="250" width="200" height="550" fill="#0F2027" opacity="0.85"/>
+  <rect x="990" y="320" width="160" height="480" fill="#1a3a4a" opacity="0.8"/>
+  <rect x="1170" y="280" width="190" height="520" fill="#0F2027" opacity="0.9"/>
+  <rect x="1380" y="360" width="130" height="440" fill="#1a3a4a" opacity="0.75"/>
+  <rect x="1530" y="310" width="170" height="490" fill="#0F2027" opacity="0.8"/>
+  <rect x="1720" y="390" width="140" height="410" fill="#1a3a4a" opacity="0.7"/>
+  
+  <!-- Windows pattern -->
+  <pattern id="windows" x="0" y="0" width="30" height="40" patternUnits="userSpaceOnUse">
+    <rect x="5" y="5" width="8" height="12" fill="#C5A059" opacity="0.3"/>
+    <rect x="17" y="5" width="8" height="12" fill="#C5A059" opacity="0.3"/>
+    <rect x="5" y="22" width="8" height="12" fill="#C5A059" opacity="0.3"/>
+    <rect x="17" y="22" width="8" height="12" fill="#C5A059" opacity="0.3"/>
+  </pattern>
+  
+  <rect x="410" y="300" width="180" height="500" fill="url(#windows)"/>
+  <rect x="770" y="250" width="200" height="550" fill="url(#windows)"/>
+  <rect x="1170" y="280" width="190" height="520" fill="url(#windows)"/>
+</svg>
