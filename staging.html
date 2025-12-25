@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Home Staging Services | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 20px 70px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+        }
+        
+        .stat-highlight {
+            display: inline-block;
+            background: rgba(197, 160, 89, 0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            margin: 5px;
+            font-weight: 600;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .feature-card ul {
+            margin-top: 15px;
+            padding-left: 0;
+            list-style: none;
+        }
+        
+        .feature-card li {
+            color: #666;
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .feature-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 60px 0;
+            align-items: start;
+        }
+        
+        .column h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        /* Pricing */
+        .pricing-section {
+            background: var(--light-gray);
+            padding: 80px 20px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .pricing-card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+        
+        .price-note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            padding: 10px 0;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Before/After Comparison */
+        .comparison-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: var(--light-gray);
+            padding: 50px;
+            border-radius: 10px;
+            margin: 40px 0;
+        }
+        
+        .comparison-item {
+            text-align: center;
+        }
+        
+        .comparison-item h4 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .comparison-stat {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+            margin: 20px 0;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(197,160,89,0.1), rgba(197,160,89,0.05));
+            padding: 40px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            margin: 40px 0;
+        }
+        
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .two-column { grid-template-columns: 1fr; gap: 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .comparison-box { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html#services" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1><i class="fas fa-couch"></i> Professional Home Staging</h1>
+        <p>Transform your property into an irresistible home that sells faster and for more money</p>
+        <div style="margin-top: 30px;">
+            <span class="stat-highlight">Sell 73% Faster</span>
+            <span class="stat-highlight">Up to 20% Higher Sale Price</span>
+            <span class="stat-highlight">Better First Impressions</span>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Why Professional Staging Matters</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: auto;">First impressions are everything. Staging helps buyers envision themselves living in your home, creating emotional connections that drive offers.</p>
+        </div>
+
+        <div class="comparison-box">
+            <div class="comparison-item">
+                <h4>❌ Unstaged Homes</h4>
+                <span class="comparison-stat">90</span>
+                <p>Average Days on Market</p>
+                <ul style="text-align: left; margin-top: 20px; color: #666;">
+                    <li style="margin-bottom: 10px;">Lower perceived value</li>
+                    <li style="margin-bottom: 10px;">Buyers struggle to envision space</li>
+                    <li style="margin-bottom: 10px;">Sell at or below asking price</li>
+                    <li style="margin-bottom: 10px;">Fewer offers, more negotiations</li>
+                </ul>
+            </div>
+            <div class="comparison-item">
+                <h4>✅ Professionally Staged</h4>
+                <span class="comparison-stat">23</span>
+                <p>Average Days on Market</p>
+                <ul style="text-align: left; margin-top: 20px; color: #666;">
+                    <li style="margin-bottom: 10px;">Maximizes visual appeal</li>
+                    <li style="margin-bottom: 10px;">Highlights best features</li>
+                    <li style="margin-bottom: 10px;">Sells 5-20% above asking</li>
+                    <li style="margin-bottom: 10px;">Multiple offers, bidding wars</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3><i class="fas fa-chart-bar" style="color: var(--accent); margin-right: 10px;"></i>Industry Data</h3>
+            <p style="color: #666; line-height: 1.8;">
+                According to the National Association of Realtors, <strong>83% of buyers' agents</strong> say staging makes it easier for buyers to visualize a property as their future home. Staged homes sell for an average of <strong>6-20% more</strong> than unstaged homes and spend <strong>73% less time</strong> on the market.
+            </p>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: var(--light-gray); padding: 80px 20px;">
+        <div class="section-title">
+            <h2>Our Staging Services</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-home"></i>
+                <h3>Occupied Home Staging</h3>
+                <p>Work with your existing furniture and décor to optimize arrangement, declutter, and enhance appeal.</p>
+                <ul>
+                    <li>Furniture rearrangement</li>
+                    <li>Decluttering consultation</li>
+                    <li>Color & lighting optimization</li>
+                    <li>Accessory recommendations</li>
+                    <li>Curb appeal enhancement</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-box-open"></i>
+                <h3>Vacant Home Staging</h3>
+                <p>Full furnishing and décor for empty properties to showcase space and functionality.</p>
+                <ul>
+                    <li>Complete furniture rental</li>
+                    <li>Professional décor & art</li>
+                    <li>Room-by-room design</li>
+                    <li>Kitchen & dining setup</li>
+                    <li>Bedroom & living areas</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-camera"></i>
+                <h3>Luxury Staging</h3>
+                <p>High-end furnishings and designer touches for premium properties.</p>
+                <ul>
+                    <li>Designer furniture selection</li>
+                    <li>Premium accessories & art</li>
+                    <li>Outdoor space staging</li>
+                    <li>Wine cellar/theater setup</li>
+                    <li>Coordinated color palettes</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-paint-roller"></i>
+                <h3>Pre-Sale Consultation</h3>
+                <p>Expert advice on cost-effective improvements before listing.</p>
+                <ul>
+                    <li>Property walkthrough</li>
+                    <li>Repair recommendations</li>
+                    <li>Paint color selection</li>
+                    <li>Upgrade ROI analysis</li>
+                    <li>Priority improvement list</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-store"></i>
+                <h3>Model Home Staging</h3>
+                <p>Showcase new construction and spec homes for builders and developers.</p>
+                <ul>
+                    <li>Floor plan optimization</li>
+                    <li>Target buyer appeal</li>
+                    <li>Long-term rental options</li>
+                    <li>Multiple unit staging</li>
+                    <li>Builder collaboration</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-tree"></i>
+                <h3>Outdoor Staging</h3>
+                <p>Enhance curb appeal and outdoor living spaces.</p>
+                <ul>
+                    <li>Patio furniture setup</li>
+                    <li>Landscaping touches</li>
+                    <li>Outdoor lighting</li>
+                    <li>Entrance enhancement</li>
+                    <li>Seasonal decorating</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section">
+        <div class="section-title">
+            <h2>Staging Packages & Pricing</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: auto;">Flexible options to fit your property and budget</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Consultation Only</h3>
+                <div class="price">$350-$500</div>
+                <p class="price-note">2-3 hour walkthrough</p>
+                <ul class="pricing-features">
+                    <li>Comprehensive property evaluation</li>
+                    <li>Room-by-room recommendations</li>
+                    <li>Decluttering & arrangement guide</li>
+                    <li>Paint & repair suggestions</li>
+                    <li>Written action plan</li>
+                    <li>Follow-up support (30 days)</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Partial Staging</h3>
+                <div class="price">$2,000-$4,000</div>
+                <p class="price-note">Key rooms (living, dining, master)</p>
+                <ul class="pricing-features">
+                    <li>Initial consultation included</li>
+                    <li>Furniture for 3-4 main rooms</li>
+                    <li>Accessories & artwork</li>
+                    <li>Professional installation</li>
+                    <li>3-month rental period</li>
+                    <li>De-staging included</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Full Home Staging</h3>
+                <div class="price">$4,000-$8,000+</div>
+                <p class="price-note">Complete property (varies by size)</p>
+                <ul class="pricing-features">
+                    <li>All rooms fully furnished</li>
+                    <li>High-end furniture & décor</li>
+                    <li>Curb appeal enhancement</li>
+                    <li>Professional photography coordination</li>
+                    <li>3-6 month rental options</li>
+                    <li>Premium support package</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-box" style="max-width: 1200px; margin: 60px auto 0;">
+            <h3>Investment That Pays for Itself</h3>
+            <p style="color: #666; line-height: 1.8;">
+                <strong>Example:</strong> A $500,000 home staged for $3,500 that sells for just 5% more ($525,000) nets you $21,500 more - a <strong>514% ROI</strong> on your staging investment. Plus, selling 67 days faster saves months of mortgage, utilities, and maintenance costs.
+            </p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Our Staging Process</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="two-column">
+            <div class="column">
+                <h3>Step 1: Initial Consultation</h3>
+                <p style="margin-bottom: 20px; color: #666;">We visit your property to assess space, style, and target buyer demographics. We'll discuss your timeline, budget, and goals.</p>
+
+                <h3>Step 2: Custom Staging Plan</h3>
+                <p style="margin-bottom: 20px; color: #666;">Receive a detailed proposal with furniture layouts, color schemes, and a complete inventory of items we'll use.</p>
+
+                <h3>Step 3: Furniture & Décor Selection</h3>
+                <p style="margin-bottom: 20px; color: #666;">Our team curates furniture and accessories that complement your home's architecture and appeal to your target market.</p>
+            </div>
+
+            <div class="column">
+                <h3>Step 4: Professional Installation</h3>
+                <p style="margin-bottom: 20px; color: #666;">Staging crew delivers and arranges all items, typically completed in 1-2 days. We handle every detail so you don't lift a finger.</p>
+
+                <h3>Step 5: Final Styling</h3>
+                <p style="margin-bottom: 20px; color: #666;">Finishing touches including artwork placement, fresh flowers, and adjustments to ensure magazine-worthy presentation.</p>
+
+                <h3>Step 6: Photography & Listing</h3>
+                <p style="margin-bottom: 20px; color: #666;">Coordinate with your photographer for optimal timing. Once sold, we'll de-stage the property and remove all items.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Maximize Your Home's Appeal?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Schedule a free staging consultation and discover how professional staging can transform your property and bottom line.
+        </p>
+        <a href="index.html#contact" class="btn">Schedule Free Consultation</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

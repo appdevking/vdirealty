@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Success Stories | VDI Realty Testimonials</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 20px 70px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        .rating-summary {
+            background: white;
+            max-width: 1200px;
+            margin: -50px auto 0;
+            position: relative;
+            z-index: 10;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .rating-box h3 {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .rating-box p {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .stars {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .content-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        
+        .quote-icon {
+            font-size: 3rem;
+            color: rgba(197, 160, 89, 0.2);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            margin-top: 40px;
+        }
+        
+        .testimonial-text {
+            color: #555;
+            font-style: italic;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 2px solid var(--light-gray);
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .author-info h4 {
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+        
+        .author-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .testimonial-rating {
+            color: var(--accent);
+            margin-top: 5px;
+        }
+        
+        .case-study {
+            background: var(--light-gray);
+            padding: 60px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+        
+        .case-study-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .case-study h3 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .case-study-label {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .case-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .case-challenge, .case-solution {
+            margin-bottom: 30px;
+        }
+        
+        .case-challenge h4, .case-solution h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .case-challenge p, .case-solution p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .video-testimonial {
+            background: var(--primary);
+            color: white;
+            padding: 60px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .video-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 100px;
+            margin: 30px 0;
+        }
+        
+        .video-placeholder i {
+            font-size: 5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .platform-reviews {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .platform-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .platform-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .platform-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .platform-rating {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 15px 0;
+        }
+        
+        .review-count {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .cta-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .cta-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .rating-summary { margin: 20px 20px 0; padding: 30px 20px; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .case-study-header { grid-template-columns: 1fr; }
+            .case-metrics { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Client Success Stories</h1>
+        <p>Real people, real results. See how VDI Realty has helped clients achieve their real estate goals.</p>
+    </section>
+
+    <div class="rating-summary">
+        <div class="rating-box">
+            <div class="stars">★★★★★</div>
+            <h3>4.9/5</h3>
+            <p>Average Rating</p>
+        </div>
+        <div class="rating-box">
+            <h3>500+</h3>
+            <p>Happy Clients</p>
+        </div>
+        <div class="rating-box">
+            <h3>98%</h3>
+            <p>Satisfaction Rate</p>
+        </div>
+        <div class="rating-box">
+            <h3>450+</h3>
+            <p>5-Star Reviews</p>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>What Our Clients Say</h2>
+            <div class="underline"></div>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-content">
+                    <p class="testimonial-text">"Vincent and his team made our first home purchase completely stress-free. They walked us through every step, negotiated an amazing deal, and found us the perfect home in Bellevue within our budget. We couldn't be happier!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JM</div>
+                        <div class="author-info">
+                            <h4>Jessica & Michael Torres</h4>
+                            <p>First-Time Homebuyers</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-content">
+                    <p class="testimonial-text">"After trying to sell our property for 6 months with another agent, VDI Realty sold it in 3 weeks—and for $45,000 more than the previous listing price. Their marketing strategy is phenomenal."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RK</div>
+                        <div class="author-info">
+                            <h4>Robert Kim</h4>
+                            <p>Home Seller - Seattle</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-content">
+                    <p class="testimonial-text">"Marcus helped us build a portfolio of 5 investment properties over 2 years. His market analysis and negotiation skills have been instrumental in our financial success. True professional."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DL</div>
+                        <div class="author-info">
+                            <h4>David & Lisa Chang</h4>
+                            <p>Real Estate Investors</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-content">
+                    <p class="testimonial-text">"Jennifer made our relocation from Chicago to Seattle seamless. She handled everything—from finding the perfect neighborhood with great schools to coordinating the entire move. Absolute lifesaver!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AP</div>
+                        <div class="author-info">
+                            <h4>Amanda Peterson</h4>
+                            <p>Corporate Relocation</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-content">
+                    <p class="testimonial-text">"Sarah's property management services are outstanding. Our rental properties are always occupied, well-maintained, and generating consistent income. She handles everything so we don't have to worry."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TW</div>
+                        <div class="author-info">
+                            <h4>Thomas Washington</h4>
+                            <p>Property Owner</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <div class="testimonial-content">
+                    <p class="testimonial-text">"VDI Realty has been our partner for multiple commercial acquisitions. Their expertise in investment analysis and market trends has helped us make smart, profitable decisions every time."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">BC</div>
+                        <div class="author-info">
+                            <h4>Brian Chen</h4>
+                            <p>Commercial Investor</p>
+                            <div class="testimonial-rating">★★★★★</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: var(--light-gray); padding: 100px 20px;">
+        <div class="section-title">
+            <h2>Case Studies</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: 20px auto 0;">Real results from real transactions</p>
+        </div>
+        
+        <div class="case-study">
+            <div class="case-study-label">First-Time Homebuyer Success</div>
+            <h3>From Apartment to Dream Home in 45 Days</h3>
+            
+            <div class="case-challenge">
+                <h4><i class="fas fa-exclamation-circle" style="color: var(--accent);"></i> The Challenge</h4>
+                <p>Young couple with limited real estate knowledge, tight budget of $450K, competing in a hot market with multiple offers on every property. They had been outbid 4 times before contacting VDI Realty.</p>
+            </div>
+            
+            <div class="case-solution">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Our Solution</h4>
+                <p>We provided comprehensive buyer education, strategic pre-approval positioning with our lending partners, identified off-market opportunities, and crafted a competitive offer with favorable contingencies. Our relationship with the listing agent and creative offer structure won the deal despite not being the highest offer.</p>
+            </div>
+            
+            <div class="case-metrics">
+                <div class="metric">
+                    <span class="metric-value">$438K</span>
+                    <p class="metric-label">Purchase Price</p>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">45</span>
+                    <p class="metric-label">Days to Close</p>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">$12K</span>
+                    <p class="metric-label">Below Budget</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="case-study">
+            <div class="case-study-label">Investment Portfolio Growth</div>
+            <h3>Building a $2.5M Multi-Family Portfolio</h3>
+            
+            <div class="case-challenge">
+                <h4><i class="fas fa-exclamation-circle" style="color: var(--accent);"></i> The Challenge</h4>
+                <p>Investor wanted to transition from stocks to real estate but had no experience in property investing. Goal was to build passive income generating portfolio within 3 years with minimal active management.</p>
+            </div>
+            
+            <div class="case-solution">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Our Solution</h4>
+                <p>Developed comprehensive 3-year acquisition strategy, identified undervalued multi-family properties in emerging neighborhoods, structured 1031 exchanges for tax efficiency, connected client with property management division for hands-off operation. Acquired 3 buildings (18 total units) over 30 months.</p>
+            </div>
+            
+            <div class="case-metrics">
+                <div class="metric">
+                    <span class="metric-value">$2.5M</span>
+                    <p class="metric-label">Portfolio Value</p>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">$9.8K</span>
+                    <p class="metric-label">Monthly Cash Flow</p>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">8.2%</span>
+                    <p class="metric-label">Cap Rate</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="case-study">
+            <div class="case-study-label">Luxury Home Sale</div>
+            <h3>Record-Breaking Sale in Medina</h3>
+            
+            <div class="case-challenge">
+                <h4><i class="fas fa-exclamation-circle" style="color: var(--accent);"></i> The Challenge</h4>
+                <p>$3.2M luxury waterfront property had been on the market for 9 months with another brokerage, only 2 showings, no offers. Sellers were frustrated and considering major price reduction.</p>
+            </div>
+            
+            <div class="case-solution">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Our Solution</h4>
+                <p>Complete rebrand with professional staging, 3D virtual tours, drone cinematography, targeted digital marketing to high-net-worth individuals, exclusive broker events, international buyer network outreach. Generated 47 showings in first month, received multiple offers, negotiated $175K over asking price.</p>
+            </div>
+            
+            <div class="case-metrics">
+                <div class="metric">
+                    <span class="metric-value">$3.375M</span>
+                    <p class="metric-label">Final Sale Price</p>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">28</span>
+                    <p class="metric-label">Days on Market</p>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">105%</span>
+                    <p class="metric-label">of List Price</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="video-testimonial">
+            <h2 style="color: white; margin-bottom: 20px;">Video Testimonials</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 30px;">Hear directly from our clients about their experience</p>
+            
+            <div class="video-placeholder">
+                <i class="fas fa-play-circle"></i>
+                <p style="font-size: 1.1rem; margin-top: 20px;">Coming Soon: Client Video Testimonials</p>
+                <p style="font-size: 0.95rem; opacity: 0.8; margin-top: 10px;">Schedule a consultation to see our full video library</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: var(--light-gray); padding: 100px 20px;">
+        <div class="section-title">
+            <h2>Reviews Across Platforms</h2>
+            <div class="underline"></div>
+        </div>
+        
+        <div class="platform-reviews">
+            <div class="platform-card">
+                <i class="fab fa-google"></i>
+                <h4>Google Reviews</h4>
+                <div class="platform-rating">4.9/5</div>
+                <div class="stars">★★★★★</div>
+                <p class="review-count">Based on 287 reviews</p>
+                <a href="#" class="cta-btn">Read Reviews</a>
+            </div>
+            
+            <div class="platform-card">
+                <i class="fab fa-yelp"></i>
+                <h4>Yelp</h4>
+                <div class="platform-rating">4.8/5</div>
+                <div class="stars">★★★★★</div>
+                <p class="review-count">Based on 143 reviews</p>
+                <a href="#" class="cta-btn">Read Reviews</a>
+            </div>
+            
+            <div class="platform-card">
+                <i class="fas fa-home"></i>
+                <h4>Zillow</h4>
+                <div class="platform-rating">5.0/5</div>
+                <div class="stars">★★★★★</div>
+                <p class="review-count">Based on 98 reviews</p>
+                <a href="#" class="cta-btn">Read Reviews</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Write Your Success Story?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Join hundreds of satisfied clients who've achieved their real estate goals with VDI Realty
+        </p>
+        <a href="index.html#contact" class="btn">Get Started Today</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

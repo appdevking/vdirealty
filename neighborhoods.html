@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seattle Neighborhood Explorer | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover { background: var(--primary); color: white; }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 20px 70px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.3rem; max-width: 800px; margin: 0 auto; opacity: 0.95; }
+        
+        .content-section { padding: 80px 20px; max-width: 1200px; margin: auto; }
+        
+        .neighborhoods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .neighborhood-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .neighborhood-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .neighborhood-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 30px;
+            color: white;
+        }
+        
+        .neighborhood-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .neighborhood-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            font-size: 0.9rem;
+        }
+        
+        .stat strong {
+            color: var(--accent);
+            display: block;
+            font-size: 1.3rem;
+        }
+        
+        .neighborhood-content {
+            padding: 30px;
+        }
+        
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .features li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .ratings {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            padding-top: 20px;
+            border-top: 2px solid var(--light-gray);
+        }
+        
+        .rating {
+            text-align: center;
+        }
+        
+        .rating-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .rating-value {
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+        
+        .rating-label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .neighborhoods-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Neighborhood Explorer</h1>
+        <p>Discover the perfect Seattle-area neighborhood for your lifestyle</p>
+    </section>
+
+    <section class="content-section">
+        <div class="neighborhoods-grid">
+            <div class="neighborhood-card">
+                <div class="neighborhood-header">
+                    <h3>Downtown Seattle</h3>
+                    <div class="neighborhood-stats">
+                        <div class="stat"><strong>$750K</strong> Median Home</div>
+                        <div class="stat"><strong>45K</strong> Population</div>
+                    </div>
+                </div>
+                <div class="neighborhood-content">
+                    <p>Urban epicenter with high-rise condos, world-class dining, and walkable lifestyle.</p>
+                    <ul class="features">
+                        <li>Pike Place Market</li>
+                        <li>Waterfront parks</li>
+                        <li>Tech hub proximity</li>
+                        <li>Public transit access</li>
+                    </ul>
+                    <div class="ratings">
+                        <div class="rating">
+                            <div class="rating-icon">🏫</div>
+                            <span class="rating-value">7/10</span>
+                            <span class="rating-label">Schools</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚶</div>
+                            <span class="rating-value">95</span>
+                            <span class="rating-label">Walk Score</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚗</div>
+                            <span class="rating-value">20min</span>
+                            <span class="rating-label">Commute</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="neighborhood-card">
+                <div class="neighborhood-header">
+                    <h3>Bellevue</h3>
+                    <div class="neighborhood-stats">
+                        <div class="stat"><strong>$1.2M</strong> Median Home</div>
+                        <div class="stat"><strong>150K</strong> Population</div>
+                    </div>
+                </div>
+                <div class="neighborhood-content">
+                    <p>Eastside hub with top-rated schools, luxury shopping, and tech employment.</p>
+                    <ul class="features">
+                        <li>Bellevue School District (9/10)</li>
+                        <li>Microsoft/Amazon nearby</li>
+                        <li>Bellevue Square Mall</li>
+                        <li>Downtown Park</li>
+                    </ul>
+                    <div class="ratings">
+                        <div class="rating">
+                            <div class="rating-icon">🏫</div>
+                            <span class="rating-value">9/10</span>
+                            <span class="rating-label">Schools</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚶</div>
+                            <span class="rating-value">72</span>
+                            <span class="rating-label">Walk Score</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚗</div>
+                            <span class="rating-value">25min</span>
+                            <span class="rating-label">Commute</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="neighborhood-card">
+                <div class="neighborhood-header">
+                    <h3>Redmond</h3>
+                    <div class="neighborhood-stats">
+                        <div class="stat"><strong>$980K</strong> Median Home</div>
+                        <div class="stat"><strong>73K</strong> Population</div>
+                    </div>
+                </div>
+                <div class="neighborhood-content">
+                    <p>Tech town with suburban feel, excellent parks, and strong community vibe.</p>
+                    <ul class="features">
+                        <li>Microsoft HQ location</li>
+                        <li>Marymoor Park trails</li>
+                        <li>Lake Sammamish access</li>
+                        <li>Family-friendly</li>
+                    </ul>
+                    <div class="ratings">
+                        <div class="rating">
+                            <div class="rating-icon">🏫</div>
+                            <span class="rating-value">8/10</span>
+                            <span class="rating-label">Schools</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚶</div>
+                            <span class="rating-value">48</span>
+                            <span class="rating-label">Walk Score</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚗</div>
+                            <span class="rating-value">30min</span>
+                            <span class="rating-label">Commute</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="neighborhood-card">
+                <div class="neighborhood-header">
+                    <h3>Kirkland</h3>
+                    <div class="neighborhood-stats">
+                        <div class="stat"><strong>$1.1M</strong> Median Home</div>
+                        <div class="stat"><strong>92K</strong> Population</div>
+                    </div>
+                </div>
+                <div class="neighborhood-content">
+                    <p>Waterfront charm with vibrant downtown, beaches, and outdoor recreation.</p>
+                    <ul class="features">
+                        <li>Lake Washington beaches</li>
+                        <li>Marina and parks</li>
+                        <li>Boutique shopping</li>
+                        <li>Tech industry jobs</li>
+                    </ul>
+                    <div class="ratings">
+                        <div class="rating">
+                            <div class="rating-icon">🏫</div>
+                            <span class="rating-value">9/10</span>
+                            <span class="rating-label">Schools</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚶</div>
+                            <span class="rating-value">58</span>
+                            <span class="rating-label">Walk Score</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚗</div>
+                            <span class="rating-value">28min</span>
+                            <span class="rating-label">Commute</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="neighborhood-card">
+                <div class="neighborhood-header">
+                    <h3>Issaquah</h3>
+                    <div class="neighborhood-stats">
+                        <div class="stat"><strong>$900K</strong> Median Home</div>
+                        <div class="stat"><strong>40K</strong> Population</div>
+                    </div>
+                </div>
+                <div class="neighborhood-content">
+                    <p>Mountain-adjacent community with hiking trails, top schools, and Costco HQ.</p>
+                    <ul class="features">
+                        <li>Tiger Mountain trails</li>
+                        <li>Issaquah School District (8/10)</li>
+                        <li>Outdoor lifestyle</li>
+                        <li>Growing downtown</li>
+                    </ul>
+                    <div class="ratings">
+                        <div class="rating">
+                            <div class="rating-icon">🏫</div>
+                            <span class="rating-value">8/10</span>
+                            <span class="rating-label">Schools</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚶</div>
+                            <span class="rating-value">42</span>
+                            <span class="rating-label">Walk Score</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚗</div>
+                            <span class="rating-value">35min</span>
+                            <span class="rating-label">Commute</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="neighborhood-card">
+                <div class="neighborhood-header">
+                    <h3>Mercer Island</h3>
+                    <div class="neighborhood-stats">
+                        <div class="stat"><strong>$1.8M</strong> Median Home</div>
+                        <div class="stat"><strong>25K</strong> Population</div>
+                    </div>
+                </div>
+                <div class="neighborhood-content">
+                    <p>Prestigious island community with luxury homes, excellent schools, and privacy.</p>
+                    <ul class="features">
+                        <li>Top-rated schools (9/10)</li>
+                        <li>Lake Washington views</li>
+                        <li>Quiet, safe neighborhood</li>
+                        <li>Quick Seattle access</li>
+                    </ul>
+                    <div class="ratings">
+                        <div class="rating">
+                            <div class="rating-icon">🏫</div>
+                            <span class="rating-value">9/10</span>
+                            <span class="rating-label">Schools</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚶</div>
+                            <span class="rating-value">35</span>
+                            <span class="rating-label">Walk Score</span>
+                        </div>
+                        <div class="rating">
+                            <div class="rating-icon">🚗</div>
+                            <span class="rating-value">20min</span>
+                            <span class="rating-label">Commute</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

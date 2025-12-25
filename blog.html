@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Blog & Resources | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 20px 70px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        .filter-bar {
+            background: white;
+            max-width: 1200px;
+            margin: -40px auto 0;
+            position: relative;
+            z-index: 10;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 12px 25px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .content-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .featured-post {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            margin-bottom: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        
+        .featured-image {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .featured-image i {
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .featured-content {
+            padding: 60px;
+        }
+        
+        .post-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .featured-content h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .post-meta {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .post-meta i {
+            margin-right: 5px;
+            color: var(--accent);
+        }
+        
+        .post-excerpt {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .read-more:hover {
+            color: var(--primary);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .blog-image {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .blog-image i {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .blog-content {
+            padding: 30px;
+        }
+        
+        .blog-content h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+        
+        .newsletter-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .newsletter-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .newsletter-form {
+            max-width: 600px;
+            margin: 40px auto 0;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-btn {
+            padding: 15px 40px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .newsletter-btn:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .featured-post { grid-template-columns: 1fr; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .newsletter-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Real Estate Blog & Resources</h1>
+        <p>Expert insights, market trends, and practical tips for buyers, sellers, and investors</p>
+    </section>
+
+    <div class="filter-bar">
+        <button class="filter-btn active">All Posts</button>
+        <button class="filter-btn">Market Updates</button>
+        <button class="filter-btn">Buying Tips</button>
+        <button class="filter-btn">Selling Advice</button>
+        <button class="filter-btn">Investment Strategies</button>
+        <button class="filter-btn">Neighborhoods</button>
+    </div>
+
+    <section class="content-section">
+        <div class="featured-post">
+            <div class="featured-image">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="featured-content">
+                <span class="post-tag">Market Update</span>
+                <h2>Seattle Real Estate Market Outlook 2025: What Buyers & Sellers Need to Know</h2>
+                <div class="post-meta">
+                    <i class="fas fa-calendar"></i> January 15, 2025 | 
+                    <i class="fas fa-user"></i> Vincent Di | 
+                    <i class="fas fa-clock"></i> 8 min read
+                </div>
+                <p class="post-excerpt">
+                    The Seattle metro area real estate market is entering 2025 with renewed optimism. Inventory levels are stabilizing, interest rates are showing signs of moderation, and buyer demand remains strong across key submarkets. Here's what you need to know to make informed decisions in the year ahead...
+                </p>
+                <a href="#" class="read-more">Read Full Article <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-key"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Buying Tips</span>
+                    <h3>7 Steps to Get Pre-Approved for a Mortgage (And Why It Matters)</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> January 12, 2025
+                    </div>
+                    <p class="post-excerpt">
+                        In today's competitive market, a pre-approval letter isn't just helpful—it's essential. Learn the exact steps to get pre-approved and how it gives you a massive advantage when making offers.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Selling Advice</span>
+                    <h3>Pricing Your Home to Sell: Data-Driven Strategies That Work</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> January 10, 2025
+                    </div>
+                    <p class="post-excerpt">
+                        Price too high and your home sits; price too low and you leave money on the table. Our pricing methodology combines comparative market analysis, market timing, and buyer psychology for optimal results.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Investment</span>
+                    <h3>Seattle Multi-Family Investing: Cap Rates, Cash Flow & Market Trends</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> January 8, 2025
+                    </div>
+                    <p class="post-excerpt">
+                        Multi-family properties in Seattle continue to offer strong returns for savvy investors. We break down current cap rates by submarket, cash flow expectations, and where to find the best opportunities in 2025.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Neighborhoods</span>
+                    <h3>Bellevue vs. Redmond: Which Eastside City is Right for You?</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> January 5, 2025
+                    </div>
+                    <p class="post-excerpt">
+                        Both cities offer excellent schools, tech jobs, and quality of life—but they have distinct personalities. We compare home prices, amenities, commute times, and lifestyle factors to help you choose.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Buying Tips</span>
+                    <h3>First-Time Homebuyer Programs in Washington State You Should Know About</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> January 3, 2025
+                    </div>
+                    <p class="post-excerpt">
+                        Down payment assistance, tax credits, and special financing programs can make homeownership more accessible. Here's a comprehensive guide to programs available to Washington first-time buyers.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-paint-roller"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Selling Advice</span>
+                    <h3>Home Staging ROI: Which Upgrades Pay Off (And Which Don't)</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> December 29, 2024
+                    </div>
+                    <p class="post-excerpt">
+                        Not all home improvements deliver equal returns. Based on 200+ transactions, we reveal which staging and upgrade investments yield the highest ROI when selling your Seattle-area home.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Market Update</span>
+                    <h3>Interest Rate Forecast 2025: What Experts Are Predicting</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> December 26, 2024
+                    </div>
+                    <p class="post-excerpt">
+                        Mortgage rates impact affordability more than almost any other factor. We analyze Federal Reserve signals, economic indicators, and expert forecasts to project where rates are heading this year.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Investment</span>
+                    <h3>1031 Exchange Explained: Deferring Taxes on Investment Property Sales</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> December 22, 2024
+                    </div>
+                    <p class="post-excerpt">
+                        The 1031 exchange is one of the most powerful wealth-building tools for real estate investors. Learn the rules, timelines, and strategies to defer capital gains taxes legally.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="blog-card">
+                <div class="blog-image">
+                    <i class="fas fa-school"></i>
+                </div>
+                <div class="blog-content">
+                    <span class="post-tag">Neighborhoods</span>
+                    <h3>Top-Rated School Districts on the Eastside: Where to Buy for Education</h3>
+                    <div class="post-meta">
+                        <i class="fas fa-calendar"></i> December 19, 2024
+                    </div>
+                    <p class="post-excerpt">
+                        For families, school quality is often the #1 factor in choosing a neighborhood. We rank Eastside school districts by test scores, programs, and parent satisfaction—plus typical home prices in each.
+                    </p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-section">
+        <h2>Get Market Updates Delivered to Your Inbox</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 20px;">
+            Subscribe to our newsletter for weekly market insights, new listings, and expert tips
+        </p>
+        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+            <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+        </form>
+        <p style="font-size: 0.9rem; margin-top: 20px; opacity: 0.8;">
+            We respect your privacy. Unsubscribe anytime.
+        </p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+    <script>
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // In a real implementation, this would filter the blog posts
+                console.log('Filter active:', this.textContent);
+            });
+        });
+        
+        // Newsletter subscription
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input').value;
+            alert(`Thank you for subscribing! We've added ${email} to our newsletter list.`);
+            event.target.reset();
+        }
+    </script>
+
+</body>
+</html>

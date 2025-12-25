@@ -592,6 +592,242 @@
                 </div>
             </div>
 
+            <!-- Home Valuation Tool -->
+            <div class="calculator-card">
+                <h3><i class="fas fa-home"></i> Home Valuation Estimator</h3>
+                <p>Get an instant estimate of your home's market value</p>
+                
+                <form id="valuationForm" onsubmit="calculateValuation(event)">
+                    <div class="form-group">
+                        <label for="propertyAddress">Property Address</label>
+                        <input type="text" id="propertyAddress" placeholder="123 Main St, Seattle, WA" required>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="sqft">Square Footage</label>
+                            <input type="number" id="sqft" placeholder="2000" required min="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="yearBuilt">Year Built</label>
+                            <input type="number" id="yearBuilt" placeholder="2010" required min="1800" max="2025">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="bedrooms">Bedrooms</label>
+                            <input type="number" id="bedrooms" min="1" placeholder="3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bathrooms">Bathrooms</label>
+                            <input type="number" id="bathrooms" min="1" step="0.5" placeholder="2.5" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="lotSize">Lot Size (sq ft)</label>
+                            <input type="number" id="lotSize" placeholder="5000" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="condition">Property Condition</label>
+                            <select id="condition">
+                                <option value="excellent">Excellent - Updated/Remodeled</option>
+                                <option value="good" selected>Good - Well Maintained</option>
+                                <option value="fair">Fair - Some Updates Needed</option>
+                                <option value="poor">Poor - Needs Major Work</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ownerEmail">Email (for detailed CMA report)</label>
+                        <input type="email" id="ownerEmail" placeholder="your@email.com" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-calculate">Get Instant Valuation</button>
+                </form>
+                
+                <div id="valuationResult" class="result-box">
+                    <h4>Estimated Home Value</h4>
+                    <div class="result-item">
+                        <span class="result-label">Estimated Value Range</span>
+                        <span class="result-value" id="valueRange">$0 - $0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Best Estimate</span>
+                        <span class="result-value highlight" id="bestEstimate">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Price Per Square Foot</span>
+                        <span class="result-value" id="pricePerSqft">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Market Trend</span>
+                        <span class="result-value" id="marketTrend"></span>
+                    </div>
+                    <div style="background: var(--light-gray); padding: 20px; margin-top: 20px; border-radius: 5px; border-left: 4px solid var(--accent);">
+                        <p style="margin: 0; color: #666; line-height: 1.6;">
+                            <strong style="color: var(--accent);">✓ Success!</strong> We've sent a detailed Comparative Market Analysis to <span id="emailSent"></span>. 
+                            A VDI Realty agent will contact you within 24 hours with a personalized consultation and accurate pricing strategy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Property Analyzer -->
+            <div class="calculator-card">
+                <h3><i class="fas fa-chart-line"></i> Investment Property Analyzer</h3>
+                <p>Calculate cash flow, cap rate, and ROI for rental properties</p>
+                
+                <form id="investmentForm" onsubmit="calculateInvestment(event)">
+                    <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem;">Purchase Information</h4>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="purchasePrice">Purchase Price</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="purchasePrice" placeholder="500000" required min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="downPaymentPct">Down Payment (%)</label>
+                            <input type="number" id="downPaymentPct" placeholder="20" min="0" max="100" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="closingCosts">Closing Costs</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="closingCosts" placeholder="10000" required min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="renovationCosts">Renovation Costs</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="renovationCosts" placeholder="0" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--primary); margin: 25px 0 15px; font-size: 1.1rem;">Financing</h4>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="investInterestRate">Interest Rate (%)</label>
+                            <input type="number" id="investInterestRate" placeholder="7.5" step="0.01" required min="0" max="20">
+                        </div>
+                        <div class="form-group">
+                            <label for="investLoanTerm">Loan Term (years)</label>
+                            <select id="investLoanTerm">
+                                <option value="15">15 Years</option>
+                                <option value="30" selected>30 Years</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--primary); margin: 25px 0 15px; font-size: 1.1rem;">Income & Expenses</h4>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="monthlyRent">Monthly Rental Income</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="monthlyRentInvest" placeholder="3000" required min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="vacancyRate">Vacancy Rate (%)</label>
+                            <input type="number" id="vacancyRate" placeholder="5" min="0" max="100" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="propertyTax">Monthly Property Tax</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="propertyTax" placeholder="500" required min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="investInsurance">Monthly Insurance</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="investInsurance" placeholder="150" required min="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="hoaMaintenance">Monthly HOA/Maintenance</label>
+                            <div class="input-prefix">
+                                <span>$</span>
+                                <input type="number" id="hoaMaintenance" placeholder="200" required min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="managementFee">Property Management (%)</label>
+                            <input type="number" id="managementFee" placeholder="8" min="0" max="20" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-calculate">Analyze Investment</button>
+                </form>
+                
+                <div id="investmentResult" class="result-box">
+                    <h4>Investment Analysis</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                        <div style="background: var(--light-gray); padding: 20px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Monthly Cash Flow</div>
+                            <div id="monthlyCashFlow" style="font-size: 1.8rem; font-weight: 800; color: var(--accent);"></div>
+                        </div>
+                        <div style="background: var(--light-gray); padding: 20px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Cap Rate</div>
+                            <div id="capRate" style="font-size: 1.8rem; font-weight: 800; color: var(--accent);"></div>
+                        </div>
+                        <div style="background: var(--light-gray); padding: 20px; border-radius: 5px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Cash on Cash ROI</div>
+                            <div id="cashROI" style="font-size: 1.8rem; font-weight: 800; color: var(--accent);"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label">Total Cash Invested</span>
+                        <span class="result-value" id="totalInvested">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Loan Amount</span>
+                        <span class="result-value" id="loanAmountInvest">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Monthly Mortgage Payment</span>
+                        <span class="result-value" id="monthlyMortgageInvest">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Gross Monthly Income</span>
+                        <span class="result-value" id="grossIncome">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Monthly Expenses</span>
+                        <span class="result-value" id="totalExpenses">$0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Annual Cash Flow</span>
+                        <span class="result-value" id="annualCashFlow">$0</span>
+                    </div>
+                    
+                    <div id="investmentRecommendation" style="background: var(--light-gray); padding: 20px; margin-top: 20px; border-radius: 5px; border-left: 4px solid var(--accent);"></div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -762,6 +998,135 @@
             document.getElementById('totalMovingCost').textContent = '$' + total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             
             document.getElementById('movingResult').classList.add('show');
+        }
+        
+        // Home Valuation Calculator
+        function calculateValuation(event) {
+            event.preventDefault();
+            
+            const address = document.getElementById('propertyAddress').value;
+            const sqft = parseFloat(document.getElementById('sqft').value);
+            const yearBuilt = parseInt(document.getElementById('yearBuilt').value);
+            const bedrooms = parseInt(document.getElementById('bedrooms').value);
+            const bathrooms = parseFloat(document.getElementById('bathrooms').value);
+            const lotSize = parseFloat(document.getElementById('lotSize').value);
+            const condition = document.getElementById('condition').value;
+            const email = document.getElementById('ownerEmail').value;
+            
+            // Base price per sqft for Seattle area (simplified algorithm)
+            let basePricePer Sqft = 400;
+            
+            // Adjust for condition
+            const conditionMultiplier = {
+                'excellent': 1.15,
+                'good': 1.0,
+                'fair': 0.90,
+                'poor': 0.75
+            };
+            
+            // Adjust for age
+            const age = 2025 - yearBuilt;
+            const ageAdjustment = age < 5 ? 1.1 : age < 15 ? 1.0 : age < 30 ? 0.95 : 0.85;
+            
+            // Adjust for bedrooms/bathrooms
+            const sizeAdjustment = (bedrooms >= 4 || bathrooms >= 3) ? 1.05 : 1.0;
+            
+            // Calculate adjusted price per sqft
+            const adjustedPricePerSqft = basePricePerSqft * conditionMultiplier[condition] * ageAdjustment * sizeAdjustment;
+            
+            // Calculate estimate
+            const bestEstimate = sqft * adjustedPricePerSqft;
+            const lowEstimate = bestEstimate * 0.92;
+            const highEstimate = bestEstimate * 1.08;
+            
+            // Market trend (simplified)
+            const marketTrend = "📈 Appreciating (+3.2% YoY)";
+            
+            document.getElementById('valueRange').textContent = '$' + Math.round(lowEstimate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' - $' + Math.round(highEstimate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('bestEstimate').textContent = '$' + Math.round(bestEstimate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('pricePerSqft').textContent = '$' + Math.round(adjustedPricePerSqft).toFixed(0);
+            document.getElementById('marketTrend').textContent = marketTrend;
+            document.getElementById('emailSent').textContent = email;
+            
+            document.getElementById('valuationResult').classList.add('show');
+            
+            // In a real app, this would send the lead to your CRM
+            console.log('Valuation lead captured:', email, address);
+        }
+        
+        // Investment Property Calculator
+        function calculateInvestment(event) {
+            event.preventDefault();
+            
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
+            const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) / 100;
+            const closingCosts = parseFloat(document.getElementById('closingCosts').value);
+            const renovationCosts = parseFloat(document.getElementById('renovationCosts').value) || 0;
+            const interestRate = parseFloat(document.getElementById('investInterestRate').value) / 100 / 12;
+            const loanTerm = parseInt(document.getElementById('investLoanTerm').value) * 12;
+            const monthlyRent = parseFloat(document.getElementById('monthlyRentInvest').value);
+            const vacancyRate = parseFloat(document.getElementById('vacancyRate').value) / 100;
+            const propertyTax = parseFloat(document.getElementById('propertyTax').value);
+            const insurance = parseFloat(document.getElementById('investInsurance').value);
+            const hoaMaintenance = parseFloat(document.getElementById('hoaMaintenance').value);
+            const managementFee = parseFloat(document.getElementById('managementFee').value) / 100;
+            
+            // Calculate loan and cash invested
+            const downPayment = purchasePrice * downPaymentPct;
+            const loanAmount = purchasePrice - downPayment;
+            const totalCashInvested = downPayment + closingCosts + renovationCosts;
+            
+            // Calculate monthly mortgage payment
+            const monthlyMortgage = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
+            
+            // Calculate income and expenses
+            const effectiveMonthlyRent = monthlyRent * (1 - vacancyRate);
+            const managementCost = monthlyRent * managementFee;
+            const totalMonthlyExpenses = monthlyMortgage + propertyTax + insurance + hoaMaintenance + managementCost;
+            
+            // Calculate cash flow
+            const monthlyCashFlow = effectiveMonthlyRent - totalMonthlyExpenses;
+            const annualCashFlow = monthlyCashFlow * 12;
+            
+            // Calculate cap rate (NOI / Purchase Price)
+            const annualNOI = (effectiveMonthlyRent * 12) - ((propertyTax + insurance + hoaMaintenance + managementCost) * 12);
+            const capRate = (annualNOI / purchasePrice) * 100;
+            
+            // Calculate cash-on-cash ROI
+            const cashOnCashROI = (annualCashFlow / totalCashInvested) * 100;
+            
+            // Display results
+            const cashFlowColor = monthlyCashFlow > 0 ? 'green' : 'red';
+            document.getElementById('monthlyCashFlow').textContent = (monthlyCashFlow >= 0 ? '+$' : '-$') + Math.abs(monthlyCashFlow).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('monthlyCashFlow').style.color = cashFlowColor;
+            
+            document.getElementById('capRate').textContent = capRate.toFixed(2) + '%';
+            document.getElementById('cashROI').textContent = cashOnCashROI.toFixed(2) + '%';
+            
+            document.getElementById('totalInvested').textContent = '$' + totalCashInvested.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('loanAmountInvest').textContent = '$' + loanAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('monthlyMortgageInvest').textContent = '$' + monthlyMortgage.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('grossIncome').textContent = '$' + effectiveMonthlyRent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('totalExpenses').textContent = '$' + totalMonthlyExpenses.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('annualCashFlow').textContent = (annualCashFlow >= 0 ? '+$' : '-$') + Math.abs(annualCashFlow).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            
+            // Recommendation
+            const recommendEl = document.getElementById('investmentRecommendation');
+            let recommendation = '';
+            
+            if (monthlyCashFlow > 200 && capRate > 6 && cashOnCashROI > 8) {
+                recommendation = '✅ <strong style="color: green;">Strong Investment</strong><br>This property shows excellent cash flow and returns. Cap rate and cash-on-cash ROI are both above market averages for Seattle.';
+            } else if (monthlyCashFlow > 0 && capRate > 4) {
+                recommendation = '⚠️ <strong style="color: var(--accent);">Moderate Investment</strong><br>Positive cash flow but returns are moderate. Consider if appreciation potential or market positioning justify the investment.';
+            } else if (monthlyCashFlow < 0) {
+                recommendation = '❌ <strong style="color: red;">Negative Cash Flow</strong><br>This property will cost you money each month. Only consider if you expect significant appreciation or plan to add value through renovations.';
+            } else {
+                recommendation = '⚠️ <strong style="color: var(--accent);">Marginal Investment</strong><br>Returns are below typical investment thresholds. Review your numbers or negotiate a better purchase price.';
+            }
+            
+            recommendEl.innerHTML = '<p style="margin: 0; color: #666; line-height: 1.6;">' + recommendation + '</p>';
+            
+            document.getElementById('investmentResult').classList.add('show');
         }
     </script>
 

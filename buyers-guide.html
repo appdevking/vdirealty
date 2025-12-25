@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Buyer's Guide | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 20px 70px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        .timeline-container {
+            max-width: 1000px;
+            margin: -50px auto 0;
+            position: relative;
+            z-index: 10;
+            padding: 0 20px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            width: 50%;
+            padding: 0 40px;
+        }
+        
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+        }
+        
+        .timeline-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        .timeline-number {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-number {
+            right: -70px;
+            left: auto;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-number {
+            left: -70px;
+        }
+        
+        .timeline-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .timeline-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .timeline-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .timeline-card li {
+            padding-left: 25px;
+            position: relative;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .timeline-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .tip-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+        }
+        
+        .tip-card h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .tip-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .mistake-card {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+        }
+        
+        .mistake-card h4 {
+            color: #e53e3e;
+        }
+        
+        .checklist-section {
+            background: var(--light-gray);
+            padding: 80px 20px;
+        }
+        
+        .checklist-grid {
+            max-width: 1000px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .checklist-item {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .checklist-item i {
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-top: 3px;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .timeline::before { left: 20px; }
+            .timeline-item { width: 100%; padding-left: 60px; padding-right: 20px; }
+            .timeline-item:nth-child(even) { margin-left: 0; }
+            .timeline-number { left: 20px !important; }
+            .timeline-item:nth-child(odd) .timeline-number,
+            .timeline-item:nth-child(even) .timeline-number { left: -10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Complete Home Buyer's Guide</h1>
+        <p>Your roadmap to a successful home purchase in the Greater Seattle area</p>
+    </section>
+
+    <div class="timeline-container">
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-number">1</div>
+                <div class="timeline-card">
+                    <h3>Assess Your Financial Readiness</h3>
+                    <p>Before you start house hunting, understand your financial position and establish a realistic budget.</p>
+                    <ul>
+                        <li>Check your credit score (aim for 620+, ideally 740+)</li>
+                        <li>Calculate how much you can afford (28% of gross income for housing)</li>
+                        <li>Save for down payment (3.5%-20% depending on loan type)</li>
+                        <li>Budget for closing costs (2-5% of purchase price)</li>
+                        <li>Build emergency fund (3-6 months of expenses)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">2</div>
+                <div class="timeline-card">
+                    <h3>Get Pre-Approved for a Mortgage</h3>
+                    <p>A pre-approval letter shows sellers you're a serious, qualified buyer—essential in competitive markets.</p>
+                    <ul>
+                        <li>Gather financial documents (W-2s, pay stubs, bank statements, tax returns)</li>
+                        <li>Shop multiple lenders for best rates and terms</li>
+                        <li>Compare conventional, FHA, VA, and jumbo loan options</li>
+                        <li>Get pre-approval letter (not just pre-qualification)</li>
+                        <li>Understand your monthly payment including taxes and insurance</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">3</div>
+                <div class="timeline-card">
+                    <h3>Partner with a Buyer's Agent</h3>
+                    <p>An experienced agent provides market expertise, negotiation skills, and access to properties—at no cost to you.</p>
+                    <ul>
+                        <li>Interview 2-3 agents to find the right fit</li>
+                        <li>Choose an agent with local market expertise</li>
+                        <li>Sign buyer's agency agreement</li>
+                        <li>Discuss your must-haves vs. nice-to-haves</li>
+                        <li>Establish search criteria and timeline</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">4</div>
+                <div class="timeline-card">
+                    <h3>Search for Your Home</h3>
+                    <p>With your criteria defined and financing secured, begin touring properties strategically.</p>
+                    <ul>
+                        <li>Research neighborhoods (schools, commute, amenities)</li>
+                        <li>Attend open houses and schedule private showings</li>
+                        <li>Take notes and photos at each property</li>
+                        <li>Consider future resale value, not just current needs</li>
+                        <li>Be patient—the right home will come</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">5</div>
+                <div class="timeline-card">
+                    <h3>Make a Competitive Offer</h3>
+                    <p>When you find "the one," act quickly with a strong, well-structured offer.</p>
+                    <ul>
+                        <li>Review comparable sales (comps) with your agent</li>
+                        <li>Determine offer price and strategy</li>
+                        <li>Include appropriate contingencies (inspection, financing, appraisal)</li>
+                        <li>Consider escalation clauses in multiple-offer situations</li>
+                        <li>Write a personal letter to sellers (if appropriate)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">6</div>
+                <div class="timeline-card">
+                    <h3>Conduct Due Diligence</h3>
+                    <p>Once your offer is accepted, verify the property's condition and value before committing.</p>
+                    <ul>
+                        <li>Schedule professional home inspection ($400-$600)</li>
+                        <li>Review inspection report thoroughly with agent</li>
+                        <li>Request repairs or credits for significant issues</li>
+                        <li>Order appraisal through your lender</li>
+                        <li>Review title report and HOA documents (if applicable)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">7</div>
+                <div class="timeline-card">
+                    <h3>Finalize Your Financing</h3>
+                    <p>Work closely with your lender to complete the mortgage approval process on time.</p>
+                    <ul>
+                        <li>Submit final documentation to lender</li>
+                        <li>Lock in your interest rate (timing matters)</li>
+                        <li>Avoid major purchases or credit changes</li>
+                        <li>Review Closing Disclosure 3 days before closing</li>
+                        <li>Arrange homeowners insurance</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-number">8</div>
+                <div class="timeline-card">
+                    <h3>Close on Your New Home</h3>
+                    <p>The final step—sign the paperwork and receive the keys to your new home!</p>
+                    <ul>
+                        <li>Do final walk-through 24 hours before closing</li>
+                        <li>Wire closing funds (never bring cash or personal checks)</li>
+                        <li>Bring government-issued ID to closing</li>
+                        <li>Sign all closing documents</li>
+                        <li>Receive keys and celebrate! 🎉</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Pro Tips for First-Time Buyers</h2>
+            <div class="underline"></div>
+        </div>
+        
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Think Long-Term</h4>
+                <p>Plan to stay at least 5-7 years to offset buying/selling costs and build equity. Consider future family plans and career stability.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Don't Max Out Your Budget</h4>
+                <p>Just because you're approved for $500K doesn't mean you should spend it all. Leave room for furniture, repairs, and life's surprises.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Research the Neighborhood</h4>
+                <p>Visit at different times of day and week. Talk to neighbors. Check crime stats, school ratings, and future development plans.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Understand Total Cost</h4>
+                <p>Your monthly payment includes principal, interest, property taxes, insurance, HOA fees, and maintenance. Budget for all of it.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Be Decisive But Patient</h4>
+                <p>In hot markets, you need to act fast on good properties. But don't let FOMO push you into a home that doesn't meet your needs.</p>
+            </div>
+            
+            <div class="tip-card">
+                <h4><i class="fas fa-lightbulb" style="color: var(--accent);"></i> Hire a Good Inspector</h4>
+                <p>A thorough inspection ($400-$600) can save you thousands by revealing issues before you buy. Never skip this step.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="checklist-section">
+        <div class="content-section" style="padding-top: 0;">
+            <div class="section-title">
+                <h2>Common First-Time Buyer Mistakes</h2>
+                <div class="underline"></div>
+            </div>
+            
+            <div class="tips-grid">
+                <div class="tip-card mistake-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Shopping Before Pre-Approval</h4>
+                    <p>You'll waste time viewing homes you can't afford and miss opportunities when you finally get serious. Get pre-approved first.</p>
+                </div>
+                
+                <div class="tip-card mistake-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Ignoring Additional Costs</h4>
+                    <p>Property taxes, HOA fees, maintenance, and repairs add up. Budget at least 1-2% of home value annually for upkeep.</p>
+                </div>
+                
+                <div class="tip-card mistake-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Waiving Inspections</h4>
+                    <p>Even in competitive markets, never buy a home sight-unseen or without inspection. The risks far outweigh any advantage.</p>
+                </div>
+                
+                <div class="tip-card mistake-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Making Emotional Decisions</h4>
+                    <p>Falling in love with a property can cloud judgment. Stay objective and evaluate based on your needs and budget.</p>
+                </div>
+                
+                <div class="tip-card mistake-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Forgetting About Resale</h4>
+                    <p>That quirky floor plan might work for you, but could it hurt resale value? Think about future buyers when choosing a home.</p>
+                </div>
+                
+                <div class="tip-card mistake-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Changing Jobs or Credit</h4>
+                    <p>Don't change jobs, open new credit accounts, or make major purchases between pre-approval and closing. It can kill your loan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Start Your Home Buying Journey?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Let VDI Realty guide you through every step with expert advice and personalized service
+        </p>
+        <a href="index.html#contact" class="btn">Schedule a Consultation</a>
+        <a href="tools.html" class="btn">Try Our Calculators</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

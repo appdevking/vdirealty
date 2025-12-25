@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | VDI Realty Team</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 100px 20px 70px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        .story-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin: 60px 0;
+        }
+        
+        .story-content h3 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .story-content p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .story-image {
+            background: linear-gradient(135deg, rgba(15, 32, 39, 0.1), rgba(197, 160, 89, 0.1));
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .story-image i {
+            font-size: 8rem;
+            color: var(--accent);
+            opacity: 0.3;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+        
+        .value-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .value-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .value-card h4 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        .value-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin: 60px 0;
+        }
+        
+        .team-member {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .team-photo {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .team-photo i {
+            font-size: 6rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .team-info {
+            padding: 30px;
+        }
+        
+        .team-info h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .team-role {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .team-bio {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .team-credentials {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        
+        .team-credentials li {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .team-credentials li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        .team-contact {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .team-contact a {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+        .team-contact a:hover {
+            color: var(--accent);
+        }
+        
+        .stats-section {
+            background: var(--light-gray);
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 40px auto 0;
+        }
+        
+        .stat-box {
+            padding: 30px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .story-section { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>About VDI Realty</h1>
+        <p>Your trusted partner in residential, commercial, and investment real estate across the Greater Seattle area</p>
+    </section>
+
+    <section class="content-section">
+        <div class="story-section">
+            <div class="story-content">
+                <h3>Our Story</h3>
+                <p>Founded with a vision to revolutionize real estate services in the Pacific Northwest, VDI Realty has grown from a boutique agency to a full-service powerhouse serving homeowners, investors, and developers.</p>
+                <p>We recognized that real estate isn't just about transactions—it's about building wealth, creating homes, and transforming communities. That's why we've assembled a team of specialists who bring deep expertise across residential sales, commercial properties, property management, and corporate relocation.</p>
+                <p>Our name stands for Vision, Dedication, and Integrity—the three pillars that guide every client relationship and transaction.</p>
+            </div>
+            <div class="story-image">
+                <i class="fas fa-building"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="section-title">
+            <h2>Our Track Record</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Properties Sold</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">$250M+</span>
+                <span class="stat-label">Transaction Volume</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">300+</span>
+                <span class="stat-label">Properties Managed</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">Client Satisfaction</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Our Core Values</h2>
+            <div class="underline"></div>
+        </div>
+        
+        <div class="values-grid">
+            <div class="value-card">
+                <i class="fas fa-eye"></i>
+                <h4>Vision</h4>
+                <p>We see beyond today's market to identify tomorrow's opportunities, helping clients make strategic decisions that build lasting wealth.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-heart"></i>
+                <h4>Dedication</h4>
+                <p>Your goals become our mission. We're committed to going above and beyond to ensure your real estate experience exceeds expectations.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Integrity</h4>
+                <p>Transparency, honesty, and ethical practices guide every interaction. We earn trust through consistent, principled service.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-users"></i>
+                <h4>Collaboration</h4>
+                <p>We believe in the power of partnership—with clients, contractors, and communities—to achieve exceptional outcomes.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-chart-line"></i>
+                <h4>Market Expertise</h4>
+                <p>Deep local knowledge combined with data-driven insights ensures you're always making informed, intelligent decisions.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-lightbulb"></i>
+                <h4>Innovation</h4>
+                <p>We embrace technology and modern marketing to give your property maximum exposure and streamline your experience.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: var(--light-gray); padding: 80px 20px;">
+        <div class="section-title">
+            <h2>Meet Our Team</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: 20px auto 0;">Experienced professionals dedicated to your success</p>
+        </div>
+        
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="team-photo">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="team-info">
+                    <h3>Vincent Di</h3>
+                    <div class="team-role">Founder & Principal Broker</div>
+                    <p class="team-bio">With over 15 years in Pacific Northwest real estate, Vincent founded VDI Realty to provide comprehensive, client-focused services across all property types.</p>
+                    <ul class="team-credentials">
+                        <li>Licensed Real Estate Broker</li>
+                        <li>Certified Negotiation Expert (CNE)</li>
+                        <li>Commercial Real Estate Specialist</li>
+                        <li>Member, National Association of Realtors®</li>
+                    </ul>
+                    <div class="team-contact">
+                        <a href="mailto:vincent@vdirealty.com"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+12065551234"><i class="fas fa-phone"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <div class="team-photo">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="team-info">
+                    <h3>Sarah Mitchell</h3>
+                    <div class="team-role">Director of Property Management</div>
+                    <p class="team-bio">Sarah oversees our property management division, ensuring optimal returns for investors and quality living experiences for tenants.</p>
+                    <ul class="team-credentials">
+                        <li>Certified Property Manager (CPM)</li>
+                        <li>10+ years property management</li>
+                        <li>Residential Management Professional (RMP)</li>
+                        <li>500+ units under management</li>
+                    </ul>
+                    <div class="team-contact">
+                        <a href="mailto:sarah@vdirealty.com"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+12065555678"><i class="fas fa-phone"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <div class="team-photo">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="team-info">
+                    <h3>Marcus Chen</h3>
+                    <div class="team-role">Investment & Commercial Specialist</div>
+                    <p class="team-bio">Marcus guides investors through commercial acquisitions and multi-family opportunities with sophisticated financial analysis.</p>
+                    <ul class="team-credentials">
+                        <li>CCIM Candidate</li>
+                        <li>MBA, Real Estate Finance</li>
+                        <li>$100M+ in commercial transactions</li>
+                        <li>1031 Exchange Expert</li>
+                    </ul>
+                    <div class="team-contact">
+                        <a href="mailto:marcus@vdirealty.com"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+12065559012"><i class="fas fa-phone"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="team-member">
+                <div class="team-photo">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="team-info">
+                    <h3>Jennifer Park</h3>
+                    <div class="team-role">Relocation & Buyer Specialist</div>
+                    <p class="team-bio">Jennifer specializes in corporate relocations and first-time buyers, providing white-glove service throughout the buying process.</p>
+                    <ul class="team-credentials">
+                        <li>Accredited Buyer's Representative (ABR)</li>
+                        <li>Relocation Specialist Certification</li>
+                        <li>5-Star Client Rating</li>
+                        <li>200+ successful relocations</li>
+                    </ul>
+                    <div class="team-contact">
+                        <a href="mailto:jennifer@vdirealty.com"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+12065553456"><i class="fas fa-phone"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Why Choose VDI Realty?</h2>
+            <div class="underline"></div>
+        </div>
+        
+        <div class="values-grid">
+            <div class="value-card">
+                <i class="fas fa-home"></i>
+                <h4>Full-Service Expertise</h4>
+                <p>From residential sales to commercial acquisitions, property management to staging—we handle it all under one roof.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <h4>Local Market Knowledge</h4>
+                <p>Deep understanding of Seattle neighborhoods, market trends, and investment opportunities that matter to you.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-handshake"></i>
+                <h4>Relationship-Focused</h4>
+                <p>We're not just agents—we're long-term partners invested in your real estate success for years to come.</p>
+            </div>
+            
+            <div class="value-card">
+                <i class="fas fa-laptop"></i>
+                <h4>Tech-Enabled Service</h4>
+                <p>Modern tools, virtual tours, digital transactions, and data analytics give you an edge in today's market.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Work Together?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Whether you're buying, selling, investing, or relocating, our team is here to guide you every step of the way.
+        </p>
+        <a href="index.html#contact" class="btn">Schedule a Consultation</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>
