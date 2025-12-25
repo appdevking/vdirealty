@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Management Services | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(rgba(15, 32, 39, 0.85), rgba(15, 32, 39, 0.85)),
+                        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 120px 20px 80px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .feature-card ul {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+        
+        .feature-card li {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 60px 0;
+            align-items: start;
+        }
+        
+        .column h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 12px 0;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .checklist i {
+            color: var(--accent);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        /* Pricing Table */
+        .pricing-section {
+            background: var(--light-gray);
+            padding: 80px 20px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card.featured {
+            border: 3px solid var(--accent);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .pricing-card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 20px 0;
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            padding: 10px 0;
+            color: #666;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+        
+        .pricing-features i {
+            color: var(--accent);
+            margin-top: 3px;
+        }
+        
+        /* Process Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .timeline-number {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-content h4 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-content p {
+            color: #666;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            background: linear-gradient(135deg, rgba(197,160,89,0.1), rgba(197,160,89,0.05));
+            padding: 40px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            margin: 40px 0;
+        }
+        
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .two-column { grid-template-columns: 1fr; gap: 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .hero-stats { gap: 30px; }
+            .pricing-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1><i class="fas fa-building"></i> Professional Property Management</h1>
+        <p>Maximize your rental income while we handle the day-to-day operations. Stress-free ownership starts here.</p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Properties Managed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">Tenant Satisfaction</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">95%</span>
+                <span class="stat-label">Occupancy Rate</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Support Available</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Comprehensive Management Services</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: auto;">Everything you need to protect your investment and maximize returns</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-user-check"></i>
+                <h3>Tenant Screening</h3>
+                <p>Rigorous vetting process to find qualified, reliable tenants:</p>
+                <ul>
+                    <li>Credit report analysis</li>
+                    <li>Employment verification</li>
+                    <li>Rental history check</li>
+                    <li>Background & criminal checks</li>
+                    <li>Income verification (3x rent minimum)</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>Rent Collection</h3>
+                <p>Streamlined payment processing and enforcement:</p>
+                <ul>
+                    <li>Online payment portal</li>
+                    <li>Automatic rent reminders</li>
+                    <li>Late fee enforcement</li>
+                    <li>Direct deposit to your account</li>
+                    <li>Monthly financial reporting</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-tools"></i>
+                <h3>Maintenance & Repairs</h3>
+                <p>24/7 maintenance coordination and vendor management:</p>
+                <ul>
+                    <li>Emergency maintenance hotline</li>
+                    <li>Vetted contractor network</li>
+                    <li>Competitive bid process</li>
+                    <li>Quality control inspections</li>
+                    <li>Preventive maintenance programs</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-file-contract"></i>
+                <h3>Lease Management</h3>
+                <p>Professional lease administration:</p>
+                <ul>
+                    <li>State-compliant lease agreements</li>
+                    <li>Lease renewal management</li>
+                    <li>Rent increase analysis</li>
+                    <li>Move-in/move-out inspections</li>
+                    <li>Security deposit handling</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-balance-scale"></i>
+                <h3>Legal Compliance</h3>
+                <p>Stay compliant with all regulations:</p>
+                <ul>
+                    <li>Fair Housing compliance</li>
+                    <li>Local landlord-tenant laws</li>
+                    <li>Eviction processing (if needed)</li>
+                    <li>HOA coordination</li>
+                    <li>Safety code compliance</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Financial Reporting</h3>
+                <p>Transparent accounting and insights:</p>
+                <ul>
+                    <li>Monthly owner statements</li>
+                    <li>Detailed expense tracking</li>
+                    <li>Year-end tax documentation</li>
+                    <li>Online owner portal</li>
+                    <li>Investment performance analysis</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section">
+        <div class="section-title">
+            <h2>Simple, Transparent Pricing</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: auto;">No hidden fees. Pay only for the services you need.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Single Property</h3>
+                <div class="price">8-10%<span> of monthly rent</span></div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Full-service management</li>
+                    <li><i class="fas fa-check"></i> Tenant screening</li>
+                    <li><i class="fas fa-check"></i> Rent collection</li>
+                    <li><i class="fas fa-check"></i> Maintenance coordination</li>
+                    <li><i class="fas fa-check"></i> Monthly reporting</li>
+                    <li><i class="fas fa-check"></i> Online owner portal</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3>Multi-Property Portfolio</h3>
+                <div class="price">6-8%<span> of monthly rent</span></div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Everything in Single Property</li>
+                    <li><i class="fas fa-check"></i> Volume discount pricing</li>
+                    <li><i class="fas fa-check"></i> Dedicated account manager</li>
+                    <li><i class="fas fa-check"></i> Priority maintenance</li>
+                    <li><i class="fas fa-check"></i> Quarterly property inspections</li>
+                    <li><i class="fas fa-check"></i> Portfolio analytics</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Lease-Only Service</h3>
+                <div class="price">One-Time<span> 50-75% of first month's rent</span></div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> Property marketing</li>
+                    <li><i class="fas fa-check"></i> Tenant screening</li>
+                    <li><i class="fas fa-check"></i> Lease preparation</li>
+                    <li><i class="fas fa-check"></i> Move-in coordination</li>
+                    <li><i class="fas fa-times" style="color: #ccc;"></i> Ongoing management</li>
+                    <li><i class="fas fa-times" style="color: #ccc;"></i> Rent collection</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-box" style="max-width: 1200px; margin: 60px auto 0;">
+            <h3>Additional Fees (Industry Standard)</h3>
+            <p style="color: #666; line-height: 1.8;">
+                <strong>Tenant Placement Fee:</strong> One-time fee of 50-75% of first month's rent (already included in pricing above)<br>
+                <strong>Lease Renewal Fee:</strong> $150-250 per renewal<br>
+                <strong>Maintenance Markup:</strong> We do NOT mark up repairs - you pay contractor costs only<br>
+                <strong>Eviction Coordination:</strong> $500 flat fee (court costs separate)<br>
+                <strong>Vacancy:</strong> No management fees charged during vacancy periods
+            </p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Our Property Management Process</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-number">1</div>
+                <div class="timeline-content">
+                    <h4>Property Assessment & Onboarding</h4>
+                    <p>We inspect your property, photograph every room, review condition, and recommend any repairs or improvements to maximize rental value. We'll also determine optimal rental pricing based on current market data.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">2</div>
+                <div class="timeline-content">
+                    <h4>Marketing & Tenant Search</h4>
+                    <p>Professional photos, compelling listing descriptions, and multi-platform advertising (Zillow, Apartments.com, Craigslist, social media). We schedule and conduct showings, answer inquiries, and pre-screen interested applicants.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">3</div>
+                <div class="timeline-content">
+                    <h4>Tenant Screening & Selection</h4>
+                    <p>Comprehensive background checks, credit reports, employment verification, and rental history. We present qualified candidates to you for final approval with our recommendation.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">4</div>
+                <div class="timeline-content">
+                    <h4>Lease Signing & Move-In</h4>
+                    <p>Execute state-compliant lease agreements, collect first month's rent and security deposit, conduct detailed move-in inspection with photos, and provide tenant orientation on property features and policies.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">5</div>
+                <div class="timeline-content">
+                    <h4>Ongoing Management & Support</h4>
+                    <p>Monthly rent collection, maintenance coordination, routine inspections, lease renewals, and regular communication. You receive monthly statements and have 24/7 access to your owner portal.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">6</div>
+                <div class="timeline-content">
+                    <h4>Move-Out & Turnover</h4>
+                    <p>Conduct move-out inspection, process security deposit disposition per state law, coordinate any necessary repairs or cleaning, and immediately begin marketing for the next tenant.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: var(--light-gray); padding: 80px 20px;">
+        <div class="section-title">
+            <h2>Why Property Owners Choose VDI</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="two-column">
+            <div class="column">
+                <h3>Our Commitment to You</h3>
+                <ul class="checklist">
+                    <li>
+                        <i class="fas fa-shield-alt"></i>
+                        <span><strong>Property Protection:</strong> We treat your investment like our own, with regular inspections and preventive maintenance</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-users"></i>
+                        <span><strong>Quality Tenants:</strong> Rigorous screening ensures reliable, long-term tenants who pay on time and respect your property</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Maximize Returns:</strong> Optimal pricing strategy and high occupancy rates mean more money in your pocket</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock"></i>
+                        <span><strong>Save Time:</strong> No more late-night maintenance calls or tenant disputes - we handle everything</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-laptop"></i>
+                        <span><strong>Technology-Enabled:</strong> Modern online portals for owners and tenants, digital payments, and mobile access</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="column">
+                <h3>What Makes Us Different</h3>
+                <ul class="checklist">
+                    <li>
+                        <i class="fas fa-handshake"></i>
+                        <span><strong>Local Expertise:</strong> Deep knowledge of Seattle neighborhoods, rental laws, and market conditions</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone-volume"></i>
+                        <span><strong>Responsive Service:</strong> Same-day response to maintenance emergencies, quick answers to owner questions</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span><strong>Transparent Accounting:</strong> Detailed monthly statements, no hidden fees, clear expense documentation</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-tools"></i>
+                        <span><strong>In-House Maintenance:</strong> Our vetted contractor network ensures quality work at competitive prices</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-award"></i>
+                        <span><strong>Proven Track Record:</strong> Years of experience, hundreds of satisfied owners, excellent tenant retention</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Frequently Asked Questions</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="two-column">
+            <div class="column">
+                <div class="info-box">
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>How quickly can you rent my property?</h3>
+                    <p style="color: #666;">Our average time to lease is 14-21 days from listing. Properties priced correctly and in good condition typically lease faster. We'll provide a competitive market analysis to ensure optimal pricing.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>Do I have to approve tenants?</h3>
+                    <p style="color: #666;">Yes! We present all qualified applicants with our professional recommendation, but you always have final approval. We'll never place a tenant without your consent.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>What if my tenant doesn't pay rent?</h3>
+                    <p style="color: #666;">We enforce late fees per the lease agreement and immediately begin collection efforts. If necessary, we'll coordinate the eviction process (legal fees separate). Our thorough screening minimizes this risk.</p>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="info-box">
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>How do I receive my rental income?</h3>
+                    <p style="color: #666;">Rent is deposited directly to your bank account by the 10th of each month. You'll receive a detailed statement showing all income and expenses via our online owner portal.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>What's the lease term?</h3>
+                    <p style="color: #666;">Standard leases are 12 months. We can accommodate 6-month leases if preferred, though annual leases provide better stability. Month-to-month is also available at higher rates.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>Can I cancel management services?</h3>
+                    <p style="color: #666;">Yes. We require 60 days written notice. There are no long-term contracts or cancellation penalties. We're confident you'll love our service, but flexibility is important to us.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Simplify Property Ownership?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Schedule a free consultation to discuss your property and learn how we can maximize your rental income while minimizing your stress.
+        </p>
+        <a href="index.html#contact" class="btn">Get Free Rental Analysis</a>
+        <a href="tools.html" class="btn btn-outline">Calculate Rental Returns</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html">Home</a> | 
+            <a href="mailto:info@vdirealty.com">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>
