@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Builder Services | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(rgba(15, 32, 39, 0.85), rgba(15, 32, 39, 0.85)),
+                        url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 120px 20px 80px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .service-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .service-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .service-box i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .service-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        /* Process Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .timeline-number {
+            min-width: 60px;
+            height: 60px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            padding-top: 5px;
+        }
+        
+        .timeline-content h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+            color: white;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: var(--light-gray);
+            padding: 80px 20px;
+            text-align: center;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .timeline-item { flex-direction: column; }
+            .stats-bar { gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html#builders" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Strategic Partnership for Builders</h1>
+        <p>You need more than a listing agent; you need a strategic partner who understands the complete lifecycle of construction and development.</p>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Our Builder Services</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: auto;">Comprehensive support from land acquisition to final sale</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-box">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Land Acquisition</h3>
+                <p>We identify off-market land opportunities and conduct feasibility analysis to ensure your project starts on solid ground.</p>
+                <ul style="margin-top: 15px; color: #666; line-height: 2;">
+                    <li>✓ Off-market sourcing</li>
+                    <li>✓ Zoning analysis</li>
+                    <li>✓ Market demand assessment</li>
+                    <li>✓ Negotiation support</li>
+                </ul>
+            </div>
+
+            <div class="service-box">
+                <i class="fas fa-file-contract"></i>
+                <h3>Zoning & Permitting</h3>
+                <p>Navigate the complex regulatory landscape with guidance from experts who understand local requirements.</p>
+                <ul style="margin-top: 15px; color: #666; line-height: 2;">
+                    <li>✓ Zoning compliance review</li>
+                    <li>✓ Permit coordination</li>
+                    <li>✓ Municipal relationships</li>
+                    <li>✓ Timeline optimization</li>
+                </ul>
+            </div>
+
+            <div class="service-box">
+                <i class="fas fa-bullhorn"></i>
+                <h3>Pre-Sale Marketing</h3>
+                <p>Generate buyer interest and secure commitments before breaking ground, reducing your financial risk.</p>
+                <ul style="margin-top: 15px; color: #666; line-height: 2;">
+                    <li>✓ Digital marketing campaigns</li>
+                    <li>✓ Buyer database access</li>
+                    <li>✓ VR/3D visualizations</li>
+                    <li>✓ Open house coordination</li>
+                </ul>
+            </div>
+
+            <div class="service-box">
+                <i class="fas fa-home"></i>
+                <h3>Model Home Management</h3>
+                <p>Professional staffing and showcase management to maximize conversions and buyer engagement.</p>
+                <ul style="margin-top: 15px; color: #666; line-height: 2;">
+                    <li>✓ Trained sales staff</li>
+                    <li>✓ Weekend open houses</li>
+                    <li>✓ Lead tracking system</li>
+                    <li>✓ Interior staging</li>
+                </ul>
+            </div>
+
+            <div class="service-box">
+                <i class="fas fa-chart-line"></i>
+                <h3>Market Analysis</h3>
+                <p>Data-driven insights on pricing, demand, and competitive positioning for optimal project performance.</p>
+                <ul style="margin-top: 15px; color: #666; line-height: 2;">
+                    <li>✓ Competitive analysis</li>
+                    <li>✓ Pricing strategy</li>
+                    <li>✓ Demand forecasting</li>
+                    <li>✓ Trend monitoring</li>
+                </ul>
+            </div>
+
+            <div class="service-box">
+                <i class="fas fa-users"></i>
+                <h3>Network Access</h3>
+                <p>Connect with vetted contractors, architects, engineers, and financing partners in our trusted network.</p>
+                <ul style="margin-top: 15px; color: #666; line-height: 2;">
+                    <li>✓ Contractor referrals</li>
+                    <li>✓ Financing connections</li>
+                    <li>✓ Legal expertise</li>
+                    <li>✓ Insurance partners</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top: 80px;">
+            <h2>Our Process</h2>
+            <div class="underline"></div>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-number">1</div>
+                <div class="timeline-content">
+                    <h3>Discovery & Strategy</h3>
+                    <p>We meet to understand your vision, timeline, budget, and target buyer profile. Then we develop a comprehensive go-to-market strategy.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">2</div>
+                <div class="timeline-content">
+                    <h3>Site Selection & Due Diligence</h3>
+                    <p>If you need land, we source opportunities and conduct thorough analysis. If you have a site, we verify zoning, utilities, and feasibility.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">3</div>
+                <div class="timeline-content">
+                    <h3>Pre-Sale Launch</h3>
+                    <p>We create marketing materials, build a buyer database, and begin generating interest before construction starts.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">4</div>
+                <div class="timeline-content">
+                    <h3>Construction Support</h3>
+                    <p>Throughout the build, we keep buyers engaged with progress updates, walkthroughs, and ongoing sales efforts.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-number">5</div>
+                <div class="timeline-content">
+                    <h3>Closeout & Handover</h3>
+                    <p>We manage the final sales push, coordinate closings, and ensure a smooth transition for all parties.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">Projects Completed</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">$120M+</span>
+            <span class="stat-label">In Sales Volume</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number">95%</span>
+            <span class="stat-label">Client Satisfaction</span>
+        </div>
+    </div>
+
+    <section class="cta-section">
+        <h2 style="color: var(--primary); margin-bottom: 20px;">Ready to Build Your Next Project?</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; color: #666;">
+            Let's discuss how we can help you maximize returns and minimize risk on your next development.
+        </p>
+        <a href="index.html#contact" class="btn">Schedule a Consultation</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html" style="color: #666; text-decoration: none;">Home</a> | 
+            <a href="mailto:info@vdirealty.com" style="color: #666; text-decoration: none;">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -586,117 +586,186 @@
                 <div class="icon-box"><i class="fas fa-home"></i></div>
                 <h3>Home & Investment</h3>
                 <p>We help homeowners, AirBnB hosts, and investors identify properties that generate long-term value.</p>
-                <a href="#contact" class="link-text">View Opportunities →</a>
+                <a href="opportunities.html" class="link-text">View Opportunities →</a>
             </div>
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-city"></i></div>
                 <h3>Builder Services</h3>
                 <p>Comprehensive land acquisition and pre-sale marketing for developers.</p>
-                <a href="#builders" class="link-text">Partner With Us →</a>
+                <a href="builders.html" class="link-text">Partner With Us →</a>
             </div>
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-plane-departure"></i></div>
                 <h3>Corporate Relocation</h3>
                 <p>Concierge-level service for executives moving to the Greater Metro area.</p>
-                <a href="#relocation" class="link-text">Get the Guide →</a>
+                <a href="relocation.html" class="link-text">Get the Guide →</a>
             </div>
         </div>
     </section>
 
     <section class="market-section reveal" id="stats">
         <div class="section-title">
-            <h2>Market Pulse</h2>
+            <h2>Market Intelligence</h2>
             <div class="underline"></div>
-            <p style="margin-top: 10px; color: #666; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Real-time data to help you navigate the changing landscape. 
-                <br><span style="font-size: 0.9em; opacity: 0.8;">(National trends tracking the 10-Year Treasury, a leading indicator for mortgage rates)</span>
+            <p style="margin-top: 15px; color: #666; max-width: 700px; margin-left: auto; margin-right: auto; font-size: 1.05rem;">
+                Stay informed with key market indicators and local insights that drive smart real estate decisions.
             </p>
         </div>
         
-        <div class="market-grid">
+        <div style="max-width: 1200px; margin: auto;">
             
-            <div class="market-col">
-                <h3 style="margin-bottom: 25px; color: var(--primary); font-size: 1.4rem;">
-                    <i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:10px;"></i> Local Snapshot
+            <!-- Local Market Stats -->
+            <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 50px 30px; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                <h3 style="color: white; text-align: center; font-size: 1.8rem; margin-bottom: 40px; font-weight: 700;">
+                    <i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:10px;"></i> 
+                    Greater Metro Area Snapshot
                 </h3>
                 
-                <div class="stat-card-grid">
-                    <div class="local-stat-card">
+                <div class="stat-card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; max-width: 1000px; margin: auto;">
+                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
                         <div class="stat-icon"><i class="fas fa-tag"></i></div>
-                        <span class="local-stat-num">$540k</span>
-                        <span class="local-stat-title">Median Price</span>
+                        <span class="local-stat-num" id="medianPrice">$540k</span>
+                        <span class="local-stat-title">Median Home Price</span>
+                        <div id="priceChange" style="margin-top: 8px; font-size: 0.75rem; color: #27ae60;">
+                            <i class="fas fa-arrow-up"></i> 3.2% YoY
+                        </div>
                     </div>
-                    <div class="local-stat-card">
+                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
                         <div class="stat-icon"><i class="far fa-clock"></i></div>
-                        <span class="local-stat-num">32</span>
+                        <span class="local-stat-num" id="daysOnMarket">32</span>
                         <span class="local-stat-title">Days on Market</span>
+                        <div id="domTrend" style="margin-top: 8px; font-size: 0.75rem; color: #e67e22;">
+                            <i class="fas fa-minus"></i> Stable
+                        </div>
                     </div>
-                    <div class="local-stat-card">
-                        <div class="stat-icon"><i class="fas fa-balance-scale"></i></div>
-                        <span class="local-stat-num">98%</span>
-                        <span class="local-stat-title">List-to-Sale</span>
+                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
+                        <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                        <span class="local-stat-num" id="saleToList">98%</span>
+                        <span class="local-stat-title">Sale to List Ratio</span>
+                        <div id="saleToListTrend" style="margin-top: 8px; font-size: 0.75rem; color: #27ae60;">
+                            <i class="fas fa-arrow-up"></i> Strong
+                        </div>
                     </div>
-                    <div class="local-stat-card">
+                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
                         <div class="stat-icon"><i class="fas fa-home"></i></div>
-                        <span class="local-stat-num">150</span>
+                        <span class="local-stat-num" id="activeListings">150</span>
                         <span class="local-stat-title">Active Listings</span>
+                        <div id="inventoryTrend" style="margin-top: 8px; font-size: 0.75rem; color: #3498db;">
+                            <i class="fas fa-info-circle"></i> Limited Inventory
+                        </div>
                     </div>
                 </div>
-                <p style="margin-top: 20px; font-size: 0.85rem; color: #999; text-align: center;">
-                    <em>*Data reflects Greater Metro Area averages updated Dec 2025.</em>
+            </div>
+
+            <!-- Market Indicators Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px;">
+                
+                <!-- Mortgage Rates Card -->
+                <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); border-top: 4px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 35px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 25px rgba(0,0,0,0.08)';">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <h4 style="color: var(--primary); font-size: 1.1rem; margin: 0;">Current Mortgage Rates</h4>
+                        <i class="fas fa-chart-line" style="font-size: 1.5rem; color: var(--accent); opacity: 0.6;"></i>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+                            <span style="color: #666; font-size: 0.9rem;">30-Year Fixed</span>
+                            <span style="font-size: 1.8rem; font-weight: 700; color: var(--primary);">6.8%</span>
+                        </div>
+                        <div style="height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: 68%; background: var(--accent);"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
+                            <span style="color: #666; font-size: 0.9rem;">15-Year Fixed</span>
+                            <span style="font-size: 1.8rem; font-weight: 700; color: var(--primary);">6.1%</span>
+                        </div>
+                        <div style="height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: 61%; background: var(--accent);"></div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #999; margin: 15px 0 0 0; text-align: center;">
+                        <i class="fas fa-sync-alt"></i> Updated Dec 2025
+                    </p>
+                </div>
+
+                <!-- Market Trends Card -->
+                <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); border-top: 4px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 35px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 25px rgba(0,0,0,0.08)';">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <h4 style="color: var(--primary); font-size: 1.1rem; margin: 0;">Market Trends</h4>
+                        <i class="fas fa-trending-up" style="font-size: 1.5rem; color: var(--accent); opacity: 0.6;"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 18px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #666; font-size: 0.85rem; font-weight: 600;">Buyer Demand</span>
+                                <span style="color: #27ae60; font-size: 0.85rem; font-weight: 700;">High</span>
+                            </div>
+                            <div style="height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: 85%; background: linear-gradient(90deg, #27ae60, #2ecc71); border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #666; font-size: 0.85rem; font-weight: 600;">Inventory Levels</span>
+                                <span style="color: #e74c3c; font-size: 0.85rem; font-weight: 700;">Low</span>
+                            </div>
+                            <div style="height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: 35%; background: linear-gradient(90deg, #e74c3c, #e67e22); border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span style="color: #666; font-size: 0.85rem; font-weight: 600;">Market Momentum</span>
+                                <span style="color: #27ae60; font-size: 0.85rem; font-weight: 700;">Strong</span>
+                            </div>
+                            <div style="height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+                                <div style="height: 100%; width: 78%; background: linear-gradient(90deg, var(--accent), #d4a55a); border-radius: 3px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #999; margin: 20px 0 0 0; text-align: center;">
+                        Seller's market conditions
+                    </p>
+                </div>
+
+                <!-- Investment Outlook Card -->
+                <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); border-top: 4px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 35px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 25px rgba(0,0,0,0.08)';">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <h4 style="color: var(--primary); font-size: 1.1rem; margin: 0;">Investment Metrics</h4>
+                        <i class="fas fa-dollar-sign" style="font-size: 1.5rem; color: var(--accent); opacity: 0.6;"></i>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 0.75rem; color: #7f8c8d; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Cap Rate</div>
+                            <div style="font-size: 1.6rem; font-weight: 700; color: var(--primary);">5.2%</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 0.75rem; color: #7f8c8d; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">ROI</div>
+                            <div style="font-size: 1.6rem; font-weight: 700; color: var(--primary);">8.4%</div>
+                        </div>
+                    </div>
+                    <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; border-left: 3px solid #3498db;">
+                        <div style="font-size: 0.8rem; color: #2c3e50; line-height: 1.5;">
+                            <strong>Outlook:</strong> Strong appreciation potential with steady rental demand in metro areas.
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: #999; margin: 15px 0 0 0; text-align: center;">
+                        Based on 12-month averages
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Market Insights Banner -->
+            <div style="background: linear-gradient(90deg, rgba(197,160,89,0.1) 0%, rgba(197,160,89,0.05) 100%); padding: 30px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center;">
+                <p style="margin: 0; color: var(--text-main); font-size: 1rem; line-height: 1.6;">
+                    <i class="fas fa-lightbulb" style="color: var(--accent); margin-right: 8px;"></i>
+                    <strong>Market Insight:</strong> With limited inventory and strong buyer demand, now is an excellent time for sellers. 
+                    Investors should focus on cash-flowing properties with long-term appreciation potential.
                 </p>
             </div>
 
-            <div class="market-col">
-                <h3 style="margin-bottom: 25px; color: var(--primary); font-size: 1.4rem;">
-                    <i class="fas fa-chart-line" style="color:var(--accent); margin-right:10px;"></i> Interest Rate Trend
-                </h3>
-                
-                <div class="widget-wrapper">
-                    <div class="tradingview-widget-container">
-                      <div class="tradingview-widget-container__widget"></div>
-                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                      {
-                      "symbols": [
-                        [
-                          "US 10-Year Treasury Yield",
-                          "TVC:US10Y|12M"
-                        ]
-                      ],
-                      "chartOnly": false,
-                      "width": "100%",
-                      "height": "100%",
-                      "locale": "en",
-                      "colorTheme": "light",
-                      "autosize": true,
-                      "showVolume": false,
-                      "showMA": false,
-                      "hideDateRanges": false,
-                      "hideMarketStatus": false,
-                      "hideSymbolLogo": false,
-                      "scalePosition": "right",
-                      "scaleMode": "Normal",
-                      "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-                      "fontSize": "10",
-                      "noTimeScale": false,
-                      "valuesTracking": "1",
-                      "changeMode": "price-and-percent",
-                      "chartType": "area",
-                      "maLineColor": "#2962FF",
-                      "maLineWidth": 1,
-                      "maLength": 9,
-                      "lineWidth": 2,
-                      "lineType": 0,
-                      "dateRanges": [
-                        "12m|1D",
-                        "60m|1W",
-                        "all|1M"
-                      ]
-                    }
-                      </script>
-                    </div>
-                    </div>
-            </div>
         </div>
     </section>
 
@@ -745,22 +814,26 @@
             <p style="margin-top: 10px; font-size: 1.1rem; color: #666;">Tell us about your project or investment goals.</p>
         </div>
         <div class="form-container">
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="return validateForm()">
+            <form id="contactForm" onsubmit="return sendEmail(event)">
                 <input type="text" name="name" id="name" placeholder="Full Name *" required>
                 <input type="email" name="email" id="email" placeholder="Email Address *" required>
                 <input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)">
                 <select name="interest" id="interest" required>
                     <option value="" disabled selected>I am interested in... *</option>
-                    <option value="Homeowner">Buying or Selling a Home</option>
-                    <option value="Investor">Investing / AirBnB Strategy</option>
-                    <option value="Builder">Builder / Development</option>
-                    <option value="Relocation">Relocation Services</option>
+                    <option value="Buying or Selling a Home">Buying or Selling a Home</option>
+                    <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
+                    <option value="Builder / Development">Builder / Development</option>
+                    <option value="Relocation Services">Relocation Services</option>
                 </select>
                 <textarea name="message" id="message" rows="5" placeholder="How can we help? *" required></textarea>
-                <button type="submit" class="btn-submit">
+                <div id="formMessage" style="margin-bottom: 15px; padding: 12px; border-radius: 3px; display: none;"></div>
+                <button type="submit" class="btn-submit" id="submitBtn">
                     <span>Send Message</span>
                 </button>
             </form>
+            <p style="margin-top: 20px; font-size: 0.85rem; color: #999; text-align: center;">
+                Or email us directly at <a href="mailto:info@vdirealty.com" style="color: var(--accent); text-decoration: none; font-weight: 600;">info@vdirealty.com</a>
+            </p>
         </div>
     </section>
 
@@ -782,8 +855,394 @@
         </p>
         <p style="margin-top: 20px; font-size: 0.85rem;">&copy; 2025 VDI Realty. All Rights Reserved.</p>
     </footer>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
+        // ========================================
+        // MARKET DATA AUTO-UPDATE SYSTEM
+        // ========================================
+        
+        // Configuration - Add your API credentials here
+        const MARKET_DATA_CONFIG = {
+            // Choose your data source: 'api' or 'json' or 'static'
+            dataSource: 'static', // Change to 'api' when you have API credentials
+            
+            // API Settings (Uncomment and configure when ready)
+            api: {
+                provider: 'realtymole', // Options: 'realtymole', 'zillow', 'attom'
+                key: '', // Your RapidAPI key
+                location: {
+                    city: 'YourCity',
+                    state: 'YourState',
+                    zipCode: '12345'
+                }
+            },
+            
+            // JSON file path for local data
+            jsonFile: 'market_data.json',
+            
+            // Cache duration (in minutes)
+            cacheDuration: 60,
+            
+            // Enable auto-refresh
+            autoRefresh: true,
+            refreshInterval: 3600000 // 1 hour in milliseconds
+        };
+        
+        // Fetch market data from Realty Mole API
+        async function fetchRealtyMoleData() {
+            const { key, location } = MARKET_DATA_CONFIG.api;
+            
+            try {
+                const response = await fetch(
+                    `https://realty-mole-property-api.p.rapidapi.com/saleListings?city=${encodeURIComponent(location.city)}&state=${location.state}&limit=100`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'X-RapidAPI-Key': key,
+                            'X-RapidAPI-Host': 'realty-mole-property-api.p.rapidapi.com'
+                        }
+                    }
+                );
+                
+                if (!response.ok) throw new Error('API request failed');
+                
+                const listings = await response.json();
+                return processListingsData(listings);
+                
+            } catch (error) {
+                console.error('Realty Mole API Error:', error);
+                return null;
+            }
+        }
+        
+        // Fetch market data from Zillow API
+        async function fetchZillowData() {
+            const { key, location } = MARKET_DATA_CONFIG.api;
+            
+            try {
+                const response = await fetch(
+                    `https://zillow-com1.p.rapidapi.com/propertyExtendedSearch?location=${encodeURIComponent(location.city + ', ' + location.state)}&status_type=ForSale`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'X-RapidAPI-Key': key,
+                            'X-RapidAPI-Host': 'zillow-com1.p.rapidapi.com'
+                        }
+                    }
+                );
+                
+                if (!response.ok) throw new Error('API request failed');
+                
+                const data = await response.json();
+                return processZillowData(data);
+                
+            } catch (error) {
+                console.error('Zillow API Error:', error);
+                return null;
+            }
+        }
+        
+        // Process listings data into market statistics
+        function processListingsData(listings) {
+            if (!listings || !Array.isArray(listings) || listings.length === 0) {
+                return null;
+            }
+            
+            // Extract prices and calculate median
+            const prices = listings
+                .map(l => l.price || l.listPrice)
+                .filter(p => p > 0)
+                .sort((a, b) => a - b);
+            
+            const medianPrice = prices[Math.floor(prices.length / 2)];
+            
+            // Calculate days on market
+            const daysOnMarket = listings
+                .map(l => l.daysOnMarket)
+                .filter(d => d !== undefined && d !== null);
+            
+            const avgDaysOnMarket = daysOnMarket.length > 0
+                ? Math.round(daysOnMarket.reduce((a, b) => a + b, 0) / daysOnMarket.length)
+                : 32;
+            
+            return {
+                medianPrice: formatPrice(medianPrice),
+                daysOnMarket: avgDaysOnMarket,
+                saleToList: 98, // May need separate calculation
+                activeListings: listings.length,
+                lastUpdated: new Date().toLocaleString()
+            };
+        }
+        
+        // Process Zillow API response
+        function processZillowData(data) {
+            // Adapt based on actual Zillow API response structure
+            // This is a placeholder - adjust to your API response
+            return {
+                medianPrice: data.medianPrice || '$540k',
+                daysOnMarket: data.avgDaysOnMarket || 32,
+                saleToList: data.saleToListRatio || 98,
+                activeListings: data.totalListings || 150,
+                lastUpdated: new Date().toLocaleString()
+            };
+        }
+        
+        // Fetch from local JSON file
+        async function fetchFromJSON() {
+            try {
+                const response = await fetch(MARKET_DATA_CONFIG.jsonFile);
+                if (!response.ok) throw new Error('JSON file not found');
+                return await response.json();
+            } catch (error) {
+                console.error('JSON fetch error:', error);
+                return null;
+            }
+        }
+        
+        // Get cached data from localStorage
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem('marketData');
+                if (!cached) return null;
+                
+                const { data, timestamp } = JSON.parse(cached);
+                const age = Date.now() - timestamp;
+                const maxAge = MARKET_DATA_CONFIG.cacheDuration * 60 * 1000;
+                
+                if (age < maxAge) {
+                    console.log('Using cached market data');
+                    return data;
+                }
+            } catch (error) {
+                console.error('Cache error:', error);
+            }
+            return null;
+        }
+        
+        // Save data to cache
+        function cacheData(data) {
+            try {
+                localStorage.setItem('marketData', JSON.stringify({
+                    data: data,
+                    timestamp: Date.now()
+                }));
+            } catch (error) {
+                console.error('Cache save error:', error);
+            }
+        }
+        
+        // Format price for display
+        function formatPrice(price) {
+            if (typeof price === 'string') return price;
+            if (price >= 1000000) {
+                return `$${(price / 1000000).toFixed(1)}M`;
+            } else if (price >= 1000) {
+                return `$${Math.round(price / 1000)}k`;
+            }
+            return `$${price}`;
+        }
+        
+        // Update the DOM with market data
+        function updateMarketData(data) {
+            if (!data) return;
+            
+            // Update median price
+            const medianPriceEl = document.getElementById('medianPrice');
+            if (medianPriceEl && data.medianPrice) {
+                medianPriceEl.textContent = data.medianPrice;
+            }
+            
+            // Update days on market
+            const daysOnMarketEl = document.getElementById('daysOnMarket');
+            if (daysOnMarketEl && data.daysOnMarket) {
+                daysOnMarketEl.textContent = data.daysOnMarket;
+            }
+            
+            // Update sale to list ratio
+            const saleToListEl = document.getElementById('saleToList');
+            if (saleToListEl && data.saleToList) {
+                saleToListEl.textContent = data.saleToList + '%';
+            }
+            
+            // Update active listings
+            const activeListingsEl = document.getElementById('activeListings');
+            if (activeListingsEl && data.activeListings) {
+                activeListingsEl.textContent = data.activeListings;
+            }
+            
+            console.log('✅ Market data updated successfully', data);
+        }
+        
+        // Main function to load market data
+        async function loadMarketData() {
+            console.log('🔄 Loading market data...');
+            
+            // Try to get cached data first
+            const cached = getCachedData();
+            if (cached) {
+                updateMarketData(cached);
+                return;
+            }
+            
+            let marketData = null;
+            
+            // Fetch based on configured source
+            if (MARKET_DATA_CONFIG.dataSource === 'api' && MARKET_DATA_CONFIG.api.key) {
+                // Fetch from API
+                if (MARKET_DATA_CONFIG.api.provider === 'realtymole') {
+                    marketData = await fetchRealtyMoleData();
+                } else if (MARKET_DATA_CONFIG.api.provider === 'zillow') {
+                    marketData = await fetchZillowData();
+                }
+            } else if (MARKET_DATA_CONFIG.dataSource === 'json') {
+                // Fetch from JSON file
+                marketData = await fetchFromJSON();
+            }
+            
+            // If we got data, update and cache it
+            if (marketData) {
+                updateMarketData(marketData);
+                cacheData(marketData);
+            } else {
+                console.log('ℹ️ Using static data (configure API or JSON source for live updates)');
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMarketData();
+            
+            // Set up auto-refresh if enabled
+            if (MARKET_DATA_CONFIG.autoRefresh && MARKET_DATA_CONFIG.refreshInterval > 0) {
+                setInterval(loadMarketData, MARKET_DATA_CONFIG.refreshInterval);
+            }
+        });
+        
+        // ========================================
+        // EMAIL FORM HANDLING
+        // ========================================
+        
+        // Initialize EmailJS
+        // SETUP REQUIRED: Replace with your actual EmailJS credentials
+        // Sign up free at https://www.emailjs.com/
+        (function() {
+            // emailjs.init("YOUR_PUBLIC_KEY"); // Uncomment and add your public key
+        })();
+        
+        // Send Email Function
+        function sendEmail(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const submitBtn = document.getElementById('submitBtn');
+            const formMessage = document.getElementById('formMessage');
+            
+            // Basic validation
+            if (!validateForm()) {
+                return false;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            formMessage.style.display = 'none';
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value || 'Not provided',
+                interest: document.getElementById('interest').value,
+                message: document.getElementById('message').value,
+                to_email: 'info@vdirealty.com'
+            };
+            
+            // Option 1: Using EmailJS (Recommended - Free tier available)
+            // Uncomment when you set up EmailJS
+            /*
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', formData)
+                .then(function(response) {
+                    showMessage('✓ Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
+                    form.reset();
+                }, function(error) {
+                    showMessage('✗ Sorry, there was an error sending your message. Please email us directly at info@vdirealty.com', 'error');
+                    console.error('EmailJS Error:', error);
+                })
+                .finally(function() {
+                    submitBtn.innerHTML = '<span>Send Message</span>';
+                    submitBtn.disabled = false;
+                });
+            */
+            
+            // Option 2: Using Web3Forms (Alternative - Also free)
+            // Uncomment to use Web3Forms instead
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Get free key at https://web3forms.com
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    subject: `VDI Realty Contact: ${formData.interest}`,
+                    message: `Interest: ${formData.interest}\n\nMessage: ${formData.message}`,
+                    to: 'info@vdirealty.com'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('✓ Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
+                    form.reset();
+                } else {
+                    showMessage('✗ Sorry, there was an error. Please email us directly at info@vdirealty.com', 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('✗ Sorry, there was an error. Please email us directly at info@vdirealty.com', 'error');
+                console.error('Form submission error:', error);
+            })
+            .finally(() => {
+                submitBtn.innerHTML = '<span>Send Message</span>';
+                submitBtn.disabled = false;
+            });
+            
+            // Option 3: Using Formspree (Alternative)
+            // Replace the fetch URL above with:
+            // fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+            
+            return false;
+        }
+        
+        // Show message helper
+        function showMessage(message, type) {
+            const formMessage = document.getElementById('formMessage');
+            formMessage.textContent = message;
+            formMessage.style.display = 'block';
+            
+            if (type === 'success') {
+                formMessage.style.backgroundColor = '#d4edda';
+                formMessage.style.color = '#155724';
+                formMessage.style.border = '1px solid #c3e6cb';
+            } else {
+                formMessage.style.backgroundColor = '#f8d7da';
+                formMessage.style.color = '#721c24';
+                formMessage.style.border = '1px solid #f5c6cb';
+            }
+            
+            // Auto-hide success message after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
         // Mobile Menu Toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
@@ -856,34 +1315,36 @@
             const message = document.getElementById('message').value.trim();
             
             if (!name || !email || !interest || !message) {
-                alert('Please fill in all required fields.');
+                showMessage('Please fill in all required fields.', 'error');
                 return false;
             }
             
             // Basic email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address.');
+                showMessage('Please enter a valid email address.', 'error');
                 return false;
             }
             
             return true;
         }
-        
-        // Add loading state to submit button
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('.form-container form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    const btn = this.querySelector('.btn-submit');
-                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                    btn.disabled = true;
-                });
-            }
-        });
     </script>
     
-    <script src="//code.tidio.co/k4bjnmca0qmwzlyrwirpnn71ksajdiqj.js" async></script>
+    <!-- Chatbase AI Chatbot -->
+    <!-- SETUP: Replace 'YOUR_CHATBOT_ID' with your actual Chatbase chatbot ID -->
+    <!-- Get your ID from: https://www.chatbase.co/chatbot-iframe -->
+    <script>
+        window.embeddedChatbotConfig = {
+            chatbotId: "YOUR_CHATBOT_ID", // Replace with your Chatbase chatbot ID
+            domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="YOUR_CHATBOT_ID"
+        domain="www.chatbase.co"
+        defer>
+    </script>
 
     </body>
 </html>

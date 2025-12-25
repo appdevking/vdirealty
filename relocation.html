@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relocation Services | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(rgba(15, 32, 39, 0.8), rgba(15, 32, 39, 0.8)),
+                        url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 120px 20px 80px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .underline {
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0 auto 15px;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 60px 0;
+            align-items: start;
+        }
+        
+        .column h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 12px 0;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .checklist i {
+            color: var(--accent);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        /* Testimonial */
+        .testimonial {
+            background: var(--light-gray);
+            padding: 50px;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            margin: 60px 0;
+            font-style: italic;
+        }
+        
+        .testimonial-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-author {
+            font-style: normal;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .testimonial-title {
+            font-style: normal;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 60px 0;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: var(--primary);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Download Box */
+        .download-box {
+            background: linear-gradient(135deg, rgba(197,160,89,0.1), rgba(197,160,89,0.05));
+            padding: 40px;
+            border-radius: 10px;
+            border: 2px dashed var(--accent);
+            text-align: center;
+        }
+        
+        .download-box i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .download-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .two-column { grid-template-columns: 1fr; gap: 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonial { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <a href="index.html#relocation" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Corporate Relocation Services</h1>
+        <p>Moving across the country is complex. We simplify the transition by acting as your eyes and ears on the ground.</p>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>Concierge-Level Support</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 700px; margin: auto;">Your dedicated partner for a seamless relocation to the Greater Metro Area</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Neighborhood Analysis</h3>
+                <p>Detailed reports on neighborhoods, commute times, local amenities, and lifestyle fit tailored to your preferences.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-school"></i>
+                <h3>School District Reports</h3>
+                <p>Comprehensive analysis of school performance, ratings, programs, and enrollment information for families.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-video"></i>
+                <h3>Virtual Tours</h3>
+                <p>Live FaceTime walkthroughs of properties so you can explore homes from anywhere in the world.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-clipboard-check"></i>
+                <h3>Pre-Qualified Listings</h3>
+                <p>We screen properties based on your criteria before you even board a plane, saving you time and energy.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Local Expert Network</h3>
+                <p>Introductions to movers, utility providers, inspectors, and contractors who will make your move seamless.</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-calendar-alt"></i>
+                <h3>Flexible Scheduling</h3>
+                <p>We work around your corporate timeline, coordinating viewings and closings to match your start date.</p>
+            </div>
+        </div>
+
+        <div class="two-column">
+            <div class="column">
+                <h3>What's Included</h3>
+                <ul class="checklist">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Initial Consultation:</strong> 60-minute video call to understand your needs, timeline, and preferences</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Custom Area Guide:</strong> Personalized report covering neighborhoods, schools, and amenities</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Curated Property List:</strong> Hand-selected homes matching your criteria</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Virtual Walkthroughs:</strong> Live video tours with Q&A</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Commute Analysis:</strong> Drive-time maps to your office</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Market Insights:</strong> Pricing analysis and negotiation support</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Closing Coordination:</strong> Remote closing options when possible</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="column">
+                <h3>Why Choose VDI for Relocation?</h3>
+                <p style="margin-bottom: 20px;">Relocating for work is stressful enough without worrying about finding the right home in an unfamiliar city. Our relocation service removes that burden.</p>
+                
+                <p style="margin-bottom: 20px;"><strong>We understand:</strong></p>
+                <ul class="checklist">
+                    <li>
+                        <i class="fas fa-briefcase"></i>
+                        <span>You have limited time to find a home</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-plane"></i>
+                        <span>Flying in for viewings is expensive and exhausting</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-home"></i>
+                        <span>You need local expertise you can trust</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-users"></i>
+                        <span>Your family's needs come first</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-clock"></i>
+                        <span>Timing is critical to your start date</span>
+                    </li>
+                </ul>
+
+                <p style="margin-top: 20px; padding: 20px; background: var(--light-gray); border-radius: 8px;">
+                    <strong>Our Promise:</strong> We'll treat your relocation with the same care and urgency we would our own family's move.
+                </p>
+            </div>
+        </div>
+
+        <div class="testimonial">
+            <div class="testimonial-text">
+                "When my company relocated me from Boston to Phoenix, I was overwhelmed. VDI sent me a custom neighborhood guide, set up virtual tours, and even visited homes on my behalf. By the time I flew in for a weekend, I had three finalists to choose from. We closed remotely and moved in seamlessly. I can't imagine doing this without them."
+            </div>
+            <div class="testimonial-author">— Sarah M., Technology Executive</div>
+            <div class="testimonial-title">Relocated from Boston, MA</div>
+        </div>
+
+        <div class="download-box">
+            <i class="fas fa-file-download"></i>
+            <h3>Download Our Relocation Guide</h3>
+            <p style="margin-bottom: 25px; color: #666;">A comprehensive 20-page guide covering everything you need to know about relocating to the Greater Metro Area.</p>
+            <a href="index.html#contact" class="btn" style="background: var(--primary); color: white;">Request Your Free Guide</a>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Make Your Move Stress-Free?</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Schedule your complimentary relocation consultation today. Let's discuss your timeline, preferences, and how we can make this transition seamless.
+            </p>
+            <a href="index.html#contact" class="btn">Schedule Consultation</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html" style="color: #666; text-decoration: none;">Home</a> | 
+            <a href="mailto:info@vdirealty.com" style="color: #666; text-decoration: none;">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

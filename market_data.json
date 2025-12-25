@@ -1,0 +1,9 @@
+{
+  "medianPrice": "$540k",
+  "daysOnMarket": 32,
+  "saleToList": 98,
+  "activeListings": 150,
+  "location": "Greater Metro Area",
+  "lastUpdated": "2025-12-24",
+  "notes": "This file is used by the website to load market data. Update manually or use the Python script."
+}
