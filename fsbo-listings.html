@@ -984,6 +984,124 @@
         });
 
         sortSelect.addEventListener('change', sortListings);
+
+        // Load listings from local backend on page load
+        async function loadListings() {
+            try {
+                const response = await fetch('http://localhost:3000/api/fsbo/listings');
+                const data = await response.json();
+                
+                if (data.success && data.listings.length > 0) {
+                    // Clear example listings
+                    listingsGrid.innerHTML = '';
+                    
+                    // Render real listings
+                    data.listings.forEach(listing => {
+                        const card = createListingCard(listing);
+                        listingsGrid.appendChild(card);
+                    });
+                    
+                    listingCount.textContent = data.listings.length;
+                    console.log(`✅ Loaded ${data.listings.length} listings from backend`);
+                } else {
+                    console.log('ℹ️ No listings found in database, showing example listings');
+                }
+            } catch (error) {
+                console.error('❌ Error loading listings:', error);
+                console.log('ℹ️ Showing example listings. Make sure backend server is running on http://localhost:3000');
+            }
+        }
+
+        // Create listing card HTML from data
+        function createListingCard(listing) {
+            const card = document.createElement('div');
+            card.className = 'listing-card';
+            card.dataset.type = listing.propertyType;
+            card.dataset.price = listing.price;
+            card.dataset.beds = listing.bedrooms;
+            card.dataset.city = listing.city;
+            
+            const isNew = (new Date() - new Date(listing.submissionDate)) < (7 * 24 * 60 * 60 * 1000); // 7 days
+            const photos = listing.photos || [];
+            const firstPhoto = photos.length > 0 ? photos[0].url : 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800';
+            
+            card.innerHTML = `
+                ${isNew ? '<div class="listing-badge new">New Listing</div>' : ''}
+                <div class="listing-image-container">
+                    <img src="${firstPhoto}" alt="${listing.address}" class="listing-image" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'">
+                    <div class="image-nav">
+                        ${photos.map((_, i) => `<span class="image-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                    </div>
+                </div>
+                <div class="listing-content">
+                    <div class="listing-price">$${listing.price.toLocaleString()}</div>
+                    <div class="listing-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${listing.address}, ${listing.city}, ${listing.state} ${listing.zip}</span>
+                    </div>
+                    <span class="listing-type">${listing.propertyType}</span>
+                    
+                    <div class="listing-details">
+                        <div class="detail-item">
+                            <div><i class="fas fa-bed"></i></div>
+                            <div class="detail-value">${listing.bedrooms}</div>
+                            <div class="detail-label">Bedrooms</div>
+                        </div>
+                        <div class="detail-item">
+                            <div><i class="fas fa-bath"></i></div>
+                            <div class="detail-value">${listing.bathrooms}</div>
+                            <div class="detail-label">Bathrooms</div>
+                        </div>
+                        <div class="detail-item">
+                            <div><i class="fas fa-ruler-combined"></i></div>
+                            <div class="detail-value">${listing.sqft.toLocaleString()}</div>
+                            <div class="detail-label">Sq Ft</div>
+                        </div>
+                    </div>
+
+                    ${listing.features ? `
+                    <div class="listing-features">
+                        ${listing.features.split(',').map(f => `<span class="feature-tag">${f.trim()}</span>`).join('')}
+                    </div>` : ''}
+
+                    <div class="listing-description">
+                        ${listing.description}
+                    </div>
+
+                    <div class="listing-contact">
+                        ${listing.privateContact ? `
+                        <div class="privacy-notice" style="flex: 1;">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Seller's contact info is protected. Use the button to inquire.</span>
+                        </div>
+                        <a href="mailto:info@vdirealty.com?subject=Inquiry about ${listing.address}" class="contact-btn">
+                            <i class="fas fa-envelope"></i> Contact Seller
+                        </a>
+                        ` : `
+                        <div class="contact-info">
+                            <div class="contact-info-item">
+                                <i class="fas fa-user"></i>
+                                <span>${listing.firstName} ${listing.lastName}</span>
+                            </div>
+                            <div class="contact-info-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>${listing.email}</span>
+                            </div>
+                            <div class="contact-info-item">
+                                <i class="fas fa-phone"></i>
+                                <span>${listing.phone}</span>
+                            </div>
+                        </div>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Load listings when page loads
+        loadListings();
     </script>
 </body>
 </html>
