@@ -95,7 +95,12 @@
             background: var(--primary);
             color: white;
         }
-        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links { display: flex; gap: 35px; align-items: center; }
+        
+        .nav-item {
+            position: relative;
+        }
+        
         .nav-links a {
             text-decoration: none;
             color: var(--primary);
@@ -105,7 +110,11 @@
             transition: all 0.3s ease;
             position: relative;
             padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
+        
         .nav-links a:not(.btn-nav):before {
             content: '';
             position: absolute;
@@ -116,8 +125,61 @@
             background: var(--accent);
             transition: width 0.3s ease;
         }
+        
         .nav-links a:not(.btn-nav):hover:before { width: 100%; }
         .nav-links a:hover { color: var(--accent); }
+        
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: var(--primary);
+            text-transform: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .dropdown-menu a:hover {
+            background: var(--light-gray);
+            color: var(--accent);
+            padding-left: 25px;
+        }
+        
+        .dropdown-menu a:before {
+            display: none;
+        }
         .btn-nav {
             background: var(--primary);
             color: white !important;
@@ -533,15 +595,39 @@
         <div class="nav-container">
             <div class="logo">VDI Realty</div>
             <nav class="nav-links">
-                <a href="about.html">About</a>
-                <a href="#services">Services</a>
-                <a href="property-management.html">Property Management</a>
-                <a href="neighborhoods.html">Neighborhoods</a>
-                <a href="fsbo-listings.html">Browse FSBO</a>
-                <a href="fsbo.html">List Property</a>
-                <a href="tools.html"><i class="fas fa-calculator"></i> Tools</a>
-                <a href="blog.html">Resources</a>
-                <a href="#contact" class="btn-nav">Contact Us</a>
+                <div class="nav-item">
+                    <a href="about.html">About</a>
+                </div>
+                
+                <div class="nav-item dropdown">
+                    <a href="#services" class="dropdown-toggle">Services <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="property-management.html"><i class="fas fa-building"></i> Property Management</a>
+                        <a href="buyers-guide.html"><i class="fas fa-home"></i> Buyer's Guide</a>
+                        <a href="sellers-guide.html"><i class="fas fa-dollar-sign"></i> Seller's Guide</a>
+                        <a href="relocation.html"><i class="fas fa-map-marked-alt"></i> Relocation Services</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item dropdown">
+                    <a href="fsbo-listings.html" class="dropdown-toggle">FSBO <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="fsbo-listings.html"><i class="fas fa-search"></i> Browse Listings</a>
+                        <a href="fsbo.html"><i class="fas fa-plus-circle"></i> List Your Property</a>
+                    </div>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="neighborhoods.html">Neighborhoods</a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="tools.html"><i class="fas fa-calculator"></i> Tools</a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="#contact" class="btn-nav">Contact</a>
+                </div>
             </nav>
             <button class="menu-toggle" onclick="toggleMobileMenu()">
                 <i class="fas fa-bars"></i>
