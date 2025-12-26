@@ -6,6 +6,7 @@ const { initDatabase } = require('./database');
 const { initializeTransporter } = require('./email-service');
 const { scheduleExpirationCheck, scheduleReminderEmails, runImmediateChecks } = require('./cron-jobs');
 const fsboRoutes = require('./routes/fsbo-routes');
+const contactRoutes = require('./routes/contact-routes');
 
 // Initialize Express app
 const app = express();
@@ -20,6 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
 app.use('/api/fsbo', fsboRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -57,10 +59,10 @@ const PORT = config.port;
 app.listen(PORT, () => {
     console.log('');
     console.log('═══════════════════════════════════════════════════');
-    console.log('🚀 VDI Realty FSBO Backend Server Started!');
+    console.log('🚀 VDI Realty Backend Server Started!');
     console.log('═══════════════════════════════════════════════════');
     console.log(`📡 Server running on: http://localhost:${PORT}`);
-    console.log(`🌐 API Base URL: http://localhost:${PORT}/api/fsbo`);
+    console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
     console.log(`📂 Upload Directory: ${config.uploadDir}`);
     console.log(`⏱️  Listing Duration: ${config.listingDurationDays} days`);
     console.log(`📧 Reminder: ${config.reminderDaysBefore} days before expiration`);
@@ -71,6 +73,7 @@ app.listen(PORT, () => {
     console.log(`  GET    /api/fsbo/listing/:id     - Get single listing`);
     console.log(`  GET    /api/fsbo/photo/:filename - Get listing photo`);
     console.log(`  POST   /api/fsbo/contact/:id     - Contact seller`);
+    console.log(`  POST   /api/contact/submit       - Submit contact form`);
     console.log(`  GET    /api/health               - Health check`);
     console.log('═══════════════════════════════════════════════════');
     console.log('');

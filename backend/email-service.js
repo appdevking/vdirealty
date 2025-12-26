@@ -238,9 +238,84 @@ const sendAdminNotification = async (listing) => {
     }
 };
 
+// Send contact form email
+const sendContactEmail = async (contactData) => {
+    const mailOptions = {
+        from: `VDI Realty Website <${config.email.user}>`,
+        to: config.adminEmail,
+        replyTo: contactData.email,
+        subject: `New Contact from ${contactData.name} - VDI Realty`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #0F2027, #203A43); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+                    .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+                    .info-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+                    .detail-row { padding: 10px 0; border-bottom: 1px solid #eee; }
+                    .detail-label { font-weight: bold; color: #0F2027; display: inline-block; width: 120px; }
+                    .message-box { background: #fff3cd; border-left: 4px solid #C5A059; padding: 15px; margin: 20px 0; border-radius: 4px; }
+                    .footer { text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>📧 New Contact Form Submission</h1>
+                    </div>
+                    <div class="content">
+                        <div class="info-box">
+                            <h3 style="margin-top: 0; color: #0F2027;">Contact Information:</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">Name:</span> ${contactData.name}
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Email:</span> <a href="mailto:${contactData.email}">${contactData.email}</a>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Phone:</span> ${contactData.phone}
+                            </div>
+                            <div class="detail-row" style="border-bottom: none;">
+                                <span class="detail-label">Interest:</span> ${contactData.interest}
+                            </div>
+                        </div>
+                        
+                        <div class="message-box">
+                            <h3 style="margin-top: 0; color: #0F2027;">Message:</h3>
+                            <p style="white-space: pre-line;">${contactData.message}</p>
+                        </div>
+                        
+                        <p style="font-size: 0.9em; color: #666;">
+                            <strong>Submitted:</strong> ${new Date(contactData.submittedAt).toLocaleString()}
+                        </p>
+                    </div>
+                    <div class="footer">
+                        <p>&copy; ${new Date().getFullYear()} VDI Realty. All rights reserved.</p>
+                        <p>This message was sent from your website contact form</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`✅ Contact form email sent to ${config.adminEmail}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending contact form email:', error);
+        return false;
+    }
+};
+
 module.exports = {
     initializeTransporter,
     sendConfirmationEmail,
     sendReminderEmail,
-    sendAdminNotification
+    sendAdminNotification,
+    sendContactEmail
 };

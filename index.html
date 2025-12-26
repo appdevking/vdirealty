@@ -1280,39 +1280,19 @@
                 to_email: 'info@vdirealty.com'
             };
             
-            // Option 1: Using EmailJS (Recommended - Free tier available)
-            // Uncomment when you set up EmailJS
-            /*
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', formData)
-                .then(function(response) {
-                    showMessage('✓ Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
-                    form.reset();
-                }, function(error) {
-                    showMessage('✗ Sorry, there was an error sending your message. Please email us directly at info@vdirealty.com', 'error');
-                    console.error('EmailJS Error:', error);
-                })
-                .finally(function() {
-                    submitBtn.innerHTML = '<span>Send Message</span>';
-                    submitBtn.disabled = false;
-                });
-            */
-            
-            // Option 2: Using Web3Forms (Alternative - Also free)
-            // Uncomment to use Web3Forms instead
-            fetch('https://api.web3forms.com/submit', {
+            // LOCAL BACKEND API - No third-party services needed!
+            fetch('http://localhost:3000/api/contact/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Get free key at https://web3forms.com
                     name: formData.name,
                     email: formData.email,
                     phone: formData.phone,
-                    subject: `VDI Realty Contact: ${formData.interest}`,
-                    message: `Interest: ${formData.interest}\n\nMessage: ${formData.message}`,
-                    to: 'info@vdirealty.com'
+                    interest: formData.interest,
+                    message: formData.message
                 })
             })
             .then(response => response.json())
@@ -1332,10 +1312,6 @@
                 submitBtn.innerHTML = '<span>Send Message</span>';
                 submitBtn.disabled = false;
             });
-            
-            // Option 3: Using Formspree (Alternative)
-            // Replace the fetch URL above with:
-            // fetch('https://formspree.io/f/YOUR_FORM_ID', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
             
             return false;
         }

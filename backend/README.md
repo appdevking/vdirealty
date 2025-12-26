@@ -51,6 +51,7 @@ The server will start on `http://localhost:3000`
 - `GET /api/fsbo/listing/:id` - Get single listing
 - `GET /api/fsbo/photo/:filename` - Serve photos
 - `POST /api/fsbo/contact/:id` - Contact seller (for private listings)
+- `POST /api/contact/submit` - Submit contact form from website
 
 ## ⚙️ Configuration
 
