@@ -450,11 +450,32 @@
             </ul>
         </div>
 
+        <!-- Listing Duration Notice -->
+        <div class="info-section" style="background: #fff3cd; border-left-color: #ffc107;">
+            <h3><i class="fas fa-clock"></i> Listing Duration & Renewal</h3>
+            <ul>
+                <li><strong>Active for 2 Weeks:</strong> Your listing will be automatically removed after 14 days to keep our listings fresh and current</li>
+                <li><strong>Unlimited Relisting:</strong> You can relist your property as many times as you want - completely free!</li>
+                <li><strong>Email Reminder:</strong> We'll send you a reminder 2 days before your listing expires</li>
+                <li><strong>Easy Renewal:</strong> Simply resubmit the form to extend your listing for another 2 weeks</li>
+                <li><strong>Why 2 Weeks?</strong> This ensures all listings are current and sellers are actively engaged</li>
+            </ul>
+        </div>
+
         <!-- Success Message -->
         <div class="success-message" id="successMessage">
             <i class="fas fa-check-circle"></i>
             <h2>Listing Submitted Successfully!</h2>
             <p>Thank you for listing your property with VDI Realty. We will review your submission and contact you shortly.</p>
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #fff3cd; border-radius: 8px; color: #856404;">
+                <strong><i class="fas fa-clock"></i> Important:</strong>
+                <ul style="text-align: left; margin: 0.5rem 0 0 1.5rem; padding: 0;">
+                    <li>Your listing will be active for <strong>14 days (2 weeks)</strong></li>
+                    <li>After 14 days, your listing will be automatically removed</li>
+                    <li>We'll send you a reminder email 2 days before expiration</li>
+                    <li>You can relist <strong>unlimited times</strong> for free - just resubmit this form!</li>
+                </ul>
+            </div>
         </div>
 
         <!-- FSBO Form -->
@@ -760,6 +781,15 @@
             // Add privacy preference
             const privateContact = document.getElementById('privateContact').checked;
             formData.set('privateContact', privateContact ? 'Yes - Keep contact info private' : 'No - Show contact info publicly');
+
+            // Add submission timestamp and expiration date
+            const submissionDate = new Date();
+            const expirationDate = new Date(submissionDate);
+            expirationDate.setDate(expirationDate.getDate() + 14); // 14 days from now
+            
+            formData.set('submissionDate', submissionDate.toISOString());
+            formData.set('expirationDate', expirationDate.toISOString());
+            formData.set('listingDuration', '14 days');
 
             try {
                 // SETUP INSTRUCTIONS:

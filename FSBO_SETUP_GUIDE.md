@@ -8,6 +8,9 @@ A complete "For Sale By Owner" (FSBO) page has been created at `fsbo.html` that 
 - ✅ Contact information form (name, email, phone)
 - ✅ **Privacy Protection Option** - Sellers can choose to keep contact info private
 - ✅ **Scam Prevention** - Optional contact intermediary through VDI Realty
+- ✅ **14-Day Auto-Expiration** - Listings automatically removed after 2 weeks
+- ✅ **Unlimited Relisting** - Sellers can relist as many times as needed for free
+- ✅ **Expiration Reminders** - Automatic email notification 2 days before expiration
 - ✅ Comprehensive property details (address, type, price, size, bed/bath, year built, lot size)
 - ✅ Property features checkboxes (pool, garage, fireplace, etc.)
 - ✅ Rich text description field
@@ -164,14 +167,69 @@ When a seller submits a listing with "Keep my contact information private" check
 - Set up a separate contact form for buyer inquiries on listing pages
 - Route buyer messages through VDI Realty email system
 
+## Listing Expiration & Auto-Removal System
+
+### How It Works:
+Each FSBO listing includes:
+- **submissionDate** - Timestamp when listing was created
+- **expirationDate** - Calculated as 14 days from submission
+- **listingDuration** - Set to "14 days"
+
+### Backend Implementation Required:
+To implement automatic removal, you'll need:
+
+1. **Database/Storage**: Store listings with submission and expiration dates
+2. **Cron Job/Scheduled Task**: Run daily to check for expired listings
+3. **Auto-Removal Script**: 
+   ```javascript
+   // Pseudo-code example
+   function removeExpiredListings() {
+       const now = new Date();
+       listings.forEach(listing => {
+           if (new Date(listing.expirationDate) < now) {
+               listing.status = 'expired';
+               // Remove from public display
+           }
+       });
+   }
+   ```
+
+4. **Email Reminder System**: Send reminder 2 days before expiration
+   - Check if `expirationDate - 2 days === today`
+   - Send email with "Relist Now" link to the form
+
+5. **Relisting Process**:
+   - No authentication needed
+   - Seller simply resubmits the form
+   - Creates new listing with fresh 14-day period
+   - Previous expired listing can be archived
+
+### Email Reminder Template:
+```
+Subject: Your FSBO Listing Expires in 2 Days
+
+Hello [Seller Name],
+
+Your property listing at [Address] will expire in 2 days on [Expiration Date].
+
+To keep your property visible to potential buyers, simply relist it (completely free!):
+[Link to FSBO form]
+
+You can relist as many times as you need - there are no limits or fees.
+
+Thank you for using VDI Realty FSBO!
+```
+
 ## Next Steps
 
 1. ✅ Set up Formspree account
 2. ✅ Update `YOUR_FORM_ID` in fsbo.html
 3. ✅ Test form submission
-4. ⬜ Add FSBO link to other pages as needed
-5. ⬜ Create a page to display FSBO listings
-6. ⬜ Set up automated email responses to sellers
+4. ⬜ Implement backend database for listings storage
+5. ⬜ Set up cron job for auto-expiration checks
+6. ⬜ Configure automated expiration reminder emails
+7. ⬜ Add listing display page with expiration filtering
+8. ⬜ Test complete listing lifecycle (submit → remind → expire → relist)
 
 ## Questions?
 
