@@ -1,1 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#cccccc" /><text x="50" y="50" font-family="Arial" font-size="12" fill="#000000" text-anchor="middle" dy=".3em">New Relocation</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="relocGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#203A43;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F2027;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#relocGrad)"/>
+  
+  <!-- Map Pin Markers -->
+  <g opacity="0.7">
+    <path d="M 200 250 L 200 200 C 200 180, 220 160, 240 160 C 260 160, 280 180, 280 200 L 280 250 L 240 300 Z" fill="#C5A059"/>
+    <circle cx="240" cy="190" r="15" fill="#0F2027"/>
+    
+    <path d="M 520 280 L 520 230 C 520 210, 540 190, 560 190 C 580 190, 600 210, 600 230 L 600 280 L 560 330 Z" fill="#C5A059"/>
+    <circle cx="560" cy="220" r="15" fill="#0F2027"/>
+  </g>
+  
+  <!-- Route Path -->
+  <path d="M 240 280 Q 400 200, 560 280" 
+    fill="none" stroke="#C5A059" stroke-width="4" stroke-dasharray="15,10" opacity="0.6"/>
+  
+  <!-- Moving Truck Silhouette -->
+  <g transform="translate(350, 320)">
+    <rect x="0" y="20" width="100" height="60" fill="#1a2f35" opacity="0.8"/>
+    <rect x="100" y="35" width="40" height="45" fill="#1a2f35" opacity="0.8"/>
+    <rect x="10" y="30" width="30" height="25" fill="#C5A059" opacity="0.3"/>
+    <circle cx="25" cy="85" r="12" fill="#C5A059" opacity="0.6"/>
+    <circle cx="115" cy="85" r="12" fill="#C5A059" opacity="0.6"/>
+  </g>
+  
+  <!-- Compass Rose -->
+  <g transform="translate(650, 450)" opacity="0.3">
+    <circle cx="0" cy="0" r="50" fill="none" stroke="#C5A059" stroke-width="2"/>
+    <polygon points="0,-40 -8,-10 0,-15 8,-10" fill="#C5A059"/>
+    <polygon points="0,40 -8,10 0,15 8,10" fill="#C5A059"/>
+    <polygon points="-40,0 -10,-8 -15,0 -10,8" fill="#C5A059"/>
+    <polygon points="40,0 10,-8 15,0 10,8" fill="#C5A059"/>
+  </g>
+</svg>
