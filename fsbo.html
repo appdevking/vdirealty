@@ -441,7 +441,9 @@
             <ul>
                 <li><strong>No Account Required:</strong> Simple, straightforward listing process</li>
                 <li><strong>Quick Exposure:</strong> Get your property listed in minutes</li>
-                <li><strong>Full Control:</strong> You manage your listing and negotiations</li>
+                <li><strong>Privacy Protected:</strong> Choose to keep your contact info private - buyers contact you through VDI Realty</li>
+                <li><strong>Scam Prevention:</strong> Optional contact protection prevents email harvesting and phishing</li>
+                <li><strong>Full Control:</strong> You manage your listing and choose which inquiries to respond to</li>
                 <li><strong>Professional Platform:</strong> Your listing appears alongside our featured properties</li>
                 <li><strong>Free to List:</strong> No upfront fees to post your property</li>
             </ul>
@@ -480,6 +482,26 @@
                     <div class="form-group">
                         <label>Phone Number <span class="required">*</span></label>
                         <input type="tel" name="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="background: #f0f8ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent);">
+                    <div class="checkbox-item" style="margin-bottom: 1rem;">
+                        <input type="checkbox" name="privateContact" id="privateContact" checked>
+                        <label for="privateContact" style="font-weight: 600; color: var(--primary); cursor: pointer;">
+                            <i class="fas fa-shield-alt" style="color: var(--accent);"></i> Keep my contact information private (Recommended)
+                        </label>
+                    </div>
+                    <div style="font-size: 0.9rem; color: #555; line-height: 1.6; padding-left: 1.5rem;">
+                        <strong>How it works:</strong>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>Your email and phone number will NOT be displayed publicly on the listing</li>
+                            <li>Interested buyers will see a "Contact Seller" button instead</li>
+                            <li>When buyers click the button, VDI Realty forwards their message to you</li>
+                            <li>You choose which inquiries to respond to - protecting you from scammers and spam</li>
+                            <li>Your contact info is only shared when YOU decide to reply</li>
+                        </ul>
+                        <p style="margin: 0.5rem 0 0 0;"><em><i class="fas fa-info-circle"></i> Uncheck this box only if you want your contact information visible to all viewers.</em></p>
                     </div>
                 </div>
             </div>
@@ -733,6 +755,10 @@
             const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
                 .map(cb => cb.value);
             formData.set('features', features.join(', '));
+
+            // Add privacy preference
+            const privateContact = document.getElementById('privateContact').checked;
+            formData.set('privateContact', privateContact ? 'Yes - Keep contact info private' : 'No - Show contact info publicly');
 
             try {
                 // SETUP INSTRUCTIONS:

@@ -6,6 +6,8 @@ A complete "For Sale By Owner" (FSBO) page has been created at `fsbo.html` that 
 
 ### Features Included:
 - ✅ Contact information form (name, email, phone)
+- ✅ **Privacy Protection Option** - Sellers can choose to keep contact info private
+- ✅ **Scam Prevention** - Optional contact intermediary through VDI Realty
 - ✅ Comprehensive property details (address, type, price, size, bed/bath, year built, lot size)
 - ✅ Property features checkboxes (pool, garage, fireplace, etc.)
 - ✅ Rich text description field
@@ -119,19 +121,48 @@ Consider building or integrating:
 
 ## Security Considerations
 
-1. **Spam Protection**: 
+1. **Privacy Protection Feature**:
+   - Sellers can opt to keep contact info private (enabled by default)
+   - When enabled, contact info is NOT displayed on public listing
+   - Buyers use "Contact Seller" button to send inquiries through VDI Realty
+   - Sellers receive forwarded messages and choose whether to respond
+   - Prevents email harvesting, phishing, and scammer contact
+   - Protects sellers from unwanted solicitations
+   
+2. **Spam Protection**: 
    - Formspree includes reCAPTCHA
    - Consider adding honeypot fields
    
-2. **File Upload Validation**:
+3. **File Upload Validation**:
    - Already limited to image types
    - Size limited to 5MB per file
    - Consider server-side validation too
 
-3. **Data Privacy**:
+4. **Data Privacy**:
    - Add privacy policy link
    - GDPR compliance if needed
    - Secure data storage
+
+## How Privacy Protection Works
+
+When a seller submits a listing with "Keep my contact information private" checked:
+
+1. **Submission**: Form includes `privateContact: Yes` flag
+2. **Listing Display**: Email and phone are hidden from public view
+3. **Buyer Interest**: Listing shows "Contact Seller" button instead of contact details
+4. **Inquiry Process**: 
+   - Buyer fills out contact form with their message
+   - VDI Realty receives inquiry via Formspree
+   - You (VDI admin) forward message to seller's email
+   - Seller reviews and decides whether to respond
+5. **Seller Control**: Seller only shares contact info with legitimate, interested buyers
+
+### Implementation Notes:
+- The privacy flag is captured in form submission data
+- When displaying listings, check the `privateContact` field
+- If `Yes`, show contact button instead of direct contact info
+- Set up a separate contact form for buyer inquiries on listing pages
+- Route buyer messages through VDI Realty email system
 
 ## Next Steps
 
