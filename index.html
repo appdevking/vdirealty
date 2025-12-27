@@ -1272,28 +1272,25 @@
             
             // Get form data
             const formData = {
+                access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Get free key at https://web3forms.com
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value || 'Not provided',
                 interest: document.getElementById('interest').value,
                 message: document.getElementById('message').value,
-                to_email: 'info@vdirealty.com'
+                from_name: 'VDI Realty Contact Form',
+                subject: 'New Contact Form Submission - VDI Realty',
+                replyto: document.getElementById('email').value
             };
             
-            // LOCAL BACKEND API - No third-party services needed!
-            fetch('http://localhost:3000/api/contact/submit', {
+            // Web3Forms API - Free, reliable, unlimited emails
+            fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    interest: formData.interest,
-                    message: formData.message
-                })
+                body: JSON.stringify(formData)
             })
             .then(response => response.json())
             .then(data => {
