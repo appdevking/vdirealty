@@ -36,16 +36,18 @@ router.post('/submit', async (req, res) => {
             submittedAt: new Date().toISOString()
         };
         
-        // Send email to admin
-        const emailSent = await sendContactEmail(contactData);
-        
-        if (!emailSent) {
-            console.error('Failed to send contact email');
-            // Still return success to user - log the issue for admin
-            return res.json({
-                success: true,
-                message: 'Thank you for contacting us! We will get back to you soon.'
-            });
+        // Send email to admin only if email credentials are configured
+        if (config.email.user && config.email.password) {
+            try {
+                await sendContactEmail(contactData);
+                console.log(`✅ Contact email sent to ${config.adminEmail}`);
+            } catch (emailError) {
+                console.error('Failed to send contact email:', emailError.message);
+                // Continue anyway - don't fail the submission
+            }
+        } else {
+            console.log('⚠️ Email not configured - contact form data logged only');
+            console.log('Contact submission:', contactData);
         }
         
         res.json({
