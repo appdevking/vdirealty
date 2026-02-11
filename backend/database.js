@@ -66,6 +66,10 @@ const initDatabase = () => {
     console.log('✅ Database initialized successfully');
 };
 
+// Initialize database tables before preparing statements
+// This ensures tables exist when db.prepare is called
+initDatabase();
+
 // Prepared statements for better performance
 const statements = {
     // Insert new listing

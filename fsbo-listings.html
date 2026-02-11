@@ -911,6 +911,9 @@
         <p>Residential, Commercial & Investment Property Solutions</p>
     </footer>
 
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
+
     <script>
         // Simple filtering functionality
         const filters = {
@@ -985,10 +988,10 @@
 
         sortSelect.addEventListener('change', sortListings);
 
-        // Load listings from local backend on page load
+        // Load listings from backend on page load
         async function loadListings() {
             try {
-                const response = await fetch('http://localhost:3000/api/fsbo/listings');
+                const response = await fetch(`${CONFIG.API_BASE_URL}/api/fsbo/listings`);
                 const data = await response.json();
                 
                 if (data.success && data.listings.length > 0) {
@@ -1008,7 +1011,7 @@
                 }
             } catch (error) {
                 console.error('❌ Error loading listings:', error);
-                console.log('ℹ️ Showing example listings. Make sure backend server is running on http://localhost:3000');
+                console.log(`ℹ️ Showing example listings. Make sure backend server is running on ${CONFIG.API_BASE_URL}`);
             }
         }
 
@@ -1022,15 +1025,23 @@
             card.dataset.city = listing.city;
             
             const isNew = (new Date() - new Date(listing.submissionDate)) < (7 * 24 * 60 * 60 * 1000); // 7 days
+            
+            // helper to resolve full photo URL
+            const getPhotoUrl = (photoPath) => {
+                if (!photoPath) return null;
+                if (photoPath.startsWith('http')) return photoPath;
+                return `${CONFIG.API_BASE_URL}${photoPath}`;
+            };
+
             const photos = listing.photos || [];
-            const firstPhoto = photos.length > 0 ? photos[0].url : 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800';
+            const firstPhoto = photos.length > 0 ? getPhotoUrl(photos[0].url) : 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800';
             
             card.innerHTML = `
                 ${isNew ? '<div class="listing-badge new">New Listing</div>' : ''}
                 <div class="listing-image-container">
                     <img src="${firstPhoto}" alt="${listing.address}" class="listing-image" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'">
                     <div class="image-nav">
-                        ${photos.map((_, i) => `<span class="image-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                        ${photos.map((p, i) => `<span class="image-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
                     </div>
                 </div>
                 <div class="listing-content">

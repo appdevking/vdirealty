@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
 const config = require('./config');
@@ -10,6 +11,13 @@ const contactRoutes = require('./routes/contact-routes');
 
 // Initialize Express app
 const app = express();
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+    console.log('📁 Created uploads directory');
+}
 
 // Middleware
 app.use(cors());
