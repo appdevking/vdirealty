@@ -32,20 +32,28 @@ This guide will help you deploy your VDI Realty FSBO backend to Railway.app, mak
 ### Option A: Deploy from GitHub (Recommended)
 
 1. **In Railway Dashboard:**
-   - Click **"+ New Project"**
+   - Click **"+ New Project"** (big button at top right or center)
    - Select **"Deploy from GitHub repo"**
-   - Authorize Railway to access your GitHub repositories
-   - Select your repository: `appdevking/vdirealty`
+   - Railway will ask you to authorize GitHub access (click "Authorize")
+   - You'll see a list of your repositories
+   - Search for and select: `appdevking/vdirealty`
    - Railway will detect it as a Node.js project
 
 2. **Configure the deployment:**
-   - Railway will auto-detect `package.json` and know it's a Node.js app
-   - It will automatically run `npm install` and `npm start`
-   - Click **"Deploy"**
+   - Railway will auto-detect `package.json` in the `/backend` folder
+   - **IMPORTANT**: Set the **Root Directory** to `backend`
+     - Click on your service card after it starts deploying
+     - Go to **"Settings"** tab
+     - Find **"Root Directory"** or **"Source"**
+     - Set it to: `backend`
+     - Click **"Save"** or it may auto-save
+   - Railway will automatically run `npm install` and `npm start`
 
 3. **Wait for deployment:**
    - Railway will build and deploy your app (takes 1-2 minutes)
    - You'll see build logs in real-time
+   - Look for ✅ **"SUCCESS"** message when done
+   - The service status should change to **"Active"** or show a green indicator
 
 ---
 
@@ -55,19 +63,49 @@ Your app needs persistent storage for:
 - SQLite database (`fsbo.db`)
 - Uploaded property photos
 
-1. **In your Railway project:**
-   - Click on your service
-   - Go to the **"Data"** tab or click **"+ New"** → **"Volume"**
-   - Create a new **Volume**
-   
-2. **Mount the volume:**
-   - **Mount Path**: `/app/data`
-   - **Name**: `vdi-storage` (or any name you prefer)
-   - Click **"Add Volume"**
+### Detailed Instructions:
 
-3. **Update your backend code:**
-   - We'll need to change the database path to use `/app/data`
-   - I'll do this for you in the next step
+1. **Navigate to your deployed service:**
+   - After deployment (from Step 2), you'll see your Railway dashboard
+   - You should see a card/tile with your project name (it might say "vdi-realty-fsbo-backend" or similar)
+   - **Click on that card** - this is "your service"
+   - You'll now see tabs at the top like: **Settings**, **Variables**, **Metrics**, **Deployments**, etc.
+
+2. **Go BACK to the Project Dashboard:**
+   - **IMPORTANT**: The "+ New" button is NOT in the service tabs!
+   - You need to go back to the project view
+   - Look for a **back arrow** or click on your **project name** at the top (usually says "vdirealty")
+   - OR click the **Railway logo** in the top left to go to the main dashboard
+   - You should now see your project canvas with service cards/boxes
+
+3. **Add a Volume (Persistent Storage):**
+   - Now you should see a **"+ New"** button or **"Create"** button on the project canvas
+   - **Click "+ New"** → Select **"Volume"** or **"Add Volume"**
+   
+   **If you still don't see it:**
+   - Right-click on the canvas (empty space in your project)
+   - Look for "Add Service" or "New Volume"
+   - OR look in the top-right corner for a **"+"** icon
+
+4. **Configure the volume:**
+   - **Mount Path**: Type exactly `/app/data` (this is critical!)
+   - **Name**: `vdi-storage` (or any name you prefer - doesn't matter)
+   - Click **"Add"** or **"Create Volume"**
+
+5. **Link the volume to your service:**
+   - After creating the volume, you'll see it as a new card/box in your project
+   - Railway will ask you to **connect it to a service**
+   - **Drag and drop** the volume card to your service card, OR
+   - Click on the volume → **Connect to Service** → Select your backend service
+   - Railway will automatically restart your service to mount the volume
+
+6. **Verify the volume is mounted:**
+   - Click on your service card again
+   - Go to the **"Settings"** tab
+   - Scroll down to find **"Volumes"** section
+   - You should see: `vdi-storage` mounted at `/app/data`
+
+> **✅ Your backend code is already updated!** The code automatically uses `/app/data` in production mode.
 
 ---
 
@@ -121,18 +159,43 @@ EMAIL_PASSWORD=your-app-specific-password
 
 ## Step 6: Update Your Website Configuration
 
-1. **Open** `js/config.js` in your project
+**⚠️ IMPORTANT: You must complete Step 5 first to get your actual Railway URL!**
 
-2. **Replace the localhost URL** with your Railway URL:
+1. **Get your Railway URL from Step 5:**
+   - It will look something like: `https://vdirealty-production-abc123.up.railway.app`
+   - The exact URL will be different - Railway assigns it automatically
+   - You can find it in Railway → Your Service → **Settings** tab → **Domains** section
 
+2. **Open** `js/config.js` in your project (in VS Code or your text editor)
+
+3. **Replace the localhost URL** with YOUR ACTUAL Railway URL:
+
+**BEFORE (current code):**
 ```javascript
 const CONFIG = {
-    // API_BASE_URL: 'http://localhost:3000' // Old local URL
-    API_BASE_URL: 'https://your-railway-url.up.railway.app' // Your new Railway URL
+    API_BASE_URL: 'http://localhost:3000' // This only works on your computer
 };
 ```
 
-3. **Commit and push** the change:
+**AFTER (what you need to change it to):**
+```javascript
+const CONFIG = {
+    API_BASE_URL: 'https://vdirealty-production-abc123.up.railway.app' // Replace with YOUR actual Railway URL
+};
+```
+
+**Example:** If Railway gave you `https://vdi-backend-xyz789.up.railway.app`, then you would use:
+```javascript
+const CONFIG = {
+    API_BASE_URL: 'https://vdi-backend-xyz789.up.railway.app'
+};
+```
+
+> **⚠️ DO NOT copy "your-railway-url" literally!** Replace it with your actual URL from Railway.
+
+4. **Save the file**
+
+5. **Commit and push** the change:
 ```bash
 git add js/config.js
 git commit -m "Update API URL to Railway backend"
