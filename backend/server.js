@@ -19,8 +19,19 @@ if (!fs.existsSync(uploadsDir)) {
     console.log('📁 Created uploads directory');
 }
 
-// Middleware
-app.use(cors());
+// Middleware - CORS configuration
+const corsOptions = {
+    origin: [
+        'https://appdevking.github.io',
+        'https://www.vdirealty.com',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
