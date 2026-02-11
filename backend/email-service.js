@@ -3,23 +3,26 @@ const config = require('./config');
 
 // Create transporter based on configuration
 let transporter;
+let sendgridClient;
 
 const initializeTransporter = () => {
-    if (config.email.service === 'gmail') {
+    if (config.email.service === 'sendgrid' && config.email.sendgridApiKey) {
+        // Use SendGrid Web API (not blocked by Railway)
+        try {
+            const sgMail = require('@sendgrid/mail');
+            sgMail.setApiKey(config.email.sendgridApiKey);
+            sendgridClient = sgMail;
+            console.log('✅ SendGrid Web API initialized');
+        } catch (error) {
+            console.error('⚠️ Failed to initialize SendGrid Web API:', error.message);
+            console.log('Install @sendgrid/mail: npm install @sendgrid/mail');
+        }
+    } else if (config.email.service === 'gmail') {
         transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: config.email.user,
                 pass: config.email.password
-            }
-        });
-    } else if (config.email.service === 'sendgrid') {
-        transporter = nodemailer.createTransport({
-            host: 'smtp.sendgrid.net',
-            port: 587,
-            auth: {
-                user: 'apikey',
-                pass: config.email.sendgridApiKey
             }
         });
     } else {
@@ -33,6 +36,25 @@ const initializeTransporter = () => {
                 pass: config.email.password
             }
         });
+    }
+};
+
+// Helper function to send email using SendGrid Web API or nodemailer
+const sendEmail = async (mailOptions) => {
+    if (sendgridClient) {
+        // Use SendGrid Web API
+        const msg = {
+            to: mailOptions.to,
+            from: config.adminEmail, // SendGrid requires verified sender
+            subject: mailOptions.subject,
+            html: mailOptions.html
+        };
+        await sendgridClient.send(msg);
+    } else if (transporter) {
+        // Use nodemailer
+        await transporter.sendMail(mailOptions);
+    } else {
+        throw new Error('No email service configured');
     }
 };
 
@@ -117,7 +139,7 @@ const sendConfirmationEmail = async (listing) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sendEmail(mailOptions);
         console.log(`✅ Confirmation email sent to ${listing.email}`);
         return true;
     } catch (error) {
@@ -200,7 +222,7 @@ const sendReminderEmail = async (listing) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sendEmail(mailOptions);
         console.log(`✅ Reminder email sent to ${listing.email}`);
         return true;
     } catch (error) {
@@ -231,7 +253,7 @@ const sendAdminNotification = async (listing) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sendEmail(mailOptions);
         console.log(`✅ Admin notification sent`);
     } catch (error) {
         console.error('❌ Error sending admin notification:', error);
@@ -303,7 +325,7 @@ const sendContactEmail = async (contactData) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sendEmail(mailOptions);
         console.log(`✅ Contact form email sent to ${config.adminEmail}`);
         return true;
     } catch (error) {

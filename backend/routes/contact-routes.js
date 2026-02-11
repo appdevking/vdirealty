@@ -37,7 +37,8 @@ router.post('/submit', async (req, res) => {
         };
         
         // Send email to admin only if email credentials are configured
-        if (config.email.user && config.email.password) {
+        const hasEmailConfig = (config.email.user && config.email.password) || config.email.sendgridApiKey;
+        if (hasEmailConfig) {
             try {
                 await sendContactEmail(contactData);
                 console.log(`✅ Contact email sent to ${config.adminEmail}`);
