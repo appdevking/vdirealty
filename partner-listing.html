@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Partner Listing | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+            background: var(--light-gray);
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover { color: var(--accent); }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 80px 20px 60px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .benefit-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .benefit-item i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .benefit-item h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .benefit-item p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        /* Form Section */
+        .form-section {
+            max-width: 900px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+        
+        .section-heading {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--accent);
+            background: #fafafa;
+        }
+        
+        .file-upload-area i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+        
+        .file-item button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 16px 50px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .submit-btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .form-message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .form-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .form-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .info-box h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .info-box ul {
+            margin: 10px 0 0 20px;
+            color: #555;
+        }
+        
+        footer {
+            background: #111;
+            color: #888;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .form-container { padding: 30px 20px; }
+            .benefits-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <div style="display: flex; gap: 2rem; align-items: center;">
+                <a href="opportunities.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Opportunities
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1><i class="fas fa-handshake"></i> Partner Listing Submission</h1>
+        <p>Showcase your properties to qualified investors and homebuyers. Zero fees, maximum exposure.</p>
+    </section>
+
+    <section class="benefits-section">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 10px;">Why List With Us?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>Zero Fees</h3>
+                <p>No commission. No listing fees. Keep 100% of your earnings.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-users"></i>
+                <h3>Qualified Buyers</h3>
+                <p>Reach serious investors actively seeking properties.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-rocket"></i>
+                <h3>Fast Exposure</h3>
+                <p>Your listing goes live within 24 hours of approval.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-chart-line"></i>
+                <h3>Analytics Dashboard</h3>
+                <p>Track views, inquiries, and market performance.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="form-section">
+        <div class="form-container">
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> Before You Start</h4>
+                <ul>
+                    <li>Listings are reviewed within 24 hours</li>
+                    <li>High-quality photos increase engagement by 300%</li>
+                    <li>Detailed descriptions help buyers make informed decisions</li>
+                    <li>Include accurate pricing and property details</li>
+                </ul>
+            </div>
+
+            <div id="formMessage" class="form-message"></div>
+
+            <form id="partnerListingForm">
+                <h3 class="section-heading"><i class="fas fa-user"></i> Your Information</h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name <span class="required">*</span></label>
+                        <input type="text" name="firstName" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name <span class="required">*</span></label>
+                        <input type="text" name="lastName" id="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" name="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number <span class="required">*</span></label>
+                        <input type="tel" name="phone" id="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Company/Agency Name</label>
+                    <input type="text" name="company" id="company" placeholder="Optional">
+                </div>
+
+                <h3 class="section-heading" style="margin-top: 40px;"><i class="fas fa-home"></i> Property Details</h3>
+
+                <div class="form-group">
+                    <label>Property Address <span class="required">*</span></label>
+                    <input type="text" name="address" id="address" placeholder="Street address" required>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>City <span class="required">*</span></label>
+                        <input type="text" name="city" id="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>State <span class="required">*</span></label>
+                        <select name="state" id="state" required>
+                            <option value="">Select State</option>
+                            <option value="WA">Washington</option>
+                            <option value="OR">Oregon</option>
+                            <option value="CA">California</option>
+                            <option value="ID">Idaho</option>
+                            <option value="MT">Montana</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ZIP Code <span class="required">*</span></label>
+                        <input type="text" name="zip" id="zip" pattern="[0-9]{5}" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Property Type <span class="required">*</span></label>
+                        <select name="propertyType" id="propertyType" required>
+                            <option value="">Select Type</option>
+                            <option value="Single-Family">Single-Family Home</option>
+                            <option value="Multi-Family">Multi-Family (2-4 units)</option>
+                            <option value="Condo">Condo</option>
+                            <option value="Townhouse">Townhouse</option>
+                            <option value="Land">Land/Lot</option>
+                            <option value="Commercial">Commercial Property</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price <span class="required">*</span></label>
+                        <input type="number" name="price" id="price" placeholder="$" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Square Footage <span class="required">*</span></label>
+                        <input type="number" name="sqft" id="sqft" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bedrooms <span class="required">*</span></label>
+                        <input type="number" name="bedrooms" id="bedrooms" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bathrooms <span class="required">*</span></label>
+                        <input type="number" name="bathrooms" id="bathrooms" step="0.5" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Year Built</label>
+                        <input type="number" name="yearBuilt" id="yearBuilt" min="1800" max="2026" placeholder="Optional">
+                    </div>
+                    <div class="form-group">
+                        <label>Lot Size (acres)</label>
+                        <input type="number" name="lotSize" id="lotSize" step="0.01" min="0" placeholder="Optional">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Key Features</label>
+                    <input type="text" name="features" id="features" placeholder="e.g., Pool, Garage, Updated Kitchen (Optional)">
+                </div>
+
+                <div class="form-group">
+                    <label>Property Description <span class="required">*</span></label>
+                    <textarea name="description" id="description" required placeholder="Describe the property, neighborhood, investment potential, etc."></textarea>
+                </div>
+
+                <h3 class="section-heading" style="margin-top: 40px;"><i class="fas fa-camera"></i> Photos</h3>
+
+                <div class="form-group">
+                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Click to Upload Photos</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Upload up to 10 high-quality images (JPEG, PNG, max 5MB each)</p>
+                    </div>
+                    <input type="file" id="fileInput" name="photos" accept="image/jpeg,image/png,image/jpg,image/webp" multiple>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+
+                <h3 class="section-heading" style="margin-top: 40px;"><i class="fas fa-cog"></i> Preferences</h3>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="privateContact" id="privateContact">
+                        <label for="privateContact">Keep my contact information private (buyers will contact you through VDI Realty)</label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Submit Listing
+                    </button>
+                </div>
+
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 20px;">
+                    By submitting, you agree to our terms and confirm the accuracy of the information provided.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 VDI Realty. All Rights Reserved.</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html" style="color: #666; text-decoration: none;">Home</a> | 
+            <a href="mailto:info@vdirealty.com" style="color: #666; text-decoration: none;">info@vdirealty.com</a>
+        </p>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script>
+        let selectedFiles = [];
+
+        // Handle file selection
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const maxFiles = 10;
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            files.forEach(file => {
+                if (selectedFiles.length >= maxFiles) {
+                    alert(`Maximum ${maxFiles} photos allowed`);
+                    return;
+                }
+
+                if (file.size > maxSize) {
+                    alert(`${file.name} is too large. Maximum size is 5MB`);
+                    return;
+                }
+
+                if (!file.type.match('image.*')) {
+                    alert(`${file.name} is not an image file`);
+                    return;
+                }
+
+                selectedFiles.push(file);
+            });
+
+            displayFileList();
+            e.target.value = ''; // Reset input
+        });
+
+        function displayFileList() {
+            const fileList = document.getElementById('fileList');
+            
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '';
+                return;
+            }
+
+            fileList.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <span><i class="fas fa-image"></i> ${file.name} (${formatFileSize(file.size)})</span>
+                    <button type="button" onclick="removeFile(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            displayFileList();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Handle form submission
+        document.getElementById('partnerListingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formMessage = document.getElementById('formMessage');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Validate
+            if (selectedFiles.length === 0) {
+                showMessage('Please upload at least one photo', 'error');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            try {
+                const formData = new FormData();
+
+                // Add form fields
+                const fields = ['firstName', 'lastName', 'email', 'phone', 'company', 'address', 
+                              'city', 'state', 'zip', 'propertyType', 'price', 'sqft', 'bedrooms', 
+                              'bathrooms', 'yearBuilt', 'lotSize', 'features', 'description'];
+                
+                fields.forEach(field => {
+                    const value = document.getElementById(field).value;
+                    if (value) formData.append(field, value);
+                });
+
+                // Add private contact preference
+                formData.append('privateContact', document.getElementById('privateContact').checked);
+
+                // Add photos
+                selectedFiles.forEach(file => {
+                    formData.append('photos', file);
+                });
+
+                // Submit to backend
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/submit`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('✓ Thank you! Your listing has been submitted and will be reviewed within 24 hours. You will receive a confirmation email shortly.', 'success');
+                    
+                    // Reset form
+                    document.getElementById('partnerListingForm').reset();
+                    selectedFiles = [];
+                    displayFileList();
+
+                    // Scroll to message
+                    formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    showMessage('✗ ' + (result.error || 'Failed to submit listing. Please try again.'), 'error');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showMessage('✗ An error occurred. Please try again or contact us at info@vdirealty.com', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Listing';
+            }
+        });
+
+        function showMessage(message, type) {
+            const formMessage = document.getElementById('formMessage');
+            formMessage.textContent = message;
+            formMessage.className = `form-message ${type}`;
+            formMessage.style.display = 'block';
+
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 10000);
+        }
+    </script>
+
+</body>
+</html>

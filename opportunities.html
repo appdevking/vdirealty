@@ -28,6 +28,211 @@
         
         h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
         
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Search & Filter Section */
+        .filter-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-input, .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .filter-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background: var(--accent);
+        }
+        
+        .clear-filter-btn {
+            background: #e0e0e0;
+            color: var(--primary);
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .clear-filter-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .search-bar {
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding-left: 45px;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        /* Partner Banner */
+        .partner-banner {
+            background: linear-gradient(135deg, var(--accent) 0%, #d4a55a 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 12px;
+            margin: 60px 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(197, 160, 89, 0.3);
+        }
+        
+        .partner-banner h2 {
+            color: white;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .partner-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            text-align: left;
+        }
+        
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .benefit-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+        
+        .benefit-card i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .benefit-card h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .benefit-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        
+        .partner-cta {
+            margin-top: 30px;
+        }
+        
+        .btn-partner {
+            background: white;
+            color: var(--accent);
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-partner:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Stats Counter */
+        .stats-counter {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .stat-box {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
         /* Header */
         header {
             background: rgba(255, 255, 255, 0.98);
@@ -176,6 +381,25 @@
             font-size: 1.5rem;
         }
         
+        .card-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .card-description {
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
         .card-stats {
             display: flex;
             gap: 20px;
@@ -220,6 +444,23 @@
         .btn:hover {
             background: var(--accent);
             transform: translateY(-2px);
+        }
+        
+        .btn-view-details {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .no-listings {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .no-listings i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 20px;
         }
         
         /* Info Boxes */
@@ -283,6 +524,9 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             .opportunities-grid { grid-template-columns: 1fr; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .partner-banner h2 { font-size: 1.8rem; }
+            .stats-counter { gap: 30px; }
         }
     </style>
 </head>
@@ -291,10 +535,13 @@
     <header>
         <div class="nav-container">
             <a href="index.html" class="logo">VDI Realty</a>
-            <div style="display: flex; gap: 2rem; align-items: center;">
-                <a href="fsbo.html" class="back-link"><i class="fas fa-home"></i> List Your Property (FSBO)</a>
+            <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+                <a href="partner-listing.html" class="back-link" style="background: var(--accent); color: white; padding: 10px 20px; border-radius: 5px;">
+                    <i class="fas fa-plus-circle"></i> List Your Property
+                </a>
+                <a href="fsbo.html" class="back-link"><i class="fas fa-home"></i> FSBO Listing</a>
                 <a href="index.html" class="back-link">
-                    <i class="fas fa-arrow-left"></i> Back to Home
+                    <i class="fas fa-arrow-left"></i> Home
                 </a>
             </div>
         </div>
@@ -302,91 +549,136 @@
 
     <section class="hero">
         <h1>Investment Opportunities</h1>
-        <p>Discover properties designed to build wealth. From primary residences to AirBnB investments, we identify opportunities that generate long-term value.</p>
+        <p>Discover properties designed to build wealth. From primary residences to AirBnB investments, we connect buyers with quality listings from trusted builders and agents.</p>
+    </section>
+
+    <!-- Partner Banner for Builders & Agents -->
+    <section class="content-section">
+        <div class="partner-banner">
+            <h2><i class="fas fa-handshake"></i> For Builders & Real Estate Agents</h2>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 20px;">Partner with VDI Realty to showcase your listings to qualified investors and homebuyers</p>
+            
+            <div class="stats-counter">
+                <div class="stat-box">
+                    <span class="stat-number" id="totalListings">50+</span>
+                    <span class="stat-label">Active Listings</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Builder Partners</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">1000+</span>
+                    <span class="stat-label">Monthly Visitors</span>
+                </div>
+            </div>
+            
+            <div class="partner-benefits">
+                <div class="benefit-card">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Zero Commission Fees</h3>
+                    <p>List your properties at no cost. Keep 100% of your commission and reach serious buyers.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Qualified Buyer Network</h3>
+                    <p>Access our network of pre-qualified investors and homebuyers actively seeking properties.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Featured Exposure</h3>
+                    <p>Get premium placement for your new developments and exclusive listings.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Market Analytics</h3>
+                    <p>Receive free market insights and analytics to price your properties competitively.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Easy Listing Management</h3>
+                    <p>Simple submission process. Update or remove listings anytime with our user-friendly system.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Co-Marketing Opportunities</h3>
+                    <p>Partner on marketing campaigns and open house events to maximize property exposure.</p>
+                </div>
+            </div>
+            
+            <div class="partner-cta">
+                <a href="partner-listing.html" class="btn-partner">
+                    <i class="fas fa-clipboard-list"></i> Submit Your Listing Now
+                </a>
+                <p style="margin-top: 15px; font-size: 0.95rem;">Already a partner? <a href="mailto:info@vdirealty.com" style="color: white; text-decoration: underline;">Contact us</a> to manage your listings</p>
+            </div>
+        </div>
     </section>
 
     <section class="content-section">
         <div class="section-title">
-            <h2>Featured Properties</h2>
+            <h2>Available Properties</h2>
             <div class="underline"></div>
-            <p style="color: #666; max-width: 600px; margin: auto;">Curated investment opportunities across the Greater Metro Area</p>
+            <p style="color: #666; max-width: 600px; margin: auto;">Browse investment opportunities from builders and agents across the Greater Metro Area</p>
         </div>
 
-        <div class="opportunities-grid">
-            <div class="opportunity-card">
-                <div class="card-image" style="background-image: url('images/property-1-new.svg');">
-                    <span class="card-badge">New Listing</span>
+        <!-- Search & Filter -->
+        <div class="filter-section">
+            <div class="filter-grid">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" class="filter-input" placeholder="Search by location, type, or description...">
                 </div>
-                <div class="card-content">
-                    <h3>Modern Downtown Condo</h3>
-                    <p>Prime location with high rental demand. Perfect for AirBnB or long-term investment.</p>
-                    <div class="card-stats">
-                        <div class="stat">
-                            <span class="stat-value">$425k</span>
-                            <span class="stat-label">Price</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">6.2%</span>
-                            <span class="stat-label">Cap Rate</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">$2.8k</span>
-                            <span class="stat-label">Mo. Income</span>
-                        </div>
-                    </div>
-                    <a href="#contact" class="btn">Schedule Viewing</a>
-                </div>
+                <select id="propertyTypeFilter" class="filter-select">
+                    <option value="">All Property Types</option>
+                    <option value="Single-Family">Single-Family</option>
+                    <option value="Multi-Family">Multi-Family</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Land">Land</option>
+                    <option value="Commercial">Commercial</option>
+                </select>
+                <select id="priceFilter" class="filter-select">
+                    <option value="">All Prices</option>
+                    <option value="0-300000">Under $300k</option>
+                    <option value="300000-500000">$300k - $500k</option>
+                    <option value="500000-750000">$500k - $750k</option>
+                    <option value="750000-1000000">$750k - $1M</option>
+                    <option value="1000000-99999999">$1M+</option>
+                </select>
+                <select id="bedroomsFilter" class="filter-select">
+                    <option value="">Any Bedrooms</option>
+                    <option value="1">1+ Bedrooms</option>
+                    <option value="2">2+ Bedrooms</option>
+                    <option value="3">3+ Bedrooms</option>
+                    <option value="4">4+ Bedrooms</option>
+                    <option value="5">5+ Bedrooms</option>
+                </select>
             </div>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+                <button onclick="applyFilters()" class="filter-btn">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+                <button onclick="clearFilters()" class="clear-filter-btn">
+                    <i class="fas fa-times"></i> Clear
+                </button>
+            </div>
+        </div>
 
-            <div class="opportunity-card">
-                <div class="card-image" style="background-image: url('images/property-2-new.svg');">
-                    <span class="card-badge">Hot Deal</span>
-                </div>
-                <div class="card-content">
-                    <h3>Suburban Family Home</h3>
-                    <p>Growing neighborhood with excellent schools. Strong appreciation potential.</p>
-                    <div class="card-stats">
-                        <div class="stat">
-                            <span class="stat-value">$585k</span>
-                            <span class="stat-label">Price</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">5.8%</span>
-                            <span class="stat-label">Cap Rate</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">$3.2k</span>
-                            <span class="stat-label">Mo. Income</span>
-                        </div>
-                    </div>
-                    <a href="#contact" class="btn">Get Details</a>
-                </div>
-            </div>
-
-            <div class="opportunity-card">
-                <div class="card-image" style="background-image: url('images/property-3-new.svg');">
-                    <span class="card-badge">Premium</span>
-                </div>
-                <div class="card-content">
-                    <h3>Luxury Vacation Rental</h3>
-                    <p>High-end property in tourist district. Exceptional AirBnB revenue potential.</p>
-                    <div class="card-stats">
-                        <div class="stat">
-                            <span class="stat-value">$725k</span>
-                            <span class="stat-label">Price</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">8.1%</span>
-                            <span class="stat-label">Cap Rate</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">$5.5k</span>
-                            <span class="stat-label">Mo. Income</span>
-                        </div>
-                    </div>
-                    <a href="#contact" class="btn">Learn More</a>
-                </div>
-            </div>
+        <!-- Listings Grid -->
+        <div id="loadingSpinner" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading properties...</p>
+        </div>
+        
+        <div id="listingsGrid" class="opportunities-grid">
+            <!-- Listings will be loaded here dynamically -->
+        </div>
+        
+        <div id="noListings" class="no-listings" style="display: none;">
+            <i class="fas fa-home"></i>
+            <h3>No properties found</h3>
+            <p>Try adjusting your filters or check back soon for new listings.</p>
         </div>
 
         <div class="section-title" style="margin-top: 80px;">
@@ -433,6 +725,191 @@
             <a href="mailto:info@vdirealty.com" style="color: #666; text-decoration: none;">info@vdirealty.com</a>
         </p>
     </footer>
+
+    <script src="js/config.js"></script>
+    <script>
+        let allListings = [];
+        let filteredListings = [];
+        
+        // Load listings from backend
+        async function loadListings() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const listingsGrid = document.getElementById('listingsGrid');
+            const noListings = document.getElementById('noListings');
+            
+            loadingSpinner.style.display = 'block';
+            listingsGrid.innerHTML = '';
+            noListings.style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
+                const data = await response.json();
+                
+                if (data.success && data.listings) {
+                    allListings = data.listings;
+                    filteredListings = allListings;
+                    
+                    // Update total listings counter
+                    document.getElementById('totalListings').textContent = allListings.length + '+';
+                    
+                    displayListings(filteredListings);
+                } else {
+                    throw new Error('Failed to load listings');
+                }
+            } catch (error) {
+                console.error('Error loading listings:', error);
+                listingsGrid.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Unable to load listings. Please try again later.</p>';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+        
+        // Display listings in the grid
+        function displayListings(listings) {
+            const listingsGrid = document.getElementById('listingsGrid');
+            const noListings = document.getElementById('noListings');
+            
+            if (!listings || listings.length === 0) {
+                listingsGrid.innerHTML = '';
+                noListings.style.display = 'block';
+                return;
+            }
+            
+            noListings.style.display = 'none';
+            
+            listingsGrid.innerHTML = listings.map(listing => {
+                const photoUrl = listing.photos && listing.photos.length > 0 
+                    ? `${API_BASE_URL}${listing.photos[0].url}`
+                    : 'images/property-1-new.svg';
+                
+                const price = formatPrice(listing.price);
+                const isNew = isNewListing(listing.submissionDate);
+                
+                return `
+                    <div class="opportunity-card">
+                        <div class="card-image" style="background-image: url('${photoUrl}');">
+                            ${isNew ? '<span class="card-badge">New Listing</span>' : ''}
+                        </div>
+                        <div class="card-content">
+                            <h3>${escapeHtml(listing.address)}</h3>
+                            <div class="card-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${escapeHtml(listing.city)}, ${escapeHtml(listing.state)} ${escapeHtml(listing.zip)}
+                            </div>
+                            <p class="card-description">${escapeHtml(listing.description)}</p>
+                            <div class="card-stats">
+                                <div class="stat">
+                                    <span class="stat-value">${price}</span>
+                                    <span class="stat-label">Price</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">${listing.bedrooms}</span>
+                                    <span class="stat-label">Beds</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">${listing.bathrooms}</span>
+                                    <span class="stat-label">Baths</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">${formatSqft(listing.sqft)}</span>
+                                    <span class="stat-label">Sq Ft</span>
+                                </div>
+                            </div>
+                            <a href="fsbo-listings.html#listing-${listing.id}" class="btn btn-view-details">View Details</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const propertyType = document.getElementById('propertyTypeFilter').value;
+            const priceRange = document.getElementById('priceFilter').value;
+            const minBedrooms = document.getElementById('bedroomsFilter').value;
+            
+            filteredListings = allListings.filter(listing => {
+                // Search filter
+                if (searchTerm) {
+                    const searchableText = `${listing.address} ${listing.city} ${listing.state} ${listing.zip} ${listing.propertyType} ${listing.description}`.toLowerCase();
+                    if (!searchableText.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+                
+                // Property type filter
+                if (propertyType && listing.propertyType !== propertyType) {
+                    return false;
+                }
+                
+                // Price range filter
+                if (priceRange) {
+                    const [minPrice, maxPrice] = priceRange.split('-').map(Number);
+                    if (listing.price < minPrice || listing.price > maxPrice) {
+                        return false;
+                    }
+                }
+                
+                // Bedrooms filter
+                if (minBedrooms && listing.bedrooms < parseInt(minBedrooms)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            displayListings(filteredListings);
+        }
+        
+        // Clear all filters
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('propertyTypeFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            document.getElementById('bedroomsFilter').value = '';
+            
+            filteredListings = allListings;
+            displayListings(filteredListings);
+        }
+        
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            applyFilters();
+        });
+        
+        // Helper functions
+        function formatPrice(price) {
+            if (price >= 1000000) {
+                return `$${(price / 1000000).toFixed(2)}M`;
+            } else if (price >= 1000) {
+                return `$${Math.round(price / 1000)}k`;
+            }
+            return `$${price}`;
+        }
+        
+        function formatSqft(sqft) {
+            return sqft ? sqft.toLocaleString() : 'N/A';
+        }
+        
+        function isNewListing(submissionDate) {
+            const submitted = new Date(submissionDate);
+            const now = new Date();
+            const daysDiff = (now - submitted) / (1000 * 60 * 60 * 24);
+            return daysDiff <= 7; // New if within 7 days
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Load listings on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadListings();
+        });
+    </script>
 
 </body>
 </html>
