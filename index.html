@@ -1289,7 +1289,12 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     showMessage('✓ Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
