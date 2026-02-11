@@ -1272,19 +1272,15 @@
             
             // Get form data
             const formData = {
-                access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Get free key at https://web3forms.com
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value || 'Not provided',
+                phone: document.getElementById('phone').value || '',
                 interest: document.getElementById('interest').value,
-                message: document.getElementById('message').value,
-                from_name: 'VDI Realty Contact Form',
-                subject: 'New Contact Form Submission - VDI Realty',
-                replyto: document.getElementById('email').value
+                message: document.getElementById('message').value
             };
             
-            // Web3Forms API - Free, reliable, unlimited emails
-            fetch('https://api.web3forms.com/submit', {
+            // Submit to VDI Realty backend
+            fetch('https://vdi-storage-production.up.railway.app/api/contact/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1298,7 +1294,7 @@
                     showMessage('✓ Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
                     form.reset();
                 } else {
-                    showMessage('✗ Sorry, there was an error. Please email us directly at info@vdirealty.com', 'error');
+                    showMessage('✗ ' + (data.error || 'Sorry, there was an error. Please email us directly at info@vdirealty.com'), 'error');
                 }
             })
             .catch(error => {
