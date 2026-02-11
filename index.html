@@ -1293,6 +1293,10 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                // Handle 204 No Content response (success but no body)
+                if (response.status === 204) {
+                    return { success: true };
+                }
                 return response.json();
             })
             .then(data => {
