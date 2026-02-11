@@ -25,7 +25,7 @@ module.exports = {
     
     // Website
     websiteUrl: process.env.WEBSITE_URL || 'http://localhost:5500',
-    adminEmail: process.env.ADMIN_EMAIL || 'admin@vdirealty.com',
+    adminEmail: process.env.ADMIN_EMAIL || 'info@vdirealty.com',
     
     // Listing settings
     listingDurationDays: parseInt(process.env.LISTING_DURATION_DAYS) || 14,
