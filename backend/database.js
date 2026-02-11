@@ -10,6 +10,12 @@ if (!fs.existsSync(dataDir)) {
     console.log(`📁 Created data directory: ${dataDir}`);
 }
 
+// Ensure uploads directory exists
+if (!fs.existsSync(config.uploadDir)) {
+    fs.mkdirSync(config.uploadDir, { recursive: true });
+    console.log(`📁 Created uploads directory: ${config.uploadDir}`);
+}
+
 // Initialize SQLite database
 const db = new Database(config.dbPath);
 console.log(`🗄️  Database location: ${config.dbPath}`);
