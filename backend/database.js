@@ -1,8 +1,18 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
+const config = require('./config');
+
+// Ensure data directory exists (for production)
+const dataDir = path.dirname(config.dbPath);
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+    console.log(`📁 Created data directory: ${dataDir}`);
+}
 
 // Initialize SQLite database
-const db = new Database(path.join(__dirname, 'fsbo.db'));
+const db = new Database(config.dbPath);
+console.log(`🗄️  Database location: ${config.dbPath}`);
 
 // Enable WAL mode for better concurrency
 db.pragma('journal_mode = WAL');

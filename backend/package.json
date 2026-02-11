@@ -1,8 +1,11 @@
 {
   "name": "vdi-realty-fsbo-backend",
   "version": "1.0.0",
-  "description": "Local backend for VDI Realty FSBO listings",
+  "description": "Backend for VDI Realty FSBO listings",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"

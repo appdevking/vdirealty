@@ -1,4 +1,11 @@
 require('dotenv').config();
+const path = require('path');
+
+// Determine storage paths based on environment
+// In production (Railway), use /app/data for persistent storage
+// In development, use local directories
+const isProd = process.env.NODE_ENV === 'production';
+const dataDir = isProd ? '/app/data' : path.join(__dirname);
 
 module.exports = {
     // Server
@@ -27,5 +34,8 @@ module.exports = {
     // File upload
     maxFileSize: 5 * 1024 * 1024, // 5MB
     maxFiles: 10,
-    uploadDir: './uploads'
+    uploadDir: path.join(dataDir, 'uploads'),
+    
+    // Database
+    dbPath: path.join(dataDir, 'fsbo.db')
 };
