@@ -1298,15 +1298,19 @@
         async function fetchListingData(url, source) {
             try {
                 const scrapingBeeKey = 'TR931TU8DU3KLFMARXR6N8PQ2RSPNNUXGLQDIBV3B8R0PS7B69OEBK0RFP5YZM2YX2I0OMA0M9STO6UQ';
-                // Enhanced parameters for better JavaScript rendering
+                
+                // Use stealth proxy for Zillow (harder to scrape)
+                const isZillow = url.toLowerCase().includes('zillow.com');
+                
                 const params = new URLSearchParams({
                     api_key: scrapingBeeKey,
                     url: url,
                     render_js: 'true',
-                    wait: '5000', // Wait 5 seconds for JS to render
-                    premium_proxy: 'true', // Use premium proxy for better success rate
+                    premium_proxy: 'true',
                     block_ads: 'true',
-                    block_resources: 'false' // Don't block resources, we need images
+                    block_resources: 'false',
+                    wait: isZillow ? '8000' : '5000', // Wait longer for Zillow
+                    stealth_proxy: isZillow ? 'true' : 'false' // Use stealth for Zillow
                 });
                 
                 const apiUrl = `https://app.scrapingbee.com/api/v1/?${params.toString()}`;
@@ -1357,10 +1361,14 @@
                 console.log('🛏️ Found property detail elements:', detailSpans);
                 
                 // Debug: Check if page might be an error or redirect
-                if (html.toLowerCase().includes('captcha') || html.toLowerCase().includes('access denied')) {
-                    console.error('⚠️ Page appears to be showing CAPTCHA or access denied');
+                const htmlLower = html.toLowerCase();
+                if (htmlLower.includes('captcha') || htmlLower.includes('security check') || 
+                    htmlLower.includes('access denied') || htmlLower.includes('please verify you are a human')) {
+                    console.error('🚫 Page appears to be showing CAPTCHA or access denied');
+                    showMessage('⚠️ This website is blocking automated extraction. Please try a different listing URL or enter the details manually.', 'error');
+                    return null; // Return null to prevent using partial data
                 }
-                if (html.toLowerCase().includes('redirect') || html.toLowerCase().includes('loading')) {
+                if (htmlLower.includes('redirect') || htmlLower.includes('loading')) {
                     console.warn('⚠️ Page might be redirecting or still loading');
                 }
                 
@@ -1419,8 +1427,9 @@
                 
                 const parsedData = parseUniversalData(extractedData);
                 
+                // Check if we got meaningful data (at least address or price)
                 if (!parsedData.address && !parsedData.price) {
-                    console.warn('No data extracted from page, using fallback mock data');
+                    console.warn('No meaningful data extracted from page, using fallback mock data');
                     return mockExtractData(url, source);
                 }
                 
