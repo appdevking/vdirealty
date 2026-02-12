@@ -673,7 +673,10 @@
     <header>
         <div class="nav-container">
             <a href="index.html" class="logo">VDI Realty</a>
-            <div style="display: flex; gap: 2rem; align-items: center;">
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                <a href="commercial-listings.html" class="back-link">
+                    <i class="fas fa-building"></i> Commercial Listings
+                </a>
                 <a href="opportunities.html" class="back-link">
                     <i class="fas fa-arrow-left"></i> Back to Opportunities
                 </a>
@@ -714,18 +717,8 @@
 
     <section class="form-section">
         <div class="form-container">
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab active" data-tab="add-listing">
-                    <i class="fas fa-plus-circle"></i> Add New Listing
-                </button>
-                <button class="tab" data-tab="current-listings">
-                    <i class="fas fa-list"></i> Current Listings
-                </button>
-            </div>
-            
-            <!-- Add New Listing Tab -->
-            <div class="tab-content active" id="add-listing">
+            <!-- Add New Listing Section -->
+            <div>
                 <!-- URL Extractor Section -->
                 <div class="url-section">
                     <h2><i class="fas fa-magic"></i> Quick Add from URL</h2>
@@ -771,7 +764,7 @@
                     <h4><i class="fas fa-info-circle"></i> Before You Start</h4>
                     <ul>
                         <li>Listings go live immediately upon submission</li>
-                        <li><strong>Your listing will appear on:</strong> <a href="opportunities.html" style="color: var(--accent);">Property Listings</a> and <a href="fsbo-listings.html" style="color: var(--accent);">FSBO Listings</a> pages</li>
+                        <li><strong>Your listing will appear on:</strong> <a href="commercial-listings.html" style="color: var(--accent);">Commercial Listings</a> and <a href="opportunities.html" style="color: var(--accent);">Property Listings</a> pages</li>
                         <li>High-quality photos increase engagement by 300%</li>
                         <li>Detailed descriptions help buyers make informed decisions</li>
                         <li>Include accurate pricing and property details</li>
@@ -1024,23 +1017,7 @@
                 </p>
             </form>
             </div>
-            <!-- End Add New Listing Tab -->
-            
-            <!-- Current Listings Tab -->
-            <div class="tab-content" id="current-listings">
-                <div class="url-section">
-                    <h2><i class="fas fa-list"></i> Your Listings</h2>
-                    <div style="margin-bottom: 20px; text-align: center;">
-                        <a href="opportunities.html" class="btn-view-live" target="_blank">
-                            <i class="fas fa-globe"></i> View Live on VDI Website
-                        </a>
-                    </div>
-                    <div id="listingsContainer" class="listings-grid">
-                        <!-- Listings will be loaded here dynamically -->
-                    </div>
-                </div>
-            </div>
-            <!-- End Current Listings Tab -->
+            <!-- End Add New Listing Section -->
         </div>
     </section>
 
@@ -1232,33 +1209,8 @@
         
         // ========================================
         // BROKER PORTAL FUNCTIONALITY
-        // URL Extraction, Tabs, localStorage
+        // URL Extraction, localStorage
         // ========================================
-        
-        // Tab switching
-        function initTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.getAttribute('data-tab');
-                    
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(tc => tc.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(targetTab).classList.add('active');
-                    
-                    // If switching to current listings, load them
-                    if (targetTab === 'current-listings') {
-                        loadListings();
-                    }
-                });
-            });
-        }
         
         // Auto-extract data from listing URLs
         async function extractListingData() {
@@ -1583,78 +1535,6 @@
             }
         }
         
-        // Load and display current listings from localStorage
-        function loadListings() {
-            const container = document.getElementById('listingsContainer');
-            const listings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
-            
-            if (listings.length === 0) {
-                container.innerHTML = `
-                    <div class=\"no-listings\">
-                        <i class=\"fas fa-home\"></i>
-                        <h3>No listings yet</h3>
-                        <p>Add your first listing using the \"Add New Listing\" tab</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = listings.map(listing => {
-                const price = listing.price ? `$${parseInt(listing.price).toLocaleString()}` : 'Price N/A';
-                const address = listing.address || 'Address not provided';
-                const city = listing.city || '';
-                const state = listing.state || '';
-                const location = [city, state].filter(Boolean).join(', ');
-                const beds = listing.bedrooms || 'N/A';
-                const baths = listing.bathrooms || 'N/A';
-                const sqft = listing.sqft ? `${parseInt(listing.sqft).toLocaleString()}` : 'N/A';
-                const image = listing.photos || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800';
-                
-                return `
-                    <div class=\"listing-card\">
-                        <img src=\"${image}\" alt=\"${address}\" class=\"listing-image\" onerror=\"this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'\">
-                        <div class=\"listing-details\">
-                            <div class=\"listing-price\">${price}</div>
-                            <div class=\"listing-address\">${address}</div>
-                            <div class=\"listing-location\">${location}</div>
-                            <div class=\"listing-features\">
-                                <div class=\"feature-item\">
-                                    <i class=\"fas fa-bed\"></i>
-                                    <span>${beds} beds</span>
-                                </div>
-                                <div class=\"feature-item\">
-                                    <i class=\"fas fa-bath\"></i>
-                                    <span>${baths} baths</span>
-                                </div>
-                                <div class=\"feature-item\">
-                                    <i class=\"fas fa-ruler-combined\"></i>
-                                    <span>${sqft} sqft</span>
-                                </div>
-                            </div>
-                            <div class=\"listing-actions\">
-                                <button class=\"btn-delete\" onclick=\"deleteListing('${listing.id}')\">
-                                    <i class=\"fas fa-trash\"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        // Delete listing from localStorage
-        function deleteListing(id) {
-            if (!confirm('Are you sure you want to delete this listing?')) {
-                return;
-            }
-            
-            let listings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
-            listings = listings.filter(listing => listing.id !== id);
-            localStorage.setItem('vdiListings', JSON.stringify(listings));
-            
-            loadListings();
-        }
-        
         // Save to localStorage
         function saveListingToStorage(listing) {
             let listings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
@@ -1680,10 +1560,8 @@
             localStorage.setItem('vdiListings', JSON.stringify(listings));
         }
         
-        // Initialize tabs and event listeners on page load
+        // Initialize event listeners on page load
         document.addEventListener('DOMContentLoaded', function() {
-            initTabs();
-            
             // Attach extract button event listener
             const extractButton = document.getElementById('extractBtn');
             if (extractButton) {
@@ -1715,10 +1593,14 @@
                 const listingData = Object.fromEntries(formData.entries());
                 saveListingToStorage(listingData);
                 
-                // After successful submission, switch to Current Listings tab
+                // Show success message with link to Commercial Listings page
                 setTimeout(() => {
-                    document.querySelector('.tab[data-tab=\"current-listings\"]')?.click();
-                }, 1500);
+                    const message = document.createElement('div');
+                    message.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #28a745; color: white; padding: 1rem 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; text-align: center;';
+                    message.innerHTML = '✅ Listing saved successfully! <a href="commercial-listings.html" style="color: #C5A059; font-weight: bold; text-decoration: underline;">View on Commercial Listings page</a>';
+                    document.body.appendChild(message);
+                    setTimeout(() => message.remove(), 5000);
+                }, 1000);
             });
         });
     </script>
