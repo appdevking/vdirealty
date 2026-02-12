@@ -1298,7 +1298,18 @@
         async function fetchListingData(url, source) {
             try {
                 const scrapingBeeKey = 'TR931TU8DU3KLFMARXR6N8PQ2RSPNNUXGLQDIBV3B8R0PS7B69OEBK0RFP5YZM2YX2I0OMA0M9STO6UQ';
-                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=${scrapingBeeKey}&url=${encodeURIComponent(url)}&render_js=true`;
+                // Enhanced parameters for better JavaScript rendering
+                const params = new URLSearchParams({
+                    api_key: scrapingBeeKey,
+                    url: url,
+                    render_js: 'true',
+                    wait: '5000', // Wait 5 seconds for JS to render
+                    premium_proxy: 'true', // Use premium proxy for better success rate
+                    block_ads: 'true',
+                    block_resources: 'false' // Don't block resources, we need images
+                });
+                
+                const apiUrl = `https://app.scrapingbee.com/api/v1/?${params.toString()}`;
                 
                 console.log('Fetching data from ScrapingBee...', url);
                 const response = await fetch(apiUrl);
@@ -1311,6 +1322,9 @@
                 
                 const html = await response.text();
                 console.log('ScrapingBee response received, HTML length:', html.length);
+                
+                // Debug: Log a sample of the HTML to see what we're getting
+                console.log('HTML sample (first 500 chars):', html.substring(0, 500));
                 
                 // Parse the HTML to extract property data
                 const parser = new DOMParser();
@@ -1397,23 +1411,32 @@
             // First, try to extract from JSON-LD structured data
             const jsonLdData = extractFromJsonLd(doc);
             if (jsonLdData && (jsonLdData.address || jsonLdData.price)) {
-                console.log('✓ Extracted data from JSON-LD structured data');
+                console.log('✓ Extracted data from JSON-LD structured data', jsonLdData);
                 return jsonLdData;
             }
             
-            // Fallback to CSS selector extraction
-            const trySelectors = (selectors) => {
+            console.log('JSON-LD extraction failed or returned no data, trying CSS selectors...');
+            
+            // Fallback to CSS selector extraction with detailed logging
+            const trySelectors = (fieldName, selectors) => {
                 for (const selector of selectors) {
-                    const element = doc.querySelector(selector);
-                    if (element && element.textContent.trim()) {
-                        return element.textContent.trim();
+                    try {
+                        const element = doc.querySelector(selector);
+                        if (element && element.textContent.trim()) {
+                            const value = element.textContent.trim();
+                            console.log(`✓ Found ${fieldName} using selector: "${selector}" -> "${value}"`);
+                            return value;
+                        }
+                    } catch (e) {
+                        // Skip invalid selectors
                     }
                 }
+                console.log(`✗ No ${fieldName} found with any selector`);
                 return '';
             };
             
             // Address selectors (expanded for Century 21 and others)
-            const address = trySelectors([
+            const address = trySelectors('address', [
                 'h1[data-testid="property-street"]',
                 '.property-street-address',
                 'h1.listing-address',
@@ -1430,7 +1453,7 @@
             ]);
             
             // Price selectors
-            const price = trySelectors([
+            const price = trySelectors('price', [
                 '[data-testid="price"]',
                 '.property-price',
                 '.listing-price',
@@ -1445,7 +1468,7 @@
             ]);
             
             // Bedrooms selectors
-            const beds = trySelectors([
+            const beds = trySelectors('beds', [
                 '[data-testid="bed-count"]',
                 '[data-rf-test-id="abp-beds"]',
                 'span[data-label="property-meta-beds"]',
@@ -1458,7 +1481,7 @@
             ]);
             
             // Bathrooms selectors
-            const baths = trySelectors([
+            const baths = trySelectors('baths', [
                 '[data-testid="bath-count"]',
                 '[data-rf-test-id="abp-baths"]',
                 'span[data-label="property-meta-baths"]',
@@ -1471,7 +1494,7 @@
             ]);
             
             // Square feet selectors
-            const sqft = trySelectors([
+            const sqft = trySelectors('sqft', [
                 '[data-testid="sqft-value"]',
                 '[data-rf-test-id="abp-sqFt"]',
                 'span[data-label="property-meta-sqft"]',
@@ -1487,7 +1510,7 @@
             ]);
             
             // Description selectors
-            const description = trySelectors([
+            const description = trySelectors('description', [
                 '[data-testid="description"]',
                 '.property-description',
                 '.listing-description',
@@ -1498,7 +1521,7 @@
                 '[class*="description"]'
             ]);
             
-            console.log('✓ Extracted data from CSS selectors');
+            console.log('CSS selector extraction completed');
             
             return {
                 address,
@@ -1515,23 +1538,31 @@
         function extractFromJsonLd(doc) {
             try {
                 const scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+                console.log(`Found ${scripts.length} JSON-LD script tags`);
+                
                 for (const script of scripts) {
                     try {
                         const data = JSON.parse(script.textContent);
+                        console.log('Parsing JSON-LD data:', data);
                         
                         // Handle both single objects and arrays
                         const items = Array.isArray(data) ? data : [data];
                         
                         for (const item of items) {
+                            const type = item['@type'];
+                            console.log('Found schema type:', type);
+                            
                             // Look for RealEstateListing or similar types
-                            if (item['@type'] === 'RealEstateListing' || item['@type'] === 'Product' || item['@type'] === 'Apartment' || item['@type'] === 'SingleFamilyResidence') {
+                            if (type === 'RealEstateListing' || type === 'Product' || type === 'Apartment' || type === 'SingleFamilyResidence') {
+                                console.log('✓ Found property schema, extracting data...');
+                                
                                 const address = item.address ? 
                                     (typeof item.address === 'string' ? item.address : 
                                      `${item.address.streetAddress || ''}, ${item.address.addressLocality || ''}, ${item.address.addressRegion || ''} ${item.address.postalCode || ''}`.trim()) : '';
                                 
                                 const price = item.offers?.price || item.price || '';
                                 
-                                return {
+                                const extracted = {
                                     address: address,
                                     price: price.toString(),
                                     beds: item.numberOfBedrooms || item.bedrooms || '',
@@ -1540,13 +1571,17 @@
                                     description: item.description || '',
                                     images: []
                                 };
+                                
+                                console.log('JSON-LD extracted data:', extracted);
+                                return extracted;
                             }
                         }
                     } catch (e) {
-                        // Skip invalid JSON
+                        console.warn('Failed to parse JSON-LD script:', e);
                         continue;
                     }
                 }
+                console.log('No property data found in JSON-LD scripts');
             } catch (error) {
                 console.warn('JSON-LD extraction failed:', error);
             }
