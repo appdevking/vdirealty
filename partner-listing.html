@@ -389,6 +389,7 @@
                 <h4><i class="fas fa-info-circle"></i> Before You Start</h4>
                 <ul>
                     <li>Listings go live immediately upon submission</li>
+                    <li><strong>Your listing will appear on:</strong> <a href="opportunities.html" style="color: var(--accent);">Investment Opportunities</a> and <a href="fsbo-listings.html" style="color: var(--accent);">FSBO Listings</a> pages</li>
                     <li>High-quality photos increase engagement by 300%</li>
                     <li>Detailed descriptions help buyers make informed decisions</li>
                     <li>Include accurate pricing and property details</li>
@@ -772,7 +773,15 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showMessage('✓ Thank you! Your listing has been submitted successfully and is now live. You will receive a confirmation email shortly.', 'success');
+                    const listingId = result.listing?.id || result.id;
+                    const viewListingLink = listingId 
+                        ? ` <a href="fsbo-listings.html#listing-${listingId}" style="color: var(--accent); text-decoration: underline; font-weight: bold;">View your listing now →</a>` 
+                        : '';
+                    
+                    showMessage(
+                        `✓ Thank you! Your listing has been submitted successfully and is now live.${viewListingLink} You will receive a confirmation email shortly.`, 
+                        'success'
+                    );
                     
                     // Reset form
                     document.getElementById('partnerListingForm').reset();
@@ -795,7 +804,7 @@
 
         function showMessage(message, type) {
             const formMessage = document.getElementById('formMessage');
-            formMessage.textContent = message;
+            formMessage.innerHTML = message; // Use innerHTML to allow links
             formMessage.className = `form-message ${type}`;
             formMessage.style.display = 'block';
 
