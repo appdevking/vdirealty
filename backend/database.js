@@ -40,8 +40,8 @@ const initDatabase = () => {
             propertyType TEXT NOT NULL,
             price INTEGER NOT NULL,
             sqft INTEGER NOT NULL,
-            bedrooms INTEGER NOT NULL,
-            bathrooms REAL NOT NULL,
+            bedrooms INTEGER,
+            bathrooms REAL,
             yearBuilt INTEGER,
             lotSize REAL,
             features TEXT,
@@ -51,6 +51,15 @@ const initDatabase = () => {
             expirationDate TEXT NOT NULL,
             status TEXT DEFAULT 'active',
             reminderSent INTEGER DEFAULT 0,
+            buildingClass TEXT,
+            zoning TEXT,
+            occupancyRate REAL,
+            capRate REAL,
+            grossIncome INTEGER,
+            operatingExpenses INTEGER,
+            numberOfUnits INTEGER,
+            parkingSpaces INTEGER,
+            leaseType TEXT,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
@@ -93,8 +102,10 @@ const statements = {
         INSERT INTO listings (
             firstName, lastName, email, phone, address, city, state, zip,
             propertyType, price, sqft, bedrooms, bathrooms, yearBuilt, lotSize,
-            features, description, privateContact, submissionDate, expirationDate
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            features, description, privateContact, submissionDate, expirationDate,
+            buildingClass, zoning, occupancyRate, capRate, grossIncome,
+            operatingExpenses, numberOfUnits, parkingSpaces, leaseType
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `),
 
     // Insert photo

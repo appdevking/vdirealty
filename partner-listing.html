@@ -480,13 +480,77 @@
                         <label>Square Footage <span class="required">*</span></label>
                         <input type="number" name="sqft" id="sqft" min="0" required>
                     </div>
-                    <div class="form-group">
-                        <label>Bedrooms <span class="required">*</span></label>
+                    <div class="form-group" id="bedroomsGroup">
+                        <label>Bedrooms <span class="required" id="bedroomsRequired">*</span></label>
                         <input type="number" name="bedrooms" id="bedrooms" min="0" required>
                     </div>
-                    <div class="form-group">
-                        <label>Bathrooms <span class="required">*</span></label>
+                    <div class="form-group" id="bathroomsGroup">
+                        <label>Bathrooms <span class="required" id="bathroomsRequired">*</span></label>
                         <input type="number" name="bathrooms" id="bathrooms" step="0.5" min="0" required>
+                    </div>
+                </div>
+
+                <!-- Commercial Property Fields (hidden by default) -->
+                <div id="commercialFields" style="display: none;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Building Class</label>
+                            <select name="buildingClass" id="buildingClass">
+                                <option value="">Select Class</option>
+                                <option value="Class A">Class A</option>
+                                <option value="Class B">Class B</option>
+                                <option value="Class C">Class C</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Zoning</label>
+                            <input type="text" name="zoning" id="zoning" placeholder="e.g., C-1, M-1, R-3">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Occupancy Rate (%)</label>
+                            <input type="number" name="occupancyRate" id="occupancyRate" min="0" max="100" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label>Cap Rate (%)</label>
+                            <input type="number" name="capRate" id="capRate" step="0.01" min="0" placeholder="e.g., 6.5">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Annual Gross Income</label>
+                            <input type="number" name="grossIncome" id="grossIncome" min="0" placeholder="$">
+                        </div>
+                        <div class="form-group">
+                            <label>Annual Operating Expenses</label>
+                            <input type="number" name="operatingExpenses" id="operatingExpenses" min="0" placeholder="$">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Number of Units/Tenants</label>
+                            <input type="number" name="numberOfUnits" id="numberOfUnits" min="0" placeholder="Total units or tenant spaces">
+                        </div>
+                        <div class="form-group">
+                            <label>Parking Spaces</label>
+                            <input type="number" name="parkingSpaces" id="parkingSpaces" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lease Type</label>
+                        <select name="leaseType" id="leaseType">
+                            <option value="">Select Type</option>
+                            <option value="Triple Net (NNN)">Triple Net (NNN)</option>
+                            <option value="Double Net (NN)">Double Net (NN)</option>
+                            <option value="Modified Gross">Modified Gross</option>
+                            <option value="Full Service">Full Service/Gross</option>
+                            <option value="Percentage">Percentage Lease</option>
+                        </select>
                     </div>
                 </div>
 
@@ -557,6 +621,30 @@
     <script>
         const API_BASE_URL = CONFIG.API_BASE_URL;
         let selectedFiles = [];
+
+        // Handle property type change
+        document.getElementById('propertyType').addEventListener('change', function() {
+            const isCommercial = this.value === 'Commercial';
+            const commercialFields = document.getElementById('commercialFields');
+            const bedroomsInput = document.getElementById('bedrooms');
+            const bathroomsInput = document.getElementById('bathrooms');
+            const bedroomsRequired = document.getElementById('bedroomsRequired');
+            const bathroomsRequired = document.getElementById('bathroomsRequired');
+
+            if (isCommercial) {
+                commercialFields.style.display = 'block';
+                bedroomsInput.removeAttribute('required');
+                bathroomsInput.removeAttribute('required');
+                bedroomsRequired.style.display = 'none';
+                bathroomsRequired.style.display = 'none';
+            } else {
+                commercialFields.style.display = 'none';
+                bedroomsInput.setAttribute('required', 'required');
+                bathroomsInput.setAttribute('required', 'required');
+                bedroomsRequired.style.display = 'inline';
+                bathroomsRequired.style.display = 'inline';
+            }
+        });
 
         // Handle file selection
         document.getElementById('fileInput').addEventListener('change', function(e) {
@@ -639,7 +727,9 @@
                 // Add form fields
                 const fields = ['firstName', 'lastName', 'email', 'phone', 'company', 'address', 
                               'city', 'state', 'zip', 'propertyType', 'price', 'sqft', 'bedrooms', 
-                              'bathrooms', 'yearBuilt', 'lotSize', 'features', 'description'];
+                              'bathrooms', 'yearBuilt', 'lotSize', 'features', 'description',
+                              'buildingClass', 'zoning', 'occupancyRate', 'capRate', 'grossIncome',
+                              'operatingExpenses', 'numberOfUnits', 'parkingSpaces', 'leaseType'];
                 
                 fields.forEach(field => {
                     const value = document.getElementById(field).value;

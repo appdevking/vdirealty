@@ -42,10 +42,17 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
         const files = req.files || [];
         
         // Validate required fields
+        const isCommercial = data.propertyType === 'Commercial';
+        
         if (!data.firstName || !data.lastName || !data.email || !data.phone || 
             !data.address || !data.city || !data.zip || !data.propertyType ||
-            !data.price || !data.sqft || !data.bedrooms || !data.bathrooms || !data.description) {
+            !data.price || !data.sqft || !data.description) {
             return res.status(400).json({ error: 'Missing required fields' });
+        }
+        
+        // For non-commercial properties, bedrooms and bathrooms are required
+        if (!isCommercial && (!data.bedrooms || !data.bathrooms)) {
+            return res.status(400).json({ error: 'Bedrooms and bathrooms are required for residential properties' });
         }
         
         // Calculate dates
@@ -66,15 +73,24 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
             data.propertyType,
             parseInt(data.price),
             parseInt(data.sqft),
-            parseInt(data.bedrooms),
-            parseFloat(data.bathrooms),
+            data.bedrooms ? parseInt(data.bedrooms) : null,
+            data.bathrooms ? parseFloat(data.bathrooms) : null,
             data.yearBuilt ? parseInt(data.yearBuilt) : null,
             data.lotSize ? parseFloat(data.lotSize) : null,
             data.features || '',
             data.description,
             data.privateContact === 'true' || data.privateContact === 'on' ? 1 : 0,
             submissionDate.toISOString(),
-            expirationDate.toISOString()
+            expirationDate.toISOString(),
+            data.buildingClass || null,
+            data.zoning || null,
+            data.occupancyRate ? parseFloat(data.occupancyRate) : null,
+            data.capRate ? parseFloat(data.capRate) : null,
+            data.grossIncome ? parseInt(data.grossIncome) : null,
+            data.operatingExpenses ? parseInt(data.operatingExpenses) : null,
+            data.numberOfUnits ? parseInt(data.numberOfUnits) : null,
+            data.parkingSpaces ? parseInt(data.parkingSpaces) : null,
+            data.leaseType || null
         );
         
         const listingId = result.lastInsertRowid;
