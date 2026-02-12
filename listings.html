@@ -244,23 +244,6 @@
             flex-wrap: wrap;
         }
         
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 3px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .btn-delete:hover {
-            background: #c82333;
-        }
-        
         .listings-header {
             display: flex;
             justify-content: space-between;
@@ -501,8 +484,12 @@
             const zip = listing.zipCode || listing.zip || '';
             const locationText = [city, state, zip].filter(Boolean).join(', ');
             
+            // Get the original listing URL
+            const listingUrl = listing.sourceUrl || listing.externalUrl || '';
+            const imageClickHandler = listingUrl ? `onclick="window.open('${listingUrl}', '_blank'); return false;" style="cursor: pointer;"` : '';
+            
             card.innerHTML = `
-                <div class="card-image" style="background-image: url('${photoUrl}');">
+                <div class="card-image" style="background-image: url('${photoUrl}');" ${imageClickHandler}>
                     <span class="card-badge">${listing.status || listing.propertyType || 'Active'}</span>
                     <div class="card-price">${formattedPrice}</div>
                 </div>
@@ -522,28 +509,12 @@
                         <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address || 'this property'}'); return false;">
                             <i class="fas fa-envelope"></i> Contact
                         </a>
-                        ${listing.sourceUrl ? `<a href="${listing.sourceUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
-                        <button class="btn-delete" onclick="deleteListing('${listing.id}'); return false;">
-                            <i class="fas fa-trash-alt"></i> Delete
-                        </button>
+                        ${listingUrl ? `<a href="${listingUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
                     </div>
                 </div>
             `;
             
             return card;
-        }
-        
-        // Delete listing
-        function deleteListing(id) {
-            if (!confirm('Are you sure you want to delete this listing?')) {
-                return;
-            }
-            
-            allListings = allListings.filter(listing => listing.id !== id);
-            localStorage.setItem('vdiListings', JSON.stringify(allListings));
-            
-            filterListings(); // Refresh display with current filters
-            console.log(`✅ Deleted listing ${id}`);
         }
         
         // Filter listings
