@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Listings | VDI Realty</title>
+    <title>Browse Listings | VDI Realty</title>
+    <meta name="description" content="Browse all property listings including commercial real estate, investment opportunities, and partner submissions.">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -240,6 +241,48 @@
         .card-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .listings-count {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .sort-options select {
+            padding: 10px 15px;
+            border: 2px solid var(--accent);
+            border-radius: 5px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
         }
         
         .btn {
@@ -314,8 +357,8 @@
     </header>
 
     <section class="hero">
-        <h1>Available Properties</h1>
-        <p>Discover your next investment opportunity</p>
+        <h1><span style="color: var(--accent);">Browse</span> Listings</h1>
+        <p>Discover investment properties, commercial real estate, and partner listings all in one place</p>
     </section>
 
     <div class="filters">
@@ -324,6 +367,7 @@
                 <select id="filterType" onchange="filterListings()">
                     <option value="">All Property Types</option>
                     <option value="Single Family">Single Family</option>
+                    <option value="Single Family Home">Single Family Home</option>
                     <option value="Condo">Condo</option>
                     <option value="Townhouse">Townhouse</option>
                     <option value="Multi-Family">Multi-Family</option>
@@ -344,12 +388,29 @@
                     <option value="2">2+ Beds</option>
                     <option value="3">3+ Beds</option>
                     <option value="4">4+ Beds</option>
+                    <option value="5">5+ Beds</option>
                 </select>
+            </div>
+            <div class="filter-group">
+                <input type="text" id="filterCity" placeholder="Enter city..." oninput="filterListings()">
             </div>
         </div>
     </div>
 
     <div class="listings-container">
+        <div class="listings-header">
+            <div class="listings-count">
+                <i class="fas fa-home"></i> <span id="listingCount">0</span> Listings
+            </div>
+            <div class="sort-options">
+                <select id="sortSelect" onchange="sortListings()">
+                    <option value="newest">Newest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="beds">Most Bedrooms</option>
+                </select>
+            </div>
+        </div>
         <div id="listingsGrid" class="listings-grid">
             <!-- Listings will be dynamically inserted here -->
         </div>
@@ -379,6 +440,15 @@
             }
             
             displayListings(allListings);
+            updateListingCount(allListings.length);
+        }
+        
+        // Update listing count
+        function updateListingCount(count) {
+            const countElement = document.getElementById('listingCount');
+            if (countElement) {
+                countElement.textContent = count;
+            }
         }
         
         // Display listings
@@ -389,6 +459,7 @@
             if (listings.length === 0) {
                 grid.style.display = 'none';
                 emptyState.style.display = 'block';
+                updateListingCount(0);
                 return;
             }
             
@@ -400,6 +471,8 @@
                 const card = createListingCard(listing);
                 grid.appendChild(card);
             });
+            
+            updateListingCount(listings.length);
         }
         
         // Create listing card
@@ -407,22 +480,37 @@
             const card = document.createElement('div');
             card.className = 'listing-card';
             
+            // Get photo URL - handle both partner submissions and regular listings
+            let photoUrl = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800';
+            if (listing.allPhotos && listing.allPhotos.length > 0) {
+                photoUrl = listing.allPhotos[0];
+            } else if (listing.photos) {
+                photoUrl = listing.photos;
+            } else if (listing.mainImage) {
+                photoUrl = listing.mainImage;
+            }
+            
             const formattedPrice = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
                 minimumFractionDigits: 0
-            }).format(listing.price);
+            }).format(listing.price || 0);
+            
+            const city = listing.city || '';
+            const state = listing.state || '';
+            const zip = listing.zipCode || listing.zip || '';
+            const locationText = [city, state, zip].filter(Boolean).join(', ');
             
             card.innerHTML = `
-                <div class="card-image" style="background-image: url('${listing.mainImage || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'}');">
-                    <span class="card-badge">${listing.status || 'Active'}</span>
+                <div class="card-image" style="background-image: url('${photoUrl}');">
+                    <span class="card-badge">${listing.status || listing.propertyType || 'Active'}</span>
                     <div class="card-price">${formattedPrice}</div>
                 </div>
                 <div class="card-content">
-                    <h3>${listing.address}</h3>
+                    <h3>${listing.address || 'Address not provided'}</h3>
                     <div class="card-address">
                         <i class="fas fa-map-marker-alt"></i>
-                        ${listing.city}, ${listing.state} ${listing.zipCode}
+                        ${locationText || 'Location not specified'}
                     </div>
                     <div class="card-stats">
                         ${listing.bedrooms ? `<div class="stat"><i class="fas fa-bed"></i> ${listing.bedrooms} Beds</div>` : ''}
@@ -431,15 +519,31 @@
                     </div>
                     <p class="card-description">${listing.description || 'Contact us for more details about this property.'}</p>
                     <div class="card-actions">
-                        <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address}'); return false;">
+                        <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address || 'this property'}'); return false;">
                             <i class="fas fa-envelope"></i> Contact
                         </a>
                         ${listing.sourceUrl ? `<a href="${listing.sourceUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
+                        <button class="btn-delete" onclick="deleteListing('${listing.id}'); return false;">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
                     </div>
                 </div>
             `;
             
             return card;
+        }
+        
+        // Delete listing
+        function deleteListing(id) {
+            if (!confirm('Are you sure you want to delete this listing?')) {
+                return;
+            }
+            
+            allListings = allListings.filter(listing => listing.id !== id);
+            localStorage.setItem('vdiListings', JSON.stringify(allListings));
+            
+            filterListings(); // Refresh display with current filters
+            console.log(`✅ Deleted listing ${id}`);
         }
         
         // Filter listings
@@ -448,16 +552,45 @@
             const minPrice = parseInt(document.getElementById('filterMinPrice').value) || 0;
             const maxPrice = parseInt(document.getElementById('filterMaxPrice').value) || Infinity;
             const minBeds = parseInt(document.getElementById('filterBeds').value) || 0;
+            const cityFilter = document.getElementById('filterCity').value.toLowerCase().trim();
             
             const filtered = allListings.filter(listing => {
                 const matchesType = !type || listing.propertyType === type;
-                const matchesPrice = listing.price >= minPrice && listing.price <= maxPrice;
+                const matchesPrice = (listing.price || 0) >= minPrice && (listing.price || 0) <= maxPrice;
                 const matchesBeds = !minBeds || (listing.bedrooms && listing.bedrooms >= minBeds);
+                const matchesCity = !cityFilter || (listing.city && listing.city.toLowerCase().includes(cityFilter));
                 
-                return matchesType && matchesPrice && matchesBeds;
+                return matchesType && matchesPrice && matchesBeds && matchesCity;
             });
             
             displayListings(filtered);
+        }
+        
+        // Sort listings
+        function sortListings() {
+            const sortValue = document.getElementById('sortSelect').value;
+            let sorted = [...allListings];
+            
+            switch(sortValue) {
+                case 'price-low':
+                    sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+                    break;
+                case 'price-high':
+                    sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+                    break;
+                case 'beds':
+                    sorted.sort((a, b) => (b.bedrooms || 0) - (a.bedrooms || 0));
+                    break;
+                default: // newest
+                    sorted.sort((a, b) => {
+                        const dateA = new Date(a.createdAt || a.submissionDate || 0);
+                        const dateB = new Date(b.createdAt || b.submissionDate || 0);
+                        return dateB - dateA;
+                    });
+            }
+            
+            allListings = sorted;
+            filterListings(); // Apply current filters to sorted list
         }
         
         // Contact about listing

@@ -674,33 +674,52 @@
         <div class="nav-container">
             <a href="index.html" class="logo">VDI Realty</a>
             <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
-                <a href="commercial-listings.html" class="back-link">
-                    <i class="fas fa-building"></i> Commercial Listings
+                <a href="listings.html" class="back-link">
+                    <i class="fas fa-list"></i> Browse Listings
                 </a>
-                <a href="opportunities.html" class="back-link">
-                    <i class="fas fa-arrow-left"></i> Back to Opportunities
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Home
                 </a>
             </div>
         </div>
     </header>
 
     <section class="hero">
-        <h1><i class="fas fa-handshake"></i> Partner Listing Submission</h1>
-        <p>Showcase your properties to qualified investors and homebuyers. Zero fees, maximum exposure.</p>
+        <h1><i class="fas fa-plus-circle"></i> Add Your Listing</h1>
+        <p>Showcase your properties to qualified investors and homebuyers • Zero fees • Maximum exposure</p>
+        <div style="margin-top: 20px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+            <div style="background: rgba(255,255,255,0.15); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px);">
+                <i class="fas fa-rocket" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>
+                <strong>Instant Publish</strong>
+                <div style="font-size: 0.9rem; opacity: 0.9;">Goes live immediately</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.15); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px);">
+                <i class="fas fa-dollar-sign" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>
+                <strong>100% Free</strong>
+                <div style="font-size: 0.9rem; opacity: 0.9;">No hidden fees</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.15); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px);">
+                <i class="fas fa-magic" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>
+                <strong>Auto-Extract</strong>
+                <div style="font-size: 0.9rem; opacity: 0.9;">Paste URL, we fill form</div>
+            </div>
+        </div>
     </section>
 
     <section class="benefits-section">
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 10px;">Why List With Us?</h2>
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 2rem;">
+            <i class="fas fa-star" style="color: var(--accent);"></i> Why List With VDI Realty?
+        </h2>
         <div class="benefits-grid">
-            <div class="benefit-item">
-                <i class="fas fa-dollar-sign"></i>
-                <h3>Zero Fees</h3>
-                <p>No commission. No listing fees. Keep 100% of your earnings.</p>
-            </div>
             <div class="benefit-item">
                 <i class="fas fa-users"></i>
                 <h3>Qualified Buyers</h3>
-                <p>Reach serious investors actively seeking properties.</p>
+                <p>Reach serious investors actively seeking properties in your area.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-globe"></i>
+                <h3>Wide Reach</h3>
+                <p>Your listing appears on our main Browse Listings page with full visibility.</p>
             </div>
             <div class="benefit-item">
                 <i class="fas fa-rocket"></i>
@@ -764,7 +783,7 @@
                     <h4><i class="fas fa-info-circle"></i> Before You Start</h4>
                     <ul>
                         <li>Listings go live immediately upon submission</li>
-                        <li><strong>Your listing will appear on:</strong> <a href="commercial-listings.html" style="color: var(--accent);">Commercial Listings</a> and <a href="opportunities.html" style="color: var(--accent);">Property Listings</a> pages</li>
+                        <li><strong>Your listing will appear on:</strong> <a href="listings.html" style="color: var(--accent);">Browse Listings</a> page</li>
                         <li>High-quality photos increase engagement by 300%</li>
                         <li>Detailed descriptions help buyers make informed decisions</li>
                         <li>Include accurate pricing and property details</li>
@@ -1593,11 +1612,11 @@
                 const listingData = Object.fromEntries(formData.entries());
                 saveListingToStorage(listingData);
                 
-                // Show success message with link to Commercial Listings page
+                // Show success message with link to Browse Listings page
                 setTimeout(() => {
                     const message = document.createElement('div');
                     message.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #28a745; color: white; padding: 1rem 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; text-align: center;';
-                    message.innerHTML = '✅ Listing saved successfully! <a href="commercial-listings.html" style="color: #C5A059; font-weight: bold; text-decoration: underline;">View on Commercial Listings page</a>';
+                    message.innerHTML = '✅ Listing saved successfully! <a href="listings.html" style="color: #C5A059; font-weight: bold; text-decoration: underline;">View on Browse Listings page</a>';
                     document.body.appendChild(message);
                     setTimeout(() => message.remove(), 5000);
                 }, 1000);
