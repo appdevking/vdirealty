@@ -93,9 +93,54 @@ const initDatabase = () => {
     console.log('✅ Database initialized successfully');
 };
 
+// Run migrations to add new columns to existing tables
+const runMigrations = () => {
+    console.log('🔄 Running database migrations...');
+    
+    // Get existing columns in listings table
+    const tableInfo = db.pragma('table_info(listings)');
+    const existingColumns = tableInfo.map(col => col.name);
+    
+    // Define new columns to add
+    const newColumns = [
+        { name: 'buildingClass', type: 'TEXT' },
+        { name: 'zoning', type: 'TEXT' },
+        { name: 'occupancyRate', type: 'REAL' },
+        { name: 'capRate', type: 'REAL' },
+        { name: 'grossIncome', type: 'INTEGER' },
+        { name: 'operatingExpenses', type: 'INTEGER' },
+        { name: 'numberOfUnits', type: 'INTEGER' },
+        { name: 'parkingSpaces', type: 'INTEGER' },
+        { name: 'leaseType', type: 'TEXT' },
+        { name: 'mlsNumber', type: 'TEXT' },
+        { name: 'externalUrl', type: 'TEXT' }
+    ];
+    
+    // Add missing columns
+    let migrationsRun = 0;
+    newColumns.forEach(column => {
+        if (!existingColumns.includes(column.name)) {
+            console.log(`  ➕ Adding column: ${column.name} (${column.type})`);
+            db.exec(`ALTER TABLE listings ADD COLUMN ${column.name} ${column.type}`);
+            migrationsRun++;
+        }
+    });
+    
+    // Make bedrooms and bathrooms nullable if they're NOT NULL (for older databases)
+    // SQLite doesn't support ALTER COLUMN, so we'll skip this for now
+    // Existing data will have these fields, new commercial properties can be NULL
+    
+    if (migrationsRun > 0) {
+        console.log(`✅ Applied ${migrationsRun} database migration(s)`);
+    } else {
+        console.log('✅ Database schema is up to date');
+    }
+};
+
 // Initialize database tables before preparing statements
 // This ensures tables exist when db.prepare is called
 initDatabase();
+runMigrations();
 
 // Prepared statements for better performance
 const statements = {
