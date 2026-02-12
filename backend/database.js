@@ -60,6 +60,8 @@ const initDatabase = () => {
             numberOfUnits INTEGER,
             parkingSpaces INTEGER,
             leaseType TEXT,
+            mlsNumber TEXT,
+            externalUrl TEXT,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
@@ -104,8 +106,9 @@ const statements = {
             propertyType, price, sqft, bedrooms, bathrooms, yearBuilt, lotSize,
             features, description, privateContact, submissionDate, expirationDate,
             buildingClass, zoning, occupancyRate, capRate, grossIncome,
-            operatingExpenses, numberOfUnits, parkingSpaces, leaseType
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            operatingExpenses, numberOfUnits, parkingSpaces, leaseType,
+            mlsNumber, externalUrl
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `),
 
     // Insert photo

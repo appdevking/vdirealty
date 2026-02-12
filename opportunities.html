@@ -786,6 +786,25 @@
                 const price = formatPrice(listing.price);
                 const isNew = isNewListing(listing.submissionDate);
                 
+                // Handle optional bedrooms/bathrooms for commercial properties
+                const bedsDisplay = listing.bedrooms ? `
+                    <div class="stat">
+                        <span class="stat-value">${listing.bedrooms}</span>
+                        <span class="stat-label">Beds</span>
+                    </div>
+                ` : '';
+                
+                const bathsDisplay = listing.bathrooms ? `
+                    <div class="stat">
+                        <span class="stat-value">${listing.bathrooms}</span>
+                        <span class="stat-label">Baths</span>
+                    </div>
+                ` : '';
+                
+                // MLS Number and External Link buttons
+                const mlsInfo = listing.mlsNumber ? `<span style="display: inline-block; background: #e8f4fd; padding: 4px 10px; border-radius: 4px; font-size: 0.85rem; margin-right: 10px;"><i class="fas fa-tag"></i> MLS# ${escapeHtml(listing.mlsNumber)}</span>` : '';
+                const externalLink = listing.externalUrl ? `<a href="${escapeHtml(listing.externalUrl)}" target="_blank" rel="noopener" style="display: inline-block; background: var(--accent); color: white; padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; text-decoration: none; margin-right: 10px;"><i class="fas fa-external-link-alt"></i> View Full Listing</a>` : '';
+                
                 return `
                     <div class="opportunity-card">
                         <div class="card-image" style="background-image: url('${photoUrl}');">
@@ -798,19 +817,14 @@
                                 ${escapeHtml(listing.city)}, ${escapeHtml(listing.state)} ${escapeHtml(listing.zip)}
                             </div>
                             <p class="card-description">${escapeHtml(listing.description)}</p>
+                            ${mlsInfo || externalLink ? `<div style="margin: 15px 0;">${mlsInfo}${externalLink}</div>` : ''}
                             <div class="card-stats">
                                 <div class="stat">
                                     <span class="stat-value">${price}</span>
                                     <span class="stat-label">Price</span>
                                 </div>
-                                <div class="stat">
-                                    <span class="stat-value">${listing.bedrooms}</span>
-                                    <span class="stat-label">Beds</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value">${listing.bathrooms}</span>
-                                    <span class="stat-label">Baths</span>
-                                </div>
+                                ${bedsDisplay}
+                                ${bathsDisplay}
                                 <div class="stat">
                                     <span class="stat-value">${formatSqft(listing.sqft)}</span>
                                     <span class="stat-label">Sq Ft</span>

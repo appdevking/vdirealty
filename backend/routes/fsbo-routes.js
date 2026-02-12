@@ -90,7 +90,9 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
             data.operatingExpenses ? parseInt(data.operatingExpenses) : null,
             data.numberOfUnits ? parseInt(data.numberOfUnits) : null,
             data.parkingSpaces ? parseInt(data.parkingSpaces) : null,
-            data.leaseType || null
+            data.leaseType || null,
+            data.mlsNumber || null,
+            data.externalUrl || null
         );
         
         const listingId = result.lastInsertRowid;

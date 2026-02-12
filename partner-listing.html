@@ -434,6 +434,24 @@
                     <input type="text" name="address" id="address" placeholder="Street address" required>
                 </div>
 
+                <div class="info-box" style="background: #e8f4fd; border-left: 4px solid var(--accent); padding: 15px; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #666; font-size: 0.9rem;">
+                        <i class="fas fa-lightbulb" style="color: var(--accent); margin-right: 8px;"></i>
+                        <strong>Already listed elsewhere?</strong> If this property is already on MLS, Zillow, Realtor.com, or your website, provide the MLS number and link below. This helps buyers find complete details.
+                    </p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>MLS Number</label>
+                        <input type="text" name="mlsNumber" id="mlsNumber" placeholder="Optional - e.g., 12345678">
+                    </div>
+                    <div class="form-group">
+                        <label>External Listing URL</label>
+                        <input type="url" name="externalUrl" id="externalUrl" placeholder="Optional - e.g., https://www.zillow.com/...">
+                    </div>
+                </div>
+
                 <div class="form-grid">
                     <div class="form-group">
                         <label>City <span class="required">*</span></label>
@@ -729,7 +747,8 @@
                               'city', 'state', 'zip', 'propertyType', 'price', 'sqft', 'bedrooms', 
                               'bathrooms', 'yearBuilt', 'lotSize', 'features', 'description',
                               'buildingClass', 'zoning', 'occupancyRate', 'capRate', 'grossIncome',
-                              'operatingExpenses', 'numberOfUnits', 'parkingSpaces', 'leaseType'];
+                              'operatingExpenses', 'numberOfUnits', 'parkingSpaces', 'leaseType',
+                              'mlsNumber', 'externalUrl'];
                 
                 fields.forEach(field => {
                     const value = document.getElementById(field).value;
