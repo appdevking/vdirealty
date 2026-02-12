@@ -1325,10 +1325,46 @@
                 
                 // Debug: Log a sample of the HTML to see what we're getting
                 console.log('HTML sample (first 500 chars):', html.substring(0, 500));
+                console.log('HTML sample (last 300 chars):', html.substring(html.length - 300));
                 
                 // Parse the HTML to extract property data
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
+                
+                // Debug: Check what we actually got
+                const pageTitle = doc.querySelector('title')?.textContent || 'No title found';
+                const bodyText = doc.body?.textContent?.substring(0, 200) || 'No body found';
+                console.log('Page title:', pageTitle);
+                console.log('Body text sample:', bodyText);
+                
+                // Debug: List all h1 tags to see what's actually on the page
+                const h1Tags = Array.from(doc.querySelectorAll('h1')).map(h1 => ({
+                    text: h1.textContent.trim(),
+                    classes: h1.className,
+                    id: h1.id
+                }));
+                console.log('All H1 tags found:', h1Tags);
+                
+                // Debug: Check if page might be an error or redirect
+                if (html.toLowerCase().includes('captcha') || html.toLowerCase().includes('access denied')) {
+                    console.error('⚠️ Page appears to be showing CAPTCHA or access denied');
+                }
+                if (html.toLowerCase().includes('redirect') || html.toLowerCase().includes('loading')) {
+                    console.warn('⚠️ Page might be redirecting or still loading');
+                }
+                
+                // Debug: Check what img tags actually exist
+                const allImages = doc.querySelectorAll('img');
+                console.log(`🔍 Total img tags found on page: ${allImages.length}`);
+                if (allImages.length > 0) {
+                    const firstFiveImages = Array.from(allImages).slice(0, 5).map(img => ({
+                        src: (img.src || 'no-src').substring(0, 60),
+                        alt: img.alt || 'no-alt',
+                        classes: img.className || 'no-classes',
+                        dataTestId: img.getAttribute('data-testid') || 'none'
+                    }));
+                    console.log('📸 Sample of first 5 img elements:', firstFiveImages);
+                }
                 
                 // Extract multiple images from the page
                 const imageSelectors = [
@@ -1406,132 +1442,21 @@
             }
         }
         
-        // Enhanced property data extraction with multiple strategies
+        // Simple property data extraction (matching working broker-portal.html approach)
         function extractPropertyData(doc) {
-            // First, try to extract from JSON-LD structured data
-            const jsonLdData = extractFromJsonLd(doc);
-            if (jsonLdData && (jsonLdData.address || jsonLdData.price)) {
-                console.log('✓ Extracted data from JSON-LD structured data', jsonLdData);
-                return jsonLdData;
-            }
-            
-            console.log('JSON-LD extraction failed or returned no data, trying CSS selectors...');
-            
-            // Fallback to CSS selector extraction with detailed logging
-            const trySelectors = (fieldName, selectors) => {
-                for (const selector of selectors) {
-                    try {
-                        const element = doc.querySelector(selector);
-                        if (element && element.textContent.trim()) {
-                            const value = element.textContent.trim();
-                            console.log(`✓ Found ${fieldName} using selector: "${selector}" -> "${value}"`);
-                            return value;
-                        }
-                    } catch (e) {
-                        // Skip invalid selectors
-                    }
-                }
-                console.log(`✗ No ${fieldName} found with any selector`);
-                return '';
-            };
-            
-            // Address selectors (expanded for Century 21 and others)
-            const address = trySelectors('address', [
-                'h1[data-testid="property-street"]',
-                '.property-street-address',
-                'h1.listing-address',
-                'h1.property-address',
-                '.pdp-address h1',
-                '[data-rf-test-id="abp-streetLine"]',
-                '.street-address',
-                'h1.address',
-                '[itemprop="streetAddress"]',
-                '.listing-title h1',
-                'h1[class*="address"]',
-                'h1[class*="street"]',
-                '.pdp-header-text h1'
-            ]);
-            
-            // Price selectors
-            const price = trySelectors('price', [
-                '[data-testid="price"]',
-                '.property-price',
-                '.listing-price',
-                '.price-display',
-                '[data-rf-test-id="abp-price"]',
-                'span[class*="price"]',
-                'div[class*="price"]',
-                '[itemprop="price"]',
-                '.list-price',
-                '.sales-price',
-                '.pdp-price'
-            ]);
-            
-            // Bedrooms selectors
-            const beds = trySelectors('beds', [
-                '[data-testid="bed-count"]',
-                '[data-rf-test-id="abp-beds"]',
-                'span[data-label="property-meta-beds"]',
-                '.property-beds',
-                '.beds-count',
-                'li[data-testid="property-meta-beds"]',
-                '[class*="bed"][class*="count"]',
-                '.bedroom-count',
-                'span[aria-label*="bed"]'
-            ]);
-            
-            // Bathrooms selectors
-            const baths = trySelectors('baths', [
-                '[data-testid="bath-count"]',
-                '[data-rf-test-id="abp-baths"]',
-                'span[data-label="property-meta-baths"]',
-                '.property-baths',
-                '.baths-count',
-                'li[data-testid="property-meta-baths"]',
-                '[class*="bath"][class*="count"]',
-                '.bathroom-count',
-                'span[aria-label*="bath"]'
-            ]);
-            
-            // Square feet selectors
-            const sqft = trySelectors('sqft', [
-                '[data-testid="sqft-value"]',
-                '[data-rf-test-id="abp-sqFt"]',
-                'span[data-label="property-meta-sqft"]',
-                '.property-sqft',
-                '.sqft-value',
-                'li[data-testid="property-meta-sqft"]',
-                '[class*="sqft"]',
-                '[class*="square"]',
-                '.living-area',
-                '.square-feet',
-                'span[aria-label*="sqft"]',
-                'span[aria-label*="square"]'
-            ]);
-            
-            // Description selectors
-            const description = trySelectors('description', [
-                '[data-testid="description"]',
-                '.property-description',
-                '.listing-description',
-                '.property-remarks',
-                '#listing-description',
-                '.remarks',
-                '.description-text',
-                '[class*="description"]'
-            ]);
-            
-            console.log('CSS selector extraction completed');
-            
-            return {
-                address,
-                price,
-                beds,
-                baths,
-                sqft,
-                description,
+            // Use comma-separated selectors - browser tries each one automatically until a match is found
+            const extractedData = {
+                address: doc.querySelector('h1.address, .property-address, .listing-address, [itemprop="address"], .street-address, h1.listing-title, h1[data-testid="property-street"], h1.property-address, .pdp-address h1, [data-rf-test-id="abp-streetLine"]')?.textContent?.trim() || '',
+                price: doc.querySelector('.price, .property-price, .listing-price, [itemprop="price"], .list-price, span.price, [data-testid="price"], .price-display, [data-rf-test-id="abp-price"], span[class*="price"], .sales-price')?.textContent?.trim() || '',
+                beds: doc.querySelector('.beds, .bedrooms, [data-beds], .beds-count, .bedroom-count, [data-testid="bed-count"], [data-rf-test-id="abp-beds"], .property-beds, li[data-testid="property-meta-beds"]')?.textContent?.trim() || '',
+                baths: doc.querySelector('.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count, [data-testid="bath-count"], [data-rf-test-id="abp-baths"], .property-baths, li[data-testid="property-meta-baths"]')?.textContent?.trim() || '',
+                sqft: doc.querySelector('.sqft, .square-feet, [data-sqft], .sqft-value, .living-area, [data-testid="sqft-value"], [data-rf-test-id="abp-sqFt"], .property-sqft, li[data-testid="property-meta-sqft"]')?.textContent?.trim() || '',
+                description: doc.querySelector('.description, .property-description, .listing-description, .remarks, .property-details, [data-testid="description"], .property-remarks, #listing-description')?.textContent?.trim() || '',
                 images: [] // Will be added separately
             };
+            
+            console.log('✓ Extracted data using simple selectors:', extractedData);
+            return extractedData;
         }
         
         // Extract data from JSON-LD structured data
