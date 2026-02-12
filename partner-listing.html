@@ -1467,27 +1467,58 @@
             if (!extractedData.beds || !extractedData.baths || !extractedData.sqft) {
                 const bodyText = doc.body?.textContent || '';
                 
+                // Use only the first half of the page to avoid related listings at the bottom
+                const upperPageText = bodyText.substring(0, Math.floor(bodyText.length / 2));
+                
                 if (!extractedData.beds) {
-                    const bedMatch = bodyText.match(/(\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
-                    if (bedMatch) {
-                        extractedData.beds = bedMatch[1];
-                        console.log('✓ Found beds in text:', extractedData.beds);
+                    // Find all bedroom matches
+                    const bedMatches = [];
+                    const bedRegex = /(\d+)\s*(?:bed(?:room)?s?|bd|br)\b/gi;
+                    let match;
+                    while ((match = bedRegex.exec(upperPageText)) !== null) {
+                        bedMatches.push(parseInt(match[1]));
+                    }
+                    
+                    if (bedMatches.length > 0) {
+                        // Take the highest value (main property usually has more beds than related listings)
+                        extractedData.beds = Math.max(...bedMatches).toString();
+                        console.log('✓ Found beds in text (from matches:', bedMatches, '-> selected:', extractedData.beds + ')');
                     }
                 }
                 
                 if (!extractedData.baths) {
-                    const bathMatch = bodyText.match(/(\d+(?:\.\d+)?)\s*(?:bath(?:room)?s?|ba)\b/i);
-                    if (bathMatch) {
-                        extractedData.baths = bathMatch[1];
-                        console.log('✓ Found baths in text:', extractedData.baths);
+                    // Find all bathroom matches
+                    const bathMatches = [];
+                    const bathRegex = /(\d+(?:\.\d+)?)\s*(?:bath(?:room)?s?|ba)\b/gi;
+                    let match;
+                    while ((match = bathRegex.exec(upperPageText)) !== null) {
+                        bathMatches.push(parseFloat(match[1]));
+                    }
+                    
+                    if (bathMatches.length > 0) {
+                        // Take the highest value
+                        extractedData.baths = Math.max(...bathMatches).toString();
+                        console.log('✓ Found baths in text (from matches:', bathMatches, '-> selected:', extractedData.baths + ')');
                     }
                 }
                 
                 if (!extractedData.sqft) {
-                    const sqftMatch = bodyText.match(/([\d,]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)\b/i);
-                    if (sqftMatch) {
-                        extractedData.sqft = sqftMatch[1].replace(/,/g, '');
-                        console.log('✓ Found sqft in text:', extractedData.sqft);
+                    // Find all sqft matches
+                    const sqftMatches = [];
+                    const sqftRegex = /([\d,]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)\b/gi;
+                    let match;
+                    while ((match = sqftRegex.exec(upperPageText)) !== null) {
+                        const value = parseInt(match[1].replace(/,/g, ''));
+                        // Only consider reasonable sqft values (100 - 50000)
+                        if (value >= 100 && value <= 50000) {
+                            sqftMatches.push(value);
+                        }
+                    }
+                    
+                    if (sqftMatches.length > 0) {
+                        // Take the highest value (main property)
+                        extractedData.sqft = Math.max(...sqftMatches).toString();
+                        console.log('✓ Found sqft in text (from matches:', sqftMatches, '-> selected:', extractedData.sqft + ')');
                     }
                 }
             }
