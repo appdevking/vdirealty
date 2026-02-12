@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Opportunities | VDI Realty</title>
+    <title>Property Listings | VDI Realty</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -548,15 +548,15 @@
     </header>
 
     <section class="hero">
-        <h1>Investment Opportunities</h1>
-        <p>Discover properties designed to build wealth. From primary residences to AirBnB investments, we connect buyers with quality listings from trusted builders and agents.</p>
+        <h1><i class="fas fa-home"></i> Property Listings</h1>
+        <p>Discover properties for sale - from investment opportunities to your next home</p>
     </section>
 
     <!-- Partner Banner for Builders & Agents -->
     <section class="content-section">
         <div class="partner-banner">
             <h2><i class="fas fa-handshake"></i> For Builders & Real Estate Agents</h2>
-            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 20px;">Partner with VDI Realty to showcase your listings to qualified investors and homebuyers</p>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 20px;">Partner with VDI Realty to showcase your listings to qualified buyers</p>
             
             <div class="stats-counter">
                 <div class="stat-box">
@@ -653,6 +653,12 @@
                     <option value="3">3+ Bedrooms</option>
                     <option value="4">4+ Bedrooms</option>
                     <option value="5">5+ Bedrooms</option>
+                </select>
+                <select id="purposeFilter" class="filter-select">
+                    <option value="">All Purposes</option>
+                    <option value="investment">Investment</option>
+                    <option value="residence">Primary Residence</option>
+                    <option value="commercial">Commercial Use</option>
                 </select>
             </div>
             <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
@@ -843,6 +849,7 @@
             const propertyType = document.getElementById('propertyTypeFilter').value;
             const priceRange = document.getElementById('priceFilter').value;
             const minBedrooms = document.getElementById('bedroomsFilter').value;
+            const purpose = document.getElementById('purposeFilter').value;
             
             filteredListings = allListings.filter(listing => {
                 // Search filter
@@ -871,6 +878,25 @@
                     return false;
                 }
                 
+                // Purpose filter (auto-detect based on property type)
+                if (purpose) {
+                    if (purpose === 'investment' && listing.propertyType === 'Commercial') {
+                        return false; // Commercial is not typical residential investment
+                    }
+                    if (purpose === 'residence' && (listing.propertyType === 'Commercial' || listing.propertyType === 'Land')) {
+                        return false; // Can't live in commercial or land
+                    }
+                    if (purpose === 'commercial' && listing.propertyType !== 'Commercial') {
+                        return false; // Only show commercial properties
+                    }
+                    if (purpose === 'investment' && listing.propertyType === 'Land') {
+                        // Land can be investment, so allow it
+                    }
+                    if (purpose === 'residence' && listing.propertyType === 'Multi-Family' && listing.numberOfUnits && listing.numberOfUnits > 4) {
+                        return false; // Large multi-family is typically investment, not residence
+                    }
+                }
+                
                 return true;
             });
             
@@ -883,6 +909,7 @@
             document.getElementById('propertyTypeFilter').value = '';
             document.getElementById('priceFilter').value = '';
             document.getElementById('bedroomsFilter').value = '';
+            document.getElementById('purposeFilter').value = '';
             
             filteredListings = allListings;
             displayListings(filteredListings);
