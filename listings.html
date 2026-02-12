@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Listings | VDI Realty</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            line-height: 1.7;
+            background: var(--light-gray);
+        }
+        
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary);
+            padding: 8px 15px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logo:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .btn-add {
+            background: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 3px;
+        }
+        
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            margin: -30px 20px 40px;
+            border-radius: 10px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+        
+        /* Listings Grid */
+        .listings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+        
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .listing-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .listing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .card-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        .card-price {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .card-content h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .card-address {
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .card-stats {
+            display: flex;
+            gap: 20px;
+            padding: 15px 0;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            margin: 15px 0;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stat i {
+            color: var(--accent);
+        }
+        
+        .card-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent);
+        }
+        
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .listings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="broker-portal.html" class="btn-add">
+                    <i class="fas fa-plus"></i> Add Listing
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Available Properties</h1>
+        <p>Discover your next investment opportunity</p>
+    </section>
+
+    <div class="filters">
+        <div class="filters-grid">
+            <div class="filter-group">
+                <select id="filterType" onchange="filterListings()">
+                    <option value="">All Property Types</option>
+                    <option value="Single Family">Single Family</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Multi-Family">Multi-Family</option>
+                    <option value="Land">Land</option>
+                    <option value="Commercial">Commercial</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <input type="number" id="filterMinPrice" placeholder="Min Price" onchange="filterListings()">
+            </div>
+            <div class="filter-group">
+                <input type="number" id="filterMaxPrice" placeholder="Max Price" onchange="filterListings()">
+            </div>
+            <div class="filter-group">
+                <select id="filterBeds" onchange="filterListings()">
+                    <option value="">Any Beds</option>
+                    <option value="1">1+ Beds</option>
+                    <option value="2">2+ Beds</option>
+                    <option value="3">3+ Beds</option>
+                    <option value="4">4+ Beds</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="listings-container">
+        <div id="listingsGrid" class="listings-grid">
+            <!-- Listings will be dynamically inserted here -->
+        </div>
+        
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-home"></i>
+            <h3>No Listings Found</h3>
+            <p>Check back soon or adjust your filters</p>
+        </div>
+    </div>
+
+    <script>
+        let allListings = [];
+        
+        // Load listings on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadListings();
+        });
+        
+        // Load listings from localStorage
+        function loadListings() {
+            allListings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
+            
+            // If no listings, add some sample data
+            if (allListings.length === 0) {
+                allListings = getSampleListings();
+            }
+            
+            displayListings(allListings);
+        }
+        
+        // Display listings
+        function displayListings(listings) {
+            const grid = document.getElementById('listingsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (listings.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            grid.innerHTML = '';
+            
+            listings.forEach(listing => {
+                const card = createListingCard(listing);
+                grid.appendChild(card);
+            });
+        }
+        
+        // Create listing card
+        function createListingCard(listing) {
+            const card = document.createElement('div');
+            card.className = 'listing-card';
+            
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(listing.price);
+            
+            card.innerHTML = `
+                <div class="card-image" style="background-image: url('${listing.mainImage || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800'}');">
+                    <span class="card-badge">${listing.status || 'Active'}</span>
+                    <div class="card-price">${formattedPrice}</div>
+                </div>
+                <div class="card-content">
+                    <h3>${listing.address}</h3>
+                    <div class="card-address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        ${listing.city}, ${listing.state} ${listing.zipCode}
+                    </div>
+                    <div class="card-stats">
+                        ${listing.bedrooms ? `<div class="stat"><i class="fas fa-bed"></i> ${listing.bedrooms} Beds</div>` : ''}
+                        ${listing.bathrooms ? `<div class="stat"><i class="fas fa-bath"></i> ${listing.bathrooms} Baths</div>` : ''}
+                        ${listing.sqft ? `<div class="stat"><i class="fas fa-ruler-combined"></i> ${parseInt(listing.sqft).toLocaleString()} sqft</div>` : ''}
+                    </div>
+                    <p class="card-description">${listing.description || 'Contact us for more details about this property.'}</p>
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address}'); return false;">
+                            <i class="fas fa-envelope"></i> Contact
+                        </a>
+                        ${listing.sourceUrl ? `<a href="${listing.sourceUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Filter listings
+        function filterListings() {
+            const type = document.getElementById('filterType').value;
+            const minPrice = parseInt(document.getElementById('filterMinPrice').value) || 0;
+            const maxPrice = parseInt(document.getElementById('filterMaxPrice').value) || Infinity;
+            const minBeds = parseInt(document.getElementById('filterBeds').value) || 0;
+            
+            const filtered = allListings.filter(listing => {
+                const matchesType = !type || listing.propertyType === type;
+                const matchesPrice = listing.price >= minPrice && listing.price <= maxPrice;
+                const matchesBeds = !minBeds || (listing.bedrooms && listing.bedrooms >= minBeds);
+                
+                return matchesType && matchesPrice && matchesBeds;
+            });
+            
+            displayListings(filtered);
+        }
+        
+        // Contact about listing
+        function contactAboutListing(address) {
+            window.location.href = `index.html#contact`;
+            setTimeout(() => {
+                const message = document.getElementById('message');
+                if (message) {
+                    message.value = `I'm interested in the property at ${address}. Please contact me with more information.`;
+                }
+            }, 500);
+        }
+        
+        // Sample listings (for demo)
+        function getSampleListings() {
+            return [
+                {
+                    id: '1',
+                    address: '456 Oak Avenue',
+                    city: 'Phoenix',
+                    state: 'AZ',
+                    zipCode: '85001',
+                    price: 425000,
+                    propertyType: 'Single Family',
+                    bedrooms: 3,
+                    bathrooms: 2.5,
+                    sqft: 2100,
+                    description: 'Beautiful home in a great neighborhood. Updated kitchen, spacious backyard.',
+                    mainImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
+                    status: 'Active',
+                    monthlyRent: 2800,
+                    capRate: 6.2
+                },
+                {
+                    id: '2',
+                    address: '789 Pine Street',
+                    city: 'Scottsdale',
+                    state: 'AZ',
+                    zipCode: '85251',
+                    price: 585000,
+                    propertyType: 'Condo',
+                    bedrooms: 2,
+                    bathrooms: 2,
+                    sqft: 1450,
+                    description: 'Modern downtown condo with city views. Perfect for investors.',
+                    mainImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800',
+                    status: 'Active',
+                    monthlyRent: 3200,
+                    capRate: 5.8
+                },
+                {
+                    id: '3',
+                    address: '321 Maple Drive',
+                    city: 'Tempe',
+                    state: 'AZ',
+                    zipCode: '85281',
+                    price: 725000,
+                    propertyType: 'Single Family',
+                    bedrooms: 4,
+                    bathrooms: 3,
+                    sqft: 2800,
+                    description: 'Luxury home with pool. Great for vacation rental investment.',
+                    mainImage: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800',
+                    status: 'Active',
+                    monthlyRent: 5500,
+                    capRate: 8.1
+                }
+            ];
+        }
+    </script>
+
+</body>
+</html>
