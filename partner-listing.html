@@ -1206,6 +1206,31 @@
                         'success'
                     );
                     
+                    // Save to localStorage for Browse Listings page
+                    const listingData = {
+                        address: document.getElementById('address').value,
+                        city: document.getElementById('city').value,
+                        state: document.getElementById('state').value,
+                        zip: document.getElementById('zip').value,
+                        price: parseInt(document.getElementById('price').value) || 0,
+                        propertyType: document.getElementById('propertyType').value,
+                        bedrooms: parseInt(document.getElementById('bedrooms').value) || 0,
+                        bathrooms: parseFloat(document.getElementById('bathrooms').value) || 0,
+                        sqft: parseInt(document.getElementById('sqft').value) || 0,
+                        yearBuilt: document.getElementById('yearBuilt').value,
+                        description: document.getElementById('description').value,
+                        mlsNumber: document.getElementById('mlsNumber').value,
+                        externalUrl: document.getElementById('externalUrl').value,
+                        sourceUrl: document.getElementById('externalUrl').value, // For Details button
+                        status: 'Active',
+                        // Include contact info for reference
+                        contactName: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+                        contactEmail: document.getElementById('email').value,
+                        contactPhone: document.getElementById('phone').value
+                    };
+                    
+                    saveListingToStorage(listingData);
+                    
                     // Reset form
                     document.getElementById('partnerListingForm').reset();
                     selectedFiles = [];
@@ -1838,24 +1863,6 @@
                     }
                 });
             }
-            
-            // Modify form submission to also save to localStorage
-            const originalSubmitHandler = document.getElementById('partnerListingForm').onsubmit;
-            document.getElementById('partnerListingForm').addEventListener('submit', function(e) {
-                // Also save to localStorage for local display
-                const formData = new FormData(e.target);
-                const listingData = Object.fromEntries(formData.entries());
-                saveListingToStorage(listingData);
-                
-                // Show success message with link to Browse Listings page
-                setTimeout(() => {
-                    const message = document.createElement('div');
-                    message.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #28a745; color: white; padding: 1rem 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; text-align: center;';
-                    message.innerHTML = '✅ Listing saved successfully! <a href="listings.html" style="color: #C5A059; font-weight: bold; text-decoration: underline;">View on Browse Listings page</a>';
-                    document.body.appendChild(message);
-                    setTimeout(() => message.remove(), 5000);
-                }, 1000);
-            });
         });
     </script>
 

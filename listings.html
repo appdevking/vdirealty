@@ -654,11 +654,6 @@
         function loadListings() {
             allListings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
             
-            // If no listings, add some sample data
-            if (allListings.length === 0) {
-                allListings = getSampleListings();
-            }
-            
             displayListings(allListings);
             updateListingCount(allListings.length);
         }
