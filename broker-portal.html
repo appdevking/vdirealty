@@ -355,6 +355,54 @@
             margin-top: 5px;
         }
         
+        /* Auto-filled state */
+        .form-autofilled {
+            background: #f0f9ff;
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .autofill-notice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #155724;
+            font-weight: 600;
+        }
+        
+        .autofill-notice i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+        
+        .edit-toggle-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .edit-toggle-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .listing-form.hidden-sections .form-section {
+            display: none;
+        }
+        
+        .listing-form.hidden-sections .btn-submit {
+            margin-top: 0;
+        }
+        
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -409,7 +457,7 @@
                     type="url" 
                     id="listingUrl" 
                     class="url-input" 
-                    placeholder="Paste listing URL here (e.g., Zillow, Realtor, Century 21, RE/MAX, or any listing site)"
+                    placeholder="Paste listing URL here (Zillow, Century 21, RE/MAX, etc.) - we'll auto-fill everything for you!"
                 >
                 <button class="extract-btn" onclick="extractListingData()">
                     <i class="fas fa-download"></i> Extract
@@ -420,12 +468,26 @@
             
             <p class="helper-text">
                 <i class="fas fa-info-circle"></i> 
-                Paste a URL from ANY real estate listing site and we'll automatically fill in the property details below.
+                Simply paste a URL from ANY real estate listing site. We'll automatically extract and fill in all the property details - no manual entry needed!
             </p>
         </div>
 
         <!-- Manual Entry Form -->
         <form id="listingForm" class="listing-form" onsubmit="submitListing(event)">
+            
+            <!-- Auto-filled Notice (hidden by default) -->
+            <div id="autofilledNotice" class="form-autofilled" style="display: none;">
+                <div class="autofill-notice">
+                    <i class="fas fa-check-circle"></i>
+                    <span>All fields automatically populated from your listing URL!</span>
+                </div>
+                <p style="margin: 0 0 10px 0; color: #666;">
+                    Review the details below and click "Save Listing" to publish. No need to fill anything manually.
+                </p>
+                <button type="button" class="edit-toggle-btn" onclick="toggleFormVisibility()">
+                    <i class="fas fa-edit"></i> Edit Details Manually
+                </button>
+            </div>
             
             <div class="form-section">
                 <h3>Property Details</h3>
@@ -590,6 +652,9 @@
                     populateForm(listingData);
                     showStatus(`✓ Listing data extracted successfully from ${source.toUpperCase()}!`, 'success');
                     document.getElementById('sourceUrl').value = url;
+                    
+                    // Hide manual form sections and show auto-fill notice
+                    hideFormSections();
                 } else {
                     throw new Error('Could not extract listing data. Please enter manually.');
                 }
@@ -764,6 +829,34 @@
         function extractZillowId(url) {
             const match = url.match(/(\d+)_zpid/);
             return match ? match[1] : null;
+        }
+        
+        // Hide form sections after auto-fill
+        function hideFormSections() {
+            const form = document.getElementById('listingForm');
+            const notice = document.getElementById('autofilledNotice');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            form.classList.add('hidden-sections');
+            notice.style.display = 'block';
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Save Listing';
+            
+            // Scroll to the notice
+            notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Toggle form visibility
+        function toggleFormVisibility() {
+            const form = document.getElementById('listingForm');
+            const isHidden = form.classList.contains('hidden-sections');
+            
+            if (isHidden) {
+                form.classList.remove('hidden-sections');
+                document.querySelector('.edit-toggle-btn').innerHTML = '<i class="fas fa-eye-slash"></i> Hide Manual Fields';
+            } else {
+                form.classList.add('hidden-sections');
+                document.querySelector('.edit-toggle-btn').innerHTML = '<i class="fas fa-edit"></i> Edit Details Manually';
+            }
         }
         
         // Populate form with extracted data
