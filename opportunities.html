@@ -738,7 +738,7 @@
         let allListings = [];
         let filteredListings = [];
         
-        // Load listings from backend
+        // Load listings from backend AND localStorage (broker portal)
         async function loadListings() {
             const loadingSpinner = document.getElementById('loadingSpinner');
             const listingsGrid = document.getElementById('listingsGrid');
@@ -749,20 +749,54 @@
             noListings.style.display = 'none';
             
             try {
-                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
-                const data = await response.json();
+                let apiListings = [];
                 
-                if (data.success && data.listings) {
-                    allListings = data.listings;
-                    filteredListings = allListings;
+                // Try to load from API
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
+                    const data = await response.json();
                     
-                    // Update total listings counter
-                    document.getElementById('totalListings').textContent = allListings.length + '+';
-                    
-                    displayListings(filteredListings);
-                } else {
-                    throw new Error('Failed to load listings');
+                    if (data.success && data.listings) {
+                        apiListings = data.listings;
+                    }
+                } catch (apiError) {
+                    console.log('API not available, loading from localStorage only');
                 }
+                
+                // Load from localStorage (broker portal additions)
+                const localListings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
+                
+                // Convert localStorage format to match API format
+                const formattedLocalListings = localListings.map(listing => ({
+                    id: listing.id,
+                    address: listing.address || '',
+                    city: listing.city || '',
+                    state: listing.state || '',
+                    zip: listing.zipCode || '',
+                    price: parseInt(listing.price) || 0,
+                    propertyType: listing.propertyType || 'Single-Family',
+                    bedrooms: parseInt(listing.bedrooms) || 0,
+                    bathrooms: parseFloat(listing.bathrooms) || 0,
+                    sqft: parseInt(listing.sqft) || 0,
+                    description: listing.description || '',
+                    photos: listing.mainImage ? [{ url: listing.mainImage }] : [],
+                    submissionDate: listing.createdAt || new Date().toISOString(),
+                    mlsNumber: listing.mlsNumber || '',
+                    externalUrl: listing.sourceUrl || ''
+                }));
+                
+                // Combine both sources (broker portal listings + API listings)
+                allListings = [...formattedLocalListings, ...apiListings];
+                filteredListings = allListings;
+                
+                // Update total listings counter if element exists
+                const totalListingsEl = document.getElementById('totalListings');
+                if (totalListingsEl) {
+                    totalListingsEl.textContent = allListings.length + '+';
+                }
+                
+                displayListings(filteredListings);
+                
             } catch (error) {
                 console.error('Error loading listings:', error);
                 listingsGrid.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Unable to load listings. Please try again later.</p>';
@@ -785,9 +819,13 @@
             noListings.style.display = 'none';
             
             listingsGrid.innerHTML = listings.map(listing => {
-                const photoUrl = listing.photos && listing.photos.length > 0 
-                    ? `${API_BASE_URL}${listing.photos[0].url}`
-                    : 'images/property-1-new.svg';
+                // Handle photo URL - could be from API or direct URL from broker portal
+                let photoUrl = 'images/property-1-new.svg';
+                if (listing.photos && listing.photos.length > 0) {
+                    const photo = listing.photos[0].url;
+                    // If it starts with http, use it directly (broker portal), otherwise prepend API_BASE_URL
+                    photoUrl = photo.startsWith('http') ? photo : `${API_BASE_URL}${photo}`;
+                }
                 
                 const price = formatPrice(listing.price);
                 const isNew = isNewListing(listing.submissionDate);

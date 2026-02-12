@@ -195,6 +195,29 @@
             color: #666;
         }
         
+        .btn-view-live {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(15, 32, 39, 0.2);
+        }
+        
+        .btn-view-live:hover {
+            background: linear-gradient(135deg, var(--accent), #b08f4a);
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-view-live i {
+            margin-right: 8px;
+        }
+        
         /* Container */
         .container {
             max-width: 1200px;
@@ -815,6 +838,11 @@
         <div class="tab-content" id="current-listings">
             <div class="url-section">
                 <h2><i class="fas fa-list"></i> Your Listings</h2>
+                <div style="margin-bottom: 20px; text-align: center;">
+                    <a href="opportunities.html" class="btn-view-live" target="_blank">
+                        <i class="fas fa-globe"></i> View Live on VDI Website
+                    </a>
+                </div>
                 <div id="listingsContainer" class="listings-grid">
                     <!-- Listings will be loaded here dynamically -->
                 </div>
