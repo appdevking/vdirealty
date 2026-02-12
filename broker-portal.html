@@ -627,8 +627,12 @@
     </div>
 
     <script>
+        // Debug: Check if script loaded
+        console.log('Broker portal script loading...');
+        
         // Auto-extract data from listing URLs
         async function extractListingData() {
+            console.log('extractListingData function called');
             const urlInput = document.getElementById('listingUrl');
             const url = urlInput.value.trim();
             const statusMessage = document.getElementById('statusMessage');
@@ -647,9 +651,11 @@
             try {
                 // Detect source
                 const source = detectSource(url);
+                console.log('Detected source:', source);
                 
                 // Extract data based on source (works with any listing site!)
                 const listingData = await fetchListingData(url, source);
+                console.log('Extracted data:', listingData);
                 
                 if (listingData) {
                     populateForm(listingData);
@@ -670,6 +676,9 @@
                 extractBtn.innerHTML = '<i class="fas fa-download"></i> Extract';
             }
         }
+        
+        // Make function globally available
+        window.extractListingData = extractListingData;
         
         // Detect listing source
         function detectSource(url) {
@@ -979,6 +988,8 @@
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing broker portal...');
+            
             // Allow Enter key to trigger extraction
             document.getElementById('listingUrl').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -986,7 +997,12 @@
                     extractListingData();
                 }
             });
+            
+            console.log('Broker portal initialized successfully');
+            console.log('extractListingData function available:', typeof window.extractListingData === 'function');
         });
+        
+        console.log('Broker portal script loaded successfully');
     </script>
 
 </body>
