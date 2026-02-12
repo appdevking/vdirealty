@@ -1318,11 +1318,28 @@
                 
                 // Extract multiple images from the page
                 const imageSelectors = [
-                    'img.main-photo', '.primary-photo img', '.hero-image', 
-                    '.listing-photo img', '.property-photo img', '.gallery-image',
-                    'img[data-photo]', 'img.property-image', '.photo-gallery img',
-                    '.carousel img', '.slider img', 'img[itemprop="image"]',
-                    '.media-gallery img', '.photos img', '.images img'
+                    'img[data-testid="photo"]',
+                    'img[data-testid="image"]',
+                    '.media-stream img',
+                    '.carousel-item img',
+                    '.photo-carousel img',
+                    'img.main-photo', 
+                    '.primary-photo img', 
+                    '.hero-image', 
+                    '.listing-photo img', 
+                    '.property-photo img', 
+                    '.gallery-image',
+                    'img[data-photo]', 
+                    'img.property-image', 
+                    '.photo-gallery img',
+                    '.carousel img', 
+                    '.slider img', 
+                    'img[itemprop="image"]',
+                    '.media-gallery img', 
+                    '.photos img', 
+                    '.images img',
+                    'picture img',
+                    'img[srcset]'
                 ];
                 
                 const images = [];
@@ -1332,7 +1349,14 @@
                 imageSelectors.forEach(selector => {
                     const imgs = doc.querySelectorAll(selector);
                     imgs.forEach(img => {
-                        const src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('data-original');
+                        let src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('data-original') || img.getAttribute('srcset');
+                        
+                        // Handle srcset - take the largest image
+                        if (src && src.includes(',')) {
+                            const sources = src.split(',').map(s => s.trim().split(' ')[0]);
+                            src = sources[sources.length - 1]; // Usually the largest is last
+                        }
+                        
                         if (src && !seenUrls.has(src) && !src.includes('logo') && !src.includes('icon') && src.startsWith('http')) {
                             // Filter out small images (likely icons/logos)
                             const width = img.naturalWidth || parseInt(img.getAttribute('width')) || 0;
@@ -1346,16 +1370,9 @@
                 
                 console.log(`Extracted ${images.length} images from page`);
                 
-                // Try to extract data from common selectors
-                const extractedData = {
-                    address: doc.querySelector('h1.address, .property-address, .listing-address, [itemprop=\"address\"], .street-address, h1.listing-title')?.textContent?.trim() || '',
-                    price: doc.querySelector('.price, .property-price, .listing-price, [itemprop=\"price\"], .list-price, span.price')?.textContent?.trim() || '',
-                    beds: doc.querySelector('.beds, .bedrooms, [data-beds], .beds-count, .bedroom-count')?.textContent?.trim() || '',
-                    baths: doc.querySelector('.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count')?.textContent?.trim() || '',
-                    sqft: doc.querySelector('.sqft, .square-feet, [data-sqft], .sqft-value, .living-area')?.textContent?.trim() || '',
-                    description: doc.querySelector('.description, .property-description, .listing-description, .remarks, .property-details')?.textContent?.trim() || '',
-                    images: images.slice(0, 10) // Limit to 10 images
-                };
+                // Enhanced multi-strategy extraction
+                const extractedData = extractPropertyData(doc);
+                extractedData.images = images.slice(0, 10); // Limit to 10 images
                 
                 console.log('Extracted data from ScrapingBee:', extractedData);
                 
@@ -1373,6 +1390,167 @@
                 console.log('Falling back to mock data');
                 return mockExtractData(url, source);
             }
+        }
+        
+        // Enhanced property data extraction with multiple strategies
+        function extractPropertyData(doc) {
+            // First, try to extract from JSON-LD structured data
+            const jsonLdData = extractFromJsonLd(doc);
+            if (jsonLdData && (jsonLdData.address || jsonLdData.price)) {
+                console.log('✓ Extracted data from JSON-LD structured data');
+                return jsonLdData;
+            }
+            
+            // Fallback to CSS selector extraction
+            const trySelectors = (selectors) => {
+                for (const selector of selectors) {
+                    const element = doc.querySelector(selector);
+                    if (element && element.textContent.trim()) {
+                        return element.textContent.trim();
+                    }
+                }
+                return '';
+            };
+            
+            // Address selectors (expanded for Century 21 and others)
+            const address = trySelectors([
+                'h1[data-testid="property-street"]',
+                '.property-street-address',
+                'h1.listing-address',
+                'h1.property-address',
+                '.pdp-address h1',
+                '[data-rf-test-id="abp-streetLine"]',
+                '.street-address',
+                'h1.address',
+                '[itemprop="streetAddress"]',
+                '.listing-title h1',
+                'h1[class*="address"]',
+                'h1[class*="street"]',
+                '.pdp-header-text h1'
+            ]);
+            
+            // Price selectors
+            const price = trySelectors([
+                '[data-testid="price"]',
+                '.property-price',
+                '.listing-price',
+                '.price-display',
+                '[data-rf-test-id="abp-price"]',
+                'span[class*="price"]',
+                'div[class*="price"]',
+                '[itemprop="price"]',
+                '.list-price',
+                '.sales-price',
+                '.pdp-price'
+            ]);
+            
+            // Bedrooms selectors
+            const beds = trySelectors([
+                '[data-testid="bed-count"]',
+                '[data-rf-test-id="abp-beds"]',
+                'span[data-label="property-meta-beds"]',
+                '.property-beds',
+                '.beds-count',
+                'li[data-testid="property-meta-beds"]',
+                '[class*="bed"][class*="count"]',
+                '.bedroom-count',
+                'span[aria-label*="bed"]'
+            ]);
+            
+            // Bathrooms selectors
+            const baths = trySelectors([
+                '[data-testid="bath-count"]',
+                '[data-rf-test-id="abp-baths"]',
+                'span[data-label="property-meta-baths"]',
+                '.property-baths',
+                '.baths-count',
+                'li[data-testid="property-meta-baths"]',
+                '[class*="bath"][class*="count"]',
+                '.bathroom-count',
+                'span[aria-label*="bath"]'
+            ]);
+            
+            // Square feet selectors
+            const sqft = trySelectors([
+                '[data-testid="sqft-value"]',
+                '[data-rf-test-id="abp-sqFt"]',
+                'span[data-label="property-meta-sqft"]',
+                '.property-sqft',
+                '.sqft-value',
+                'li[data-testid="property-meta-sqft"]',
+                '[class*="sqft"]',
+                '[class*="square"]',
+                '.living-area',
+                '.square-feet',
+                'span[aria-label*="sqft"]',
+                'span[aria-label*="square"]'
+            ]);
+            
+            // Description selectors
+            const description = trySelectors([
+                '[data-testid="description"]',
+                '.property-description',
+                '.listing-description',
+                '.property-remarks',
+                '#listing-description',
+                '.remarks',
+                '.description-text',
+                '[class*="description"]'
+            ]);
+            
+            console.log('✓ Extracted data from CSS selectors');
+            
+            return {
+                address,
+                price,
+                beds,
+                baths,
+                sqft,
+                description,
+                images: [] // Will be added separately
+            };
+        }
+        
+        // Extract data from JSON-LD structured data
+        function extractFromJsonLd(doc) {
+            try {
+                const scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+                for (const script of scripts) {
+                    try {
+                        const data = JSON.parse(script.textContent);
+                        
+                        // Handle both single objects and arrays
+                        const items = Array.isArray(data) ? data : [data];
+                        
+                        for (const item of items) {
+                            // Look for RealEstateListing or similar types
+                            if (item['@type'] === 'RealEstateListing' || item['@type'] === 'Product' || item['@type'] === 'Apartment' || item['@type'] === 'SingleFamilyResidence') {
+                                const address = item.address ? 
+                                    (typeof item.address === 'string' ? item.address : 
+                                     `${item.address.streetAddress || ''}, ${item.address.addressLocality || ''}, ${item.address.addressRegion || ''} ${item.address.postalCode || ''}`.trim()) : '';
+                                
+                                const price = item.offers?.price || item.price || '';
+                                
+                                return {
+                                    address: address,
+                                    price: price.toString(),
+                                    beds: item.numberOfBedrooms || item.bedrooms || '',
+                                    baths: item.numberOfBathroomsFull || item.bathrooms || '',
+                                    sqft: item.floorSize?.value || item.floorSize || '',
+                                    description: item.description || '',
+                                    images: []
+                                };
+                            }
+                        }
+                    } catch (e) {
+                        // Skip invalid JSON
+                        continue;
+                    }
+                }
+            } catch (error) {
+                console.warn('JSON-LD extraction failed:', error);
+            }
+            return null;
         }
         
         // Mock data extraction (fallback)
