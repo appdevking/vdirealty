@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Broker Portal - Add Listing | VDI Realty</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -479,7 +482,7 @@
             <div id="autofilledNotice" class="form-autofilled" style="display: none;">
                 <div class="autofill-notice">
                     <i class="fas fa-check-circle"></i>
-                    <span>✨ Real data extracted from listing website!</span>
+                    <span>Real data extracted from listing website!</span>
                 </div>
                 <p style="margin: 0 0 10px 0; color: #666;">
                     <strong>Powered by ScrapingBee:</strong> Property details automatically extracted from the listing URL using AI.
@@ -487,7 +490,7 @@
                 <p style="margin: 0 0 10px 0; color: #666;">
                     Review the auto-filled details below and click "Save Listing" to publish.
                 </p>
-                <button type="button" class="edit-toggle-btn" onclick="toggleFormVisibility()">
+                <button type="button" class="edit-toggle-btn" id="toggleFieldsBtn">
                     <i class="fas fa-edit"></i> View/Edit All Fields
                 </button>
             </div>
@@ -627,6 +630,16 @@
     </div>
 
     <script>
+        // ========================================
+        // VDI REALTY BROKER PORTAL v2.0
+        // Last Updated: Feb 11, 2026
+        // ScrapingBee Integration: ACTIVE
+        // ========================================
+        console.log('*** VDI Broker Portal v2.0 - ScrapingBee ACTIVE ***');
+        console.log('Version Date: February 11, 2026');
+        console.log('SUCCESS: You have the CORRECT version loaded!');
+        console.log('---');
+        
         // Debug: Check if script loaded
         console.log('Broker portal script loading...');
         
@@ -997,6 +1010,13 @@
                 console.log('Extract button event listener attached');
             } else {
                 console.error('Extract button not found!');
+            }
+            
+            // Attach toggle fields button event listener
+            const toggleFieldsBtn = document.getElementById('toggleFieldsBtn');
+            if (toggleFieldsBtn) {
+                toggleFieldsBtn.addEventListener('click', toggleFormVisibility);
+                console.log('Toggle fields button event listener attached');
             }
             
             // Allow Enter key to trigger extraction
