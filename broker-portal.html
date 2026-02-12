@@ -941,29 +941,40 @@
             try {
                 // Using ScrapingBee - Works with ANY listing site!
                 const scrapingBeeKey = 'TR931TU8DU3KLFMARXR6N8PQ2RSPNNUXGLQDIBV3B8R0PS7B69OEBK0RFP5YZM2YX2I0OMA0M9STO6UQ';
-                const extractRules = {
-                    address: {selector: 'h1.address, .property-address, .listing-address, [itemprop="address"], .street-address, h1.listing-title'},
-                    price: {selector: '.price, .property-price, .listing-price, [itemprop="price"], .list-price, span.price'},
-                    beds: {selector: '.beds, .bedrooms, [data-beds], .beds-count, .bedroom-count'},
-                    baths: {selector: '.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count'},
-                    sqft: {selector: '.sqft, .square-feet, [data-sqft], .sqft-value, .living-area'},
-                    description: {selector: '.description, .property-description, .listing-description, .remarks, .property-details'},
-                    image: {selector: 'img.main-photo, .primary-photo, .hero-image, .listing-photo img', type: 'attribute', attribute: 'src'}
-                };
                 
-                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=${scrapingBeeKey}&url=${encodeURIComponent(url)}&render_js=false&extract_rules=${encodeURIComponent(JSON.stringify(extractRules))}`;
+                // Simplified API call - just get the HTML without extract_rules to avoid 400 errors
+                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=${scrapingBeeKey}&url=${encodeURIComponent(url)}&render_js=true`;
                 
                 console.log('Fetching data from ScrapingBee...', url);
                 const response = await fetch(apiUrl);
                 
                 if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('ScrapingBee API error details:', errorText);
                     throw new Error(`ScrapingBee API error: ${response.status}`);
                 }
                 
-                const data = await response.json();
-                console.log('ScrapingBee response:', data);
+                const html = await response.text();
+                console.log('ScrapingBee response received, HTML length:', html.length);
                 
-                const parsedData = parseUniversalData(data);
+                // Parse the HTML to extract property data
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Try to extract data from common selectors
+                const extractedData = {
+                    address: doc.querySelector('h1.address, .property-address, .listing-address, [itemprop="address"], .street-address, h1.listing-title')?.textContent?.trim() || '',
+                    price: doc.querySelector('.price, .property-price, .listing-price, [itemprop="price"], .list-price, span.price')?.textContent?.trim() || '',
+                    beds: doc.querySelector('.beds, .bedrooms, [data-beds], .beds-count, .bedroom-count')?.textContent?.trim() || '',
+                    baths: doc.querySelector('.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count')?.textContent?.trim() || '',
+                    sqft: doc.querySelector('.sqft, .square-feet, [data-sqft], .sqft-value, .living-area')?.textContent?.trim() || '',
+                    description: doc.querySelector('.description, .property-description, .listing-description, .remarks, .property-details')?.textContent?.trim() || '',
+                    image: doc.querySelector('img.main-photo, .primary-photo, .hero-image, .listing-photo img')?.src || ''
+                };
+                
+                console.log('Extracted data from ScrapingBee:', extractedData);
+                
+                const parsedData = parseUniversalData(extractedData);
                 
                 // If no data was extracted, fall back to mock data
                 if (!parsedData.address && !parsedData.price) {
@@ -1148,25 +1159,33 @@
         function populateForm(data) {
             console.log('Populating form with data:', data); // Debug log
             
-            // Populate all form fields
-            if (data.address) document.getElementById('address').value = data.address;
-            if (data.city) document.getElementById('city').value = data.city;
-            if (data.state) document.getElementById('state').value = data.state;
-            if (data.zipCode) document.getElementById('zipCode').value = data.zipCode;
-            if (data.price) document.getElementById('price').value = data.price;
-            if (data.propertyType) document.getElementById('propertyType').value = data.propertyType;
-            if (data.bedrooms) document.getElementById('bedrooms').value = data.bedrooms;
-            if (data.bathrooms) document.getElementById('bathrooms').value = data.bathrooms;
-            if (data.sqft) document.getElementById('sqft').value = data.sqft;
-            if (data.lotSize) document.getElementById('lotSize').value = data.lotSize;
-            if (data.yearBuilt) document.getElementById('yearBuilt').value = data.yearBuilt;
-            if (data.description) document.getElementById('description').value = data.description;
-            if (data.mainImage) document.getElementById('mainImage').value = data.mainImage;
-            if (data.additionalImages) document.getElementById('additionalImages').value = data.additionalImages;
-            if (data.monthlyRent) document.getElementById('monthlyRent').value = data.monthlyRent;
-            if (data.capRate) document.getElementById('capRate').value = data.capRate;
-            if (data.mlsNumber) document.getElementById('mlsNumber').value = data.mlsNumber;
-            if (data.status) document.getElementById('status').value = data.status;
+            // Helper function to safely set element value
+            const setElementValue = (id, value) => {
+                const element = document.getElementById(id);
+                if (element && value !== undefined && value !== null) {
+                    element.value = value;
+                }
+            };
+            
+            // Populate all form fields with null checks
+            setElementValue('address', data.address);
+            setElementValue('city', data.city);
+            setElementValue('state', data.state);
+            setElementValue('zipCode', data.zipCode);
+            setElementValue('price', data.price);
+            setElementValue('propertyType', data.propertyType);
+            setElementValue('bedrooms', data.bedrooms);
+            setElementValue('bathrooms', data.bathrooms);
+            setElementValue('sqft', data.sqft);
+            setElementValue('lotSize', data.lotSize);
+            setElementValue('yearBuilt', data.yearBuilt);
+            setElementValue('description', data.description);
+            setElementValue('mainImage', data.mainImage);
+            setElementValue('additionalImages', data.additionalImages);
+            setElementValue('monthlyRent', data.monthlyRent);
+            setElementValue('capRate', data.capRate);
+            setElementValue('mlsNumber', data.mlsNumber);
+            setElementValue('status', data.status);
             
             console.log('Form populated successfully'); // Debug log
             
