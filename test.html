@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+</head>
+<body>
+    <h1>JavaScript Test</h1>
+    <button id="testBtn">Click Me</button>
+    <div id="result"></div>
+    
+    <script>
+        console.log('TEST: JavaScript is running!');
+        console.log('TEST: This should appear in console');
+        
+        document.getElementById('testBtn').addEventListener('click', function() {
+            console.log('TEST: Button clicked!');
+            document.getElementById('result').innerHTML = 'JavaScript works!';
+            alert('JavaScript is working!');
+        });
+        
+        console.log('TEST: Script loaded successfully');
+    </script>
+</body>
+</html>
