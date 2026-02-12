@@ -459,7 +459,7 @@
                     class="url-input" 
                     placeholder="Paste listing URL here (Zillow, Century 21, RE/MAX, etc.) - we'll auto-fill everything for you!"
                 >
-                <button class="extract-btn" onclick="extractListingData()">
+                <button class="extract-btn" id="extractBtn">
                     <i class="fas fa-download"></i> Extract
                 </button>
             </div>
@@ -636,7 +636,7 @@
             const urlInput = document.getElementById('listingUrl');
             const url = urlInput.value.trim();
             const statusMessage = document.getElementById('statusMessage');
-            const extractBtn = document.querySelector('.extract-btn');
+            const extractBtn = document.getElementById('extractBtn');
             
             if (!url) {
                 showStatus('Please enter a listing URL', 'error');
@@ -990,16 +990,29 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing broker portal...');
             
+            // Attach extract button event listener
+            const extractButton = document.getElementById('extractBtn');
+            if (extractButton) {
+                extractButton.addEventListener('click', extractListingData);
+                console.log('Extract button event listener attached');
+            } else {
+                console.error('Extract button not found!');
+            }
+            
             // Allow Enter key to trigger extraction
-            document.getElementById('listingUrl').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    extractListingData();
-                }
-            });
+            const urlInput = document.getElementById('listingUrl');
+            if (urlInput) {
+                urlInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        extractListingData();
+                    }
+                });
+                console.log('Enter key listener attached');
+            }
             
             console.log('Broker portal initialized successfully');
-            console.log('extractListingData function available:', typeof window.extractListingData === 'function');
+            console.log('extractListingData function available:', typeof extractListingData === 'function');
         });
         
         console.log('Broker portal script loaded successfully');
