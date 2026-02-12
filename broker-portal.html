@@ -479,13 +479,16 @@
             <div id="autofilledNotice" class="form-autofilled" style="display: none;">
                 <div class="autofill-notice">
                     <i class="fas fa-check-circle"></i>
-                    <span>All fields automatically populated from your listing URL!</span>
+                    <span>Property data extracted and auto-filled!</span>
                 </div>
                 <p style="margin: 0 0 10px 0; color: #666;">
-                    Review the details below and click "Save Listing" to publish. No need to fill anything manually.
+                    <strong>Note:</strong> Currently using demo data. To extract real data from listing URLs, add your ScrapingBee API key (see <a href="UNIVERSAL_EXTRACTION_GUIDE.md" target="_blank">setup guide</a>).
+                </p>
+                <p style="margin: 0 0 10px 0; color: #666;">
+                    Review the auto-filled details below and click "Save Listing" to publish.
                 </p>
                 <button type="button" class="edit-toggle-btn" onclick="toggleFormVisibility()">
-                    <i class="fas fa-edit"></i> Edit Details Manually
+                    <i class="fas fa-edit"></i> View/Edit All Fields
                 </button>
             </div>
             
@@ -734,22 +737,57 @@
         }
         
         // Mock data extraction (for demo purposes)
+        // This creates realistic-looking data based on the URL
+        // Replace with real API when you add your ScrapingBee/RapidAPI key
         function mockExtractData(url, source) {
-            // This simulates extracted data - replace with real API calls
+            // Generate varied mock data based on URL to demonstrate functionality
+            const urlHash = url.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0);
+            const random = Math.abs(urlHash);
+            
+            const addresses = [
+                '1136 205th Ave NE',
+                '456 Maple Drive',
+                '789 Oak Street',
+                '2340 Pine Avenue',
+                '5678 Cedar Lane',
+                '910 Birch Court'
+            ];
+            
+            const cities = ['Sammamish', 'Phoenix', 'Scottsdale', 'Tempe', 'Mesa', 'Gilbert'];
+            const states = ['WA', 'AZ', 'AZ', 'AZ', 'AZ', 'AZ'];
+            const zips = ['98074', '85001', '85251', '85281', '85201', '85297'];
+            
+            const idx = random % addresses.length;
+            const priceBase = 350000 + (random % 500000);
+            const beds = 2 + (random % 4);
+            const baths = 1.5 + (random % 3) * 0.5;
+            const sqftBase = 1500 + (random % 2000);
+            
+            const descriptions = [
+                `Beautiful ${beds} bedroom home in a prime location. Updated kitchen with modern appliances, spacious backyard perfect for entertaining.`,
+                `Stunning property featuring ${beds} beds and ${baths} baths. Move-in ready with recent upgrades throughout. Great neighborhood!`,
+                `Charming residence with ${sqftBase} sq ft of living space. Perfect for families, close to schools and shopping.`,
+                `Immaculate home with ${beds} bedrooms. Features include updated flooring, fresh paint, and energy-efficient windows.`
+            ];
+            
             return {
-                address: '123 Main Street',
-                city: 'Phoenix',
-                state: 'AZ',
-                zipCode: '85001',
-                price: 425000,
-                propertyType: 'Single Family',
-                bedrooms: 3,
-                bathrooms: 2.5,
-                sqft: 2100,
-                lotSize: 0.25,
-                description: 'Beautiful home in a great neighborhood. Updated kitchen, spacious backyard, and close to schools.',
+                address: addresses[idx],
+                city: cities[idx],
+                state: states[idx],
+                zipCode: zips[idx],
+                price: priceBase,
+                propertyType: beds > 3 ? 'Single Family' : 'Condo',
+                bedrooms: beds,
+                bathrooms: baths,
+                sqft: sqftBase,
+                lotSize: beds > 3 ? (random % 10000 + 5000) : 0,
+                yearBuilt: 1990 + (random % 35),
+                description: descriptions[random % descriptions.length],
                 mainImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
-                additionalImages: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800, https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800'
+                additionalImages: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800, https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800',
+                monthlyRent: Math.round(priceBase * 0.006),
+                capRate: (5 + (random % 4)).toFixed(1),
+                status: 'Active'
             };
         }
         
@@ -841,8 +879,10 @@
             notice.style.display = 'block';
             submitBtn.innerHTML = '<i class="fas fa-check"></i> Save Listing';
             
-            // Scroll to the notice
-            notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            // Scroll to the notice with a slight delay to allow form population to complete
+            setTimeout(() => {
+                notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
         }
         
         // Toggle form visibility
@@ -861,23 +901,30 @@
         
         // Populate form with extracted data
         function populateForm(data) {
-            document.getElementById('address').value = data.address || '';
-            document.getElementById('city').value = data.city || '';
-            document.getElementById('state').value = data.state || '';
-            document.getElementById('zipCode').value = data.zipCode || '';
-            document.getElementById('price').value = data.price || '';
-            document.getElementById('propertyType').value = data.propertyType || '';
-            document.getElementById('bedrooms').value = data.bedrooms || '';
-            document.getElementById('bathrooms').value = data.bathrooms || '';
-            document.getElementById('sqft').value = data.sqft || '';
-            document.getElementById('lotSize').value = data.lotSize || '';
-            document.getElementById('description').value = data.description || '';
-            document.getElementById('mainImage').value = data.mainImage || '';
-            document.getElementById('additionalImages').value = data.additionalImages || '';
-            document.getElementById('monthlyRent').value = data.monthlyRent || '';
-            document.getElementById('capRate').value = data.capRate || '';
-            document.getElementById('mlsNumber').value = data.mlsNumber || '';
+            console.log('Populating form with data:', data); // Debug log
             
+            // Populate all form fields
+            if (data.address) document.getElementById('address').value = data.address;
+            if (data.city) document.getElementById('city').value = data.city;
+            if (data.state) document.getElementById('state').value = data.state;
+            if (data.zipCode) document.getElementById('zipCode').value = data.zipCode;
+            if (data.price) document.getElementById('price').value = data.price;
+            if (data.propertyType) document.getElementById('propertyType').value = data.propertyType;
+            if (data.bedrooms) document.getElementById('bedrooms').value = data.bedrooms;
+            if (data.bathrooms) document.getElementById('bathrooms').value = data.bathrooms;
+            if (data.sqft) document.getElementById('sqft').value = data.sqft;
+            if (data.lotSize) document.getElementById('lotSize').value = data.lotSize;
+            if (data.yearBuilt) document.getElementById('yearBuilt').value = data.yearBuilt;
+            if (data.description) document.getElementById('description').value = data.description;
+            if (data.mainImage) document.getElementById('mainImage').value = data.mainImage;
+            if (data.additionalImages) document.getElementById('additionalImages').value = data.additionalImages;
+            if (data.monthlyRent) document.getElementById('monthlyRent').value = data.monthlyRent;
+            if (data.capRate) document.getElementById('capRate').value = data.capRate;
+            if (data.mlsNumber) document.getElementById('mlsNumber').value = data.mlsNumber;
+            if (data.status) document.getElementById('status').value = data.status;
+            
+            console.log('Form populated successfully'); // Debug log
+        }
             // Scroll to form
             document.querySelector('.listing-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
