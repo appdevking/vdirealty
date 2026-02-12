@@ -502,10 +502,7 @@
             color: white;
         }
         
-        .form-autofilled.hidden-sections .form-group,
-        .form-autofilled.hidden-sections .section-heading,
-        .form-autofilled.hidden-sections .form-grid,
-        .form-autofilled.hidden-sections .info-box {
+        .form-autofilled.hidden-sections .hideable-section {
             display: none !important;
         }
         
@@ -822,6 +819,8 @@
                     <input type="text" name="company" id="company" placeholder="Optional">
                 </div>
 
+                <!-- Hideable section starts here (property details) -->
+                <div class="hideable-section">
                 <h3 class="section-heading" style="margin-top: 40px;"><i class="fas fa-home"></i> Property Details</h3>
 
                 <div class="form-group">
@@ -1024,6 +1023,8 @@
                         <label for="privateContact">Keep my contact information private (buyers will contact you through VDI Realty)</label>
                     </div>
                 </div>
+                </div>
+                <!-- End hideable section -->
 
                 <div class="form-group" style="margin-top: 30px;">
                     <button type="submit" class="submit-btn" id="submitBtn">
