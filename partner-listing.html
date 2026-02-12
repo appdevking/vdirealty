@@ -1345,6 +1345,17 @@
                 }));
                 console.log('All H1 tags found:', h1Tags);
                 
+                // Debug: Check for property details elements
+                const detailSpans = Array.from(doc.querySelectorAll('span, li, div')).filter(el => {
+                    const text = el.textContent.trim();
+                    return text.match(/\d+\s*(bed|bath|sq\s*ft|sqft)/i);
+                }).slice(0, 5).map(el => ({
+                    tag: el.tagName,
+                    text: el.textContent.trim(),
+                    classes: el.className
+                }));
+                console.log('🛏️ Found property detail elements:', detailSpans);
+                
                 // Debug: Check if page might be an error or redirect
                 if (html.toLowerCase().includes('captcha') || html.toLowerCase().includes('access denied')) {
                     console.error('⚠️ Page appears to be showing CAPTCHA or access denied');
@@ -1367,58 +1378,38 @@
                 }
                 
                 // Extract multiple images from the page
-                const imageSelectors = [
-                    'img[data-testid="photo"]',
-                    'img[data-testid="image"]',
-                    '.media-stream img',
-                    '.carousel-item img',
-                    '.photo-carousel img',
-                    'img.main-photo', 
-                    '.primary-photo img', 
-                    '.hero-image', 
-                    '.listing-photo img', 
-                    '.property-photo img', 
-                    '.gallery-image',
-                    'img[data-photo]', 
-                    'img.property-image', 
-                    '.photo-gallery img',
-                    '.carousel img', 
-                    '.slider img', 
-                    'img[itemprop="image"]',
-                    '.media-gallery img', 
-                    '.photos img', 
-                    '.images img',
-                    'picture img',
-                    'img[srcset]'
-                ];
-                
                 const images = [];
                 const seenUrls = new Set();
                 
-                // Try each selector to find images
-                imageSelectors.forEach(selector => {
-                    const imgs = doc.querySelectorAll(selector);
-                    imgs.forEach(img => {
-                        let src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('data-original') || img.getAttribute('srcset');
+                // Get all images
+                const allImgs = doc.querySelectorAll('img');
+                allImgs.forEach(img => {
+                    let src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('data-original');
+                    
+                    // Also check srcset
+                    if (!src && img.srcset) {
+                        const sources = img.srcset.split(',').map(s => s.trim().split(' ')[0]);
+                        src = sources[sources.length - 1]; // Usually the largest is last
+                    }
+                    
+                    if (src && !seenUrls.has(src)) {
+                        // Filter out logos, icons, small images
+                        const isLogo = src.toLowerCase().includes('logo') || src.toLowerCase().includes('icon') || 
+                                      img.alt?.toLowerCase().includes('logo') || img.alt?.toLowerCase().includes('icon');
+                        const width = parseInt(img.getAttribute('width')) || 0;
                         
-                        // Handle srcset - take the largest image
-                        if (src && src.includes(',')) {
-                            const sources = src.split(',').map(s => s.trim().split(' ')[0]);
-                            src = sources[sources.length - 1]; // Usually the largest is last
+                        // Include if: has http/https, not a logo, and either no width specified or width > 200
+                        if (src.match(/^https?:\/\//i) && !isLogo && (width === 0 || width > 200)) {
+                            images.push(src);
+                            seenUrls.add(src);
                         }
-                        
-                        if (src && !seenUrls.has(src) && !src.includes('logo') && !src.includes('icon') && src.startsWith('http')) {
-                            // Filter out small images (likely icons/logos)
-                            const width = img.naturalWidth || parseInt(img.getAttribute('width')) || 0;
-                            if (width === 0 || width > 200) { // Only include larger images
-                                images.push(src);
-                                seenUrls.add(src);
-                            }
-                        }
-                    });
+                    }
                 });
                 
                 console.log(`Extracted ${images.length} images from page`);
+                if (images.length > 0) {
+                    console.log('Sample images:', images.slice(0, 3));
+                }
                 
                 // Enhanced multi-strategy extraction
                 const extractedData = extractPropertyData(doc);
@@ -1452,8 +1443,61 @@
                 baths: doc.querySelector('.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count, [data-testid="bath-count"], [data-rf-test-id="abp-baths"], .property-baths, li[data-testid="property-meta-baths"]')?.textContent?.trim() || '',
                 sqft: doc.querySelector('.sqft, .square-feet, [data-sqft], .sqft-value, .living-area, [data-testid="sqft-value"], [data-rf-test-id="abp-sqFt"], .property-sqft, li[data-testid="property-meta-sqft"]')?.textContent?.trim() || '',
                 description: doc.querySelector('.description, .property-description, .listing-description, .remarks, .property-details, [data-testid="description"], .property-remarks, #listing-description')?.textContent?.trim() || '',
+                mls: '',
+                city: '',
+                state: '',
+                zip: '',
                 images: [] // Will be added separately
             };
+            
+            // Try to extract city, state, zip from page title (format: "Address, City, State Zip")
+            const titleEl = doc.querySelector('title');
+            if (titleEl) {
+                const title = titleEl.textContent;
+                const match = title.match(/,\s*([^,]+),\s*([A-Z]{2})\s*(\d{5})/i);
+                if (match) {
+                    extractedData.city = match[1].trim();
+                    extractedData.state = match[2].trim();
+                    extractedData.zip = match[3].trim();
+                    console.log('✓ Extracted location from title:', { city: extractedData.city, state: extractedData.state, zip: extractedData.zip });
+                }
+            }
+            
+            // Try to find beds/baths/sqft in text content if selectors didn't work
+            if (!extractedData.beds || !extractedData.baths || !extractedData.sqft) {
+                const bodyText = doc.body?.textContent || '';
+                
+                if (!extractedData.beds) {
+                    const bedMatch = bodyText.match(/(\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
+                    if (bedMatch) {
+                        extractedData.beds = bedMatch[1];
+                        console.log('✓ Found beds in text:', extractedData.beds);
+                    }
+                }
+                
+                if (!extractedData.baths) {
+                    const bathMatch = bodyText.match(/(\d+(?:\.\d+)?)\s*(?:bath(?:room)?s?|ba)\b/i);
+                    if (bathMatch) {
+                        extractedData.baths = bathMatch[1];
+                        console.log('✓ Found baths in text:', extractedData.baths);
+                    }
+                }
+                
+                if (!extractedData.sqft) {
+                    const sqftMatch = bodyText.match(/([\d,]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)\b/i);
+                    if (sqftMatch) {
+                        extractedData.sqft = sqftMatch[1].replace(/,/g, '');
+                        console.log('✓ Found sqft in text:', extractedData.sqft);
+                    }
+                }
+            }
+            
+            // Try to find MLS number
+            const mlsMatch = (doc.body?.textContent || '').match(/MLS[#:\s]*([A-Z0-9-]+)/i);
+            if (mlsMatch) {
+                extractedData.mls = mlsMatch[1];
+                console.log('✓ Found MLS:', extractedData.mls);
+            }
             
             console.log('✓ Extracted data using simple selectors:', extractedData);
             return extractedData;
@@ -1575,9 +1619,10 @@
                 sqft: cleanNumber(data.sqft),
                 description: data.description || '',
                 images: data.images || [], // Array of image URLs
-                city: '',
-                state: '',
-                zip: '',
+                city: data.city || '',
+                state: data.state || '',
+                zip: data.zip || '',
+                mls: data.mls || '',
                 propertyType: 'Single-Family'
             };
         }
@@ -1633,6 +1678,7 @@
             setElementValue('bathrooms', data.bathrooms);
             setElementValue('sqft', data.sqft);
             setElementValue('yearBuilt', data.yearBuilt);
+            setElementValue('mlsNumber', data.mls);
             setElementValue('description', data.description);
             
             // Handle extracted images
