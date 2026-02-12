@@ -324,6 +324,87 @@
             letter-spacing: 2px;
         }
 
+        /* --- QUICK LISTING CTA --- */
+        .quick-listing-cta {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 60px 20px;
+            border-top: 3px solid var(--accent);
+            border-bottom: 3px solid var(--accent);
+        }
+        .cta-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .cta-content h2 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        .cta-content p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .cta-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 35px 0;
+            flex-wrap: wrap;
+        }
+        .cta-step {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+        }
+        .cta-step-number {
+            background: var(--accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .cta-step h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        .cta-step p {
+            font-size: 0.95rem;
+            color: #666;
+        }
+        .cta-btn {
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            padding: 18px 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border-radius: 5px;
+            box-shadow: 0 4px 20px rgba(197, 160, 89, 0.3);
+            margin-top: 15px;
+        }
+        .cta-btn:hover {
+            background: #b08d4b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(197, 160, 89, 0.5);
+        }
+        .cta-btn i {
+            margin-right: 8px;
+        }
+
         /* --- SERVICES GRID --- */
         .services-section { padding: 100px 20px; background: var(--light-gray); }
         .section-title { text-align: center; margin-bottom: 60px; }
@@ -622,7 +703,8 @@
                     <a href="opportunities.html" class="dropdown-toggle">Opportunities <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
                     <div class="dropdown-menu">
                         <a href="opportunities.html"><i class="fas fa-chart-line"></i> Investment Properties</a>
-                        <a href="partner-listing.html"><i class="fas fa-handshake"></i> Partner Listing</a>
+                        <a href="listings.html"><i class="fas fa-list"></i> Browse Listings</a>
+                        <a href="broker-portal.html"><i class="fas fa-plus-circle"></i> Add Your Listing</a>
                     </div>
                 </div>
                 
@@ -650,8 +732,8 @@
         <a href="property-management.html">Property Management</a>
         <a href="fsbo-listings.html"><i class="fas fa-search"></i> FSBO Listings</a>
         <a href="fsbo.html"><i class="fas fa-plus-circle"></i> List Your Property</a>
-        <a href="opportunities.html"><i class="fas fa-list"></i> Property Listings</a>
-        <a href="partner-listing.html"><i class="fas fa-handshake"></i> Partner Listing</a>
+        <a href="listings.html"><i class="fas fa-list"></i> All Listings</a>
+        <a href="broker-portal.html" style="background: var(--accent); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0;"><i class="fas fa-magic"></i> Quick Add Listing</a>
         <a href="neighborhoods.html">Neighborhoods</a>
         <a href="testimonials.html">Testimonials</a>
         <a href="buyers-guide.html">Buyer's Guide</a>
@@ -685,6 +767,39 @@
             <span class="stat-label">Expert Guidance</span>
         </div>
     </div>
+
+    <!-- Quick Listing CTA -->
+    <section class="quick-listing-cta reveal">
+        <div class="cta-content">
+            <h2><i class="fas fa-magic"></i> List Your Property in Seconds</h2>
+            <p>No registration. No hassle. Just paste your listing URL and publish.</p>
+            
+            <div class="cta-steps">
+                <div class="cta-step">
+                    <div class="cta-step-number">1</div>
+                    <h4>Copy Your Listing Link</h4>
+                    <p>From Zillow, Century 21, RE/MAX, or any listing site</p>
+                </div>
+                <div class="cta-step">
+                    <div class="cta-step-number">2</div>
+                    <h4>Paste & Extract</h4>
+                    <p>Our system auto-fills all property details</p>
+                </div>
+                <div class="cta-step">
+                    <div class="cta-step-number">3</div>
+                    <h4>Review & Publish</h4>
+                    <p>Your listing goes live instantly</p>
+                </div>
+            </div>
+            
+            <a href="broker-portal.html" class="cta-btn">
+                <i class="fas fa-plus-circle"></i> Add Your Listing Now
+            </a>
+            <p style="margin-top: 15px; font-size: 0.9rem; color: #888;">
+                100% free • No account required • All listing sites supported
+            </p>
+        </div>
+    </section>
 
     <section class="services-section reveal" id="services">
         <div class="section-title">
