@@ -654,14 +654,329 @@
             padding: 40px 20px;
             text-align: center;
         }
+
+        /* ==================== MOBILE OPTIMIZATION ==================== */
+        
+        /* Mobile/Desktop Text Toggle */
+        .mobile-text {
+            display: none;
+        }
+        
+        .desktop-text {
+            display: inline;
+        }
         
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .form-container { padding: 30px 20px; }
-            .benefits-grid { grid-template-columns: 1fr; }
-            .tabs { flex-direction: column; }
-            .tab { border-bottom: none; border-left: 3px solid transparent; }
-            .tab.active { border-left-color: var(--accent); border-bottom-color: transparent; }
+            .mobile-text {
+                display: inline;
+            }
+            
+            .desktop-text {
+                display: none;
+            }
+            
+            .mobile-notice {
+                display: block !important;
+                animation: slideInDown 0.5s ease-out;
+            }
+            
+            @keyframes slideInDown {
+                from {
+                    transform: translateY(-20px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+            
+            /* Hero Section Mobile */
+            .hero {
+                padding: 60px 15px 40px;
+            }
+            
+            .hero h1 { 
+                font-size: 2rem; 
+                line-height: 1.2;
+                margin-bottom: 20px;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+
+            /* Navigation Mobile */
+            .nav-container {
+                padding: 0 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+                padding: 6px 12px;
+            }
+            
+            .back-link {
+                font-size: 0.9rem;
+            }
+
+            /* Form Container Mobile */
+            .form-container { 
+                padding: 20px 15px;
+                margin: 20px 10px;
+            }
+            
+            /* Hero Benefits Mobile */
+            .hero > div:last-child {
+                flex-direction: column !important;
+                gap: 15px !important;
+                margin-top: 25px !important;
+            }
+            
+            .hero > div:last-child > div {
+                padding: 12px 20px !important;
+                text-align: center;
+            }
+
+            /* Form Groups Mobile */
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-group label {
+                font-size: 0.95rem;
+                margin-bottom: 8px;
+            }
+
+            /* Input Fields Mobile - Larger touch targets */
+            input, select, textarea {
+                padding: 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+                border-radius: 8px;
+                min-height: 48px; /* Accessibility guideline */
+            }
+            
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            /* URL Input Group Mobile */
+            .url-input-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 25px;
+            }
+            
+            .url-input {
+                padding: 16px !important;
+                border-radius: 8px;
+                font-size: 16px;
+                min-height: 48px;
+            }
+            
+            /* Extract Button Mobile - Stack below input */
+            .extract-btn {
+                position: static !important;
+                transform: none !important;
+                width: 100%;
+                padding: 16px !important;
+                font-size: 16px;
+                min-height: 48px;
+                border-radius: 8px;
+                margin-top: 10px;
+            }
+
+            /* File Upload Mobile */
+            .file-upload-area {
+                padding: 25px 15px;
+                border-radius: 12px;
+                touch-action: manipulation;
+            }
+            
+            .file-upload-area i {
+                font-size: 2.5rem;
+                margin-bottom: 12px;
+            }
+            
+            .file-upload-area p {
+                font-size: 0.95rem;
+                line-height: 1.4;
+            }
+
+            /* File Items Mobile */
+            .file-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .file-item button {
+                padding: 12px;
+                font-size: 14px;
+                min-height: 44px;
+                border-radius: 6px;
+            }
+
+            /* Form Actions Mobile */
+            .listing-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 30px;
+            }
+            
+            .listing-actions button {
+                width: 100% !important;
+                padding: 16px !important;
+                font-size: 16px;
+                min-height: 48px;
+                border-radius: 8px;
+                touch-action: manipulation;
+            }
+
+            /* Edit Toggle Button Mobile */
+            .edit-toggle-btn {
+                width: 100% !important;
+                padding: 16px !important;
+                font-size: 16px;
+                min-height: 48px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+            }
+
+            /* Supported Sites Mobile */
+            .supported-sites {
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: center;
+            }
+            
+            .site-badge {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+
+            /* Benefits Grid Mobile */
+            .benefits-grid { 
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            /* Tabs Mobile */
+            .tabs { 
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .tab { 
+                border-bottom: none; 
+                border-left: 3px solid transparent;
+                text-align: left;
+                padding: 15px 20px;
+                min-height: 48px;
+            }
+            
+            .tab.active { 
+                border-left-color: var(--accent); 
+                border-bottom-color: transparent; 
+            }
+
+            /* Checkbox Groups Mobile */
+            .checkbox-group {
+                gap: 15px;
+            }
+            
+            .checkbox-group label {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 8px;
+                touch-action: manipulation;
+            }
+            
+            .checkbox-group input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                min-width: 20px;
+            }
+
+            /* Footer Mobile */
+            footer {
+                padding: 30px 15px;
+                font-size: 0.9rem;
+            }
+            
+            /* Success Messages Mobile */
+            .success-message, .error-message {
+                margin: 15px 10px;
+                padding: 15px;
+                border-radius: 8px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* ==================== SMALL MOBILE (< 480px) ==================== */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 0.95rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .form-container {
+                margin: 15px 5px;
+                padding: 15px 10px;
+                border-radius: 12px;
+            }
+            
+            input, select, textarea, .extract-btn {
+                border-radius: 10px;
+            }
+            
+            .hero > div:last-child > div {
+                padding: 10px 15px !important;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ==================== TOUCH IMPROVEMENTS ==================== */
+        @media (hover: none) and (pointer: coarse) {
+            /* Touch devices specific styles */
+            button, .file-upload-area, .tab {
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            button:active, .extract-btn:active {
+                transform: scale(0.98);
+                transition: transform 0.1s;
+            }
+            
+            /* Remove hover effects on touch devices */
+            .extract-btn:hover {
+                background: var(--accent);
+            }
+            
+            .file-upload-area:hover {
+                border-color: #ddd;
+                background: white;
+            }
         }
     </style>
 </head>
@@ -733,6 +1048,15 @@
 
     <section class="form-section">
         <div class="form-container">
+            <!-- Mobile Welcome Notice -->
+            <div class="mobile-notice" style="display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center;">
+                <i class="fas fa-mobile-alt" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
+                <h4 style="margin: 0 0 8px 0; font-size: 1.1rem;">📱 Mobile-Optimized Experience</h4>
+                <p style="margin: 0; font-size: 0.9rem; opacity: 0.95;">
+                    ✨ Take photos with your camera • 👆 Large touch-friendly buttons • 📝 Auto-resize text areas
+                </p>
+            </div>
+            
             <!-- Add New Listing Section -->
             <div>
                 <!-- URL Extractor Section -->
@@ -1030,12 +1354,18 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                    <div class="file-upload-area" onclick="handleFileUploadClick()">
                         <i class="fas fa-cloud-upload-alt"></i>
-                        <h4>Click to Upload Photos</h4>
-                        <p style="color: #666; font-size: 0.9rem;">Upload up to 10 high-quality images (JPEG, PNG, max 5MB each) <strong>or use photos extracted from URL above</strong></p>
+                        <h4><span class="desktop-text">Click to Upload Photos</span><span class="mobile-text">Take Photo or Upload Images</span></h4>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            <span class="mobile-text">📱 Take photos with camera or choose from gallery<br></span>
+                            Upload up to 10 high-quality images (JPEG, PNG, max 5MB each) <strong>or use photos extracted from URL above</strong>
+                        </p>
                     </div>
-                    <input type="file" id="fileInput" name="photos" accept="image/jpeg,image/png,image/jpg,image/webp" multiple>
+                    <input type="file" id="fileInput" name="photos" 
+                           accept="image/jpeg,image/png,image/jpg,image/webp" 
+                           capture="environment" 
+                           multiple>
                     <div id="fileList" class="file-list"></div>
                 </div>
 
@@ -1075,11 +1405,103 @@
 
     <script src="js/config.js"></script>
     <script>
+        // ==================== IMMEDIATE DEBUG START ====================
+        console.log('🔥 IMMEDIATE: JavaScript is running!');
+        console.log('🔥 IMMEDIATE: Window location:', window.location.href);
+        console.log('🔥 IMMEDIATE: Document ready state:', document.readyState);
+        
+        // Check if config loaded immediately
+        setTimeout(() => {
+            console.log('🔥 IMMEDIATE: CONFIG object exists?', typeof CONFIG !== 'undefined');
+            if (typeof CONFIG !== 'undefined') {
+                console.log('🔥 IMMEDIATE: CONFIG contents:', CONFIG);
+            } else {
+                console.error('🔥 IMMEDIATE: CONFIG NOT FOUND - config.js failed to load!');
+            }
+            console.log('🔥 IMMEDIATE: API_BASE_URL exists?', typeof API_BASE_URL !== 'undefined');
+        }, 100);
+        // ==================== IMMEDIATE DEBUG END ====================
+        
+        // Test button existence immediately
+        setTimeout(() => {
+            console.log('🔥 BUTTON CHECK: Looking for Extract button...');
+            const btn = document.getElementById('extractBtn');
+            console.log('🔥 BUTTON CHECK: Extract button found?', !!btn);
+            if (btn) {
+                console.log('🔥 BUTTON CHECK: Button element:', btn);
+                console.log('🔥 BUTTON CHECK: Button type:', btn.type);
+                console.log('🔥 BUTTON CHECK: Button onclick:', btn.onclick);
+            } else {
+                console.error('🔥 BUTTON CHECK: Extract button NOT FOUND!');
+                // Check all buttons
+                const allBtns = document.querySelectorAll('button');
+                console.log('🔥 BUTTON CHECK: All buttons found:', allBtns.length);
+                allBtns.forEach((b, i) => {
+                    console.log(`🔥 BUTTON CHECK: Button ${i}:`, b.id, b.className, b.textContent.trim());
+                });
+            }
+        }, 500);
+        
         console.log('[DEBUG] Config loaded:', CONFIG);
         console.log('[DEBUG] API_BASE_URL:', CONFIG.API_BASE_URL);
         
-        const API_BASE_URL = CONFIG.API_BASE_URL;
+        // API_BASE_URL is already declared in js/config.js, no need to redeclare
         let selectedFiles = [];
+
+        // ==================== MOBILE ENHANCEMENTS ==================== 
+        
+        // Enhanced file upload handler for mobile devices
+        function handleFileUploadClick() {
+            console.log('📱 [Mobile] File upload clicked');
+            
+            // Detect if user is on mobile device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('📱 [Mobile] Mobile device detected, opening camera/gallery options');
+                // On mobile, this will show camera/gallery options due to capture="environment" attribute
+            } else {
+                console.log('💻 [Desktop] Desktop device detected, opening file browser');
+            }
+            
+            document.getElementById('fileInput').click();
+        }
+        
+        // Mobile-specific optimizations
+        function initializeMobileOptimizations() {
+            console.log('📱 [Mobile] Initializing mobile optimizations...');
+            
+            // Prevent zoom on input focus for iOS
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                // Ensure font-size is 16px or larger to prevent zoom
+                if (window.innerWidth <= 768) {
+                    input.style.fontSize = '16px';
+                }
+            });
+            
+            // Add touch-friendly scrolling
+            document.body.style.setProperty('-webkit-overflow-scrolling', 'touch');
+            
+            // Optimize viewport for mobile
+            let viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            }
+            
+            // Add mobile-specific event listeners
+            document.addEventListener('touchstart', function() {}, { passive: true });
+            
+            console.log('📱 [Mobile] Mobile optimizations complete');
+        }
+        
+        // Auto-resize textareas on mobile
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+        
+        // ==================== END MOBILE ENHANCEMENTS ==================== 
 
         // Handle property type change
         document.getElementById('propertyType').addEventListener('change', function() {
@@ -1299,56 +1721,107 @@
         
         // Auto-extract data from listing URLs
         async function extractListingData() {
-            console.log('====================================');
-            console.log('[Extract] Function called - extractListingData()');
-            console.log('====================================');
+            console.log('🚀 ====================================');
+            console.log('🚀 [Extract] Function called - extractListingData()');
+            console.log('🚀 ====================================');
+            
+            // Check if CONFIG and API_BASE_URL are available
+            if (typeof CONFIG === 'undefined') {
+                console.error('❌ CONFIG object is undefined! Check if js/config.js loaded properly.');
+                showStatus('Configuration error: CONFIG not loaded', 'error');
+                return;
+            }
+            
+            if (typeof API_BASE_URL === 'undefined') {
+                console.error('❌ API_BASE_URL is undefined! Check configuration.');
+                showStatus('Configuration error: API_BASE_URL not set', 'error');
+                return;
+            }
+            
+            console.log('✅ CONFIG:', CONFIG);
+            console.log('✅ API_BASE_URL:', API_BASE_URL);
             
             const urlInput = document.getElementById('listingUrl');
-            const url = urlInput.value.trim();
             const statusMessage = document.getElementById('statusMessage');
             const extractBtn = document.getElementById('extractBtn');
             
-            console.log('[Extract] URL input value:', url);
-            console.log('[Extract] Status message element:', statusMessage);
-            console.log('[Extract] Extract button element:', extractBtn);
+            console.log('🔍 [Extract] DOM Elements Check:');
+            console.log('   - URL input:', urlInput);
+            console.log('   - Status message element:', statusMessage);
+            console.log('   - Extract button element:', extractBtn);
+            
+            if (!urlInput) {
+                console.error('❌ listingUrl input element not found!');
+                alert('Error: URL input field not found on page');
+                return;
+            }
+            
+            const url = urlInput.value.trim();
+            console.log('🔍 [Extract] URL input value:', `"${url}"`);
             
             if (!url) {
+                console.log('⚠️ [Extract] No URL provided');
                 showStatus('Please enter a listing URL', 'error');
                 return;
             }
             
+            // Validate URL format
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                console.log('⚠️ [Extract] Invalid URL format');
+                showStatus('Please enter a valid URL (must start with https://)', 'error');
+                return;
+            }
+            
             // Disable button and show loading
-            extractBtn.disabled = true;
-            extractBtn.innerHTML = '<i class=\"fas fa-spinner fa-spin\"></i> Extracting...';
+            if (extractBtn) {
+                extractBtn.disabled = true;
+                extractBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Extracting...';
+            }
+            
             showStatus('Extracting listing data...', 'loading');
             
             try {
                 // Detect source
                 const source = detectSource(url);
-                console.log('[Extract] Detected source:', source);
+                console.log('🎯 [Extract] Detected source:', source);
                 
                 // Extract data based on source
+                console.log('📡 [Extract] Starting data extraction...');
                 const listingData = await fetchListingData(url, source);
-                console.log('[Extract] Extracted data:', listingData);
+                console.log('📊 [Extract] Extracted data:', listingData);
                 
                 if (listingData) {
+                    console.log('✅ [Extract] Data extraction successful, populating form...');
                     populateFormFields(listingData);
                     showStatus(`✓ Listing data extracted successfully from ${source.toUpperCase()}!`, 'success');
                     document.getElementById('externalUrl').value = url;
                     
                     // Hide manual form sections and show auto-fill notice
                     hideFormSections();
+                    console.log('✅ [Extract] Form populated and sections hidden');
                 } else {
                     throw new Error('Could not extract listing data. Please enter manually.');
                 }
                 
             } catch (error) {
-                console.error('[Extract] Error:', error);
+                console.error('💥 [Extract] Error:', error);
+                console.error('💥 [Extract] Error stack:', error.stack);
                 const errorMsg = error.message || 'Failed to extract data. The listing may not be supported or the backend is unavailable.';
                 showStatus(`❌ ${errorMsg}`, 'error');
+                
+                // Additional debugging for network errors
+                if (error.message.includes('fetch')) {
+                    console.error('🌐 Network error details:');
+                    console.error('   - Check if AWS backend is running');
+                    console.error('   - Check if API_BASE_URL is correct:', API_BASE_URL);
+                    console.error('   - Check browser network tab for actual request');
+                }
             } finally {
-                extractBtn.disabled = false;
-                extractBtn.innerHTML = '<i class=\"fas fa-download\"></i> Extract';
+                if (extractBtn) {
+                    extractBtn.disabled = false;
+                    extractBtn.innerHTML = '<i class="fas fa-download"></i> Extract';
+                }
+                console.log('🏁 [Extract] Function completed');
             }
         }
         
@@ -1773,41 +2246,214 @@
             localStorage.setItem('vdiListings', JSON.stringify(listings));
         }
         
+        // Enhanced debugging and initialization
+        function debugPageElements() {
+            console.log('=== DEBUGGING PAGE ELEMENTS ===');
+            console.log('Extract button:', document.getElementById('extractBtn'));
+            console.log('Listing URL input:', document.getElementById('listingUrl'));
+            console.log('Status message:', document.getElementById('statusMessage'));
+            console.log('CONFIG object:', typeof CONFIG !== 'undefined' ? CONFIG : 'UNDEFINED');
+            console.log('API_BASE_URL:', typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'UNDEFINED');
+        }
+
+        // Test function to manually trigger extraction
+        function testExtraction() {
+            console.log('TEST: Manual extraction triggered');
+            extractListingData();
+        }
+
+        // Global test functions accessible from console
+        window.vdiDebug = {
+            testExtract: function() {
+                console.log('🧪 [Debug] Manually triggering extraction...');
+                extractListingData();
+            },
+            
+            checkElements: function() {
+                debugPageElements();
+            },
+            
+            setTestUrl: function(url) {
+                const urlInput = document.getElementById('listingUrl');
+                if (urlInput) {
+                    urlInput.value = url || 'https://www.century21.com/property/1136-205th-ave-ne-sammamish-wa-98074-MLS-2283848';
+                    console.log('✅ Test URL set:', urlInput.value);
+                } else {
+                    console.error('❌ URL input not found');
+                }
+            },
+            
+            testConfig: function() {
+                console.log('CONFIG:', typeof CONFIG !== 'undefined' ? CONFIG : 'UNDEFINED');
+                console.log('API_BASE_URL:', typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'UNDEFINED');
+            }
+        };
+
         // Initialize event listeners on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('[Init] Page loaded, attaching event listeners');
+            console.log('🔄 [Init] Page loaded, starting initialization...');
             
-            // Attach extract button event listener
+            // Debug page elements first
+            debugPageElements();
+            
+            // Initialize mobile optimizations
+            initializeMobileOptimizations();
+            
+            // Attach extract button event listener with multiple methods
             const extractButton = document.getElementById('extractBtn');
             if (extractButton) {
-                console.log('[Init] Extract button found, attaching click listener');
+                console.log('✅ [Init] Extract button found, attaching click listener');
+                
+                // Method 1: addEventListener
                 extractButton.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('[Init] Extract button clicked!');
+                    console.log('🖱️ [Event] Extract button clicked via addEventListener!');
                     extractListingData();
                 });
+                
+                // Method 2: onclick as backup
+                extractButton.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('🖱️ [Event] Extract button clicked via onclick!');
+                    extractListingData();
+                };
+                
+                console.log('✅ [Init] Both click handlers attached successfully');
             } else {
-                console.error('[Init] Extract button NOT found!');
+                console.error('❌ [Init] Extract button NOT found! Looking for element with id="extractBtn"');
+                
+                // Try to find it with different methods
+                const allButtons = document.querySelectorAll('button');
+                console.log('Found buttons on page:', allButtons);
+                const extractButtons = document.querySelectorAll('.extract-btn');
+                console.log('Found extract-btn class buttons:', extractButtons);
             }
             
             // Attach toggle fields button event listener
             const toggleFieldsBtn = document.getElementById('toggleFieldsBtn');
             if (toggleFieldsBtn) {
+                console.log('✅ [Init] Toggle fields button found');
                 toggleFieldsBtn.addEventListener('click', toggleFormVisibility);
+            } else {
+                console.log('⚠️ [Init] Toggle fields button NOT found (this is normal if not auto-filled yet)');
             }
             
             // Allow Enter key to trigger extraction
             const urlInput = document.getElementById('listingUrl');
             if (urlInput) {
+                console.log('✅ [Init] URL input found, attaching keypress listener');
                 urlInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
+                        console.log('⌨️ [Event] Enter key pressed in URL input');
                         extractListingData();
                     }
                 });
+            } else {
+                console.error('❌ [Init] URL input NOT found!');
             }
+            
+            // Add mobile-specific enhancements to form elements
+            console.log('📱 [Mobile] Setting up form enhancements...');
+            
+            // Auto-resize textareas on mobile
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    if (window.innerWidth <= 768) {
+                        autoResizeTextarea(this);
+                    }
+                });
+                
+                // Initial resize if on mobile
+                if (window.innerWidth <= 768) {
+                    autoResizeTextarea(textarea);
+                }
+            });
+            
+            // Add touch feedback to buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Improve mobile scrolling for long forms
+            if (window.innerWidth <= 768) {
+                document.body.style.overflow = 'auto';
+                document.documentElement.style.overflow = 'auto';
+                
+                // Add smooth scrolling behavior
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // Handle keyboard appearance on iOS - scroll to focused input
+                const inputs = document.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    input.addEventListener('focus', function() {
+                        setTimeout(() => {
+                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300); // Wait for keyboard animation
+                    });
+                });
+                
+                // Add haptic feedback on iOS for button taps
+                const submitButton = document.querySelector('button[type="submit"]');
+                if (submitButton && typeof window.navigator.vibrate === 'function') {
+                    submitButton.addEventListener('click', function() {
+                        window.navigator.vibrate(10); // Light vibration
+                    });
+                }
+            }
+            
+            console.log('✅ [Mobile] Form enhancements complete');
+            
+            console.log('🔄 [Init] Initialization complete');
         });
+
+        // Also attach a global click handler as absolute fallback
+        window.addEventListener('load', function() {
+            console.log('🌐 [Global] Window loaded, adding global click handler...');
+            
+            document.addEventListener('click', function(e) {
+                if (e.target && (e.target.id === 'extractBtn' || e.target.closest('#extractBtn'))) {
+                    console.log('🎯 [Global] Extract button clicked via global handler!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    extractListingData();
+                }
+            });
+        });
+        
+        // ==================== MANUAL TEST FUNCTION ====================
+        // Add manual test function to window for debugging
+        window.manualExtractTest = function() {
+            console.log('🧪 [Manual Test] Running manual extract test...');
+            document.getElementById('listingUrl').value = 'https://www.century21.com/real-estate/residential-lease/123-test-st-city-state-zip/';
+            extractListingData();
+        };
+        
+        window.testButtonClick = function() {
+            console.log('🧪 [Button Test] Testing button click programmatically...');
+            const btn = document.getElementById('extractBtn');
+            if (btn) {
+                console.log('🧪 [Button Test] Button found, triggering click...');
+                btn.click();
+            } else {
+                console.log('🧪 [Button Test] Button NOT found!');
+            }
+        };
+        
+        console.log('🧪 [Manual Test] Added test functions:');
+        console.log('🧪 [Manual Test] - window.manualExtractTest() - runs extraction with test URL');
+        console.log('🧪 [Manual Test] - window.testButtonClick() - programmatically clicks button');
+        // ==================== END MANUAL TEST FUNCTION ====================
     </script>
 
 </body>
