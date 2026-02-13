@@ -1996,6 +1996,7 @@
                 // If we found JSON-LD property data, extract from that first
                 if (propertyData) {
                     console.log('📋 [C21] Extracting from JSON data...');
+                    console.log('📋 [C21 DEBUG] JSON structure:', JSON.stringify(propertyData, null, 2).substring(0, 500));
                     
                     // Extract address
                     if (propertyData.address) {
