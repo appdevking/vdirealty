@@ -187,6 +187,17 @@ async function extractPropertyData(page, source) {
                     '.listing-description',
                     '.description',
                     'div[class*="description"]'
+                ],
+                mls: [
+                    // Target MLS number in listing details section
+                    'dt:contains("MLS") + dd',
+                    'dt:contains("MLS#") + dd', 
+                    'dt:contains("MLS Number") + dd',
+                    '.c21__DetailAccordionItem dt:contains("MLS") + dd',
+                    'li:has(span:contains("MLS")) span:last-child',
+                    'div:has(.label:contains("MLS")) .value',
+                    'span[class*="mls"]',
+                    'div[class*="mls"]'
                 ]
             },
             universal: {
@@ -195,7 +206,8 @@ async function extractPropertyData(page, source) {
                 beds: ['.beds', '.bedrooms', '[data-beds]', 'span[class*="bed"]', 'div[class*="bed"]'],
                 baths: ['.baths', '.bathrooms', '[data-baths]', 'span[class*="bath"]', 'div[class*="bath"]'],
                 sqft: ['.sqft', '.square-feet', '[data-sqft]', 'span[class*="sqft"]', 'span[class*="sq-ft"]'],
-                description: ['.description', '.property-description', '.listing-description', '.remarks', 'div[class*="description"]']
+                description: ['.description', '.property-description', '.listing-description', '.remarks', 'div[class*="description"]'],
+                mls: ['.mls', '.mls-number', '[data-mls]', 'span[class*="mls"]', 'div[class*="mls"]', '.listing-id', '.property-id']
             }
         };
 
@@ -257,6 +269,7 @@ async function extractPropertyData(page, source) {
             baths: getTextFromSelectors(siteSelectors.baths),
             sqft: getTextFromSelectors(siteSelectors.sqft),
             description: getTextFromSelectors(siteSelectors.description),
+            mls: getTextFromSelectors(siteSelectors.mls),
             images: images.slice(0, 15) // Get more images
         };
 
@@ -417,6 +430,38 @@ async function extractPropertyData(page, source) {
             
             extractedData.sqft = foundSqft;
         }
+        
+        // Extract MLS number if not found by selectors
+        if (!extractedData.mls || extractedData.mls === '') {
+            console.log('🔍 Primary MLS selectors failed, trying text scanning...');
+            
+            const scanText = document.body.textContent || '';
+            
+            // Look for patterns like "MLS#:2479516", "MLS: 2479516", "MLS Number: 2479516"
+            const mlsPatterns = [
+                /MLS\s*#?\s*:?\s*([A-Z0-9\-]+)/gi,
+                /MLS\s+Number\s*:?\s*([A-Z0-9\-]+)/gi,
+                /Listing\s+ID\s*:?\s*([A-Z0-9\-]+)/gi,
+                /Property\s+ID\s*:?\s*([A-Z0-9\-]+)/gi
+            ];
+            
+            let foundMls = '';
+            for (const pattern of mlsPatterns) {
+                const match = scanText.match(pattern);
+                if (match && match[1]) {
+                    // Validate: should be alphanumeric and reasonable length (4-15 chars)
+                    const mls = match[1].trim();
+                    if (mls.length >= 4 && mls.length <= 15 && /^[A-Z0-9\-]+$/i.test(mls)) {
+                        foundMls = mls;
+                        console.log(`✅ Found MLS via text scanning: "${match[0]}" -> ${mls}`);
+                        break;
+                    } else {
+                        console.log(`❌ Rejected invalid MLS format: ${mls} from "${match[0]}"`);
+                    }
+                }
+            }
+            extractedData.mls = foundMls;
+        }
 
         return extractedData;
     }, source);
@@ -434,6 +479,7 @@ function parseData(extractedData) {
         bathrooms: '',
         sqft: '',
         description: '',
+        mls: '',
         images: extractedData.images || []
     };
 
@@ -535,6 +581,21 @@ function parseData(extractedData) {
             } else {
                 console.log(`⚠️ Rejected unrealistic sqft: ${sqft}`);
             }
+        }
+    }
+
+    // Parse MLS with validation
+    if (extractedData.mls) {
+        console.log(`🏷️ Raw MLS text: "${extractedData.mls}"`);
+        // Clean up MLS number - remove any extra characters
+        let cleanMls = extractedData.mls.replace(/[^A-Z0-9\-]/gi, '').toUpperCase();
+        
+        // Validate: should be alphanumeric with optional hyphens, reasonable length (4-15 chars)
+        if (cleanMls.length >= 4 && cleanMls.length <= 15 && /^[A-Z0-9\-]+$/.test(cleanMls)) {
+            parsed.mls = cleanMls;
+            console.log(`🏷️ Valid MLS: ${cleanMls}`);
+        } else {
+            console.log(`⚠️ Rejected invalid MLS format: ${cleanMls}`);
         }
     }
 
