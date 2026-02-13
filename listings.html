@@ -798,16 +798,11 @@
         
         // Contact about listing
         function contactAboutListing(address, listing) {
-            // Open modal and populate with listing data
-            const modal = document.getElementById('contactModal');
-            modal.classList.add('active');
-            
-            // Populate property info
-            document.getElementById('modalPropertyAddress').textContent = address;
-            document.getElementById('propertyAddress').value = address;
-            
             // Get listing details
-            const listingObj = allListings.find(l => l.address === address);
+            const listingObj = allListings.find(l => l.address === address) || listing;
+            
+            // Build property details string
+            let propertyDetails = address;
             if (listingObj) {
                 const price = new Intl.NumberFormat('en-US', {
                     style: 'currency',
@@ -822,17 +817,17 @@
                     listingObj.sqft ? `${parseInt(listingObj.sqft).toLocaleString()} sqft` : ''
                 ].filter(Boolean).join(' • ');
                 
-                document.getElementById('modalPropertyDetails').textContent = details;
-                document.getElementById('propertyPrice').value = price;
-                document.getElementById('propertyDetails').value = details;
-                
-                // Pre-fill message
-                document.getElementById('contactMessage').value = 
-                    `Hi, I'm interested in the property at ${address} (${price}). Please contact me with more information about this listing.`;
+                propertyDetails = `${address} (${details})`;
             }
             
-            // Prevent body scroll when modal is open
-            document.body.style.overflow = 'hidden';
+            // Redirect to contact form with pre-filled data
+            const params = new URLSearchParams({
+                interest: 'Property Inquiry',
+                property: propertyDetails,
+                message: `I am interested in learning more about the property at ${address}.`
+            });
+            
+            window.location.href = `index.html#contact?${params.toString()}`;
         }
         
         function closeContactModal() {

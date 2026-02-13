@@ -1059,7 +1059,7 @@
     <section class="contact-section reveal" id="contact">
         <div class="section-title">
             <h2>Get In Touch</h2>
-            <p style="margin-top: 10px; font-size: 1.1rem; color: #666;">Tell us about your project or investment goals.</p>
+            <p style="margin-top: 10px; font-size: 1.1rem; color: #666;">Tell us about your project, investment goals, or inquire about a specific property.</p>
         </div>
         <div class="form-container">
             <form id="contactForm" onsubmit="return sendEmail(event)">
@@ -1068,6 +1068,7 @@
                 <input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)">
                 <select name="interest" id="interest" required>
                     <option value="" disabled selected>I am interested in... *</option>
+                    <option value="Property Inquiry">Property Inquiry</option>
                     <option value="Buying or Selling a Home">Buying or Selling a Home</option>
                     <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
                     <option value="Builder / Development">Builder / Development</option>
@@ -1517,6 +1518,29 @@
         // Initial check for elements already in view
         document.addEventListener('DOMContentLoaded', function() {
             reveal();
+            
+            // Check URL parameters for pre-filling contact form (from listings page)
+            const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
+            if (urlParams.has('interest')) {
+                // Pre-fill interest dropdown
+                const interestSelect = document.getElementById('interest');
+                if (interestSelect) {
+                    interestSelect.value = urlParams.get('interest');
+                }
+            }
+            
+            if (urlParams.has('message')) {
+                // Pre-fill message
+                const messageField = document.getElementById('message');
+                if (messageField) {
+                    let message = urlParams.get('message');
+                    // If property details are provided, add them to the message
+                    if (urlParams.has('property')) {
+                        message = `${message}\n\nProperty: ${urlParams.get('property')}`;
+                    }
+                    messageField.value = message;
+                }
+            }
             
             // Smooth scroll for all anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
