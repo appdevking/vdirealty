@@ -7,7 +7,7 @@ let sendgridClient;
 
 const initializeTransporter = () => {
     if (config.email.service === 'sendgrid' && config.email.sendgridApiKey) {
-        // Use SendGrid Web API (not blocked by Railway)
+        // Use SendGrid Web API for reliable email delivery
         try {
             const sgMail = require('@sendgrid/mail');
             sgMail.setApiKey(config.email.sendgridApiKey);

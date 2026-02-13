@@ -2,7 +2,7 @@ require('dotenv').config();
 const path = require('path');
 
 // Determine storage paths based on environment
-// In production (Railway), use /app/data for persistent storage
+// In production (AWS EC2), use /app/data for persistent storage
 // In development, use local directories
 const isProd = process.env.NODE_ENV === 'production';
 const dataDir = isProd ? '/app/data' : path.join(__dirname);

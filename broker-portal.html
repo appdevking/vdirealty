@@ -689,7 +689,7 @@
                     <span>Real data extracted from listing website!</span>
                 </div>
                 <p style="margin: 0 0 10px 0; color: #666;">
-                    <strong>Powered by ScrapingBee:</strong> Property details automatically extracted from the listing URL using AI.
+                    <strong>Powered by AWS:</strong> Property details automatically extracted from the listing URL.
                 </p>
                 <p style="margin: 0 0 10px 0; color: #666;">
                     Review the auto-filled details below and click "Save Listing" to publish.
@@ -851,13 +851,16 @@
         <!-- End Current Listings Tab -->
     </div>
 
+    <!-- Configuration -->
+    <script src="js/config.js"></script>
+
     <script>
         // ========================================
         // VDI REALTY BROKER PORTAL v2.0
-        // Last Updated: Feb 11, 2026
-        // ScrapingBee Integration: ACTIVE
+        // Last Updated: Feb 12, 2026
+        // AWS Puppeteer Extraction: ACTIVE
         // ========================================
-        console.log('*** VDI Broker Portal v2.0 - ScrapingBee ACTIVE ***');
+        console.log('*** VDI Broker Portal v2.0 - AWS Backend ACTIVE ***');
         console.log('Version Date: February 11, 2026');
         console.log('SUCCESS: You have the CORRECT version loaded!');
         console.log('---');
@@ -933,68 +936,50 @@
             return 'universal';
         }
         
-        // Fetch listing data - NOW WITH REAL SCRAPING ENABLED!
+        // Fetch listing data using AWS backend (Puppeteer)
         async function fetchListingData(url, source) {
-            // OPTION 1: Universal Web Scraping (ACTIVE - Works with ANY listing site!)
-            // Using ScrapingBee to extract from Century 21, RE/MAX, Zillow, etc.
-            
             try {
-                // Using ScrapingBee - Works with ANY listing site!
-                const scrapingBeeKey = 'TR931TU8DU3KLFMARXR6N8PQ2RSPNNUXGLQDIBV3B8R0PS7B69OEBK0RFP5YZM2YX2I0OMA0M9STO6UQ';
+                console.log('[Extract] Starting API call to:', `${API_BASE_URL}/api/fsbo/extract`);
+                console.log('[Extract] Request URL:', url);
                 
-                // Simplified API call - just get the HTML without extract_rules to avoid 400 errors
-                const apiUrl = `https://app.scrapingbee.com/api/v1/?api_key=${scrapingBeeKey}&url=${encodeURIComponent(url)}&render_js=true`;
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/extract`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
                 
-                console.log('Fetching data from ScrapingBee...', url);
-                const response = await fetch(apiUrl);
+                console.log('[Extract] Response status:', response.status);
                 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error('ScrapingBee API error details:', errorText);
-                    throw new Error(`ScrapingBee API error: ${response.status}`);
+                    console.error('[Extract] Error response:', errorText);
+                    throw new Error(`Extraction API error: ${response.status}`);
                 }
                 
-                const html = await response.text();
-                console.log('ScrapingBee response received, HTML length:', html.length);
+                const result = await response.json();
+                console.log('[Extract] API response:', result);
                 
-                // Parse the HTML to extract property data
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                // Try to extract data from common selectors
-                const extractedData = {
-                    address: doc.querySelector('h1.address, .property-address, .listing-address, [itemprop="address"], .street-address, h1.listing-title')?.textContent?.trim() || '',
-                    price: doc.querySelector('.price, .property-price, .listing-price, [itemprop="price"], .list-price, span.price')?.textContent?.trim() || '',
-                    beds: doc.querySelector('.beds, .bedrooms, [data-beds], .beds-count, .bedroom-count')?.textContent?.trim() || '',
-                    baths: doc.querySelector('.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count')?.textContent?.trim() || '',
-                    sqft: doc.querySelector('.sqft, .square-feet, [data-sqft], .sqft-value, .living-area')?.textContent?.trim() || '',
-                    description: doc.querySelector('.description, .property-description, .listing-description, .remarks, .property-details')?.textContent?.trim() || '',
-                    image: doc.querySelector('img.main-photo, .primary-photo, .hero-image, .listing-photo img')?.src || ''
-                };
-                
-                console.log('Extracted data from ScrapingBee:', extractedData);
-                
-                const parsedData = parseUniversalData(extractedData);
-                
-                // If no data was extracted, fall back to mock data
-                if (!parsedData.address && !parsedData.price) {
-                    console.warn('No data extracted from page, using fallback mock data');
-                    return mockExtractData(url, source);
+                if (result.success && result.data) {
+                    return result.data;
+                } else {
+                    throw new Error(result.error || 'Failed to extract listing data');
                 }
-                
-                return parsedData;
                 
             } catch (error) {
-                console.error('ScrapingBee extraction failed:', error);
-                // Fall back to mock data if API fails
-                console.log('Falling back to mock data');
-                return mockExtractData(url, source);
+                console.error('[Extract] Exception:', error);
+                
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    throw new Error('Could not connect to extraction service. Please check your internet connection.');
+                }
+                
+                throw new Error(error.message || 'Failed to extract listing data. Please try again or enter details manually.');
             }
         }
         
-        // Mock data extraction (for demo purposes)
+        // Mock data extraction (fallback for demo purposes)
         // This creates realistic-looking data based on the URL
-        // Replace with real API when you add your ScrapingBee/RapidAPI key
         function mockExtractData(url, source) {
             // Generate varied mock data based on URL to demonstrate functionality
             const urlHash = url.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0);
@@ -1047,7 +1032,7 @@
             };
         }
         
-        // Parse universal scraping API data (for ScrapingBee, Apify, etc.)
+        // Parse extracted data from AWS backend
         function parseUniversalData(data) {
             // Clean and extract numbers from strings
             const cleanPrice = (str) => {
