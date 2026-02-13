@@ -294,6 +294,61 @@
             border-radius: 5px;
         }
 
+        .image-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 5;
+            opacity: 0;
+        }
+
+        .listing-image-container:hover .image-arrow {
+            opacity: 1;
+        }
+
+        .image-arrow:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .image-arrow.prev {
+            left: 1rem;
+        }
+
+        .image-arrow.next {
+            right: 1rem;
+        }
+
+        .image-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .photo-count {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            color: var(--white);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+
         .listing-content {
             padding: 1.5rem;
         }
@@ -726,13 +781,28 @@
             const photos = listing.photos || [];
             const firstPhoto = photos.length > 0 ? getPhotoUrl(photos[0].url) : 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800';
             
+            // Store all photo URLs as data attribute
+            const photoUrls = photos.map(p => getPhotoUrl(p.url)).join('|||');
+            card.dataset.photos = photoUrls;
+            
             card.innerHTML = `
                 ${isNew ? '<div class="listing-badge new">New Listing</div>' : ''}
-                <div class="listing-image-container">
+                <div class="listing-image-container" data-current-photo="0">
+                    ${photos.length > 1 ? `<div class="photo-count"><i class="fas fa-images"></i> ${photos.length}</div>` : ''}
                     <img src="${firstPhoto}" alt="${listing.address}" class="listing-image" onerror="this.src='https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'">
+                    ${photos.length > 1 ? `
+                    <button class="image-arrow prev" aria-label="Previous photo">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="image-arrow next" aria-label="Next photo">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    ` : ''}
+                    ${photos.length > 1 ? `
                     <div class="image-nav">
-                        ${photos.map((p, i) => `<span class="image-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                        ${photos.map((p, i) => `<span class="image-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join('')}
                     </div>
+                    ` : ''}
                 </div>
                 <div class="listing-content">
                     <div class="listing-price">$${listing.price.toLocaleString()}</div>
@@ -775,7 +845,7 @@
                             <i class="fas fa-shield-alt"></i>
                             <span>Seller's contact info is protected. Use the button to inquire.</span>
                         </div>
-                        <a href="mailto:info@vdirealty.com?subject=Inquiry about ${listing.address}" class="contact-btn">
+                        <a href="mailto:info@vdirealty.com?subject=Inquiry%20about%20${encodeURIComponent(listing.address + ', ' + listing.city)}&body=Hello%2C%0A%0AI%20am%20interested%20in%20the%20following%20property%20listed%20on%20VDI%20Realty%3A%0A%0AProperty%3A%20${encodeURIComponent(listing.address + ', ' + listing.city + ', ' + listing.state + ' ' + listing.zip)}%0APrice%3A%20%24${listing.price.toLocaleString()}%0AType%3A%20${encodeURIComponent(listing.propertyType)}%0A%0APlease%20provide%20more%20information%20about%20this%20property.%0A%0AThank%20you%2C%0A" class="contact-btn">
                             <i class="fas fa-envelope"></i> Contact Seller
                         </a>
                         ` : `
@@ -793,10 +863,83 @@
                                 <span>${listing.phone}</span>
                             </div>
                         </div>
+                        <a href="mailto:${listing.email}?subject=Inquiry%20about%20${encodeURIComponent(listing.address)}&body=Hello%20${encodeURIComponent(listing.firstName)}%2C%0A%0AI%20saw%20your%20property%20listing%20on%20VDI%20Realty%20and%20I%20am%20interested%20in%20learning%20more.%0A%0AProperty%3A%20${encodeURIComponent(listing.address + ', ' + listing.city + ', ' + listing.state + ' ' + listing.zip)}%0APrice%3A%20%24${listing.price.toLocaleString()}%0A%0A" class="contact-btn">
+                            <i class="fas fa-envelope"></i> Contact Seller
+                        </a>
                         `}
                     </div>
                 </div>
             `;
+            
+            // Add image navigation functionality
+            const imageContainer = card.querySelector('.listing-image-container');
+            const img = card.querySelector('.listing-image');
+            const dots = card.querySelectorAll('.image-dot');
+            const prevBtn = card.querySelector('.image-arrow.prev');
+            const nextBtn = card.querySelector('.image-arrow.next');
+            const photosData = card.dataset.photos.split('|||').filter(p => p);
+            
+            if (photos.length > 1) {
+                const updateImage = (index) => {
+                    const currentIndex = parseInt(imageContainer.dataset.currentPhoto);
+                    if (index === currentIndex || index < 0 || index >= photosData.length) return;
+                    
+                    // Update image
+                    img.src = photosData[index];
+                    imageContainer.dataset.currentPhoto = index;
+                    
+                    // Update dots
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                    
+                    // Update arrow states
+                    if (prevBtn && nextBtn) {
+                        prevBtn.disabled = index === 0;
+                        nextBtn.disabled = index === photosData.length - 1;
+                    }
+                };
+                
+                // Dot click handlers
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        updateImage(index);
+                    });
+                });
+                
+                // Arrow click handlers
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const currentIndex = parseInt(imageContainer.dataset.currentPhoto);
+                        updateImage(currentIndex - 1);
+                    });
+                }
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const currentIndex = parseInt(imageContainer.dataset.currentPhoto);
+                        updateImage(currentIndex + 1);
+                    });
+                }
+                
+                // Keyboard navigation when hovering over image
+                imageContainer.addEventListener('keydown', (e) => {
+                    const currentIndex = parseInt(imageContainer.dataset.currentPhoto);
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        updateImage(currentIndex - 1);
+                    } else if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        updateImage(currentIndex + 1);
+                    }
+                });
+                
+                // Initial state for arrows
+                if (prevBtn) prevBtn.disabled = true;
+            }
             
             return card;
         }
