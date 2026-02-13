@@ -27,12 +27,48 @@ async function extractPropertyData(page, source) {
         // Helper function to try multiple selectors
         const getTextFromSelectors = (selectors) => {
             for (const selector of selectors) {
-                const el = document.querySelector(selector);
-                if (el && el.textContent && el.textContent.trim()) {
-                    console.log(`✅ Selector "${selector}" found: "${el.textContent.trim()}"`);
-                    return el.textContent.trim();
+                console.log(`🔍 Trying selector: "${selector}"`);
+                
+                // Handle :contains pseudo-selectors for Home Facts targeting
+                if (selector.includes(':contains')) {
+                    const [baseSelector, containsPart] = selector.split(':contains');
+                    const searchText = containsPart.replace(/[()'"]/g, '').trim();
+                    const elements = document.querySelectorAll(baseSelector || 'dt');
+                    
+                    for (const el of elements) {
+                        if (el.textContent && el.textContent.toLowerCase().includes(searchText.toLowerCase())) {
+                            console.log(`✅ Found element containing "${searchText}": "${el.textContent.trim()}"`);
+                            
+                            // Look for the next sibling (dd element in definition lists)
+                            let nextEl = el.nextElementSibling;
+                            if (nextEl) {
+                                console.log(`✅ Found next sibling: "${nextEl.textContent.trim()}"`);
+                                return nextEl.textContent.trim();
+                            }
+                            
+                            // If no next sibling, return the element's own text (extract numbers from it)
+                            const numberMatch = el.textContent.match(/(\d+\.?\d*)/);
+                            if (numberMatch) {
+                                console.log(`✅ Extracted number from text: ${numberMatch[1]}`);
+                                return numberMatch[1];
+                            }
+                            
+                            return el.textContent.trim();
+                        }
+                    }
+                    console.log(`❌ No element found containing "${searchText}"`);
+                } else if (selector.includes(':has')) {
+                    // Handle :has pseudo-selectors (not fully supported, so skip)
+                    console.log(`⚠️ Skipping :has selector (not fully supported): "${selector}"`);
+                } else {
+                    // Regular CSS selector
+                    const el = document.querySelector(selector);
+                    if (el && el.textContent && el.textContent.trim()) {
+                        console.log(`✅ Selector "${selector}" found: "${el.textContent.trim()}"`);
+                        return el.textContent.trim();
+                    }
+                    console.log(`❌ Selector "${selector}" not found or empty`);
                 }
-                console.log(`❌ Selector "${selector}" not found or empty`);
             }
             return '';
         };
@@ -88,71 +124,61 @@ async function extractPropertyData(page, source) {
                     'h2[class*="price"]'
                 ],
                 beds: [
-                    // Primary Century 21 selectors
+                    // Target Home Facts section specifically for Bedrooms
+                    'dt:contains("Bedrooms") + dd',
+                    'dt:contains("Bedroom") + dd', 
+                    '.c21__DetailAccordionItem dt:contains("Bedrooms") + dd',
+                    '.c21__DetailAccordionItem dt:contains("Bedroom") + dd',
+                    
+                    // Alternative structured data patterns
+                    'li:has(span:contains("Bedrooms")) span:last-child',
+                    'li:has(span:contains("Bedroom")) span:last-child',
+                    'div:has(.label:contains("Bedrooms")) .value',
+                    'div:has(.label:contains("Bedroom")) .value',
+                    
+                    // Previous fallback selectors
                     'li[data-test="property-bedroom"] .Text--numbers',
-                    'li[data-test="property-bedroom"] span', 
-                    '.c21__DetailFactsCallout span.Text--numbers:first-of-type',
-                    '.c21__DetailFactsCallout li:first-child .Text--numbers',
-                    '.c21__DetailFactsCallout li:first-child span',
-                    '.c21__DetailFactsCallout li:first-child',
-                    'div[class*="DetailFacts"] li:first-child span',
-                    'div[class*="DetailFacts"] li:first-child',
-                    
-                    // Universal fallback selectors (work on many sites)
-                    'span[data-testid*="bed"]', 'div[data-testid*="bed"]',
-                    '*[class*="bed-count"] span', '*[class*="bed-count"]',
-                    '*[class*="bedrooms"] span', '*[class*="bedrooms"]',
-                    '*[class*="bedroom"] span', '*[class*="bedroom"]',
-                    '*[aria-label*="bedroom"]',
-                    
-                    // Try to find any span/div that might contain bed info
-                    'span[title*="bed"]', 'span[title*="Bed"]',
-                    'div[title*="bed"]', 'div[title*="Bed"]'
+                    'li[data-test="property-bedroom"] span',
+                    '.c21__DetailFactsCallout li:first-child span'
                 ],
                 baths: [
-                    // Primary Century 21 selectors
+                    // Target Home Facts section specifically for Bathrooms
+                    'dt:contains("Total bathrooms") + dd',
+                    'dt:contains("Total bathroom") + dd',
+                    'dt:contains("Bathrooms") + dd', 
+                    'dt:contains("Bathroom") + dd',
+                    '.c21__DetailAccordionItem dt:contains("Total bathrooms") + dd',
+                    '.c21__DetailAccordionItem dt:contains("Bathrooms") + dd',
+                    
+                    // Alternative structured data patterns
+                    'li:has(span:contains("Total bathrooms")) span:last-child',
+                    'li:has(span:contains("Bathrooms")) span:last-child',
+                    'div:has(.label:contains("Bathrooms")) .value',
+                    'div:has(.label:contains("Total bathrooms")) .value',
+                    
+                    // Previous fallback selectors
                     'li[data-test="property-bathroom"] .Text--numbers',
                     'li[data-test="property-bathroom"] span',
-                    '.c21__DetailFactsCallout span.Text--numbers:nth-of-type(2)',
-                    '.c21__DetailFactsCallout li:nth-child(2) .Text--numbers', 
-                    '.c21__DetailFactsCallout li:nth-child(2) span',
-                    '.c21__DetailFactsCallout li:nth-child(2)',
-                    'div[class*="DetailFacts"] li:nth-child(2) span',
-                    'div[class*="DetailFacts"] li:nth-child(2)',
-                    
-                    // Universal fallback selectors
-                    'span[data-testid*="bath"]', 'div[data-testid*="bath"]',
-                    '*[class*="bath-count"] span', '*[class*="bath-count"]',
-                    '*[class*="bathrooms"] span', '*[class*="bathrooms"]',
-                    '*[class*="bathroom"] span', '*[class*="bathroom"]',
-                    '*[aria-label*="bathroom"]',
-                    
-                    // Try to find any span/div that might contain bath info
-                    'span[title*="bath"]', 'span[title*="Bath"]',
-                    'div[title*="bath"]', 'div[title*="Bath"]'
+                    '.c21__DetailFactsCallout li:nth-child(2) span'
                 ],
                 sqft: [
-                    // Primary Century 21 selectors
+                    // Target Home Facts section specifically for Living area
+                    'dt:contains("Living area") + dd',
+                    'dt:contains("Building area") + dd',
+                    'dt:contains("Square") + dd',
+                    '.c21__DetailAccordionItem dt:contains("Living area") + dd',
+                    '.c21__DetailAccordionItem dt:contains("Building area") + dd',
+                    
+                    // Alternative structured data patterns
+                    'li:has(span:contains("Living area")) span:last-child',
+                    'li:has(span:contains("Building area")) span:last-child', 
+                    'div:has(.label:contains("Living area")) .value',
+                    'div:has(.label:contains("Building area")) .value',
+                    
+                    // Previous fallback selectors
                     'li[data-test="property-sqft"] .Text--numbers',
                     'li[data-test="property-sqft"] span',
-                    '.c21__DetailFactsCallout span.Text--numbers:last-of-type',
-                    '.c21__DetailFactsCallout li:last-child .Text--numbers',
-                    '.c21__DetailFactsCallout li:last-child span',
-                    '.c21__DetailFactsCallout li:last-child',
-                    'div[class*="DetailFacts"] li:last-child span',
-                    'div[class*="DetailFacts"] li:last-child',
-                    
-                    // Universal fallback selectors
-                    'span[data-testid*="sqft"]', 'span[data-testid*="sq-ft"]',
-                    'div[data-testid*="sqft"]', 'div[data-testid*="sq-ft"]',
-                    '*[class*="sqft"] span', '*[class*="sqft"]',
-                    '*[class*="square-feet"] span', '*[class*="square-feet"]',
-                    '*[class*="sq-ft"] span', '*[class*="sq-ft"]',
-                    '*[aria-label*="square"]',
-                    
-                    // Try to find any span/div that might contain sqft info
-                    'span[title*="sq"]', 'span[title*="Sq"]', 
-                    'div[title*="sq"]', 'div[title*="Sq"]'
+                    '.c21__DetailFactsCallout li:last-child span'
                 ],
                 description: [
                     '.c21__DetailDescription p',
@@ -238,25 +264,43 @@ async function extractPropertyData(page, source) {
         console.log('🔍 Checking if fallback scanning is needed...');
         
         if (!extractedData.beds || extractedData.beds === '') {
-            console.log('🔍 Primary bed selectors failed, trying text scanning...');
-            const pageText = document.body.textContent || '';
+            console.log('🔍 Primary bed selectors failed, trying Home Facts text scanning...');
             
-            // Look for patterns like "1 Bed", "1 BR", "1 Bedroom", etc.
+            // First, try to find Home Facts section by searching for elements containing "Home facts"
+            let homeFactsSection = null;
+            const allElements = document.querySelectorAll('*');
+            for (const el of allElements) {
+                if (el.textContent && el.textContent.toLowerCase().includes('home facts')) {
+                    homeFactsSection = el;
+                    break;
+                }
+            }
+            
+            // Also try common section selectors
+            if (!homeFactsSection) {
+                homeFactsSection = document.querySelector('.c21__DetailAccordionItem, .property-details, .home-facts, .property-facts');
+            }
+            
+            const scanText = homeFactsSection ? homeFactsSection.textContent : document.body.textContent;
+            console.log('📍 Scanning text source:', homeFactsSection ? 'Home Facts section found' : 'full page fallback');
+            
+            // Look for structured patterns like "Bedrooms: 1" or "Bedrooms 1"
             const bedPatterns = [
-                /(\d+)\s+(?:Beds?|BR|Bedrooms?)\b/gi,
-                /(?:Beds?|BR|Bedrooms?)[\s:]+(\d+)/gi,
-                /(\d+)\s*(?:bed|br|bedroom)\b/gi
+                /Bedrooms?\s*:?\s*(\d+)/gi,
+                /(\d+)\s+Beds?\b/gi,
+                /(\d+)\s+BR\b/gi,
+                /(\d+)\s+Bedrooms?\b/gi
             ];
             
             let foundBeds = '';
             for (const pattern of bedPatterns) {
-                const matches = [...pageText.matchAll(pattern)];
+                const matches = [...scanText.matchAll(pattern)];
                 for (const match of matches) {
                     const beds = parseInt(match[1]);
                     // Validate: reasonable range for bedrooms (0-10)
                     if (beds >= 0 && beds <= 10) {
                         foundBeds = beds.toString();
-                        console.log(`✅ Found beds via text scanning: "${match[0]}" -> ${beds}`);
+                        console.log(`✅ Found beds in structured data: "${match[0]}" -> ${beds}`);
                         break;
                     } else {
                         console.log(`❌ Rejected unrealistic bedroom count: ${beds} from "${match[0]}"`);
@@ -268,25 +312,43 @@ async function extractPropertyData(page, source) {
         }
         
         if (!extractedData.baths || extractedData.baths === '') {
-            console.log('🔍 Primary bath selectors failed, trying text scanning...');
-            const pageText = document.body.textContent || '';
+            console.log('🔍 Primary bath selectors failed, trying Home Facts text scanning...');
             
-            // Look for patterns like "1 Bath", "1 BA", "1 Bathroom", etc.
+            // Find Home Facts section
+            let homeFactsSection = null;
+            const allElements = document.querySelectorAll('*');
+            for (const el of allElements) {
+                if (el.textContent && el.textContent.toLowerCase().includes('home facts')) {
+                    homeFactsSection = el;
+                    break;
+                }
+            }
+            
+            if (!homeFactsSection) {
+                homeFactsSection = document.querySelector('.c21__DetailAccordionItem, .property-details, .home-facts, .property-facts');
+            }
+            
+            const scanText = homeFactsSection ? homeFactsSection.textContent : document.body.textContent;
+            console.log('🚿 Scanning text source:', homeFactsSection ? 'Home Facts section found' : 'full page fallback');
+            
+            // Look for structured patterns like "Total bathrooms: 1" or "Bathrooms: 1"
             const bathPatterns = [
-                /(\d+(?:\.\d+)?)\s+(?:Baths?|BA|Bathrooms?)\b/gi,
-                /(?:Baths?|BA|Bathrooms?)[\s:]+(\d+(?:\.\d+)?)/gi,
-                /(\d+(?:\.\d+)?)\s*(?:bath|ba|bathroom)\b/gi
+                /Total\s+bathrooms?\s*:?\s*(\d+(?:\.\d+)?)/gi,
+                /Bathrooms?\s*:?\s*(\d+(?:\.\d+)?)/gi,
+                /(\d+(?:\.\d+)?)\s+Baths?\b/gi,
+                /(\d+(?:\.\d+)?)\s+BA\b/gi,
+                /(\d+(?:\.\d+)?)\s+Bathrooms?\b/gi
             ];
             
             let foundBaths = '';
             for (const pattern of bathPatterns) {
-                const matches = [...pageText.matchAll(pattern)];
+                const matches = [...scanText.matchAll(pattern)];
                 for (const match of matches) {
                     const baths = parseFloat(match[1]);
-                    // Validate: reasonable range for bathrooms (0-20, allow decimals like 1.5)
+                    // Validate: reasonable range for bathrooms (0-20, allow decimals)
                     if (baths >= 0 && baths <= 20) {
                         foundBaths = baths.toString();
-                        console.log(`✅ Found baths via text scanning: "${match[0]}" -> ${baths}`);
+                        console.log(`✅ Found baths in structured data: "${match[0]}" -> ${baths}`);
                         break; 
                     } else {
                         console.log(`❌ Rejected unrealistic bathroom count: ${baths} from "${match[0]}"`);
@@ -298,11 +360,30 @@ async function extractPropertyData(page, source) {
         }
         
         if (!extractedData.sqft || extractedData.sqft === '') {
-            console.log('🔍 Primary sqft selectors failed, trying text scanning...');
-            const pageText = document.body.textContent || '';
+            console.log('🔍 Primary sqft selectors failed, trying Home Facts text scanning...');
             
-            // Look for patterns like "545 sq ft", "545 Sq Ft", "545 sqft", etc.
+            // Find Home Facts section
+            let homeFactsSection = null;
+            const allElements = document.querySelectorAll('*');
+            for (const el of allElements) {
+                if (el.textContent && el.textContent.toLowerCase().includes('home facts')) {
+                    homeFactsSection = el;
+                    break;
+                }
+            }
+            
+            if (!homeFactsSection) {
+                homeFactsSection = document.querySelector('.c21__DetailAccordionItem, .property-details, .home-facts, .property-facts');
+            }
+            
+            const scanText = homeFactsSection ? homeFactsSection.textContent : document.body.textContent;
+            console.log('📐 Scanning text source:', homeFactsSection ? 'Home Facts section found' : 'full page fallback');
+            
+            // Look for structured patterns like "Living area: 545 sq. ft."
             const sqftPatterns = [
+                /Living\s+area\s*:?\s*(\d{2,6})(?:\s*sq\.?\s*ft\.?)?/gi,
+                /Square\s+Foot(?:age)?\s*:?\s*(\d{2,6})/gi,
+                /Total\s+square\s+feet?\s*:?\s*(\d{2,6})/gi,
                 /(\d{2,6})[\s\-]*(?:sq\.?\s*ft\.?|square\s*feet?|sqft)\b/gi,
                 /(\d{2,6})\s+(?:SF|sq)\b/gi,
                 /(?:sq\.?\s*ft\.?|square\s*feet?|sqft)[\s:]+(\d{2,6})/gi
@@ -312,10 +393,10 @@ async function extractPropertyData(page, source) {
             const potentialMatches = [];
             
             for (const pattern of sqftPatterns) {
-                const matches = [...pageText.matchAll(pattern)];
+                const matches = [...scanText.matchAll(pattern)];
                 for (const match of matches) {
                     const sqft = parseInt(match[1]);
-                    // Store all potential matches for analysis
+                    // Store all potential matches for analysis 
                     potentialMatches.push({ sqft, text: match[0] });
                 }
             }
@@ -327,7 +408,7 @@ async function extractPropertyData(page, source) {
                 // Validate: reasonable range for residential square footage (200-5000)
                 if (match.sqft >= 200 && match.sqft <= 5000) {
                     foundSqft = match.sqft.toString();
-                    console.log(`✅ Found sqft via text scanning: "${match.text}" -> ${match.sqft} (closest to expected 545)`);
+                    console.log(`✅ Found sqft in structured data: "${match.text}" -> ${match.sqft}`);  
                     break;
                 } else {
                     console.log(`❌ Rejected unrealistic sqft: ${match.sqft} from "${match.text}"`);
