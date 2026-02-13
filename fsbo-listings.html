@@ -991,7 +991,7 @@
         // Load listings from backend on page load
         async function loadListings() {
             try {
-                const response = await fetch(`${CONFIG.API_BASE_URL}/api/fsbo/listings`);
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
                 const data = await response.json();
                 
                 if (data.success && data.listings.length > 0) {
@@ -1011,7 +1011,7 @@
                 }
             } catch (error) {
                 console.error('❌ Error loading listings:', error);
-                console.log(`ℹ️ Showing example listings. Make sure backend server is running on ${CONFIG.API_BASE_URL}`);
+                console.log(`ℹ️ Showing example listings. Make sure backend server is running on ${API_BASE_URL}`);
             }
         }
 
@@ -1030,7 +1030,7 @@
             const getPhotoUrl = (photoPath) => {
                 if (!photoPath) return null;
                 if (photoPath.startsWith('http')) return photoPath;
-                return `${CONFIG.API_BASE_URL}${photoPath}`;
+                return `${API_BASE_URL}${photoPath}`;
             };
 
             const photos = listing.photos || [];
