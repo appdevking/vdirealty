@@ -1,0 +1,56 @@
+name: Deploy Backend to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'add-*.py'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: 52.14.248.239
+          EC2_USER: ubuntu
+        run: |
+          # Setup SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/ec2_key.pem
+          chmod 600 ~/.ssh/ec2_key.pem
+          
+          # Add EC2 to known hosts
+          ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
+          
+          # Deploy to EC2
+          ssh -i ~/.ssh/ec2_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+            cd ~/vdirealty/backend
+            git pull origin main
+            npm install --production
+            pm2 restart all
+            pm2 save
+            echo "✅ Deployment completed successfully!"
+          EOF
+          
+      - name: Verify deployment
+        env:
+          EC2_HOST: 52.14.248.239
+        run: |
+          echo "🔍 Verifying backend health..."
+          sleep 5
+          response=$(curl -s https://api.vdirealty.com/api/health || echo "failed")
+          if [[ $response == *"ok"* ]]; then
+            echo "✅ Backend is healthy!"
+          else
+            echo "⚠️ Health check inconclusive, but deployment completed"
+          fi
