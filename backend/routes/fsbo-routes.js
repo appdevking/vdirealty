@@ -97,7 +97,7 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
         
         const listingId = result.lastInsertRowid;
         
-        // Insert photos
+        // Insert uploaded photos
         if (files.length > 0) {
             files.forEach((file, index) => {
                 statements.insertPhoto.run(
@@ -110,6 +110,27 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
                     index
                 );
             });
+        }
+        
+        // Insert extracted photo URLs (from listing extraction)
+        if (data.photoUrls) {
+            try {
+                const photoUrls = JSON.parse(data.photoUrls);
+                photoUrls.forEach((url, index) => {
+                    // For URL-based photos, store URL as the path
+                    statements.insertPhoto.run(
+                        listingId,
+                        `extracted-${index}.jpg`, // Placeholder filename
+                        `Extracted Photo ${index + 1}`, // Original name
+                        url, // Store URL as path
+                        0, // Size unknown
+                        'image/jpeg', // Default mime type
+                        files.length + index // Order after uploaded files
+                    );
+                });
+            } catch (e) {
+                console.error('Error parsing photoUrls:', e);
+            }
         }
         
         // Get complete listing data
@@ -155,7 +176,8 @@ router.get('/listings', (req, res) => {
                 photos: photos.map(photo => ({
                     id: photo.id,
                     filename: photo.filename,
-                    url: `/api/fsbo/photo/${photo.filename}`
+                    // If path is a URL (extracted photo), use it directly; otherwise use local endpoint
+                    url: photo.path.startsWith('http') ? photo.path : `/api/fsbo/photo/${photo.filename}`
                 })),
                 // Hide contact info if private
                 email: listing.privateContact ? null : listing.email,
@@ -196,7 +218,8 @@ router.get('/listing/:id', (req, res) => {
                 photos: photos.map(photo => ({
                     id: photo.id,
                     filename: photo.filename,
-                    url: `/api/fsbo/photo/${photo.filename}`
+                    // If path is a URL (extracted photo), use it directly; otherwise use local endpoint
+                    url: photo.path.startsWith('http') ? photo.path : `/api/fsbo/photo/${photo.filename}`
                 })),
                 // Hide contact info if private
                 email: listing.privateContact ? null : listing.email,

@@ -1153,9 +1153,12 @@
             const formMessage = document.getElementById('formMessage');
             const submitBtn = document.getElementById('submitBtn');
 
-            // Validate
-            if (selectedFiles.length === 0) {
-                showMessage('Please upload at least one photo', 'error');
+            // Validate - check both manually uploaded files AND extracted photos
+            const extractedPhotosData = document.getElementById('extractedPhotosData');
+            const hasExtractedPhotos = extractedPhotosData && extractedPhotosData.value && JSON.parse(extractedPhotosData.value).length > 0;
+            
+            if (selectedFiles.length === 0 && !hasExtractedPhotos) {
+                showMessage('Please upload at least one photo or extract photos from a listing URL', 'error');
                 return;
             }
 
@@ -1182,10 +1185,16 @@
                 // Add private contact preference
                 formData.append('privateContact', document.getElementById('privateContact').checked);
 
-                // Add photos
+                // Add manually uploaded photos
                 selectedFiles.forEach(file => {
                     formData.append('photos', file);
                 });
+                
+                // Add extracted photo URLs if available
+                const extractedPhotosField = document.getElementById('extractedPhotosData');
+                if (extractedPhotosField && extractedPhotosField.value) {
+                    formData.append('photoUrls', extractedPhotosField.value);
+                }
 
                 // Submit to backend
                 const response = await fetch(`${API_BASE_URL}/api/fsbo/submit`, {
