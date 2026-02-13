@@ -822,9 +822,9 @@
             
             // Redirect to contact form with pre-filled data
             const params = new URLSearchParams({
-                interest: 'Property Inquiry',
+                interest: 'Request More Information',
                 property: propertyDetails,
-                message: `I am interested in learning more about the property at ${address}.`
+                message: `I would like to learn more about this property.\n\nProperty Details:\n${propertyDetails}`
             });
             
             window.location.href = `index.html#contact?${params.toString()}`;

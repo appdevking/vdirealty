@@ -1069,11 +1069,22 @@
                 <select name="interest" id="interest" required>
                     <option value="" disabled selected>I am interested in... *</option>
                     <option value="Property Inquiry">Property Inquiry</option>
+                    <option value="Schedule a Showing">Schedule a Showing</option>
+                    <option value="Request More Information">Request More Information</option>
+                    <option value="Make an Offer">Make an Offer</option>
+                    <option value="Ask a Question">Ask a Question About This Property</option>
                     <option value="Buying or Selling a Home">Buying or Selling a Home</option>
                     <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
                     <option value="Builder / Development">Builder / Development</option>
                     <option value="Relocation Services">Relocation Services</option>
                 </select>
+                <input type="hidden" name="property" id="property" value="">
+                <div id="propertyInfo" style="display: none; background: #f0f9ff; border-left: 4px solid var(--accent); padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                    <strong style="color: var(--primary); display: block; margin-bottom: 8px;">
+                        <i class="fas fa-home"></i> Property Inquiry:
+                    </strong>
+                    <span id="propertyDetails" style="color: #555; font-size: 0.95rem;"></span>
+                </div>
                 <textarea name="message" id="message" rows="5" placeholder="How can we help? *" required></textarea>
                 <div id="formMessage" style="margin-bottom: 15px; padding: 12px; border-radius: 3px; display: none;"></div>
                 <button type="submit" class="btn-submit" id="submitBtn">
@@ -1529,16 +1540,30 @@
                 }
             }
             
+            // Handle property inquiry from listings page
+            if (urlParams.has('property')) {
+                const propertyDetails = urlParams.get('property');
+                
+                // Populate hidden field
+                const propertyField = document.getElementById('property');
+                if (propertyField) {
+                    propertyField.value = propertyDetails;
+                }
+                
+                // Show and populate property info box
+                const propertyInfo = document.getElementById('propertyInfo');
+                const propertyDetailsSpan = document.getElementById('propertyDetails');
+                if (propertyInfo && propertyDetailsSpan) {
+                    propertyDetailsSpan.textContent = propertyDetails;
+                    propertyInfo.style.display = 'block';
+                }
+            }
+            
             if (urlParams.has('message')) {
                 // Pre-fill message
                 const messageField = document.getElementById('message');
                 if (messageField) {
-                    let message = urlParams.get('message');
-                    // If property details are provided, add them to the message
-                    if (urlParams.has('property')) {
-                        message = `${message}\n\nProperty: ${urlParams.get('property')}`;
-                    }
-                    messageField.value = message;
+                    messageField.value = urlParams.get('message');
                 }
             }
             
