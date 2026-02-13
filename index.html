@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VDI Realty | Residential, Commercial, & Investment</title>
+    <title>VDI Realty | Browse Listings & FSBO Properties - List FREE</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🏠</text></svg>">
+    
+    <meta name="description" content="Browse 500+ residential & commercial listings plus 150+ FSBO properties. List your property FREE - no registration required. Instant publishing, 24/7 access.">
+    <meta name="keywords" content="real estate listings, FSBO, for sale by owner, property listings, homes for sale, commercial real estate, free property listing">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -96,10 +99,28 @@
             background: var(--primary);
             color: white;
         }
-        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links { display: flex; gap: 25px; align-items: center; }
         
         .nav-item {
             position: relative;
+        }
+        
+        .nav-highlight {
+            background: linear-gradient(135deg, var(--accent) 0%, #b08d4b 100%);
+            padding: 10px 20px !important;
+            border-radius: 5px;
+            color: white !important;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(197, 160, 89, 0.3);
+        }
+        
+        .nav-highlight:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
+        }
+        
+        .nav-highlight:before {
+            display: none !important;
         }
         
         .nav-links a {
@@ -644,6 +665,21 @@
         /* Improved section spacing */
         section { position: relative; }
         
+        /* Listings showcase grid */
+        .listings-showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 968px) {
+            .listings-showcase-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+        
         @media (max-width: 968px) {
             .hero h1 { font-size: 2.8rem; }
             .hero p { font-size: 1.1rem; }
@@ -652,12 +688,19 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
             .hero p { font-size: 1rem; }
+            .hero-content div { gap: 10px !important; }
+            .hero-btn { padding: 14px 25px; font-size: 0.9rem; }
             .nav-links { display: none; }
             .menu-toggle { display: block; }
             .mobile-menu { display: block; }
             .split-content { padding: 40px 20px; min-width: 100%; }
             .split-image { min-width: 100%; min-height: 300px; }
-            .stats-bar { gap: 40px; padding: 40px 20px; }
+            .stats-bar { 
+                gap: 20px; 
+                padding: 40px 20px;
+                grid-template-columns: 1fr 1fr;
+                display: grid;
+            }
             .market-grid { grid-template-columns: 1fr; }
             .grid-container { grid-template-columns: 1fr; }
             .form-container { padding: 30px 20px; }
@@ -678,7 +721,19 @@
             <div class="logo">VDI Realty</div>
             <nav class="nav-links">
                 <div class="nav-item">
-                    <a href="about.html">About</a>
+                    <a href="listings.html" class="nav-highlight"><i class="fas fa-home"></i> Browse Listings</a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="fsbo-listings.html" class="nav-highlight"><i class="fas fa-handshake"></i> FSBO</a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="partner-listing.html"><i class="fas fa-plus-circle"></i> Add Listing</a>
+                </div>
+                
+                <div class="nav-item">
+                    <a href="neighborhoods.html">Neighborhoods</a>
                 </div>
                 
                 <div class="nav-item dropdown">
@@ -687,32 +742,12 @@
                         <a href="property-management.html"><i class="fas fa-building"></i> Property Management</a>
                         <a href="buyers-guide.html"><i class="fas fa-home"></i> Buyer's Guide</a>
                         <a href="sellers-guide.html"><i class="fas fa-dollar-sign"></i> Seller's Guide</a>
-                        <a href="relocation.html"><i class="fas fa-map-marked-alt"></i> Relocation Services</a>
-                    </div>
-                </div>
-                
-                <div class="nav-item dropdown">
-                    <a href="fsbo-listings.html" class="dropdown-toggle">FSBO <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="fsbo-listings.html"><i class="fas fa-search"></i> Browse Listings</a>
-                        <a href="fsbo.html"><i class="fas fa-plus-circle"></i> List Your Property</a>
-                    </div>
-                </div>
-                
-                <div class="nav-item dropdown">
-                    <a href="listings.html" class="dropdown-toggle">Listings <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="listings.html"><i class="fas fa-list"></i> Browse Listings</a>
-                        <a href="partner-listing.html"><i class="fas fa-plus-circle"></i> Add Your Listing</a>
+                        <a href="relocation.html"><i class="fas fa-map-marked-alt"></i> Relocation</a>
                     </div>
                 </div>
                 
                 <div class="nav-item">
-                    <a href="neighborhoods.html">Neighborhoods</a>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="tools.html"><i class="fas fa-calculator"></i> Tools</a>
+                    <a href="about.html">About</a>
                 </div>
                 
                 <div class="nav-item">
@@ -726,46 +761,122 @@
     </header>
     
     <nav class="mobile-menu" id="mobileMenu">
-        <a href="about.html">About</a>
+        <a href="listings.html" style="background: var(--accent); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0; font-weight: 700;"><i class="fas fa-home"></i> Browse All Listings</a>
+        <a href="fsbo-listings.html" style="background: var(--accent); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0; font-weight: 700;"><i class="fas fa-handshake"></i> FSBO Properties</a>
+        <a href="partner-listing.html" style="background: var(--primary); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0; font-weight: 700;"><i class="fas fa-plus-circle"></i> Add Your Listing FREE</a>
+        <a href="fsbo.html"><i class="fas fa-file-invoice-dollar"></i> List FSBO Property</a>
+        <a href="neighborhoods.html">Neighborhoods</a>
         <a href="#services" onclick="toggleMobileMenu()">Services</a>
         <a href="property-management.html">Property Management</a>
-        <a href="fsbo-listings.html"><i class="fas fa-search"></i> FSBO Listings</a>
-        <a href="fsbo.html"><i class="fas fa-plus-circle"></i> List Your Property</a>
-        <a href="listings.html"><i class="fas fa-list"></i> All Listings</a>
-        <a href="partner-listing.html" style="background: var(--accent); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0;"><i class="fas fa-magic"></i> Quick Add Listing</a>
-        <a href="neighborhoods.html">Neighborhoods</a>
-        <a href="testimonials.html">Testimonials</a>
         <a href="buyers-guide.html">Buyer's Guide</a>
         <a href="sellers-guide.html">Seller's Guide</a>
+        <a href="about.html">About</a>
+        <a href="testimonials.html">Testimonials</a>
         <a href="tools.html"><i class="fas fa-calculator"></i> Calculators</a>
-        <a href="blog.html">Resources</a>
-        <a href="#builders" onclick="toggleMobileMenu()">For Builders</a>
-        <a href="#network" onclick="toggleMobileMenu()">Network</a>
         <a href="#contact" onclick="toggleMobileMenu()">Contact Us</a>
     </nav>
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Building Wealth Through Real Estate</h1>
-            <p>Connecting Homeowners, Investors, and Developers to the opportunities that matter.</p>
-            <a href="#contact" class="hero-btn">Start a Conversation</a>
+            <h1>Find Your Next Property</h1>
+            <p>Browse thousands of listings or list your property for FREE - No registration required</p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+                <a href="listings.html" class="hero-btn" style="background: var(--accent);">
+                    <i class="fas fa-search"></i> Browse All Listings
+                </a>
+                <a href="fsbo-listings.html" class="hero-btn" style="background: var(--secondary);">
+                    <i class="fas fa-handshake"></i> FSBO Properties
+                </a>
+                <a href="partner-listing.html" class="hero-btn" style="background: white; color: var(--primary); border: 2px solid var(--primary);">
+                    <i class="fas fa-plus-circle"></i> Add Your Listing FREE
+                </a>
+            </div>
         </div>
     </section>
 
     <div class="stats-bar">
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-handshake"></i></span>
-            <span class="stat-label">Well Connected</span>
+            <span class="stat-number" id="listingCount">500+</span>
+            <span class="stat-label">Active Listings</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-chart-line"></i></span>
-            <span class="stat-label">Market Insight</span>
+            <span class="stat-number" id="fsboCount">150+</span>
+            <span class="stat-label">FSBO Properties</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-star"></i></span>
-            <span class="stat-label">Expert Guidance</span>
+            <span class="stat-number"><i class="fas fa-dollar-sign"></i> FREE</span>
+            <span class="stat-label">No Fees to List</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number"><i class="fas fa-clock"></i> 24/7</span>
+            <span class="stat-label">Instant Publishing</span>
         </div>
     </div>
+
+    <!-- Listing Options Showcase -->
+    <section style="padding: 80px 20px; background: white;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div class="section-title" style="margin-bottom: 50px;">
+                <h2>Explore Properties</h2>
+                <div class="underline"></div>
+                <p style="margin-top: 15px; color: #666; font-size: 1.1rem;">
+                    Access hundreds of properties - traditional listings and for-sale-by-owner opportunities
+                </p>
+            </div>
+            
+            <div class="listings-showcase-grid">
+                <!-- All Listings Card -->
+                <a href="listings.html" style="text-decoration: none; display: block; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.3s ease; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); min-height: 350px;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'">
+                    <div style="padding: 50px 40px; color: white;">
+                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.9;">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 style="font-size: 2rem; margin-bottom: 15px; color: white;">All Listings</h3>
+                        <p style="font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; line-height: 1.6;">
+                            Browse our complete collection of residential, commercial, and investment properties
+                        </p>
+                        <div style="display: inline-block; background: var(--accent); color: white; padding: 12px 30px; border-radius: 5px; font-weight: 700; font-size: 1rem;">
+                            <i class="fas fa-arrow-right"></i> Browse 500+ Listings
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- FSBO Card -->
+                <a href="fsbo-listings.html" style="text-decoration: none; display: block; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.3s ease; background: linear-gradient(135deg, var(--accent) 0%, #b08d4b 100%); min-height: 350px;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'">
+                    <div style="padding: 50px 40px; color: white;">
+                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.9;">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 style="font-size: 2rem; margin-bottom: 15px; color: white;">FSBO Properties</h3>
+                        <p style="font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; line-height: 1.6;">
+                            Discover For Sale By Owner listings - direct deals with no agent fees
+                        </p>
+                        <div style="display: inline-block; background: white; color: var(--accent); padding: 12px 30px; border-radius: 5px; font-weight: 700; font-size: 1rem;">
+                            <i class="fas fa-arrow-right"></i> View 150+ FSBO Listings
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Add Listing CTA -->
+            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; border: 2px dashed var(--accent);">
+                <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 15px;">
+                    <i class="fas fa-plus-circle" style="color: var(--accent);"></i> Got a Property to List?
+                </h3>
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;">
+                    List for FREE in under 60 seconds - No registration, no hidden fees, no hassle
+                </p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <a href="partner-listing.html" style="display: inline-block; padding: 15px 35px; background: var(--primary); color: white; text-decoration: none; border-radius: 5px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='var(--secondary)'" onmouseout="this.style.background='var(--primary)'">
+                        <i class="fas fa-magic"></i> Quick Add Listing
+                    </a>
+                    <a href="fsbo.html" style="display: inline-block; padding: 15px 35px; background: var(--accent); color: white; text-decoration: none; border-radius: 5px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='#b08d4b'" onmouseout="this.style.background='var(--accent)'">
+                        <i class="fas fa-file-invoice-dollar"></i> List FSBO Property
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Quick Listing CTA -->
     <section class="quick-listing-cta reveal">
@@ -807,28 +918,22 @@
         </div>
         <div class="grid-container">
             <div class="service-card">
-                <div class="icon-box"><i class="fas fa-home"></i></div>
-                <h3>Home & Investment</h3>
-                <p>We help homeowners, AirBnB hosts, and investors identify properties that generate long-term value.</p>
+                <div class="icon-box"><i class="fas fa-search"></i></div>
+                <h3>Browse All Listings</h3>
+                <p>Explore our complete collection of 500+ residential, commercial, and investment properties available now.</p>
                 <a href="listings.html" class="link-text">View All Properties →</a>
             </div>
             <div class="service-card">
-                <div class="icon-box"><i class="fas fa-city"></i></div>
-                <h3>Builder Services</h3>
-                <p>Comprehensive land acquisition and pre-sale marketing for developers.</p>
-                <a href="builders.html" class="link-text">Partner With Us →</a>
+                <div class="icon-box"><i class="fas fa-handshake"></i></div>
+                <h3>FSBO Properties</h3>
+                <p>Discover For Sale By Owner listings with direct deals and no agent commissions - save thousands.</p>
+                <a href="fsbo-listings.html" class="link-text">Browse FSBO Listings →</a>
             </div>
             <div class="service-card">
-                <div class="icon-box"><i class="fas fa-plane-departure"></i></div>
-                <h3>Corporate Relocation</h3>
-                <p>Concierge-level service for executives moving to the Greater Metro area.</p>
-                <a href="relocation.html" class="link-text">Get the Guide →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-couch"></i></div>
-                <h3>Professional Staging</h3>
-                <p>Transform your property with expert staging to maximize appeal and sale price.</p>
-                <a href="staging.html" class="link-text">Learn More →</a>
+                <div class="icon-box"><i class="fas fa-plus-circle"></i></div>
+                <h3>List Your Property</h3>
+                <p>Add your listing in under 60 seconds - completely FREE with no registration or hidden fees required.</p>
+                <a href="partner-listing.html" class="link-text">Add Listing Now →</a>
             </div>
             <div class="service-card">
                 <div class="icon-box"><i class="fas fa-building"></i></div>
