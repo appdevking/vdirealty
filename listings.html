@@ -777,7 +777,7 @@
                             <i class="fas fa-envelope"></i> Contact
                         </a>
                         <a href="#" class="btn btn-buyer-assist" onclick="requestBuyerAssistance('${listing.address || 'this property'}', ${listing.price || 0}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft || 0}); return false;">
-                            <i class="fas fa-handshake"></i> Get VDI Help
+                            <i class="fas fa-handshake"></i> Get Represented
                         </a>
                         ${listingUrl ? `<a href="${listingUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
                     </div>
@@ -986,7 +986,7 @@
             });
             
             // Redirect to contact form
-            window.location.href = `index.html?${params.toString()}#contact`;
+            window.location.href = `index.html#contact?${params.toString()}`;
         }
         
         // Sample listings (for demo)
