@@ -673,24 +673,42 @@
         
         // Load listings from API
         async function loadListings() {
+            let listings = [];
+            
+            // Try backend API first
             try {
-                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings?source=partner`);
-                const data = await response.json();
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings?source=partner`, {
+                    signal: AbortSignal.timeout(5000) // 5 second timeout
+                });
                 
-                if (data.success && data.listings) {
-                    allListings = data.listings;
-                    displayListings(allListings);
-                    updateListingCount(allListings.length);
-                } else {
-                    console.error('Failed to load listings');
-                    displayListings([]);
-                    updateListingCount(0);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.listings) {
+                        listings = data.listings;
+                        console.log('✅ Loaded', listings.length, 'listings from backend');
+                    }
                 }
             } catch (error) {
-                console.error('Error loading listings:', error);
-                displayListings([]);
-                updateListingCount(0);
+                console.log('⚠️ Backend unavailable, loading from localStorage:', error.message);
             }
+            
+            // Fallback to localStorage if backend failed or returned no listings
+            if (listings.length === 0) {
+                const localListings = localStorage.getItem('vdiListings');
+                if (localListings) {
+                    try {
+                        listings = JSON.parse(localListings);
+                        console.log('✅ Loaded', listings.length, 'listings from localStorage');
+                    } catch (e) {
+                        console.error('Error parsing localStorage listings:', e);
+                        listings = [];
+                    }
+                }
+            }
+            
+            allListings = listings;
+            displayListings(allListings);
+            updateListingCount(allListings.length);
         }
         
         // Update listing count
