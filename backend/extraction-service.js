@@ -28,7 +28,7 @@ async function extractPropertyData(page, source) {
         const getTextFromSelectors = (selectors) => {
             for (const selector of selectors) {
                 const el = document.querySelector(selector);
-                if (el && el.textContent.trim()) {
+                if (el && el.textContent && el.textContent.trim()) {
                     console.log(`✅ Selector "${selector}" found: "${el.textContent.trim()}"`);
                     return el.textContent.trim();
                 }
@@ -88,50 +88,71 @@ async function extractPropertyData(page, source) {
                     'h2[class*="price"]'
                 ],
                 beds: [
-                    // Primary selectors - look for specific bedroom data
+                    // Primary Century 21 selectors
                     'li[data-test="property-bedroom"] .Text--numbers',
                     'li[data-test="property-bedroom"] span', 
                     '.c21__DetailFactsCallout span.Text--numbers:first-of-type',
-                    // Fallback selectors
                     '.c21__DetailFactsCallout li:first-child .Text--numbers',
                     '.c21__DetailFactsCallout li:first-child span',
-                    '.property-facts .bedroom-count',
-                    '.bed-count .number',
-                    'span[class*="bedroom"]',
-                    // Generic patterns that might work
-                    '[class*="bedroom"] span',
-                    '[class*="bed"] span[class*="number"]'
+                    '.c21__DetailFactsCallout li:first-child',
+                    'div[class*="DetailFacts"] li:first-child span',
+                    'div[class*="DetailFacts"] li:first-child',
+                    
+                    // Universal fallback selectors (work on many sites)
+                    'span[data-testid*="bed"]', 'div[data-testid*="bed"]',
+                    '*[class*="bed-count"] span', '*[class*="bed-count"]',
+                    '*[class*="bedrooms"] span', '*[class*="bedrooms"]',
+                    '*[class*="bedroom"] span', '*[class*="bedroom"]',
+                    '*[aria-label*="bedroom"]',
+                    
+                    // Try to find any span/div that might contain bed info
+                    'span[title*="bed"]', 'span[title*="Bed"]',
+                    'div[title*="bed"]', 'div[title*="Bed"]'
                 ],
                 baths: [
-                    // Primary selectors - look for specific bathroom data  
+                    // Primary Century 21 selectors
                     'li[data-test="property-bathroom"] .Text--numbers',
                     'li[data-test="property-bathroom"] span',
                     '.c21__DetailFactsCallout span.Text--numbers:nth-of-type(2)',
-                    // Fallback selectors
                     '.c21__DetailFactsCallout li:nth-child(2) .Text--numbers', 
                     '.c21__DetailFactsCallout li:nth-child(2) span',
-                    '.property-facts .bathroom-count', 
-                    '.bath-count .number',
-                    'span[class*="bathroom"]',
-                    // Generic patterns that might work
-                    '[class*="bathroom"] span',
-                    '[class*="bath"] span[class*="number"]'
+                    '.c21__DetailFactsCallout li:nth-child(2)',
+                    'div[class*="DetailFacts"] li:nth-child(2) span',
+                    'div[class*="DetailFacts"] li:nth-child(2)',
+                    
+                    // Universal fallback selectors
+                    'span[data-testid*="bath"]', 'div[data-testid*="bath"]',
+                    '*[class*="bath-count"] span', '*[class*="bath-count"]',
+                    '*[class*="bathrooms"] span', '*[class*="bathrooms"]',
+                    '*[class*="bathroom"] span', '*[class*="bathroom"]',
+                    '*[aria-label*="bathroom"]',
+                    
+                    // Try to find any span/div that might contain bath info
+                    'span[title*="bath"]', 'span[title*="Bath"]',
+                    'div[title*="bath"]', 'div[title*="Bath"]'
                 ],
                 sqft: [
-                    // Primary selectors - look for specific sqft data
+                    // Primary Century 21 selectors
                     'li[data-test="property-sqft"] .Text--numbers',
                     'li[data-test="property-sqft"] span',
                     '.c21__DetailFactsCallout span.Text--numbers:last-of-type',
-                    // Fallback selectors
                     '.c21__DetailFactsCallout li:last-child .Text--numbers',
                     '.c21__DetailFactsCallout li:last-child span',
-                    '.property-facts .sqft-count',
-                    '.sqft-count .number', 
-                    'span[class*="sqft"]',
-                    'span[class*="square"]',
-                    // Generic patterns that might work
-                    '[class*="sqft"] span',
-                    '[class*="square"] span[class*="number"]'
+                    '.c21__DetailFactsCallout li:last-child',
+                    'div[class*="DetailFacts"] li:last-child span',
+                    'div[class*="DetailFacts"] li:last-child',
+                    
+                    // Universal fallback selectors
+                    'span[data-testid*="sqft"]', 'span[data-testid*="sq-ft"]',
+                    'div[data-testid*="sqft"]', 'div[data-testid*="sq-ft"]',
+                    '*[class*="sqft"] span', '*[class*="sqft"]',
+                    '*[class*="square-feet"] span', '*[class*="square-feet"]',
+                    '*[class*="sq-ft"] span', '*[class*="sq-ft"]',
+                    '*[aria-label*="square"]',
+                    
+                    // Try to find any span/div that might contain sqft info
+                    'span[title*="sq"]', 'span[title*="Sq"]', 
+                    'div[title*="sq"]', 'div[title*="Sq"]'
                 ],
                 description: [
                     '.c21__DetailDescription p',
@@ -203,7 +224,7 @@ async function extractPropertyData(page, source) {
         });
 
         // Return extracted data
-        return {
+        const extractedData = {
             address: getTextFromSelectors(siteSelectors.address),
             price: getTextFromSelectors(siteSelectors.price),
             beds: getTextFromSelectors(siteSelectors.beds),
@@ -212,6 +233,78 @@ async function extractPropertyData(page, source) {
             description: getTextFromSelectors(siteSelectors.description),
             images: images.slice(0, 15) // Get more images
         };
+
+        // If primary selectors failed, try broad text scanning as fallback
+        console.log('🔍 Checking if fallback scanning is needed...');
+        
+        if (!extractedData.beds || extractedData.beds === '') {
+            console.log('🔍 Primary bed selectors failed, trying text scanning...');
+            const pageText = document.body.textContent || '';
+            
+            // Look for patterns like "1 Bed", "1 BR", "1 Bedroom", etc.
+            const bedPatterns = [
+                /(\d+)\s*(?:Bed|BR|Bedroom)s?/i,
+                /(?:Bed|BR|Bedroom)s?\s*[:\-]?\s*(\d+)/i,
+                /(\d+)\s*(?:bed|br|bedroom)/i
+            ];
+            
+            for (const pattern of bedPatterns) {
+                const match = pageText.match(pattern);
+                if (match && match[1]) {
+                    extractedData.beds = match[1];
+                    console.log(`✅ Found beds via text scanning: "${match[0]}" -> ${match[1]}`);
+                    break;
+                }
+            }
+        }
+        
+        if (!extractedData.baths || extractedData.baths === '') {
+            console.log('🔍 Primary bath selectors failed, trying text scanning...');
+            const pageText = document.body.textContent || '';
+            
+            // Look for patterns like "1 Bath", "1 BA", "1 Bathroom", etc.
+            const bathPatterns = [
+                /(\d+\.?\d*)\s*(?:Bath|BA|Bathroom)s?/i,
+                /(?:Bath|BA|Bathroom)s?\s*[:\-]?\s*(\d+\.?\d*)/i,
+                /(\d+\.?\d*)\s*(?:bath|ba|bathroom)/i
+            ];
+            
+            for (const pattern of bathPatterns) {
+                const match = pageText.match(pattern);
+                if (match && match[1]) {
+                    extractedData.baths = match[1];
+                    console.log(`✅ Found baths via text scanning: "${match[0]}" -> ${match[1]}`);
+                    break;
+                }
+            }
+        }
+        
+        if (!extractedData.sqft || extractedData.sqft === '') {
+            console.log('🔍 Primary sqft selectors failed, trying text scanning...');
+            const pageText = document.body.textContent || '';
+            
+            // Look for patterns like "545 sq ft", "545 Sq Ft", "545 sqft", etc.
+            const sqftPatterns = [
+                /(\d{3,6})[\s\-]*(?:sq\.?\s*ft\.?|square\s*feet?|sqft)/i,
+                /(?:sq\.?\s*ft\.?|square\s*feet?|sqft)[\s\-]*[:\-]?\s*(\d{3,6})/i,
+                /(\d{3,6})\s*(?:sf|sq)/i
+            ];
+            
+            for (const pattern of sqftPatterns) {
+                const match = pageText.match(pattern);
+                if (match && match[1]) {
+                    const sqft = parseInt(match[1]);
+                    // Reasonable range for residential square footage
+                    if (sqft >= 200 && sqft <= 10000) {
+                        extractedData.sqft = match[1];
+                        console.log(`✅ Found sqft via text scanning: "${match[0]}" -> ${match[1]}`);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return extractedData;
     }, source);
 }
 
