@@ -1637,13 +1637,26 @@
                     formData.append('photoUrls', extractedPhotosField.value);
                 }
 
-                // Submit to backend
-                const response = await fetch(`${API_BASE_URL}/api/fsbo/submit`, {
-                    method: 'POST',
-                    body: formData
-                });
+                let result = { success: false };
+                
+                // Try backend first, fallback to client-side storage
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/fsbo/submit`, {
+                        method: 'POST',
+                        body: formData,
+                        signal: AbortSignal.timeout(5000) // 5 second timeout
+                    });
 
-                const result = await response.json();
+                    if (response.ok) {
+                        result = await response.json();
+                    } else {
+                        console.log('Backend not available, using client-side storage');
+                        result = saveListingClientSide(formData);
+                    }
+                } catch (error) {
+                    console.log('Backend error, using client-side storage:', error.message);
+                    result = saveListingClientSide(formData);
+                }
 
                 if (result.success) {
                     const listingId = result.listingId;
@@ -1651,12 +1664,14 @@
                         ? ` <a href="listings.html#listing-${listingId}" style="color: var(--accent); text-decoration: underline; font-weight: bold;">View your listing now →</a>` 
                         : '';
                     
-                    showMessage(
-                        `✓ Thank you! Your listing has been submitted successfully and is now live.${viewListingLink} You will receive a confirmation email shortly.`, 
-                        'success'
-                    );
+                    const message = result.clientSide
+                        ? `✓ Thank you! Your listing has been saved locally.${viewListingLink} Note: This is stored in your browser only (backend unavailable).`
+                        : `✓ Thank you! Your listing has been submitted successfully and is now live.${viewListingLink} You will receive a confirmation email shortly.`;
                     
-                    // Save to localStorage for Browse Listings page
+                    showMessage(message, 'success');
+                    
+                    // Save to localStorage for Browse Listings page (if not already saved by client-side function)
+                    if (!result.clientSide) {
                     const listingData = {
                         id: listingId,
                         address: document.getElementById('address').value,
@@ -1682,6 +1697,7 @@
                     };
                     
                     saveListingToStorage(listingData);
+                    }
                     
                     // Reset form
                     document.getElementById('partnerListingForm').reset();
@@ -2701,6 +2717,50 @@
                 setTimeout(() => {
                     statusMessage.style.display = 'none';
                 }, 5000);
+            }
+        }
+        
+        // Client-side listing submission (when backend unavailable)
+        function saveListingClientSide(formData) {
+            try {
+                const listingId = 'local_' + Date.now();
+                const listingData = {
+                    id: listingId,
+                    address: formData.get('address'),
+                    city: formData.get('city'),
+                    state: formData.get('state'),
+                    zip: formData.get('zip'),
+                    price: parseInt(formData.get('price')) || 0,
+                    propertyType: formData.get('propertyType'),
+                    bedrooms: parseInt(formData.get('bedrooms')) || 0,
+                    bathrooms: parseFloat(formData.get('bathrooms')) || 0,
+                    sqft: parseInt(formData.get('sqft')) || 0,
+                    yearBuilt: formData.get('yearBuilt'),
+                    description: formData.get('description'),
+                    mlsNumber: formData.get('mlsNumber'),
+                    externalUrl: formData.get('externalUrl'),
+                    sourceUrl: formData.get('externalUrl'),
+                    status: 'Active',
+                    photos: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
+                    contactName: `${formData.get('firstName')} ${formData.get('lastName')}`,
+                    contactEmail: formData.get('email'),
+                    contactPhone: formData.get('phone'),
+                    storedLocally: true  // Flag to indicate this is client-side only
+                };
+                
+                saveListingToStorage(listingData);
+                
+                return {
+                    success: true,
+                    listingId: listingId,
+                    clientSide: true
+                };
+            } catch (error) {
+                console.error('Client-side save error:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
             }
         }
         
