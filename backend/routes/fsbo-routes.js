@@ -221,7 +221,7 @@ router.get('/listings', (req, res) => {
         
         // Get listings filtered by source if provided
         const listings = source 
-            ? statements.getActiveListingsBySource.all(source)
+            ? statements.getActiveListingsBySource.all(source, source)
             : statements.getActiveListings.all();
         
         // Attach photos to each listing

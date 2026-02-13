@@ -119,13 +119,24 @@ const runMigrations = () => {
     
     // Add missing columns
     let migrationsRun = 0;
+    let listingSourceAdded = false;
     newColumns.forEach(column => {
         if (!existingColumns.includes(column.name)) {
             console.log(`  ➕ Adding column: ${column.name} (${column.type})`);
             db.exec(`ALTER TABLE listings ADD COLUMN ${column.name} ${column.type}`);
+            if (column.name === 'listingSource') {
+                listingSourceAdded = true;
+            }
             migrationsRun++;
         }
     });
+    
+    // Update existing records with NULL listingSource to 'fsbo'
+    // This handles both: newly created column and existing column with NULL values
+    if (listingSourceAdded || existingColumns.includes('listingSource')) {
+        db.exec(`UPDATE listings SET listingSource = 'fsbo' WHERE listingSource IS NULL`);
+        console.log('  🔄 Updated NULL listingSource values to \'fsbo\'');
+    }
     
     // Make bedrooms and bathrooms nullable if they're NOT NULL (for older databases)
     // SQLite doesn't support ALTER COLUMN, so we'll skip this for now
@@ -173,7 +184,8 @@ const statements = {
     // Get active listings by source
     getActiveListingsBySource: db.prepare(`
         SELECT * FROM listings 
-        WHERE status = 'active' AND expirationDate > datetime('now') AND listingSource = ?
+        WHERE status = 'active' AND expirationDate > datetime('now') 
+        AND (listingSource = ? OR (listingSource IS NULL AND ? = 'fsbo'))
         ORDER BY createdAt DESC
     `),
 
