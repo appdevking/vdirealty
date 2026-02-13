@@ -1833,7 +1833,7 @@
             if (urlLower.includes('realtor.com')) return 'realtor';
             if (urlLower.includes('redfin.com')) return 'redfin';
             if (urlLower.includes('trulia.com')) return 'trulia';
-            if (urlLower.includes('century21.com')) return 'century21';
+            if (urlLower.includes('century21')) return 'century21'; // Catches century21.com, century21northhomes.com, etc.
             if (urlLower.includes('remax.com')) return 'remax';
             if (urlLower.includes('coldwellbanker.com')) return 'coldwellbanker';
             if (urlLower.includes('compass.com')) return 'compass';
@@ -1842,44 +1842,195 @@
             return 'universal';
         }
         
-        // Fetch listing data using AWS backend (Puppeteer)
+        // Fetch listing data - CLIENT-SIDE EXTRACTION (no backend needed)
         async function fetchListingData(url, source) {
+            console.log('[Fetch] Client-side extraction for:', source);
+            console.log('[Fetch] URL:', url);
+            
+            // Use client-side extraction for Century 21
+            if (source === 'century21') {
+                return await extractC21Listing(url);
+            }
+            
+            // For other sources, try backend first then fallback
             try {
-                console.log('[Fetch] Starting API call to:', `${API_BASE_URL}/api/fsbo/extract`);
-                console.log('[Fetch] Request URL:', url);
-                
+                console.log('[Fetch] Trying backend for:', source);
                 const response = await fetch(`${API_BASE_URL}/api/fsbo/extract`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ url })
+                    body: JSON.stringify({ url }),
+                    timeout: 5000 // 5 second timeout
                 });
                 
-                console.log('[Fetch] Response status:', response.status);
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        return result.data;
+                    }
+                }
+            } catch (error) {
+                console.log('[Fetch] Backend unavailable, trying client-side extraction');
+            }
+            
+            // Fallback to client-side extraction
+            throw new Error('This listing source is not yet supported for client-side extraction. Currently only Century 21 is supported.');
+        }
+        
+        // CLIENT-SIDE CENTURY 21 EXTRACTION
+        async function extractC21Listing(url) {
+            console.log('🏠 [C21] Starting client-side extraction for C21');
+            
+            try {
+                // Use CORS proxy to fetch the page
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                console.log('🌐 [C21] Fetching via proxy:', proxyUrl);
                 
+                const response = await fetch(proxyUrl);
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('[Fetch] Error response:', errorText);
-                    throw new Error(`Extraction failed (status ${response.status}). The listing site may be blocking automated access or the page structure is not supported.`);
+                    throw new Error('Failed to fetch listing page');
                 }
                 
-                const result = await response.json();
-                console.log('[Fetch] API response:', result);
+                const data = await response.json();
+                console.log('✅ [C21] Page fetched successfully');
                 
-                if (result.success && result.data) {
-                    return result.data;
-                } else {
-                    throw new Error(result.error || 'Failed to extract listing data. Please try a different listing or enter details manually.');
+                // Parse the HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data.contents, 'text/html');
+                console.log('📄 [C21] HTML parsed');
+                
+                // Extract data using C21 selectors
+                const extractedData = {
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    price: 0,
+                    propertyType: 'Single-Family',
+                    bedrooms: 0,
+                    bathrooms: 0,
+                    sqft: 0,
+                    yearBuilt: '',
+                    description: '',
+                    mls: '',
+                    images: []
+                };
+                
+                // Extract address from h1
+                const addressEl = doc.querySelector('h1.c21__DetailMasthead-address, h1[itemprop="address"], .property-address h1, .pdp-address h1');
+                if (addressEl) {
+                    const fullAddress = addressEl.textContent.trim();
+                    console.log('📍 [C21] Full address:', fullAddress);
+                    
+                    // Parse address format: "16454 108th Ave NE, Bothell, WA 98011"
+                    const addressParts = fullAddress.split(',').map(p => p.trim());
+                    if (addressParts.length >= 3) {
+                        extractedData.address = addressParts[0]; // Street address
+                        extractedData.city = addressParts[1]; // City
+                        
+                        // Split state and zip
+                        const stateZip = addressParts[2].split(/\s+/);
+                        extractedData.state = stateZip[0] || '';
+                        extractedData.zip = stateZip[1] || '';
+                    } else {
+                        extractedData.address = fullAddress;
+                    }
                 }
+                
+                // Extract price
+                const priceEl = doc.querySelector('.c21__DetailMasthead-price .Text--decorativePrice, .price, [data-testid="price"]');
+                if (priceEl) {
+                    const priceText = priceEl.textContent.trim();
+                    extractedData.price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+                    console.log('💰 [C21] Price:', extractedData.price);
+                }
+                
+                // Extract beds, baths, sqft from Home Facts section
+                const extractFact = (label) => {
+                    // Find dt element containing the label
+                    const dtElements = doc.querySelectorAll('dt');
+                    for (const dt of dtElements) {
+                        if (dt.textContent.includes(label)) {
+                            // Get the next dd element
+                            const dd = dt.nextElementSibling;
+                            if (dd && dd.tagName === 'DD') {
+                                return dd.textContent.trim();
+                            }
+                        }
+                    }
+                    return null;
+                };
+                
+                // Bedrooms
+                const bedsText = extractFact('Bedrooms') || extractFact('Beds');
+                if (bedsText) {
+                    extractedData.bedrooms = parseFloat(bedsText.replace(/[^0-9.]/g, '')) || 0;
+                    console.log('🛏️ [C21] Bedrooms:', extractedData.bedrooms);
+                }
+                
+                // Bathrooms
+                const bathsText = extractFact('Bathrooms') || extractFact('Baths') || extractFact('Full baths');
+                if (bathsText) {
+                    extractedData.bathrooms = parseFloat(bathsText.replace(/[^0-9.]/g, '')) || 0;
+                    console.log('🚿 [C21] Bathrooms:', extractedData.bathrooms);
+                }
+                
+                // Square feet
+                const sqftText = extractFact('Living area') || extractFact('Sqft') || extractFact('Square Feet');
+                if (sqftText) {
+                    extractedData.sqft = parseInt(sqftText.replace(/[^0-9]/g, '')) || 0;
+                    console.log('📐 [C21] Sqft:', extractedData.sqft);
+                }
+                
+                // Year built
+                const yearText = extractFact('Year built');
+                if (yearText) {
+                    extractedData.yearBuilt = yearText.replace(/[^0-9]/g, '');
+                    console.log('📅 [C21] Year:', extractedData.yearBuilt);
+                }
+                
+                // Property type
+                const typeText = extractFact('Property type') || extractFact('Type');
+                if (typeText) {
+                    extractedData.propertyType = typeText;
+                    console.log('🏘️ [C21] Type:', extractedData.propertyType);
+                }
+                
+                // Description
+                const descEl = doc.querySelector('.c21__DetailDescription, .property-description, [itemprop="description"]');
+                if (descEl) {
+                    extractedData.description = descEl.textContent.trim().substring(0, 1000); // Limit to 1000 chars
+                    console.log('📝 [C21] Description length:', extractedData.description.length);
+                }
+                
+                // MLS number
+                const mlsMatch = doc.body.textContent.match(/MLS[#:\s]*([A-Z0-9-]+)/i);
+                if (mlsMatch) {
+                    extractedData.mls = mlsMatch[1];
+                    console.log('🔑 [C21] MLS:', extractedData.mls);
+                }
+                
+                // Extract images
+                const imageElements = doc.querySelectorAll('img[src*="c21stores"], img.property-image, .gallery img');
+                extractedData.images = Array.from(imageElements)
+                    .map(img => img.src)
+                    .filter(src => src && src.startsWith('http'))
+                    .slice(0, 10); // Limit to 10 images
+                console.log('🖼️ [C21] Images found:', extractedData.images.length);
+                
+                console.log('✅ [C21] Extraction complete:', extractedData);
+                
+                // Validate we got meaningful data
+                if (!extractedData.address && !extractedData.price) {
+                    throw new Error('Could not extract property data. The page structure may have changed.');
+                }
+                
+                return extractedData;
                 
             } catch (error) {
-                console.error('[Fetch] Exception:', error);
-                // Re-throw with more context if it's a network error
-                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    throw new Error('Network error: Cannot reach extraction service. Please check your connection.');
-                }
-                throw error;
+                console.error('❌ [C21] Extraction failed:', error);
+                throw new Error(`Century 21 extraction failed: ${error.message}`);
             }
         }
         
