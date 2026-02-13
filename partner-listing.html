@@ -1998,8 +1998,41 @@
                     console.log('📋 [C21] Extracting from JSON data...');
                     console.log('📋 [C21 DEBUG] JSON structure:', JSON.stringify(propertyData, null, 2).substring(0, 500));
                     
-                    // Extract address
-                    if (propertyData.address) {
+                    // Extract address from "name" field (C21 format: "16454 108th Avenue NE Bothell WA 98011")
+                    if (propertyData.name) {
+                        const fullAddress = propertyData.name;
+                        console.log('📍 [C21] Full address from name:', fullAddress);
+                        
+                        // Parse: "16454 108th Avenue NE Bothell WA 98011" -> street, city, state, zip
+                        // Format: [street] [city] [STATE] [ZIP]
+                        const parts = fullAddress.trim().split(/\s+/);
+                        const zipMatch = fullAddress.match(/\b(\d{5})$/);
+                        const stateMatch = fullAddress.match(/\b([A-Z]{2})\s+\d{5}$/);
+                        
+                        if (zipMatch && stateMatch) {
+                            extractedData.zip = zipMatch[1];
+                            extractedData.state = stateMatch[1];
+                            
+                            // Everything before "STATE ZIP" is street + city
+                            const beforeStateZip = fullAddress.substring(0, stateMatch.index).trim();
+                            
+                            // City is usually the last word before state
+                            const beforeParts = beforeStateZip.split(/\s+/);
+                            if (beforeParts.length > 1) {
+                                extractedData.city = beforeParts[beforeParts.length - 1];
+                                extractedData.address = beforeParts.slice(0, -1).join(' ');
+                            } else {
+                                extractedData.address = beforeStateZip;
+                            }
+                        } else {
+                            extractedData.address = fullAddress;
+                        }
+                        
+                        console.log('📍 [C21] Parsed - Address:', extractedData.address, 'City:', extractedData.city, 'State:', extractedData.state, 'Zip:', extractedData.zip);
+                    }
+                    
+                    // Extract address from old format (fallback)
+                    if (!extractedData.address && propertyData.address) {
                         if (typeof propertyData.address === 'string') {
                             extractedData.address = propertyData.address;
                         } else {
@@ -2095,12 +2128,16 @@
                         extractedData.bedrooms = parseFloat(bedsText.replace(/[^0-9.]/g, '')) || 0;
                         console.log('🛏️ [C21] Bedrooms:', extractedData.bedrooms);
                     } else {
-                        // Try text search
+                        // Try text search - be more specific
                         const bodyText = html;
-                        const bedsMatch = bodyText.match(/(\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
+                        const bedsMatch = bodyText.match(/[^\d](\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
                         if (bedsMatch) {
-                            extractedData.bedrooms = parseInt(bedsMatch[1]);
-                            console.log('🛏️ [C21] Bedrooms from text:', extractedData.bedrooms);
+                            const value = parseInt(bedsMatch[1]);
+                            // Sanity check: bedrooms should be between 1 and 20
+                            if (value >= 1 && value <= 20) {
+                                extractedData.bedrooms = value;
+                                console.log('🛏️ [C21] Bedrooms from text:', extractedData.bedrooms);
+                            }
                         }
                     }
                 }
@@ -2112,12 +2149,17 @@
                         extractedData.bathrooms = parseFloat(bathsText.replace(/[^0-9.]/g, '')) || 0;
                         console.log('🚿 [C21] Bathrooms:', extractedData.bathrooms);
                     } else {
-                        // Try text search
+                        // Try text search - be more specific to avoid wrong matches
                         const bodyText = html;
-                        const bathsMatch = bodyText.match(/(\d+(?:\.\d+)?)\s*(?:bath(?:room)?s?|ba)\b/i);
+                        // Look for patterns like "3.5 Bathrooms" or "3 bath" but not inside URLs or random numbers
+                        const bathsMatch = bodyText.match(/[^\d](\d+(?:\.\d+)?)\s*(?:full\s*)?(?:bath(?:room)?s?|ba)\b/i);
                         if (bathsMatch) {
-                            extractedData.bathrooms = parseFloat(bathsMatch[1]);
-                            console.log('🚿 [C21] Bathrooms from text:', extractedData.bathrooms);
+                            const value = parseFloat(bathsMatch[1]);
+                            // Sanity check: bathrooms should be between 1 and 20
+                            if (value >= 1 && value <= 20) {
+                                extractedData.bathrooms = value;
+                                console.log('🚿 [C21] Bathrooms from text:', extractedData.bathrooms);
+                            }
                         }
                     }
                 }
@@ -2164,8 +2206,9 @@
                 
                 // MLS number
                 if (!extractedData.mls) {
-                    const mlsMatch = html.match(/MLS[#:\s]*([A-Z0-9-]+)/i);
-                    if (mlsMatch) {
+                    // Look for MLS# followed by actual number/code, not just "number"
+                    const mlsMatch = html.match(/MLS[#:\s]*([A-Z0-9]{5,})/i);
+                    if (mlsMatch && mlsMatch[1] !== 'number') {
                         extractedData.mls = mlsMatch[1];
                         console.log('🔑 [C21] MLS:', extractedData.mls);
                     }
