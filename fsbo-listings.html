@@ -488,6 +488,51 @@
             box-shadow: 0 5px 15px rgba(15, 32, 39, 0.3);
         }
 
+        .buyer-assist-btn {
+            background: var(--white);
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .buyer-assist-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(15, 32, 39, 0.3);
+        }
+
+        .buyer-assist-btn i {
+            color: var(--accent);
+        }
+
+        .buyer-assist-btn:hover i {
+            color: var(--white);
+        }
+
+        .listing-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .listing-buttons > * {
+            flex: 1;
+            min-width: 200px;
+        }
+
         .privacy-notice {
             background: #f0f8ff;
             padding: 0.8rem;
@@ -894,9 +939,6 @@
                             <i class="fas fa-shield-alt"></i>
                             <span>Seller's contact info is protected. Use the button to inquire.</span>
                         </div>
-                        <button class="contact-btn" onclick="contactAboutListing(${listing.id}, '${listing.address}, ${listing.city}', ${listing.price}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft})">
-                            <i class="fas fa-envelope"></i> Contact Seller
-                        </button>
                         ` : `
                         <div class="contact-info">
                             <div class="contact-info-item">
@@ -912,10 +954,15 @@
                                 <span>${listing.phone}</span>
                             </div>
                         </div>
+                        `}
+                    </div>
+                    <div class="listing-buttons">
                         <button class="contact-btn" onclick="contactAboutListing(${listing.id}, '${listing.address}, ${listing.city}', ${listing.price}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft})">
                             <i class="fas fa-envelope"></i> Contact Seller
                         </button>
-                        `}
+                        <a href="javascript:void(0)" class="buyer-assist-btn" onclick="requestBuyerAssistance('${listing.address}, ${listing.city}', ${listing.price}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft})">
+                            <i class="fas fa-handshake"></i> Get VDI Help
+                        </a>
                     </div>
                 </div>
             `;
@@ -1118,6 +1165,35 @@
                 }
             }
         });
+        
+        // Buyer assistance function
+        function requestBuyerAssistance(address, price, bedrooms, bathrooms, sqft) {
+            // Format property details
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(price || 0);
+            
+            const details = [
+                formattedPrice,
+                bedrooms ? `${bedrooms} Beds` : '',
+                bathrooms ? `${bathrooms} Baths` : '',
+                sqft ? `${parseInt(sqft).toLocaleString()} sqft` : ''
+            ].filter(Boolean).join(' • ');
+            
+            const propertyInfo = `${address} - ${details}`;
+            
+            // Build query params for contact form
+            const params = new URLSearchParams({
+                interest: 'Buyer Representation Request',
+                property: propertyInfo,
+                message: `I'm interested in the following property and would like VDI Realty to represent me as my buyer's agent:\n\nProperty: ${address}\nDetails: ${details}\n\nPlease contact me to discuss how VDI can help me with this purchase. I understand that buyer representation is often at no cost to me as the buyer.`
+            });
+            
+            // Redirect to contact form
+            window.location.href = `index.html?${params.toString()}#contact`;
+        }
     </script>
 </body>
 </html>

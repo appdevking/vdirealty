@@ -299,6 +299,25 @@
             background: #e0e0e0;
         }
         
+        .btn-buyer-assist {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-buyer-assist:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-buyer-assist i {
+            color: var(--accent);
+        }
+        
+        .btn-buyer-assist:hover i {
+            color: var(--white);
+        }
+        
         .empty-state {
             text-align: center;
             padding: 80px 20px;
@@ -757,6 +776,9 @@
                         <a href="#" class="btn btn-primary" onclick="contactAboutListing(${listing.id ? "'" + listing.id + "'" : 'null'}, '${listing.address || 'this property'}', ${listing.price || 0}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft || 0}); return false;">
                             <i class="fas fa-envelope"></i> Contact
                         </a>
+                        <a href="#" class="btn btn-buyer-assist" onclick="requestBuyerAssistance('${listing.address || 'this property'}', ${listing.price || 0}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft || 0}); return false;">
+                            <i class="fas fa-handshake"></i> Get VDI Help
+                        </a>
                         ${listingUrl ? `<a href="${listingUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
                     </div>
                 </div>
@@ -937,6 +959,35 @@
                 }
             }
         });
+        
+        // Buyer assistance function
+        function requestBuyerAssistance(address, price, bedrooms, bathrooms, sqft) {
+            // Format property details
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(price || 0);
+            
+            const details = [
+                formattedPrice,
+                bedrooms ? `${bedrooms} Beds` : '',
+                bathrooms ? `${bathrooms} Baths` : '',
+                sqft ? `${parseInt(sqft).toLocaleString()} sqft` : ''
+            ].filter(Boolean).join(' • ');
+            
+            const propertyInfo = `${address} - ${details}`;
+            
+            // Build query params for contact form
+            const params = new URLSearchParams({
+                interest: 'Buyer Representation Request',
+                property: propertyInfo,
+                message: `I'm interested in the following property and would like VDI Realty to represent me as my buyer's agent:\n\nProperty: ${address}\nDetails: ${details}\n\nPlease contact me to discuss how VDI can help me with this purchase. I understand that buyer representation is often at no cost to me as the buyer.`
+            });
+            
+            // Redirect to contact form
+            window.location.href = `index.html?${params.toString()}#contact`;
+        }
         
         // Sample listings (for demo)
         function getSampleListings() {
