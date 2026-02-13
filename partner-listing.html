@@ -1296,13 +1296,18 @@
         
         // Auto-extract data from listing URLs
         async function extractListingData() {
-            console.log('[Extract] Button clicked');
+            console.log('====================================');
+            console.log('[Extract] Function called - extractListingData()');
+            console.log('====================================');
+            
             const urlInput = document.getElementById('listingUrl');
             const url = urlInput.value.trim();
             const statusMessage = document.getElementById('statusMessage');
             const extractBtn = document.getElementById('extractBtn');
             
-            console.log('[Extract] URL:', url);
+            console.log('[Extract] URL input value:', url);
+            console.log('[Extract] Status message element:', statusMessage);
+            console.log('[Extract] Extract button element:', extractBtn);
             
             if (!url) {
                 showStatus('Please enter a listing URL', 'error');
@@ -1767,10 +1772,20 @@
         
         // Initialize event listeners on page load
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('[Init] Page loaded, attaching event listeners');
+            
             // Attach extract button event listener
             const extractButton = document.getElementById('extractBtn');
             if (extractButton) {
-                extractButton.addEventListener('click', extractListingData);
+                console.log('[Init] Extract button found, attaching click listener');
+                extractButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('[Init] Extract button clicked!');
+                    extractListingData();
+                });
+            } else {
+                console.error('[Init] Extract button NOT found!');
             }
             
             // Attach toggle fields button event listener
