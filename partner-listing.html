@@ -1922,6 +1922,19 @@
                 const doc = parser.parseFromString(html, 'text/html');
                 console.log('📄 [C21] HTML parsed');
                 
+                // DEBUG: Log what we can find
+                console.log('🔍 [C21 DEBUG] Looking for elements...');
+                console.log('  - h1 tags:', doc.querySelectorAll('h1').length);
+                if (doc.querySelector('h1')) {
+                    console.log('  - First h1 text:', doc.querySelector('h1').textContent.trim());
+                }
+                console.log('  - All dt elements:', doc.querySelectorAll('dt').length);
+                doc.querySelectorAll('dt').forEach((dt, i) => {
+                    if (i < 10) { // Only log first 10
+                        console.log(`    dt[${i}]:`, dt.textContent.trim());
+                    }
+                });
+                
                 // Extract data using C21 selectors
                 const extractedData = {
                     address: '',
