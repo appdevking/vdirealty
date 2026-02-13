@@ -1996,7 +1996,8 @@
                 // If we found JSON-LD property data, extract from that first
                 if (propertyData) {
                     console.log('📋 [C21] Extracting from JSON data...');
-                    console.log('📋 [C21 DEBUG] JSON structure:', JSON.stringify(propertyData, null, 2).substring(0, 500));
+                    console.log('📋 [C21 DEBUG] Full JSON structure:', propertyData);
+                    console.log('📋 [C21 DEBUG] JSON keys:', Object.keys(propertyData));
                     
                     // Extract address from "name" field (C21 format: "16454 108th Avenue NE Bothell WA 98011")
                     if (propertyData.name) {
@@ -2054,6 +2055,8 @@
                     extractedData.bedrooms = propertyData.numberOfBedrooms || propertyData.bedrooms || 0;
                     extractedData.bathrooms = propertyData.numberOfBathroomsTotal || propertyData.bathrooms || 0;
                     extractedData.sqft = propertyData.floorSize?.value || propertyData.floorSize || propertyData.livingArea || 0;
+                    
+                    console.log('🔍 [C21] From JSON - Beds:', extractedData.bedrooms, 'Baths:', extractedData.bathrooms, 'Sqft:', extractedData.sqft);
                     
                     // Extract description
                     extractedData.description = propertyData.description || '';
@@ -2123,60 +2126,76 @@
                 
                 // Bedrooms (if not from JSON)
                 if (!extractedData.bedrooms) {
+                    console.log('🔍 [C21] Beds not in JSON, trying HTML/text...');
                     const bedsText = extractFact('Bedrooms') || extractFact('Beds');
                     if (bedsText) {
                         extractedData.bedrooms = parseFloat(bedsText.replace(/[^0-9.]/g, '')) || 0;
-                        console.log('🛏️ [C21] Bedrooms:', extractedData.bedrooms);
+                        console.log('🛏️ [C21] Bedrooms from dt/dd:', extractedData.bedrooms);
                     } else {
                         // Try text search - be more specific
                         const bodyText = html;
                         const bedsMatch = bodyText.match(/[^\d](\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
+                        console.log('🔍 [C21] Beds regex match:', bedsMatch);
                         if (bedsMatch) {
                             const value = parseInt(bedsMatch[1]);
                             // Sanity check: bedrooms should be between 1 and 20
                             if (value >= 1 && value <= 20) {
                                 extractedData.bedrooms = value;
                                 console.log('🛏️ [C21] Bedrooms from text:', extractedData.bedrooms);
+                            } else {
+                                console.log('⚠️ [C21] Beds value out of range:', value);
                             }
+                        } else {
+                            console.log('⚠️ [C21] No beds match found in text');
                         }
                     }
                 }
                 
                 // Bathrooms (if not from JSON)
                 if (!extractedData.bathrooms) {
+                    console.log('🔍 [C21] Baths not in JSON, trying HTML/text...');
                     const bathsText = extractFact('Bathrooms') || extractFact('Baths') || extractFact('Full baths');
                     if (bathsText) {
                         extractedData.bathrooms = parseFloat(bathsText.replace(/[^0-9.]/g, '')) || 0;
-                        console.log('🚿 [C21] Bathrooms:', extractedData.bathrooms);
+                        console.log('🚿 [C21] Bathrooms from dt/dd:', extractedData.bathrooms);
                     } else {
                         // Try text search - be more specific to avoid wrong matches
                         const bodyText = html;
                         // Look for patterns like "3.5 Bathrooms" or "3 bath" but not inside URLs or random numbers
                         const bathsMatch = bodyText.match(/[^\d](\d+(?:\.\d+)?)\s*(?:full\s*)?(?:bath(?:room)?s?|ba)\b/i);
+                        console.log('🔍 [C21] Baths regex match:', bathsMatch);
                         if (bathsMatch) {
                             const value = parseFloat(bathsMatch[1]);
                             // Sanity check: bathrooms should be between 1 and 20
                             if (value >= 1 && value <= 20) {
                                 extractedData.bathrooms = value;
                                 console.log('🚿 [C21] Bathrooms from text:', extractedData.bathrooms);
+                            } else {
+                                console.log('⚠️ [C21] Baths value out of range:', value);
                             }
+                        } else {
+                            console.log('⚠️ [C21] No baths match found in text');
                         }
                     }
                 }
                 
                 // Square feet (if not from JSON)
                 if (!extractedData.sqft) {
+                    console.log('🔍 [C21] Sqft not in JSON, trying HTML/text...');
                     const sqftText = extractFact('Living area') || extractFact('Sqft') || extractFact('Square Feet');
                     if (sqftText) {
                         extractedData.sqft = parseInt(sqftText.replace(/[^0-9]/g, '')) || 0;
-                        console.log('📐 [C21] Sqft:', extractedData.sqft);
+                        console.log('📐 [C21] Sqft from dt/dd:', extractedData.sqft);
                     } else {
                         // Try text search
                         const bodyText = html;
                         const sqftMatch = bodyText.match(/([\d,]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)\b/i);
+                        console.log('🔍 [C21] Sqft regex match:', sqftMatch);
                         if (sqftMatch) {
                             extractedData.sqft = parseInt(sqftMatch[1].replace(/,/g, ''));
                             console.log('📐 [C21] Sqft from text:', extractedData.sqft);
+                        } else {
+                            console.log('⚠️ [C21] No sqft match found in text');
                         }
                     }
                 }
