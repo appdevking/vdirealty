@@ -1531,7 +1531,8 @@
             reveal();
             
             // Check URL parameters for pre-filling contact form (from listings page)
-            const urlParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
+            // Support both ?params#contact and #contact?params formats
+            const urlParams = new URLSearchParams(window.location.search || window.location.hash.split('?')[1] || '');
             if (urlParams.has('interest')) {
                 // Pre-fill interest dropdown
                 const interestSelect = document.getElementById('interest');
