@@ -73,12 +73,17 @@ async function extractPropertyData(page, source) {
                     'h1'
                 ],
                 price: [
+                    // Look for detailed/exact price first
                     '.c21__DetailMasthead-price .Text--decorativePrice', 
-                    '.c21__DetailMasthead-price span[class*="price"]',
+                    '.c21__DetailMasthead-price span[class*="price"]:not([class*="sub"])',
+                    'div[class*="DetailMasthead-price"] span[class*="decorativePrice"]',
+                    'div[class*="DetailMasthead-price"] span[class*="Text--decorativePrice"]',
+                    'h2[class*="price"]:not([class*="sub"]):not([class*="summary"])',
+                    // Fallback to any price display
                     'div[class*="DetailMasthead-price"] span',
                     'div[class*="price"] span[class*="decorative"]',
                     '.price-display .price-value',
-                    'span[class*="Price"]',
+                    'span[class*="Price"]:not([class*="sub"])',
                     '.price',
                     'h2[class*="price"]'
                 ],
@@ -240,9 +245,41 @@ function parseData(extractedData) {
 
     // Parse price
     if (extractedData.price) {
-        const priceMatch = extractedData.price.match(/\$?([\d,]+)/);
-        if (priceMatch) {
-            parsed.price = priceMatch[1].replace(/,/g, '');
+        console.log(`🏷️ Raw price text: "${extractedData.price}"`);
+        
+        let priceValue = '';
+        
+        // Handle abbreviated formats like "180K", "1.5M", "1,500K"
+        const abbreviatedMatch = extractedData.price.match(/\$?([\d,]+\.?\d*)\s*([KMB])/i);
+        if (abbreviatedMatch) {
+            const number = parseFloat(abbreviatedMatch[1].replace(/,/g, ''));
+            const multiplier = abbreviatedMatch[2].toUpperCase();
+            
+            let fullPrice = number;
+            if (multiplier === 'K') {
+                fullPrice = number * 1000;
+            } else if (multiplier === 'M') {
+                fullPrice = number * 1000000;
+            } else if (multiplier === 'B') {
+                fullPrice = number * 1000000000;
+            }
+            
+            priceValue = Math.round(fullPrice).toString();
+            console.log(`🏷️ Converted abbreviated price "${extractedData.price}" to: ${priceValue}`);
+        } else {
+            // Handle full numeric prices like "$179,900" or "179900"
+            const fullPriceMatch = extractedData.price.match(/\$?([\d,]+\.?\d*)/);
+            if (fullPriceMatch) {
+                priceValue = fullPriceMatch[1].replace(/,/g, '').replace(/\..*/, ''); // Remove commas and decimals
+                console.log(`🏷️ Extracted full price "${extractedData.price}" as: ${priceValue}`);
+            }
+        }
+        
+        // Final validation - ensure it's a valid number
+        if (priceValue && !isNaN(priceValue) && parseInt(priceValue) > 0) {
+            parsed.price = priceValue;
+        } else {
+            console.log(`⚠️ Could not parse price from: "${extractedData.price}"`);
         }
     }
 
