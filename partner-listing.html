@@ -1280,10 +1280,13 @@
         
         // Auto-extract data from listing URLs
         async function extractListingData() {
+            console.log('[Extract] Button clicked');
             const urlInput = document.getElementById('listingUrl');
             const url = urlInput.value.trim();
             const statusMessage = document.getElementById('statusMessage');
             const extractBtn = document.getElementById('extractBtn');
+            
+            console.log('[Extract] URL:', url);
             
             if (!url) {
                 showStatus('Please enter a listing URL', 'error');
@@ -1298,11 +1301,11 @@
             try {
                 // Detect source
                 const source = detectSource(url);
-                console.log('Detected source:', source);
+                console.log('[Extract] Detected source:', source);
                 
                 // Extract data based on source
                 const listingData = await fetchListingData(url, source);
-                console.log('Extracted data:', listingData);
+                console.log('[Extract] Extracted data:', listingData);
                 
                 if (listingData) {
                     populateFormFields(listingData);
@@ -1316,8 +1319,9 @@
                 }
                 
             } catch (error) {
-                showStatus(error.message, 'error');
-                console.error('Extraction error:', error);
+                console.error('[Extract] Error:', error);
+                const errorMsg = error.message || 'Failed to extract data. The listing may not be supported or the backend is unavailable.';
+                showStatus(`❌ ${errorMsg}`, 'error');
             } finally {
                 extractBtn.disabled = false;
                 extractBtn.innerHTML = '<i class=\"fas fa-download\"></i> Extract';
@@ -1344,7 +1348,8 @@
         // Fetch listing data using AWS backend (Puppeteer)
         async function fetchListingData(url, source) {
             try {
-                console.log('Fetching data from AWS backend...', url);
+                console.log('[Fetch] Starting API call to:', `${API_BASE_URL}/api/fsbo/extract`);
+                console.log('[Fetch] Request URL:', url);
                 
                 const response = await fetch(`${API_BASE_URL}/api/fsbo/extract`, {
                     method: 'POST',
@@ -1354,21 +1359,29 @@
                     body: JSON.stringify({ url })
                 });
                 
+                console.log('[Fetch] Response status:', response.status);
+                
                 if (!response.ok) {
-                    throw new Error(`Backend API error: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('[Fetch] Error response:', errorText);
+                    throw new Error(`Extraction failed (status ${response.status}). The listing site may be blocking automated access or the page structure is not supported.`);
                 }
                 
                 const result = await response.json();
-                console.log('Backend response:', result);
+                console.log('[Fetch] API response:', result);
                 
                 if (result.success && result.data) {
                     return result.data;
                 } else {
-                    throw new Error(result.error || 'Failed to extract listing data');
+                    throw new Error(result.error || 'Failed to extract listing data. Please try a different listing or enter details manually.');
                 }
                 
             } catch (error) {
-                console.error('Backend extraction failed:', error);
+                console.error('[Fetch] Exception:', error);
+                // Re-throw with more context if it's a network error
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    throw new Error('Network error: Cannot reach extraction service. Please check your connection.');
+                }
                 throw error;
             }
         }
