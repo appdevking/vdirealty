@@ -1399,14 +1399,19 @@
                 console.log('🛏️ Found property detail elements:', detailSpans);
                 
                 // Debug: Check if page might be an error or redirect
-                const htmlLower = html.toLowerCase();
-                if (htmlLower.includes('captcha') || htmlLower.includes('security check') || 
-                    htmlLower.includes('access denied') || htmlLower.includes('please verify you are a human')) {
+                // Only check visible text (title and body), not the entire HTML which includes JS code
+                const visibleText = (pageTitle + ' ' + bodyText).toLowerCase();
+                const hasBlockingIndicators = visibleText.includes('please verify you are a human') || 
+                                             visibleText.includes('security check') ||
+                                             visibleText.includes('access denied') ||
+                                             visibleText.includes('are you a robot');
+                
+                if (hasBlockingIndicators) {
                     console.error('🚫 Page appears to be showing CAPTCHA or access denied');
                     showMessage('⚠️ This website is blocking automated extraction. Please try a different listing URL or enter the details manually.', 'error');
                     return null; // Return null to prevent using partial data
                 }
-                if (htmlLower.includes('redirect') || htmlLower.includes('loading')) {
+                if (visibleText.includes('redirect') && visibleText.includes('moment')) {
                     console.warn('⚠️ Page might be redirecting or still loading');
                 }
                 
