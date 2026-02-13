@@ -1884,20 +1884,20 @@
             
             try {
                 // Use CORS proxy to fetch the page
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
                 console.log('🌐 [C21] Fetching via proxy:', proxyUrl);
                 
                 const response = await fetch(proxyUrl);
                 if (!response.ok) {
-                    throw new Error('Failed to fetch listing page');
+                    throw new Error(`Failed to fetch listing page (status ${response.status})`);
                 }
                 
-                const data = await response.json();
-                console.log('✅ [C21] Page fetched successfully');
+                const html = await response.text();
+                console.log('✅ [C21] Page fetched successfully, length:', html.length);
                 
                 // Parse the HTML
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(data.contents, 'text/html');
+                const doc = parser.parseFromString(html, 'text/html');
                 console.log('📄 [C21] HTML parsed');
                 
                 // Extract data using C21 selectors
