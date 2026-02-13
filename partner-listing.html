@@ -1954,7 +1954,7 @@
                     }
                     
                     // Look for window.__INITIAL_STATE__ or similar patterns
-                    if (scriptText.includes('__INITIAL_STATE__') || scriptText.includes('property') || scriptText.includes('listing')) {
+                    if (scriptText.includes('__INITIAL_STATE__') || scriptText.includes('property') || scriptText.includes('listing') || scriptText.includes('bedrooms') || scriptText.includes('bathrooms')) {
                         // Try to extract JSON object
                         const jsonMatch = scriptText.match(/(\{[\s\S]*\})/);
                         if (jsonMatch) {
@@ -1965,7 +1965,32 @@
                                     propertyData = json.property || json.listing || json.data;
                                     break;
                                 }
-                            } catch (e) {}
+                                // Also check if the JSON itself has bedroom/bathroom info
+                                if (json.bedrooms || json.bathrooms || json.numberOfBedrooms) {
+                                    console.log('  ✅ Found property details in script JSON!');
+                                    propertyData = json;
+                                    break;
+                                }
+                            } catch (e) {
+                                // Try to find key-value patterns directly
+                                const bedsInScript = scriptText.match(/"(?:bedrooms?|numberOfBedrooms)":\s*(\d+)/i);
+                                const bathsInScript = scriptText.match(/"(?:bathrooms?|numberOfBathrooms)":\s*(\d+(?:\.\d+)?)/i);
+                                const sqftInScript = scriptText.match(/"(?:livingArea|floorSize|squareFeet)":\s*([\d,]+)/i);
+                                
+                                if (bedsInScript || bathsInScript || sqftInScript) {
+                                    console.log('  ✅ Found property details in script text!', {
+                                        beds: bedsInScript?.[1],
+                                        baths: bathsInScript?.[1],
+                                        sqft: sqftInScript?.[1]
+                                    });
+                                    propertyData = {
+                                        numberOfBedrooms: bedsInScript ? parseInt(bedsInScript[1]) : null,
+                                        bathrooms: bathsInScript ? parseFloat(bathsInScript[1]) : null,
+                                        livingArea: sqftInScript ? parseInt(sqftInScript[1].replace(/,/g, '')) : null
+                                    };
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -2061,6 +2086,36 @@
                     // Extract description
                     extractedData.description = propertyData.description || '';
                     
+                    // Try to extract beds/baths/sqft from description text
+                    if (extractedData.description) {
+                        console.log('🔍 [C21] Searching description for bed/bath/sqft...');
+                        const desc = extractedData.description;
+                        
+                        // Look for patterns like "5 bedrooms" or "5 bed"
+                        const descBedsMatch = desc.match(/(\d+)\s*(?:bedroom|bed|br)s?\b/i);
+                        if (descBedsMatch && !extractedData.bedrooms) {
+                            extractedData.bedrooms = parseInt(descBedsMatch[1]);
+                            console.log('🛏️ [C21] Beds from description:', extractedData.bedrooms);
+                        }
+                        
+                        // Look for "4.5 bathrooms" or "4 bath"
+                        const descBathsMatch = desc.match(/(\d+(?:\.\d+)?)\s*(?:bathroom|bath|ba)s?\b/i);
+                        if (descBathsMatch && !extractedData.bathrooms) {
+                            const value = parseFloat(descBathsMatch[1]);
+                            if (value >= 1 && value <= 20) {
+                                extractedData.bathrooms = value;
+                                console.log('🚿 [C21] Baths from description:', extractedData.bathrooms);
+                            }
+                        }
+                        
+                        // Look for "4,500 square feet" or "4500 sq ft"
+                        const descSqftMatch = desc.match(/([\d,]+)\s*(?:square\s*feet|sq\.?\s*ft|sqft)\b/i);
+                        if (descSqftMatch && !extractedData.sqft) {
+                            extractedData.sqft = parseInt(descSqftMatch[1].replace(/,/g, ''));
+                            console.log('📐 [C21] Sqft from description:', extractedData.sqft);
+                        }
+                    }
+                    
                     // Extract images
                     if (propertyData.image) {
                         if (Array.isArray(propertyData.image)) {
@@ -2132,13 +2187,23 @@
                         extractedData.bedrooms = parseFloat(bedsText.replace(/[^0-9.]/g, '')) || 0;
                         console.log('🛏️ [C21] Bedrooms from dt/dd:', extractedData.bedrooms);
                     } else {
-                        // Try text search - be more specific
+                        // Try multiple regex patterns for better matching
                         const bodyText = html;
-                        const bedsMatch = bodyText.match(/[^\d](\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
+                        
+                        // Pattern 1: "5 bedrooms" or "5 bedroom"
+                        let bedsMatch = bodyText.match(/(\d+)\s+bedrooms?\b/i);
+                        if (!bedsMatch) {
+                            // Pattern 2: "Bedrooms: 5" or "Bedrooms</dt><dd>5"
+                            bedsMatch = bodyText.match(/bedrooms?[:\s<>]+(\d+)/i);
+                        }
+                        if (!bedsMatch) {
+                            // Pattern 3: "5 Bed" or "5 br"
+                            bedsMatch = bodyText.match(/(\d+)\s+(?:bed|br)\b/i);
+                        }
+                        
                         console.log('🔍 [C21] Beds regex match:', bedsMatch);
                         if (bedsMatch) {
                             const value = parseInt(bedsMatch[1]);
-                            // Sanity check: bedrooms should be between 1 and 20
                             if (value >= 1 && value <= 20) {
                                 extractedData.bedrooms = value;
                                 console.log('🛏️ [C21] Bedrooms from text:', extractedData.bedrooms);
@@ -2159,14 +2224,22 @@
                         extractedData.bathrooms = parseFloat(bathsText.replace(/[^0-9.]/g, '')) || 0;
                         console.log('🚿 [C21] Bathrooms from dt/dd:', extractedData.bathrooms);
                     } else {
-                        // Try text search - be more specific to avoid wrong matches
                         const bodyText = html;
-                        // Look for patterns like "3.5 Bathrooms" or "3 bath" but not inside URLs or random numbers
-                        const bathsMatch = bodyText.match(/[^\d](\d+(?:\.\d+)?)\s*(?:full\s*)?(?:bath(?:room)?s?|ba)\b/i);
+                        
+                        // Pattern 1: "4.5 bathrooms" or "4 bathroom"
+                        let bathsMatch = bodyText.match(/(\d+(?:\.\d+)?)\s+bathrooms?\b/i);
+                        if (!bathsMatch) {
+                            // Pattern 2: "Bathrooms: 4.5" or "Bathrooms</dt><dd>4.5"
+                            bathsMatch = bodyText.match(/bathrooms?[:\s<>]+(\d+(?:\.\d+)?)/i);
+                        }
+                        if (!bathsMatch) {
+                            // Pattern 3: "4.5 Bath" or "4 ba" 
+                            bathsMatch = bodyText.match(/(\d+(?:\.\d+)?)\s+(?:bath|ba)\b/i);
+                        }
+                        
                         console.log('🔍 [C21] Baths regex match:', bathsMatch);
                         if (bathsMatch) {
                             const value = parseFloat(bathsMatch[1]);
-                            // Sanity check: bathrooms should be between 1 and 20
                             if (value >= 1 && value <= 20) {
                                 extractedData.bathrooms = value;
                                 console.log('🚿 [C21] Bathrooms from text:', extractedData.bathrooms);
@@ -2187,9 +2260,19 @@
                         extractedData.sqft = parseInt(sqftText.replace(/[^0-9]/g, '')) || 0;
                         console.log('📐 [C21] Sqft from dt/dd:', extractedData.sqft);
                     } else {
-                        // Try text search
                         const bodyText = html;
-                        const sqftMatch = bodyText.match(/([\d,]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)\b/i);
+                        
+                        // Pattern 1: "4,500 square feet" or "4500 square feet"
+                        let sqftMatch = bodyText.match(/([\d,]+)\s+square\s+feet/i);
+                        if (!sqftMatch) {
+                            // Pattern 2: "4,500 sq ft" or "4500 sq. ft."
+                            sqftMatch = bodyText.match(/([\d,]+)\s+sq\.?\s*ft/i);
+                        }
+                        if (!sqftMatch) {
+                            // Pattern 3: "4,500 sqft" or "4500sqft"
+                            sqftMatch = bodyText.match(/([\d,]+)\s*sqft/i);
+                        }
+                        
                         console.log('🔍 [C21] Sqft regex match:', sqftMatch);
                         if (sqftMatch) {
                             extractedData.sqft = parseInt(sqftMatch[1].replace(/,/g, ''));
