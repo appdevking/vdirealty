@@ -323,9 +323,6 @@ router.post('/contact/:listingId', async (req, res) => {
 // Admin authentication middleware
 const adminAuth = (req, res, next) => {
     const password = req.headers.authorization;
-    console.log('[Admin Auth] Received password:', password);
-    console.log('[Admin Auth] Expected password:', config.adminPassword);
-    console.log('[Admin Auth] Match:', password === config.adminPassword);
     if (password === config.adminPassword) {
         next();
     } else {
