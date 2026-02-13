@@ -656,6 +656,55 @@
         <p>Residential, Commercial & Investment Property Solutions</p>
     </footer>
 
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeContactModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2><i class="fas fa-envelope"></i> Contact Seller</h2>
+                <p>Send a message to the property owner</p>
+            </div>
+            <div class="modal-body">
+                <div class="property-info" id="propertyInfo">
+                    <h3 id="modalPropertyAddress"></h3>
+                    <p id="modalPropertyDetails"></p>
+                </div>
+                
+                <div id="contactFormMessage" class="form-message"></div>
+                
+                <form id="contactListingForm" onsubmit="return submitContactForm(event)">
+                    <div class="form-group">
+                        <label>Your Full Name <span class="required">*</span></label>
+                        <input type="text" id="contactName" name="name" required placeholder="John Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" id="contactEmail" name="email" required placeholder="john@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="contactPhone" name="phone" required placeholder="(206) 555-1234">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Message <span class="required">*</span></label>
+                        <textarea id="contactMessage" name="message" required placeholder="Tell the seller about your interest in this property..."></textarea>
+                    </div>
+                    
+                    <input type="hidden" id="listingId" name="listingId">
+                    
+                    <button type="submit" class="submit-btn" id="contactSubmitBtn">
+                        <i class="fas fa-paper-plane"></i> Send Message to Seller
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Configuration -->
     <script src="js/config.js"></script>
 
@@ -845,9 +894,9 @@
                             <i class="fas fa-shield-alt"></i>
                             <span>Seller's contact info is protected. Use the button to inquire.</span>
                         </div>
-                        <a href="mailto:info@vdirealty.com?subject=Inquiry%20about%20${encodeURIComponent(listing.address + ', ' + listing.city)}&body=Hello%2C%0A%0AI%20am%20interested%20in%20the%20following%20property%20listed%20on%20VDI%20Realty%3A%0A%0AProperty%3A%20${encodeURIComponent(listing.address + ', ' + listing.city + ', ' + listing.state + ' ' + listing.zip)}%0APrice%3A%20%24${listing.price.toLocaleString()}%0AType%3A%20${encodeURIComponent(listing.propertyType)}%0A%0APlease%20provide%20more%20information%20about%20this%20property.%0A%0AThank%20you%2C%0A" class="contact-btn">
+                        <button class="contact-btn" onclick="contactAboutListing(${listing.id}, '${listing.address}, ${listing.city}', ${listing.price}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft})">
                             <i class="fas fa-envelope"></i> Contact Seller
-                        </a>
+                        </button>
                         ` : `
                         <div class="contact-info">
                             <div class="contact-info-item">
@@ -863,9 +912,9 @@
                                 <span>${listing.phone}</span>
                             </div>
                         </div>
-                        <a href="mailto:${listing.email}?subject=Inquiry%20about%20${encodeURIComponent(listing.address)}&body=Hello%20${encodeURIComponent(listing.firstName)}%2C%0A%0AI%20saw%20your%20property%20listing%20on%20VDI%20Realty%20and%20I%20am%20interested%20in%20learning%20more.%0A%0AProperty%3A%20${encodeURIComponent(listing.address + ', ' + listing.city + ', ' + listing.state + ' ' + listing.zip)}%0APrice%3A%20%24${listing.price.toLocaleString()}%0A%0A" class="contact-btn">
+                        <button class="contact-btn" onclick="contactAboutListing(${listing.id}, '${listing.address}, ${listing.city}', ${listing.price}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft})">
                             <i class="fas fa-envelope"></i> Contact Seller
-                        </a>
+                        </button>
                         `}
                     </div>
                 </div>
@@ -946,6 +995,129 @@
 
         // Load listings when page loads
         loadListings();
+
+        // Contact modal functions
+        function contactAboutListing(listingId, address, price, bedrooms, bathrooms, sqft) {
+            // Format property details
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(price || 0);
+            
+            const details = [
+                formattedPrice,
+                bedrooms ? `${bedrooms} Beds` : '',
+                bathrooms ? `${bathrooms} Baths` : '',
+                sqft ? `${parseInt(sqft).toLocaleString()} sqft` : ''
+            ].filter(Boolean).join(' • ');
+            
+            // Populate modal
+            document.getElementById('modalPropertyAddress').textContent = address;
+            document.getElementById('modalPropertyDetails').textContent = details;
+            document.getElementById('listingId').value = listingId || '';
+            
+            // Pre-fill message
+            document.getElementById('contactMessage').value = `I am interested in learning more about this property.\n\nProperty: ${address}\n${details}\n\nPlease contact me with additional information.`;
+            
+            // Open modal
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Reset form
+            document.getElementById('contactListingForm').reset();
+            document.getElementById('contactFormMessage').className = 'form-message';
+            document.getElementById('contactFormMessage').style.display = 'none';
+        }
+        
+        async function submitContactForm(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('contactSubmitBtn');
+            const messageDiv = document.getElementById('contactFormMessage');
+            const listingId = document.getElementById('listingId').value;
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            messageDiv.style.display = 'none';
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                message: document.getElementById('contactMessage').value
+            };
+            
+            try {
+                // Send to backend API
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/contact/${listingId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Show success message
+                    messageDiv.className = 'form-message success';
+                    messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Message sent successfully!</strong> The seller will contact you soon.';
+                    messageDiv.style.display = 'block';
+                    
+                    // Reset form
+                    document.getElementById('contactListingForm').reset();
+                    
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        closeContactModal();
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Failed to send message');
+                }
+            } catch (error) {
+                console.error('Contact form error:', error);
+                
+                // Show error message
+                messageDiv.className = 'form-message error';
+                messageDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> <strong>Failed to send message.</strong> ${error.message || 'Please try again later.'}`;
+                messageDiv.style.display = 'block';
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message to Seller';
+            }
+            
+            return false;
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('contactModal');
+            if (e.target === modal) {
+                closeContactModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('contactModal');
+                if (modal.classList.contains('active')) {
+                    closeContactModal();
+                }
+            }
+        });
     </script>
 </body>
 </html>

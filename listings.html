@@ -634,6 +634,7 @@
                     <input type="hidden" id="propertyAddress" name="propertyAddress">
                     <input type="hidden" id="propertyPrice" name="propertyPrice">
                     <input type="hidden" id="propertyDetails" name="propertyDetails">
+                    <input type="hidden" id="listingId" name="listingId">
                     
                     <button type="submit" class="submit-btn" id="contactSubmitBtn">
                         <i class="fas fa-paper-plane"></i> Send Inquiry
@@ -753,7 +754,7 @@
                     </div>
                     <p class="card-description">${listing.description || 'Contact us for more details about this property.'}</p>
                     <div class="card-actions">
-                        <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address || 'this property'}'); return false;">
+                        <a href="#" class="btn btn-primary" onclick="contactAboutListing(${listing.id ? "'" + listing.id + "'" : 'null'}, '${listing.address || 'this property'}', ${listing.price || 0}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft || 0}); return false;">
                             <i class="fas fa-envelope"></i> Contact
                         </a>
                         ${listingUrl ? `<a href="${listingUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
@@ -812,37 +813,36 @@
         }
         
         // Contact about listing
-        function contactAboutListing(address) {
-            // Get listing details
-            const listingObj = allListings.find(l => l.address === address);
+        function contactAboutListing(listingId, address, price, bedrooms, bathrooms, sqft) {
+            // Format property details
+            const formattedPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(price || 0);
             
-            // Build property details string
-            let propertyDetails = address;
-            if (listingObj) {
-                const price = new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 0
-                }).format(listingObj.price || 0);
-                
-                const details = [
-                    price,
-                    listingObj.bedrooms ? `${listingObj.bedrooms} Beds` : '',
-                    listingObj.bathrooms ? `${listingObj.bathrooms} Baths` : '',
-                    listingObj.sqft ? `${parseInt(listingObj.sqft).toLocaleString()} sqft` : ''
-                ].filter(Boolean).join(' • ');
-                
-                propertyDetails = `${address} (${details})`;
-            }
+            const details = [
+                formattedPrice,
+                bedrooms ? `${bedrooms} Beds` : '',
+                bathrooms ? `${bathrooms} Baths` : '',
+                sqft ? `${parseInt(sqft).toLocaleString()} sqft` : ''
+            ].filter(Boolean).join(' • ');
             
-            // Redirect to contact form with pre-filled data
-            const params = new URLSearchParams({
-                interest: 'Request More Information',
-                property: propertyDetails,
-                message: `I would like to learn more about this property.\n\nProperty Details:\n${propertyDetails}`
-            });
+            // Populate modal
+            document.getElementById('modalPropertyAddress').textContent = address;
+            document.getElementById('modalPropertyDetails').textContent = details;
+            document.getElementById('propertyAddress').value = address;
+            document.getElementById('propertyPrice').value = formattedPrice;
+            document.getElementById('propertyDetails').value = `${address} - ${details}`;
+            document.getElementById('listingId').value = listingId || '';
             
-            window.location.href = `index.html?${params.toString()}#contact`;
+            // Pre-fill message
+            document.getElementById('contactMessage').value = `I am interested in learning more about this property.\n\nProperty: ${address}\n${details}\n\nPlease contact me with additional information.`;
+            
+            // Open modal
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
         
         function closeContactModal() {
@@ -856,55 +856,66 @@
             document.getElementById('contactFormMessage').style.display = 'none';
         }
         
-        function submitContactForm(e) {
+        async function submitContactForm(e) {
             e.preventDefault();
             
             const submitBtn = document.getElementById('contactSubmitBtn');
             const messageDiv = document.getElementById('contactFormMessage');
+            const listingId = document.getElementById('listingId').value;
             
             // Disable submit button
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            messageDiv.style.display = 'none';
             
             // Get form data
             const formData = {
                 name: document.getElementById('contactName').value,
                 email: document.getElementById('contactEmail').value,
                 phone: document.getElementById('contactPhone').value,
-                message: document.getElementById('contactMessage').value,
-                propertyAddress: document.getElementById('propertyAddress').value,
-                propertyPrice: document.getElementById('propertyPrice').value,
-                propertyDetails: document.getElementById('propertyDetails').value
+                message: document.getElementById('contactMessage').value
             };
             
-            // Simulate sending (replace with actual API call)
-            setTimeout(() => {
-                // Show success message
-                messageDiv.className = 'form-message success';
-                messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Message sent successfully!</strong> We\'ll contact you within 24 hours about this property.';
+            try {
+                // Send to backend API
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/contact/${listingId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    // Show success message
+                    messageDiv.className = 'form-message success';
+                    messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> <strong>Message sent successfully!</strong> The seller will contact you soon.';
+                    messageDiv.style.display = 'block';
+                    
+                    // Reset form
+                    document.getElementById('contactListingForm').reset();
+                    
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        closeContactModal();
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Failed to send message');
+                }
+            } catch (error) {
+                console.error('Contact form error:', error);
+                
+                // Show error message
+                messageDiv.className = 'form-message error';
+                messageDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> <strong>Failed to send message.</strong> ${error.message || 'Please try again later.'}`;
                 messageDiv.style.display = 'block';
-                
-                // Reset form
-                document.getElementById('contactListingForm').reset();
-                
+            } finally {
                 // Re-enable button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Inquiry';
-                
-                // Close modal after 3 seconds
-                setTimeout(() => {
-                    closeContactModal();
-                }, 3000);
-                
-                // Here you would typically send to your backend:
-                // fetch('/api/contact', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(formData)
-                // });
-                
-                console.log('Contact form submitted:', formData);
-            }, 1500);
+            }
             
             return false;
         }
