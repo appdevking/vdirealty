@@ -47,7 +47,8 @@ app.use('/api/contact', contactRoutes);
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ 
-        status: 'ok', 
+        status: 'ok',
+        autoDeployed: true, // GitHub Actions auto-deployment active 
         message: 'VDI Realty FSBO API is running',
         timestamp: new Date().toISOString()
     });
