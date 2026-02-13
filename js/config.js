@@ -12,3 +12,6 @@ const CONFIG = {
 
 // Prevent modification
 Object.freeze(CONFIG);
+
+// Export for use in HTML files
+const API_BASE_URL = CONFIG.API_BASE_URL;
