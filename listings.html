@@ -8,6 +8,7 @@
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="js/config.js"></script>
 
     <style>
         :root {
@@ -650,12 +651,26 @@
             loadListings();
         });
         
-        // Load listings from localStorage
-        function loadListings() {
-            allListings = JSON.parse(localStorage.getItem('vdiListings') || '[]');
-            
-            displayListings(allListings);
-            updateListingCount(allListings.length);
+        // Load listings from API
+        async function loadListings() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
+                const data = await response.json();
+                
+                if (data.success && data.listings) {
+                    allListings = data.listings;
+                    displayListings(allListings);
+                    updateListingCount(allListings.length);
+                } else {
+                    console.error('Failed to load listings');
+                    displayListings([]);
+                    updateListingCount(0);
+                }
+            } catch (error) {
+                console.error('Error loading listings:', error);
+                displayListings([]);
+                updateListingCount(0);
+            }
         }
         
         // Update listing count
@@ -738,7 +753,7 @@
                     </div>
                     <p class="card-description">${listing.description || 'Contact us for more details about this property.'}</p>
                     <div class="card-actions">
-                        <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address || 'this property'}', listing); return false;">
+                        <a href="#" class="btn btn-primary" onclick="contactAboutListing('${listing.address || 'this property'}'); return false;">
                             <i class="fas fa-envelope"></i> Contact
                         </a>
                         ${listingUrl ? `<a href="${listingUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
@@ -797,9 +812,9 @@
         }
         
         // Contact about listing
-        function contactAboutListing(address, listing) {
+        function contactAboutListing(address) {
             // Get listing details
-            const listingObj = allListings.find(l => l.address === address) || listing;
+            const listingObj = allListings.find(l => l.address === address);
             
             // Build property details string
             let propertyDetails = address;
