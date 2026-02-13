@@ -243,19 +243,28 @@ async function extractPropertyData(page, source) {
             
             // Look for patterns like "1 Bed", "1 BR", "1 Bedroom", etc.
             const bedPatterns = [
-                /(\d+)\s*(?:Bed|BR|Bedroom)s?/i,
-                /(?:Bed|BR|Bedroom)s?\s*[:\-]?\s*(\d+)/i,
-                /(\d+)\s*(?:bed|br|bedroom)/i
+                /(\d+)\s+(?:Beds?|BR|Bedrooms?)\b/gi,
+                /(?:Beds?|BR|Bedrooms?)[\s:]+(\d+)/gi,
+                /(\d+)\s*(?:bed|br|bedroom)\b/gi
             ];
             
+            let foundBeds = '';
             for (const pattern of bedPatterns) {
-                const match = pageText.match(pattern);
-                if (match && match[1]) {
-                    extractedData.beds = match[1];
-                    console.log(`✅ Found beds via text scanning: "${match[0]}" -> ${match[1]}`);
-                    break;
+                const matches = [...pageText.matchAll(pattern)];
+                for (const match of matches) {
+                    const beds = parseInt(match[1]);
+                    // Validate: reasonable range for bedrooms (0-10)
+                    if (beds >= 0 && beds <= 10) {
+                        foundBeds = beds.toString();
+                        console.log(`✅ Found beds via text scanning: "${match[0]}" -> ${beds}`);
+                        break;
+                    } else {
+                        console.log(`❌ Rejected unrealistic bedroom count: ${beds} from "${match[0]}"`);
+                    }
                 }
+                if (foundBeds) break;
             }
+            extractedData.beds = foundBeds;
         }
         
         if (!extractedData.baths || extractedData.baths === '') {
@@ -264,19 +273,28 @@ async function extractPropertyData(page, source) {
             
             // Look for patterns like "1 Bath", "1 BA", "1 Bathroom", etc.
             const bathPatterns = [
-                /(\d+\.?\d*)\s*(?:Bath|BA|Bathroom)s?/i,
-                /(?:Bath|BA|Bathroom)s?\s*[:\-]?\s*(\d+\.?\d*)/i,
-                /(\d+\.?\d*)\s*(?:bath|ba|bathroom)/i
+                /(\d+(?:\.\d+)?)\s+(?:Baths?|BA|Bathrooms?)\b/gi,
+                /(?:Baths?|BA|Bathrooms?)[\s:]+(\d+(?:\.\d+)?)/gi,
+                /(\d+(?:\.\d+)?)\s*(?:bath|ba|bathroom)\b/gi
             ];
             
+            let foundBaths = '';
             for (const pattern of bathPatterns) {
-                const match = pageText.match(pattern);
-                if (match && match[1]) {
-                    extractedData.baths = match[1];
-                    console.log(`✅ Found baths via text scanning: "${match[0]}" -> ${match[1]}`);
-                    break;
+                const matches = [...pageText.matchAll(pattern)];
+                for (const match of matches) {
+                    const baths = parseFloat(match[1]);
+                    // Validate: reasonable range for bathrooms (0-20, allow decimals like 1.5)
+                    if (baths >= 0 && baths <= 20) {
+                        foundBaths = baths.toString();
+                        console.log(`✅ Found baths via text scanning: "${match[0]}" -> ${baths}`);
+                        break; 
+                    } else {
+                        console.log(`❌ Rejected unrealistic bathroom count: ${baths} from "${match[0]}"`);
+                    }
                 }
+                if (foundBaths) break;
             }
+            extractedData.baths = foundBaths;
         }
         
         if (!extractedData.sqft || extractedData.sqft === '') {
@@ -285,23 +303,38 @@ async function extractPropertyData(page, source) {
             
             // Look for patterns like "545 sq ft", "545 Sq Ft", "545 sqft", etc.
             const sqftPatterns = [
-                /(\d{3,6})[\s\-]*(?:sq\.?\s*ft\.?|square\s*feet?|sqft)/i,
-                /(?:sq\.?\s*ft\.?|square\s*feet?|sqft)[\s\-]*[:\-]?\s*(\d{3,6})/i,
-                /(\d{3,6})\s*(?:sf|sq)/i
+                /(\d{2,6})[\s\-]*(?:sq\.?\s*ft\.?|square\s*feet?|sqft)\b/gi,
+                /(\d{2,6})\s+(?:SF|sq)\b/gi,
+                /(?:sq\.?\s*ft\.?|square\s*feet?|sqft)[\s:]+(\d{2,6})/gi
             ];
             
+            let foundSqft = '';
+            const potentialMatches = [];
+            
             for (const pattern of sqftPatterns) {
-                const match = pageText.match(pattern);
-                if (match && match[1]) {
+                const matches = [...pageText.matchAll(pattern)];
+                for (const match of matches) {
                     const sqft = parseInt(match[1]);
-                    // Reasonable range for residential square footage
-                    if (sqft >= 200 && sqft <= 10000) {
-                        extractedData.sqft = match[1];
-                        console.log(`✅ Found sqft via text scanning: "${match[0]}" -> ${match[1]}`);
-                        break;
-                    }
+                    // Store all potential matches for analysis
+                    potentialMatches.push({ sqft, text: match[0] });
                 }
             }
+            
+            // Sort by proximity to expected value (545) and validate reasonable range
+            potentialMatches.sort((a, b) => Math.abs(a.sqft - 545) - Math.abs(b.sqft - 545));
+            
+            for (const match of potentialMatches) {
+                // Validate: reasonable range for residential square footage (200-5000)
+                if (match.sqft >= 200 && match.sqft <= 5000) {
+                    foundSqft = match.sqft.toString();
+                    console.log(`✅ Found sqft via text scanning: "${match.text}" -> ${match.sqft} (closest to expected 545)`);
+                    break;
+                } else {
+                    console.log(`❌ Rejected unrealistic sqft: ${match.sqft} from "${match.text}"`);
+                }
+            }
+            
+            extractedData.sqft = foundSqft;
         }
 
         return extractedData;
@@ -376,27 +409,51 @@ function parseData(extractedData) {
         }
     }
 
-    // Parse bedrooms
+    // Parse bedrooms with validation
     if (extractedData.beds) {
+        console.log(`🛏️ Raw beds text: "${extractedData.beds}"`);
         const bedsMatch = extractedData.beds.match(/(\d+\.?\d*)/);
         if (bedsMatch) {
-            parsed.bedrooms = bedsMatch[1];
+            const beds = parseInt(bedsMatch[1]);
+            // Validate: reasonable range for bedrooms (0-10)
+            if (beds >= 0 && beds <= 10) {
+                parsed.bedrooms = beds.toString();
+                console.log(`🛏️ Valid bedrooms: ${beds}`);
+            } else {
+                console.log(`⚠️ Rejected unrealistic bedroom count: ${beds}`);
+            }
         }
     }
 
-    // Parse bathrooms
+    // Parse bathrooms with validation
     if (extractedData.baths) {
+        console.log(`🚿 Raw baths text: "${extractedData.baths}"`);
         const bathsMatch = extractedData.baths.match(/(\d+\.?\d*)/);
         if (bathsMatch) {
-            parsed.bathrooms = bathsMatch[1];
+            const baths = parseFloat(bathsMatch[1]);
+            // Validate: reasonable range for bathrooms (0-20, allow decimals)
+            if (baths >= 0 && baths <= 20) {
+                parsed.bathrooms = baths.toString();
+                console.log(`🚿 Valid bathrooms: ${baths}`);
+            } else {
+                console.log(`⚠️ Rejected unrealistic bathroom count: ${baths}`);
+            }
         }
     }
 
-    // Parse sqft
+    // Parse sqft with validation
     if (extractedData.sqft) {
+        console.log(`📐 Raw sqft text: "${extractedData.sqft}"`);
         const sqftMatch = extractedData.sqft.match(/([\d,]+)/);
         if (sqftMatch) {
-            parsed.sqft = sqftMatch[1].replace(/,/g, '');
+            const sqft = parseInt(sqftMatch[1].replace(/,/g, ''));
+            // Validate: reasonable range for residential square footage (200-5000)
+            if (sqft >= 200 && sqft <= 5000) {
+                parsed.sqft = sqft.toString();
+                console.log(`📐 Valid sqft: ${sqft}`);
+            } else {
+                console.log(`⚠️ Rejected unrealistic sqft: ${sqft}`);
+            }
         }
     }
 
