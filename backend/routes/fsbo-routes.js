@@ -320,4 +320,60 @@ router.post('/contact/:listingId', async (req, res) => {
     }
 });
 
+// Admin authentication middleware
+const adminAuth = (req, res, next) => {
+    const password = req.headers.authorization;
+    if (password === config.adminPassword) {
+        next();
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+};
+
+// Admin: Get all listings (including removed ones)
+router.get('/admin/listings', adminAuth, (req, res) => {
+    try {
+        const listings = statements.getAllListings.all();
+        
+        // Get photos for each listing
+        const listingsWithPhotos = listings.map(listing => {
+            const photos = statements.getPhotosByListingId.all(listing.id);
+            return {
+                ...listing,
+                photos: photos.map(photo => ({
+                    id: photo.id,
+                    filename: photo.filename,
+                    url: photo.path.startsWith('http') ? photo.path : `/api/fsbo/photo/${photo.filename}`
+                }))
+            };
+        });
+        
+        res.json({ success: true, listings: listingsWithPhotos });
+    } catch (error) {
+        console.error('Error fetching admin listings:', error);
+        res.status(500).json({ error: 'Failed to fetch listings' });
+    }
+});
+
+// Admin: Remove a listing (soft delete)
+router.delete('/listing/:id', adminAuth, (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Check if listing exists
+        const listing = statements.getListingById.get(id);
+        if (!listing) {
+            return res.status(404).json({ error: 'Listing not found' });
+        }
+        
+        // Soft delete: update status to 'removed'
+        statements.updateListingStatus.run('removed', id);
+        
+        res.json({ success: true, message: 'Listing removed successfully' });
+    } catch (error) {
+        console.error('Error removing listing:', error);
+        res.status(500).json({ error: 'Failed to remove listing' });
+    }
+});
+
 module.exports = router;

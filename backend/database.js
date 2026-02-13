@@ -203,6 +203,11 @@ const statements = {
     // Mark reminder sent
     markReminderSent: db.prepare(`
         UPDATE listings SET reminderSent = 1, updatedAt = CURRENT_TIMESTAMP WHERE id = ?
+    `),
+
+    // Admin: Get all listings (including removed)
+    getAllListings: db.prepare(`
+        SELECT * FROM listings ORDER BY createdAt DESC
     `)
 };
 
