@@ -1847,9 +1847,14 @@
             console.log('[Fetch] Client-side extraction for:', source);
             console.log('[Fetch] URL:', url);
             
-            // Use client-side extraction for Century 21
+            // Try client-side extraction for Century 21 first, fall back to backend
             if (source === 'century21') {
-                return await extractC21Listing(url);
+                const clientData = await extractC21Listing(url);
+                if (clientData) {
+                    return clientData; // Success with client-side
+                }
+                // If null returned, fall through to backend
+                console.log('🔄 [Fetch] Client-side failed, falling back to backend for C21...');
             }
             
             // For other sources, try backend first then fallback
@@ -1885,7 +1890,9 @@
             // Try multiple CORS proxies in sequence
             const proxies = [
                 { name: 'AllOrigins', url: (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}` },
+                { name: 'Cors.sh', url: (u) => `https://cors.sh/${u}` },
                 { name: 'CorsProxy.io', url: (u) => `https://corsproxy.io/?${encodeURIComponent(u)}` },
+                { name: 'Proxy.cors.sh', url: (u) => `https://proxy.cors.sh/${u}` },
                 { name: 'ThingProxy', url: (u) => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(u)}` }
             ];
             
@@ -1913,7 +1920,9 @@
             }
             
             if (!html) {
-                throw new Error(`All CORS proxies failed. Last error: ${lastError?.message || 'Unknown'}. Century 21 may be blocking automated access.`);
+                console.log('⚠️ [C21] All CORS proxies failed, falling back to backend extraction...');
+                // Fall back to backend extraction
+                return null;
             }
             
             try {

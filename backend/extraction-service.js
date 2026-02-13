@@ -12,7 +12,7 @@ function detectSource(url) {
     if (urlLower.includes('realtor.com')) return 'realtor';
     if (urlLower.includes('redfin.com')) return 'redfin';
     if (urlLower.includes('trulia.com')) return 'trulia';
-    if (urlLower.includes('century21.com')) return 'century21';
+    if (urlLower.includes('century21')) return 'century21'; // Match all C21 domains
     if (urlLower.includes('remax.com')) return 'remax';
     if (urlLower.includes('coldwellbanker.com')) return 'coldwellbanker';
     if (urlLower.includes('compass.com')) return 'compass';
