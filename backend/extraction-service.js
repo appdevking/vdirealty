@@ -23,48 +23,115 @@ function detectSource(url) {
 
 // Extract property data from page
 async function extractPropertyData(page, source) {
-    return await page.evaluate(() => {
-        // Helper function to get text from selector
-        const getText = (selector) => {
-            const el = document.querySelector(selector);
-            return el ? el.textContent.trim() : '';
+    return await page.evaluate((src) => {
+        // Helper function to try multiple selectors
+        const getTextFromSelectors = (selectors) => {
+            for (const selector of selectors) {
+                const el = document.querySelector(selector);
+                if (el && el.textContent.trim()) {
+                    return el.textContent.trim();
+                }
+            }
+            return '';
         };
+
+        // Source-specific selectors (more targeted)
+        const selectors = {
+            zillow: {
+                address: ['h1[data-test="home-details-summary-headline"]', 'h1.ds-address-container', 'h1[class*="summary-address"]'],
+                price: ['span[data-test="property-floorplan-price"]', 'span.ds-price', 'div[data-testid="price"]', 'span[class*="price"]'],
+                beds: ['span[data-testid="bed-count"]', 'span.Text-c11n-8-84-3__sc-aiai24-0[class*="bed"]'],
+                baths: ['span[data-testid="bath-count"]', 'span.Text-c11n-8-84-3__sc-aiai24-0[class*="bath"]'],
+                sqft: ['span[data-testid="sqft-value"]', 'span.Text-c11n-8-84-3__sc-aiai24-0[class*="sqft"]'],
+                description: ['div[data-testid="description"]', 'div.ds-home-facts-and-features']
+            },
+            realtor: {
+                address: ['h1[data-testid="property-street"]', 'h1.address', 'h1[class*="address"]'],
+                price: ['div[data-testid="price"]', 'span[data-label="pc-price"]', 'div[class*="price"]'],
+               beds: ['li[data-testid="property-meta-beds"]', 'span[data-label="pc-meta-beds"]'],
+                baths: ['li[data-testid="property-meta-baths"]', 'span[data-label="pc-meta-baths"]'],
+                sqft: ['li[data-testid="property-meta-sqft"]', 'span[data-label="pc-meta-sqft"]'],
+                description: ['section[data-testid="description"]', 'div[id="ldp-detail-romance"]']
+            },
+            redfin: {
+                address: ['h1[data-rf-test-id="abp-streetLine"]', 'div.street-address', 'h1[class*="address"]'],
+                price: ['div[data-rf-test-id="abp-price"]', 'span.price', 'div.statsValue'],
+                beds: ['div[data-rf-test-id="abp-beds"]', 'div[data-rf-test-name="Beds"]'],
+                baths: ['div[data-rf-test-id="abp-baths"]', 'div[data-rf-test-name="Baths"]'],
+                sqft: ['div[data-rf-test-id="abp-sqFt"]', 'div[data-rf-test-name="Sq. Ft."]', 'span.sqft-value'],
+                description: ['div[data-rf-test-id="abp-description"]', 'div.remarks']
+            },
+            universal: {
+                address: ['h1', 'h1.address', '.property-address', '.listing-address', '[itemprop="address"]', '.street-address'],
+                price: ['.price', '.property-price', '.listing-price', '[itemprop="price"]', 'span[class*="price"]', 'div[class*="price"]'],
+                beds: ['.beds', '.bedrooms', '[data-beds]', 'span[class*="bed"]', 'div[class*="bed"]'],
+                baths: ['.baths', '.bathrooms', '[data-baths]', 'span[class*="bath"]', 'div[class*="bath"]'],
+                sqft: ['.sqft', '.square-feet', '[data-sqft]', 'span[class*="sqft"]', 'span[class*="sq-ft"]'],
+                description: ['.description', '.property-description', '.listing-description', '.remarks', 'div[class*="description"]']
+            }
+        };
+
+        // Choose selectors based on source
+        const siteSelectors = selectors[src] || selectors.universal;
 
         // Extract images
         const images = [];
         const seenUrls = new Set();
         
-        document.querySelectorAll('img').forEach(img => {
-            let src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('data-original');
-            
-            if (!src && img.srcset) {
-                const sources = img.srcset.split(',').map(s => s.trim().split(' ')[0]);
-                src = sources[sources.length - 1];
-            }
-            
-            if (src && !seenUrls.has(src)) {
-                const isLogo = src.toLowerCase().includes('logo') || src.toLowerCase().includes('icon') || 
-                              img.alt?.toLowerCase().includes('logo') || img.alt?.toLowerCase().includes('icon');
-                const width = parseInt(img.getAttribute('width')) || 0;
+        // Look for images in multiple ways
+        const imageSelectors = [
+            'img[src*="photos"]',
+            'img[src*="images"]',
+            'img[src*="listing"]',
+            'img[src*="property"]',
+            'picture img',
+            'div[class*="photo"] img',
+            'div[class*="image"] img',
+            'div[class*="gallery"] img',
+            'img[alt*="photo"]',
+            'img'
+        ];
+
+        imageSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(img => {
+                let src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || 
+                         img.getAttribute('data-original') || img.getAttribute('data-srcset');
                 
-                if (src.match(/^https?:\/\//i) && !isLogo && (width === 0 || width > 200)) {
-                    images.push(src);
-                    seenUrls.add(src);
+                if (!src && img.srcset) {
+                    const sources = img.srcset.split(',').map(s => s.trim().split(' ')[0]);
+                    src = sources[sources.length - 1];
                 }
-            }
+                
+                if (src && !seenUrls.has(src)) {
+                    const isLogo = src.toLowerCase().includes('logo') || 
+                                  src.toLowerCase().includes('icon') ||
+                                  src.toLowerCase().includes('avatar') ||
+                                  img.alt?.toLowerCase().includes('logo') || 
+                                  img.alt?.toLowerCase().includes('icon');
+                    
+                    const width = parseInt(img.getAttribute('width')) || img.width || 0;
+                    const height = parseInt(img.getAttribute('height')) || img.height || 0;
+                    
+                    // Only include larger images that look like property photos
+                    if (src.match(/^https?:\/\//i) && !isLogo && (width === 0 || width > 300) && (height === 0 || height > 200)) {
+                        images.push(src);
+                        seenUrls.add(src);
+                    }
+                }
+            });
         });
 
-        // Universal selectors for property data
+        // Return extracted data
         return {
-            address: getText('h1.address, .property-address, .listing-address, [itemprop="address"], .street-address, h1.listing-title, h1[data-testid="property-street"], h1.property-address, .pdp-address h1, [data-rf-test-id="abp-streetLine"]'),
-            price: getText('.price, .property-price, .listing-price, [itemprop="price"], .list-price, span.price, [data-testid="price"], .price-display, [data-rf-test-id="abp-price"], span[class*="price"], .sales-price'),
-            beds: getText('.beds, .bedrooms, [data-beds], .beds-count, .bedroom-count, [data-testid="bed-count"], [data-rf-test-id="abp-beds"], .property-beds, li[data-testid="property-meta-beds"]'),
-            baths: getText('.baths, .bathrooms, [data-baths], .baths-count, .bathroom-count, [data-testid="bath-count"], [data-rf-test-id="abp-baths"], .property-baths, li[data-testid="property-meta-baths"]'),
-            sqft: getText('.sqft, .square-feet, [data-sqft], .sqft-value, .living-area, [data-testid="sqft-value"], [data-rf-test-id="abp-sqFt"], .property-sqft, li[data-testid="property-meta-sqft"]'),
-            description: getText('.description, .property-description, .listing-description, .remarks, .property-details, [data-testid="description"], .property-remarks, #listing-description'),
-            images: images.slice(0, 10)
+            address: getTextFromSelectors(siteSelectors.address),
+            price: getTextFromSelectors(siteSelectors.price),
+            beds: getTextFromSelectors(siteSelectors.beds),
+            baths: getTextFromSelectors(siteSelectors.baths),
+            sqft: getTextFromSelectors(siteSelectors.sqft),
+            description: getTextFromSelectors(siteSelectors.description),
+            images: images.slice(0, 15) // Get more images
         };
-    });
+    }, source);
 }
 
 // Parse extracted data into standardized format
@@ -177,7 +244,7 @@ async function extractListing(url) {
         try {
             await page.goto(url, {
                 waitUntil: 'domcontentloaded', // Less strict than networkidle2
-                timeout: 45000 // 45 seconds
+                timeout: 60000 // 60 seconds
             });
         } catch (navError) {
             console.log(`[Extraction] Navigation warning: ${navError.message}, continuing anyway...`);
@@ -186,8 +253,34 @@ async function extractListing(url) {
         
         console.log(`[Extraction] Page loaded, waiting for content...`);
         
-        // Wait a bit for dynamic content
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        // Wait for page to settle
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Scroll to trigger lazy loading
+        try {
+            await page.evaluate(async () => {
+                await new Promise((resolve) => {
+                    let totalHeight = 0;
+                    const distance = 300;
+                    const timer = setInterval(() => {
+                        const scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
+
+                        if (totalHeight >= scrollHeight){
+                            clearInterval(timer);
+                            window.scrollTo(0, 0); // Scroll back to top
+                            setTimeout(resolve, 1000);
+                        }
+                    }, 100);
+                });
+            });
+        } catch (scrollError) {
+            console.log(`[Extraction] Scroll failed, continuing...`);
+        }
+        
+        console.log(`[Extraction] Content loaded, waiting additional time...`);
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
         // Check for blocking/CAPTCHA
         const pageContent = await page.content();
