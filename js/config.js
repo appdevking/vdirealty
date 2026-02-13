@@ -7,7 +7,7 @@
  */
 const CONFIG = {
     // API_BASE_URL: 'http://localhost:3000' // Uncomment for local development
-    API_BASE_URL: 'http://52.14.248.239' // AWS EC2 backend (migration from Railway completed Feb 13, 2026)
+    API_BASE_URL: 'https://api.vdirealty.com' // AWS EC2 backend with SSL (migration from Railway completed Feb 13, 2026)
 };
 
 // Prevent modification
