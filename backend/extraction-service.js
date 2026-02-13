@@ -29,8 +29,10 @@ async function extractPropertyData(page, source) {
             for (const selector of selectors) {
                 const el = document.querySelector(selector);
                 if (el && el.textContent.trim()) {
+                    console.log(`✅ Selector "${selector}" found: "${el.textContent.trim()}"`);
                     return el.textContent.trim();
                 }
+                console.log(`❌ Selector "${selector}" not found or empty`);
             }
             return '';
         };
@@ -60,6 +62,80 @@ async function extractPropertyData(page, source) {
                 baths: ['div[data-rf-test-id="abp-baths"]', 'div[data-rf-test-name="Baths"]'],
                 sqft: ['div[data-rf-test-id="abp-sqFt"]', 'div[data-rf-test-name="Sq. Ft."]', 'span.sqft-value'],
                 description: ['div[data-rf-test-id="abp-description"]', 'div.remarks']
+            },
+            century21: {
+                address: [
+                    'h1.c21__DetailMasthead-address', 
+                    'h1[class*="DetailMasthead-address"]',
+                    'h1[class*="address"]', 
+                    '.property-address',
+                    'address',
+                    'h1'
+                ],
+                price: [
+                    '.c21__DetailMasthead-price .Text--decorativePrice', 
+                    '.c21__DetailMasthead-price span[class*="price"]',
+                    'div[class*="DetailMasthead-price"] span',
+                    'div[class*="price"] span[class*="decorative"]',
+                    '.price-display .price-value',
+                    'span[class*="Price"]',
+                    '.price',
+                    'h2[class*="price"]'
+                ],
+                beds: [
+                    // Primary selectors - look for specific bedroom data
+                    'li[data-test="property-bedroom"] .Text--numbers',
+                    'li[data-test="property-bedroom"] span', 
+                    '.c21__DetailFactsCallout span.Text--numbers:first-of-type',
+                    // Fallback selectors
+                    '.c21__DetailFactsCallout li:first-child .Text--numbers',
+                    '.c21__DetailFactsCallout li:first-child span',
+                    '.property-facts .bedroom-count',
+                    '.bed-count .number',
+                    'span[class*="bedroom"]',
+                    // Generic patterns that might work
+                    '[class*="bedroom"] span',
+                    '[class*="bed"] span[class*="number"]'
+                ],
+                baths: [
+                    // Primary selectors - look for specific bathroom data  
+                    'li[data-test="property-bathroom"] .Text--numbers',
+                    'li[data-test="property-bathroom"] span',
+                    '.c21__DetailFactsCallout span.Text--numbers:nth-of-type(2)',
+                    // Fallback selectors
+                    '.c21__DetailFactsCallout li:nth-child(2) .Text--numbers', 
+                    '.c21__DetailFactsCallout li:nth-child(2) span',
+                    '.property-facts .bathroom-count', 
+                    '.bath-count .number',
+                    'span[class*="bathroom"]',
+                    // Generic patterns that might work
+                    '[class*="bathroom"] span',
+                    '[class*="bath"] span[class*="number"]'
+                ],
+                sqft: [
+                    // Primary selectors - look for specific sqft data
+                    'li[data-test="property-sqft"] .Text--numbers',
+                    'li[data-test="property-sqft"] span',
+                    '.c21__DetailFactsCallout span.Text--numbers:last-of-type',
+                    // Fallback selectors
+                    '.c21__DetailFactsCallout li:last-child .Text--numbers',
+                    '.c21__DetailFactsCallout li:last-child span',
+                    '.property-facts .sqft-count',
+                    '.sqft-count .number', 
+                    'span[class*="sqft"]',
+                    'span[class*="square"]',
+                    // Generic patterns that might work
+                    '[class*="sqft"] span',
+                    '[class*="square"] span[class*="number"]'
+                ],
+                description: [
+                    '.c21__DetailDescription p',
+                    '.c21__DetailDescription',
+                    '.property-description',
+                    '.listing-description',
+                    '.description',
+                    'div[class*="description"]'
+                ]
             },
             universal: {
                 address: ['h1', 'h1.address', '.property-address', '.listing-address', '[itemprop="address"]', '.street-address'],
