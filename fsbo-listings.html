@@ -1026,7 +1026,7 @@
         // Load listings from backend on page load
         async function loadListings() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings?source=fsbo`);
                 const data = await response.json();
                 
                 if (data.success && data.listings.length > 0) {

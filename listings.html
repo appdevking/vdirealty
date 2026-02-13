@@ -674,7 +674,7 @@
         // Load listings from API
         async function loadListings() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`);
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings?source=partner`);
                 const data = await response.json();
                 
                 if (data.success && data.listings) {

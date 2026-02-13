@@ -113,7 +113,8 @@ const runMigrations = () => {
         { name: 'parkingSpaces', type: 'INTEGER' },
         { name: 'leaseType', type: 'TEXT' },
         { name: 'mlsNumber', type: 'TEXT' },
-        { name: 'externalUrl', type: 'TEXT' }
+        { name: 'externalUrl', type: 'TEXT' },
+        { name: 'listingSource', type: 'TEXT DEFAULT \'fsbo\'' }
     ];
     
     // Add missing columns
@@ -152,8 +153,8 @@ const statements = {
             features, description, privateContact, submissionDate, expirationDate,
             buildingClass, zoning, occupancyRate, capRate, grossIncome,
             operatingExpenses, numberOfUnits, parkingSpaces, leaseType,
-            mlsNumber, externalUrl
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            mlsNumber, externalUrl, listingSource
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `),
 
     // Insert photo
@@ -166,6 +167,13 @@ const statements = {
     getActiveListings: db.prepare(`
         SELECT * FROM listings 
         WHERE status = 'active' AND expirationDate > datetime('now')
+        ORDER BY createdAt DESC
+    `),
+
+    // Get active listings by source
+    getActiveListingsBySource: db.prepare(`
+        SELECT * FROM listings 
+        WHERE status = 'active' AND expirationDate > datetime('now') AND listingSource = ?
         ORDER BY createdAt DESC
     `),
 

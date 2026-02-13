@@ -1198,6 +1198,9 @@
                 // Add private contact preference
                 formData.append('privateContact', document.getElementById('privateContact').checked);
 
+                // Add listing source to distinguish partner listings from FSBO
+                formData.append('listingSource', 'partner');
+
                 // Add manually uploaded photos
                 selectedFiles.forEach(file => {
                     formData.append('photos', file);

@@ -142,7 +142,8 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
             data.parkingSpaces ? parseInt(data.parkingSpaces) : null,
             data.leaseType || null,
             data.mlsNumber || null,
-            data.externalUrl || null
+            data.externalUrl || null,
+            data.listingSource || 'fsbo'
         );
         
         const listingId = result.lastInsertRowid;
@@ -216,7 +217,12 @@ router.post('/submit', upload.array('photos', config.maxFiles), async (req, res)
 // Get all active listings
 router.get('/listings', (req, res) => {
     try {
-        const listings = statements.getActiveListings.all();
+        const { source } = req.query;
+        
+        // Get listings filtered by source if provided
+        const listings = source 
+            ? statements.getActiveListingsBySource.all(source)
+            : statements.getActiveListings.all();
         
         // Attach photos to each listing
         const listingsWithPhotos = listings.map(listing => {
