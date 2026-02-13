@@ -1882,19 +1882,41 @@
         async function extractC21Listing(url) {
             console.log('🏠 [C21] Starting client-side extraction for C21');
             
-            try {
-                // Use CORS proxy to fetch the page
-                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-                console.log('🌐 [C21] Fetching via proxy:', proxyUrl);
-                
-                const response = await fetch(proxyUrl);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch listing page (status ${response.status})`);
+            // Try multiple CORS proxies in sequence
+            const proxies = [
+                { name: 'AllOrigins', url: (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}` },
+                { name: 'CorsProxy.io', url: (u) => `https://corsproxy.io/?${encodeURIComponent(u)}` },
+                { name: 'ThingProxy', url: (u) => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(u)}` }
+            ];
+            
+            let html = null;
+            let lastError = null;
+            
+            // Try each proxy until one works
+            for (const proxy of proxies) {
+                try {
+                    const proxyUrl = proxy.url(url);
+                    console.log(`🌐 [C21] Trying ${proxy.name}:`, proxyUrl);
+                    
+                    const response = await fetch(proxyUrl, { timeout: 10000 });
+                    if (response.ok) {
+                        html = await response.text();
+                        console.log(`✅ [C21] Success with ${proxy.name}! Page length:`, html.length);
+                        break;
+                    } else {
+                        console.log(`⚠️ [C21] ${proxy.name} returned status ${response.status}, trying next...`);
+                    }
+                } catch (error) {
+                    console.log(`⚠️ [C21] ${proxy.name} failed:`, error.message, ', trying next...');
+                    lastError = error;
                 }
-                
-                const html = await response.text();
-                console.log('✅ [C21] Page fetched successfully, length:', html.length);
-                
+            }
+            
+            if (!html) {
+                throw new Error(`All CORS proxies failed. Last error: ${lastError?.message || 'Unknown'}. Century 21 may be blocking automated access.`);
+            }
+            
+            try {
                 // Parse the HTML
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
