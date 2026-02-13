@@ -34,6 +34,8 @@ def detect_source(url):
         return 'coldwellbanker'
     if 'compass.com' in url_lower:
         return 'compass'
+    if 'whittlesey' in url_lower:
+        return 'whittlesey'
     
     return 'unknown'
 
@@ -224,6 +226,183 @@ def extract_realtor(url, soup):
     return data
 
 
+def extract_compass(url, soup):
+    """Extract data from Compass listings"""
+    data = {
+        'source': 'Compass',
+        'sourceUrl': url
+    }
+    
+    # Try JSON-LD first
+    json_ld = extract_json_ld(soup)
+    if json_ld:
+        if 'name' in json_ld:
+            data['address'] = json_ld['name']
+        if 'offers' in json_ld and 'price' in json_ld['offers']:
+            data['price'] = clean_number(json_ld['offers']['price'])
+        if 'description' in json_ld:
+            data['description'] = json_ld['description']
+        if 'numberOfBedrooms' in json_ld:
+            data['bedrooms'] = clean_number(json_ld['numberOfBedrooms'])
+        if 'numberOfBathroomsTotal' in json_ld:
+            data['bathrooms'] = clean_number(json_ld['numberOfBathroomsTotal'])
+    
+    # Try common selectors
+    selectors = {
+        'address': ['h1[data-tn="pdp-address"]', 'h1'],
+        'price': ['div[data-tn="pdp-price"]', 'span[data-tn="pdp-price"]'],
+        'beds': ['div:contains("Beds")', 'span:contains("Beds")'],
+        'baths': ['div:contains("Baths")', 'span:contains("Baths")'],
+        'sqft': ['div:contains("Sq Ft")', 'span:contains("Sq Ft")']
+    }
+    
+    for key, sels in selectors.items():
+        if key not in data:
+            for sel in sels:
+                elem = soup.select_one(sel)
+                if elem:
+                    text = elem.get_text(strip=True)
+                    if key in ['beds', 'baths', 'sqft', 'price']:
+                        data[key if key != 'beds' else 'bedrooms'] = clean_number(text)
+                    else:
+                        data[key] = text
+                    break
+    
+    return data
+
+
+def extract_whittlesey(url, soup):
+    """Extract data from Whittlesey Properties listings"""
+    data = {
+        'source': 'Whittlesey Properties',
+        'sourceUrl': url
+    }
+    
+    # Try JSON-LD first
+    json_ld = extract_json_ld(soup)
+    if json_ld:
+        if 'name' in json_ld:
+            data['address'] = json_ld['name']
+        if 'offers' in json_ld and 'price' in json_ld['offers']:
+            data['price'] = clean_number(json_ld['offers']['price'])
+        if 'description' in json_ld:
+            data['description'] = json_ld['description']
+    
+    # Try common selectors and text patterns
+    # Look for address in h1, title, or meta tags
+    if 'address' not in data:
+        for sel in ['h1', 'title', '.address', '.property-address']:
+            elem = soup.select_one(sel)
+            if elem:
+                text = elem.get_text(strip=True)
+                if text and len(text) > 5:
+                    data['address'] = text
+                    break
+    
+    # Look for price
+    if 'price' not in data:
+        price_patterns = [r'\$[\d,]+', r'Price:\s*\$?([\d,]+)']
+        text = soup.get_text()
+        for pattern in price_patterns:
+            match = re.search(pattern, text)
+            if match:
+                data['price'] = clean_number(match.group(0))
+                break
+    
+    # Look for beds/baths/sqft
+    text_content = soup.get_text()
+    if 'bedrooms' not in data:
+        beds_match = re.search(r'(\d+)\s+(?:Bed(?:room)?s?|BR)', text_content, re.I)
+        if beds_match:
+            data['bedrooms'] = int(beds_match.group(1))
+    
+    if 'bathrooms' not in data:
+        baths_match = re.search(r'(\d+(?:\.\d+)?)\s+(?:Bath(?:room)?s?|BA)', text_content, re.I)
+        if baths_match:
+            data['bathrooms'] = float(baths_match.group(1))
+    
+    if 'sqft' not in data:
+        sqft_match = re.search(r'([\d,]+)\s+(?:Sq\.?\s*Ft|Square\s+Feet)', text_content, re.I)
+        if sqft_match:
+            data['sqft'] = clean_number(sqft_match.group(1))
+    
+    return data
+
+
+def extract_generic(url, soup):
+    """Generic extraction for unknown sources - tries multiple methods"""
+    data = {
+        'source': 'Unknown',
+        'sourceUrl': url
+    }
+    
+    # Try JSON-LD first (most reliable)
+    json_ld = extract_json_ld(soup)
+    if json_ld:
+        if 'name' in json_ld:
+            data['address'] = json_ld['name']
+        if 'offers' in json_ld and 'price' in json_ld['offers']:
+            data['price'] = clean_number(json_ld['offers']['price'])
+        if 'description' in json_ld:
+            data['description'] = json_ld['description']
+        if 'numberOfBedrooms' in json_ld:
+            data['bedrooms'] = clean_number(json_ld['numberOfBedrooms'])
+        if 'numberOfBathroomsTotal' in json_ld:
+            data['bathrooms'] = clean_number(json_ld['numberOfBathroomsTotal'])
+        if 'floorSize' in json_ld:
+            if isinstance(json_ld['floorSize'], dict) and 'value' in json_ld['floorSize']:
+                data['sqft'] = clean_number(json_ld['floorSize']['value'])
+            else:
+                data['sqft'] = clean_number(json_ld['floorSize'])
+    
+    # Try common HTML selectors
+    if 'address' not in data:
+        for sel in ['h1', 'title', '.address', '.property-address', '[itemprop="address"]']:
+            elem = soup.select_one(sel)
+            if elem:
+                text = elem.get_text(strip=True)
+                # Basic validation - address should have some length
+                if text and len(text) > 5 and len(text) < 200:
+                    data['address'] = text
+                    break
+    
+    # Try to find price in page text
+    if 'price' not in data:
+        text_content = soup.get_text()
+        price_match = re.search(r'\$\s*([\d,]+(?:\.\d{2})?)', text_content)
+        if price_match:
+            price_val = clean_number(price_match.group(1))
+            # Sanity check - price should be reasonable
+            if price_val and price_val >= 1000 and price_val <= 100000000:
+                data['price'] = price_val
+    
+    # Find beds/baths/sqft with text patterns
+    text_content = soup.get_text()
+    
+    if 'bedrooms' not in data:
+        beds_match = re.search(r'(\d+)\s+(?:Bed(?:room)?s?|BR)\b', text_content, re.I)
+        if beds_match:
+            beds_val = int(beds_match.group(1))
+            if beds_val >= 0 and beds_val <= 20:
+                data['bedrooms'] = beds_val
+    
+    if 'bathrooms' not in data:
+        baths_match = re.search(r'(\d+(?:\.\d+)?)\s+(?:Bath(?:room)?s?|BA)\b', text_content, re.I)
+        if baths_match:
+            baths_val = float(baths_match.group(1))
+            if baths_val >= 0 and baths_val <= 20:
+                data['bathrooms'] = baths_val
+    
+    if 'sqft' not in data:
+        sqft_match = re.search(r'([\d,]+)\s+(?:Sq\.?\s*Ft|Square\s+Feet|sqft)\b', text_content, re.I)
+        if sqft_match:
+            sqft_val = clean_number(sqft_match.group(1))
+            if sqft_val and sqft_val >= 100 and sqft_val <= 50000:
+                data['sqft'] = sqft_val
+    
+    return data
+
+
 def extract_listing(url):
     """Extract listing data from URL"""
     print(f"\n📥 Processing: {url}")
@@ -248,20 +427,13 @@ def extract_listing(url):
             data = extract_zillow(url, soup)
         elif source == 'realtor':
             data = extract_realtor(url, soup)
+        elif source == 'compass':
+            data = extract_compass(url, soup)
+        elif source == 'whittlesey':
+            data = extract_whittlesey(url, soup)
         else:
-            # Generic extraction
-            data = {
-                'source': 'Unknown',
-                'sourceUrl': url
-            }
-            json_ld = extract_json_ld(soup)
-            if json_ld:
-                if 'name' in json_ld:
-                    data['address'] = json_ld['name']
-                if 'offers' in json_ld and 'price' in json_ld['offers']:
-                    data['price'] = clean_number(json_ld['offers']['price'])
-                if 'description' in json_ld:
-                    data['description'] = json_ld['description']
+            # Use enhanced generic extraction
+            data = extract_generic(url, soup)
         
         # Add timestamp
         from datetime import datetime
@@ -320,23 +492,34 @@ def main():
         output_file = 'extracted_listings.json'
         with open(output_file, 'w') as f:
             json.dump(listings, f, indent=2)
-        
+
+        # Generate listings_import.js for localStorage import
+        js_file = 'listings_import.js'
+        js_code = f"// Auto-generated on {__import__('datetime').datetime.now().isoformat()}\n" + \
+            "// Run this in your browser console or include in your site to import listings into localStorage\n" + \
+            "const listings = " + json.dumps(listings, indent=2) + ";\n" + \
+            "localStorage.setItem('listings', JSON.stringify(listings));\n" + \
+            "console.log('Imported ' + listings.length + ' listings to localStorage.');\n"
+        with open(js_file, 'w') as f:
+            f.write(js_code)
+
         print("\n" + "=" * 60)
         print(f"✅ SUCCESS! Extracted {len(listings)} listing(s)")
         print(f"📁 Saved to: {output_file}")
+        print(f"📝 JS Import file: {js_file}")
         print("=" * 60)
-        
+
         # Show summary
         print("\n📋 Summary:")
         for i, listing in enumerate(listings, 1):
             addr = listing.get('address', 'Unknown Address')
             price = f"${listing.get('price', 0):,}" if listing.get('price') else 'No price'
             print(f"  {i}. {addr} - {price}")
-        
+
         print(f"\n💡 Next steps:")
-        print(f"  1. Open extracted_listings.json")
-        print(f"  2. Copy the data")
-        print(f"  3. Import to your website or database")
+        print(f"  1. Open extracted_listings.json for review")
+        print(f"  2. To import listings, open listings_import.js in your browser console or include it in your site.")
+        print(f"  3. Listings will be available in localStorage for your site.")
     else:
         print("\n❌ No listings extracted")
 

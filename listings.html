@@ -553,6 +553,14 @@
     <div class="filters">
         <div class="filters-grid">
             <div class="filter-group">
+                <select id="filterSource" onchange="filterListings()">
+                    <option value="">All Sources</option>
+                    <option value="fsbo">FSBO</option>
+                    <option value="partner">Partner Listings</option>
+                    <option value="builder">New Construction</option>
+                </select>
+            </div>
+            <div class="filter-group">
                 <select id="filterType" onchange="filterListings()">
                     <option value="">All Property Types</option>
                     <option value="Single Family">Single Family</option>
@@ -773,9 +781,21 @@
             const listingUrl = listing.sourceUrl || listing.externalUrl || '';
             const imageClickHandler = listingUrl ? `onclick="window.open('${listingUrl}', '_blank'); return false;" style="cursor: pointer;"` : '';
             
+            // Get badge text based on listing source
+            let badgeText = listing.status || listing.propertyType || 'Active';
+            let badgeStyle = '';
+            
+            if (listing.listingSource === 'builder') {
+                badgeText = 'New Construction';
+                badgeStyle = 'background: linear-gradient(135deg, #2C5364, #203A43); font-weight: 700;';
+            } else if (listing.constructionStatus) {
+                badgeText = listing.constructionStatus;
+                badgeStyle = 'background: linear-gradient(135deg, #2C5364, #203A43); font-weight: 700;';
+            }
+            
             card.innerHTML = `
                 <div class="card-image" style="background-image: url('${photoUrl}');" ${imageClickHandler}>
-                    <span class="card-badge">${listing.status || listing.propertyType || 'Active'}</span>
+                    <span class="card-badge" style="${badgeStyle}">${badgeText}</span>
                     <div class="card-price">${formattedPrice}</div>
                 </div>
                 <div class="card-content">
@@ -807,6 +827,7 @@
         
         // Filter listings
         function filterListings() {
+            const source = document.getElementById('filterSource').value;
             const type = document.getElementById('filterType').value;
             const minPrice = parseInt(document.getElementById('filterMinPrice').value) || 0;
             const maxPrice = parseInt(document.getElementById('filterMaxPrice').value) || Infinity;
@@ -814,12 +835,13 @@
             const cityFilter = document.getElementById('filterCity').value.toLowerCase().trim();
             
             const filtered = allListings.filter(listing => {
+                const matchesSource = !source || listing.listingSource === source;
                 const matchesType = !type || listing.propertyType === type;
                 const matchesPrice = (listing.price || 0) >= minPrice && (listing.price || 0) <= maxPrice;
                 const matchesBeds = !minBeds || (listing.bedrooms && listing.bedrooms >= minBeds);
                 const matchesCity = !cityFilter || (listing.city && listing.city.toLowerCase().includes(cityFilter));
                 
-                return matchesType && matchesPrice && matchesBeds && matchesCity;
+                return matchesSource && matchesType && matchesPrice && matchesBeds && matchesCity;
             });
             
             displayListings(filtered);
