@@ -5,6 +5,7 @@ const fs = require('fs');
 const { statements } = require('../database');
 const { sendConfirmationEmail, sendAdminNotification } = require('../email-service');
 const config = require('../config');
+const { extractListing } = require('../extraction-service');
 
 const router = express.Router();
 
@@ -32,6 +33,55 @@ const upload = multer({
         } else {
             cb(new Error('Only image files are allowed!'));
         }
+    }
+});
+
+// Extract listing data from URL
+router.post('/extract', async (req, res) => {
+    try {
+        const { url } = req.body;
+        
+        if (!url) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'URL is required' 
+            });
+        }
+        
+        // Validate URL format
+        try {
+            new URL(url);
+        } catch (e) {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Invalid URL format' 
+            });
+        }
+        
+        console.log(`[API] Extraction request for: ${url}`);
+        
+        // Extract data using Puppeteer
+        const result = await extractListing(url);
+        
+        if (result.success) {
+            res.json({
+                success: true,
+                source: result.source,
+                data: result.data
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                error: result.error || 'Failed to extract listing data'
+            });
+        }
+        
+    } catch (error) {
+        console.error('[API] Extraction error:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Extraction failed. Please try again or enter details manually.' 
+        });
     }
 });
 

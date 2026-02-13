@@ -1341,156 +1341,35 @@
             return 'universal';
         }
         
-        // Fetch listing data with ScrapingBee
+        // Fetch listing data using AWS backend (Puppeteer)
         async function fetchListingData(url, source) {
             try {
-                const scrapingBeeKey = 'TR931TU8DU3KLFMARXR6N8PQ2RSPNNUXGLQDIBV3B8R0PS7B69OEBK0RFP5YZM2YX2I0OMA0M9STO6UQ';
+                console.log('Fetching data from AWS backend...', url);
                 
-                // Use stealth proxy for Zillow (harder to scrape)
-                const isZillow = url.toLowerCase().includes('zillow.com');
-                
-                const params = new URLSearchParams({
-                    api_key: scrapingBeeKey,
-                    url: url,
-                    render_js: 'true',
-                    premium_proxy: 'true',
-                    block_ads: 'true',
-                    block_resources: 'false',
-                    wait: isZillow ? '8000' : '5000', // Wait longer for Zillow
-                    stealth_proxy: isZillow ? 'true' : 'false' // Use stealth for Zillow
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/extract`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
                 });
-                
-                const apiUrl = `https://app.scrapingbee.com/api/v1/?${params.toString()}`;
-                
-                console.log('Fetching data from ScrapingBee...', url);
-                const response = await fetch(apiUrl);
                 
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('ScrapingBee API error details:', errorText);
-                    throw new Error(`ScrapingBee API error: ${response.status}`);
+                    throw new Error(`Backend API error: ${response.status}`);
                 }
                 
-                const html = await response.text();
-                console.log('ScrapingBee response received, HTML length:', html.length);
+                const result = await response.json();
+                console.log('Backend response:', result);
                 
-                // Debug: Log a sample of the HTML to see what we're getting
-                console.log('HTML sample (first 500 chars):', html.substring(0, 500));
-                console.log('HTML sample (last 300 chars):', html.substring(html.length - 300));
-                
-                // Parse the HTML to extract property data
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                // Debug: Check what we actually got
-                const pageTitle = doc.querySelector('title')?.textContent || 'No title found';
-                const bodyText = doc.body?.textContent?.substring(0, 200) || 'No body found';
-                console.log('Page title:', pageTitle);
-                console.log('Body text sample:', bodyText);
-                
-                // Debug: List all h1 tags to see what's actually on the page
-                const h1Tags = Array.from(doc.querySelectorAll('h1')).map(h1 => ({
-                    text: h1.textContent.trim(),
-                    classes: h1.className,
-                    id: h1.id
-                }));
-                console.log('All H1 tags found:', h1Tags);
-                
-                // Debug: Check for property details elements
-                const detailSpans = Array.from(doc.querySelectorAll('span, li, div')).filter(el => {
-                    const text = el.textContent.trim();
-                    return text.match(/\d+\s*(bed|bath|sq\s*ft|sqft)/i);
-                }).slice(0, 5).map(el => ({
-                    tag: el.tagName,
-                    text: el.textContent.trim(),
-                    classes: el.className
-                }));
-                console.log('🛏️ Found property detail elements:', detailSpans);
-                
-                // Debug: Check if page might be an error or redirect
-                // Only check visible text (title and body), not the entire HTML which includes JS code
-                const visibleText = (pageTitle + ' ' + bodyText).toLowerCase();
-                const hasBlockingIndicators = visibleText.includes('please verify you are a human') || 
-                                             visibleText.includes('security check') ||
-                                             visibleText.includes('access denied') ||
-                                             visibleText.includes('are you a robot');
-                
-                if (hasBlockingIndicators) {
-                    console.error('🚫 Page appears to be showing CAPTCHA or access denied');
-                    showMessage('⚠️ This website is blocking automated extraction. Please try a different listing URL or enter the details manually.', 'error');
-                    return null; // Return null to prevent using partial data
+                if (result.success && result.data) {
+                    return result.data;
+                } else {
+                    throw new Error(result.error || 'Failed to extract listing data');
                 }
-                if (visibleText.includes('redirect') && visibleText.includes('moment')) {
-                    console.warn('⚠️ Page might be redirecting or still loading');
-                }
-                
-                // Debug: Check what img tags actually exist
-                const allImages = doc.querySelectorAll('img');
-                console.log(`🔍 Total img tags found on page: ${allImages.length}`);
-                if (allImages.length > 0) {
-                    const firstFiveImages = Array.from(allImages).slice(0, 5).map(img => ({
-                        src: (img.src || 'no-src').substring(0, 60),
-                        alt: img.alt || 'no-alt',
-                        classes: img.className || 'no-classes',
-                        dataTestId: img.getAttribute('data-testid') || 'none'
-                    }));
-                    console.log('📸 Sample of first 5 img elements:', firstFiveImages);
-                }
-                
-                // Extract multiple images from the page
-                const images = [];
-                const seenUrls = new Set();
-                
-                // Get all images
-                const allImgs = doc.querySelectorAll('img');
-                allImgs.forEach(img => {
-                    let src = img.src || img.getAttribute('data-src') || img.getAttribute('data-lazy') || img.getAttribute('data-original');
-                    
-                    // Also check srcset
-                    if (!src && img.srcset) {
-                        const sources = img.srcset.split(',').map(s => s.trim().split(' ')[0]);
-                        src = sources[sources.length - 1]; // Usually the largest is last
-                    }
-                    
-                    if (src && !seenUrls.has(src)) {
-                        // Filter out logos, icons, small images
-                        const isLogo = src.toLowerCase().includes('logo') || src.toLowerCase().includes('icon') || 
-                                      img.alt?.toLowerCase().includes('logo') || img.alt?.toLowerCase().includes('icon');
-                        const width = parseInt(img.getAttribute('width')) || 0;
-                        
-                        // Include if: has http/https, not a logo, and either no width specified or width > 200
-                        if (src.match(/^https?:\/\//i) && !isLogo && (width === 0 || width > 200)) {
-                            images.push(src);
-                            seenUrls.add(src);
-                        }
-                    }
-                });
-                
-                console.log(`Extracted ${images.length} images from page`);
-                if (images.length > 0) {
-                    console.log('Sample images:', images.slice(0, 3));
-                }
-                
-                // Enhanced multi-strategy extraction
-                const extractedData = extractPropertyData(doc);
-                extractedData.images = images.slice(0, 10); // Limit to 10 images
-                
-                console.log('Extracted data from ScrapingBee:', extractedData);
-                
-                const parsedData = parseUniversalData(extractedData);
-                
-                // Check if we got meaningful data (at least address or price)
-                if (!parsedData.address && !parsedData.price) {
-                    console.warn('No meaningful data extracted from page, using fallback mock data');
-                    return mockExtractData(url, source);
-                }
-                
-                return parsedData;
                 
             } catch (error) {
-                console.error('ScrapingBee extraction failed:', error);
-                console.log('Falling back to mock data');
-                return mockExtractData(url, source);
+                console.error('Backend extraction failed:', error);
+                throw error;
             }
         }
         
