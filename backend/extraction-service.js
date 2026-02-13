@@ -182,7 +182,7 @@ async function extractListing(url) {
         console.log(`[Extraction] Page loaded, waiting for content...`);
         
         // Wait a bit for dynamic content
-        await page.waitForTimeout(3000);
+        await new Promise(resolve => setTimeout(resolve, 3000));
         
         // Check for blocking/CAPTCHA
         const pageContent = await page.content();
