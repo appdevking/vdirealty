@@ -1929,13 +1929,54 @@
                     console.log('  - First h1 text:', doc.querySelector('h1').textContent.trim());
                 }
                 console.log('  - All dt elements:', doc.querySelectorAll('dt').length);
+                
+                // Look for JSON-LD or embedded JSON data
+                const scripts = doc.querySelectorAll('script[type="application/ld+json"], script');
+                console.log('  - Script tags:', scripts.length);
+                
+                let propertyData = null;
+                
+                // Try to find embedded property data in scripts
+                for (const script of scripts) {
+                    const scriptText = script.textContent;
+                    
+                    // Look for JSON-LD
+                    if (script.type === 'application/ld+json') {
+                        try {
+                            const json = JSON.parse(scriptText);
+                            console.log('  - Found JSON-LD:', json['@type']);
+                            if (json['@type'] === 'Product' || json['@type'] === 'RealEstateListing') {
+                                propertyData = json;
+                                console.log('  ✅ Found property JSON-LD!');
+                                break;
+                            }
+                        } catch (e) {}
+                    }
+                    
+                    // Look for window.__INITIAL_STATE__ or similar patterns
+                    if (scriptText.includes('__INITIAL_STATE__') || scriptText.includes('property') || scriptText.includes('listing')) {
+                        // Try to extract JSON object
+                        const jsonMatch = scriptText.match(/(\{[\s\S]*\})/);
+                        if (jsonMatch) {
+                            try {
+                                const json = JSON.parse(jsonMatch[1]);
+                                if (json.property || json.listing || json.data) {
+                                    console.log('  ✅ Found embedded property data in script!');
+                                    propertyData = json.property || json.listing || json.data;
+                                    break;
+                                }
+                            } catch (e) {}
+                        }
+                    }
+                }
+                
                 doc.querySelectorAll('dt').forEach((dt, i) => {
                     if (i < 10) { // Only log first 10
                         console.log(`    dt[${i}]:`, dt.textContent.trim());
                     }
                 });
                 
-                // Extract data using C21 selectors
+                // Extract data using C21 selectors or JSON-LD data
                 const extractedData = {
                     address: '',
                     city: '',
@@ -1952,36 +1993,85 @@
                     images: []
                 };
                 
-                // Extract address from h1
-                const addressEl = doc.querySelector('h1.c21__DetailMasthead-address, h1[itemprop="address"], .property-address h1, .pdp-address h1');
-                if (addressEl) {
-                    const fullAddress = addressEl.textContent.trim();
-                    console.log('📍 [C21] Full address:', fullAddress);
+                // If we found JSON-LD property data, extract from that first
+                if (propertyData) {
+                    console.log('📋 [C21] Extracting from JSON data...');
                     
-                    // Parse address format: "16454 108th Ave NE, Bothell, WA 98011"
-                    const addressParts = fullAddress.split(',').map(p => p.trim());
-                    if (addressParts.length >= 3) {
-                        extractedData.address = addressParts[0]; // Street address
-                        extractedData.city = addressParts[1]; // City
-                        
-                        // Split state and zip
-                        const stateZip = addressParts[2].split(/\s+/);
-                        extractedData.state = stateZip[0] || '';
-                        extractedData.zip = stateZip[1] || '';
-                    } else {
-                        extractedData.address = fullAddress;
+                    // Extract address
+                    if (propertyData.address) {
+                        if (typeof propertyData.address === 'string') {
+                            extractedData.address = propertyData.address;
+                        } else {
+                            extractedData.address = propertyData.address.streetAddress || '';
+                            extractedData.city = propertyData.address.addressLocality || '';
+                            extractedData.state = propertyData.address.addressRegion || '';
+                            extractedData.zip = propertyData.address.postalCode || '';
+                        }
+                    }
+                    
+                    // Extract price
+                    if (propertyData.offers?.price) {
+                        extractedData.price = parseInt(propertyData.offers.price);
+                    } else if (propertyData.price) {
+                        extractedData.price = parseInt(propertyData.price);
+                    }
+                    
+                    // Extract beds/baths/sqft
+                    extractedData.bedrooms = propertyData.numberOfBedrooms || propertyData.bedrooms || 0;
+                    extractedData.bathrooms = propertyData.numberOfBathroomsTotal || propertyData.bathrooms || 0;
+                    extractedData.sqft = propertyData.floorSize?.value || propertyData.floorSize || propertyData.livingArea || 0;
+                    
+                    // Extract description
+                    extractedData.description = propertyData.description || '';
+                    
+                    // Extract images
+                    if (propertyData.image) {
+                        if (Array.isArray(propertyData.image)) {
+                            extractedData.images = propertyData.image.slice(0, 10);
+                        } else if (typeof propertyData.image === 'string') {
+                            extractedData.images = [propertyData.image];
+                        }
+                    }
+                    
+                    console.log('✅ [C21] Extracted from JSON-LD');
+                }
+                
+                // Fallback to HTML selectors if JSON didn't have complete data
+                
+                // Extract address from h1 (if not from JSON)
+                if (!extractedData.address) {
+                    const addressEl = doc.querySelector('h1.c21__DetailMasthead-address, h1[itemprop="address"], .property-address h1, .pdp-address h1');
+                    if (addressEl) {
+                        const fullAddress = addressEl.textContent.trim();
+                        console.log('📍 [C21] Full address from h1:', fullAddress);
+                    
+                        // Parse address format: "16454 108th Ave NE, Bothell, WA 98011"
+                        const addressParts = fullAddress.split(',').map(p => p.trim());
+                        if (addressParts.length >= 3) {
+                            extractedData.address = addressParts[0]; // Street address
+                            extractedData.city = addressParts[1]; // City
+                            
+                            // Split state and zip
+                            const stateZip = addressParts[2].split(/\s+/);
+                            extractedData.state = stateZip[0] || '';
+                            extractedData.zip = stateZip[1] || '';
+                        } else {
+                            extractedData.address = fullAddress;
+                        }
                     }
                 }
                 
-                // Extract price
-                const priceEl = doc.querySelector('.c21__DetailMasthead-price .Text--decorativePrice, .price, [data-testid="price"]');
-                if (priceEl) {
-                    const priceText = priceEl.textContent.trim();
-                    extractedData.price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
-                    console.log('💰 [C21] Price:', extractedData.price);
+                // Extract price (if not from JSON)
+                if (!extractedData.price) {
+                    const priceEl = doc.querySelector('.c21__DetailMasthead-price .Text--decorativePrice, .price, [data-testid="price"]');
+                    if (priceEl) {
+                        const priceText = priceEl.textContent.trim();
+                        extractedData.price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+                        console.log('💰 [C21] Price:', extractedData.price);
+                    }
                 }
                 
-                // Extract beds, baths, sqft from Home Facts section
+                // Extract beds, baths, sqft from Home Facts section (if not from JSON)
                 const extractFact = (label) => {
                     // Find dt element containing the label
                     const dtElements = doc.querySelectorAll('dt');
@@ -1989,7 +2079,7 @@
                         if (dt.textContent.includes(label)) {
                             // Get the next dd element
                             const dd = dt.nextElementSibling;
-                            if (dd && dd.tagName === 'DD') {
+                            if (dd && dd.tagName ==='DD') {
                                 return dd.textContent.trim();
                             }
                         }
@@ -1997,25 +2087,55 @@
                     return null;
                 };
                 
-                // Bedrooms
-                const bedsText = extractFact('Bedrooms') || extractFact('Beds');
-                if (bedsText) {
-                    extractedData.bedrooms = parseFloat(bedsText.replace(/[^0-9.]/g, '')) || 0;
-                    console.log('🛏️ [C21] Bedrooms:', extractedData.bedrooms);
+                // Bedrooms (if not from JSON)
+                if (!extractedData.bedrooms) {
+                    const bedsText = extractFact('Bedrooms') || extractFact('Beds');
+                    if (bedsText) {
+                        extractedData.bedrooms = parseFloat(bedsText.replace(/[^0-9.]/g, '')) || 0;
+                        console.log('🛏️ [C21] Bedrooms:', extractedData.bedrooms);
+                    } else {
+                        // Try text search
+                        const bodyText = html;
+                        const bedsMatch = bodyText.match(/(\d+)\s*(?:bed(?:room)?s?|bd|br)\b/i);
+                        if (bedsMatch) {
+                            extractedData.bedrooms = parseInt(bedsMatch[1]);
+                            console.log('🛏️ [C21] Bedrooms from text:', extractedData.bedrooms);
+                        }
+                    }
                 }
                 
-                // Bathrooms
-                const bathsText = extractFact('Bathrooms') || extractFact('Baths') || extractFact('Full baths');
-                if (bathsText) {
-                    extractedData.bathrooms = parseFloat(bathsText.replace(/[^0-9.]/g, '')) || 0;
-                    console.log('🚿 [C21] Bathrooms:', extractedData.bathrooms);
+                // Bathrooms (if not from JSON)
+                if (!extractedData.bathrooms) {
+                    const bathsText = extractFact('Bathrooms') || extractFact('Baths') || extractFact('Full baths');
+                    if (bathsText) {
+                        extractedData.bathrooms = parseFloat(bathsText.replace(/[^0-9.]/g, '')) || 0;
+                        console.log('🚿 [C21] Bathrooms:', extractedData.bathrooms);
+                    } else {
+                        // Try text search
+                        const bodyText = html;
+                        const bathsMatch = bodyText.match(/(\d+(?:\.\d+)?)\s*(?:bath(?:room)?s?|ba)\b/i);
+                        if (bathsMatch) {
+                            extractedData.bathrooms = parseFloat(bathsMatch[1]);
+                            console.log('🚿 [C21] Bathrooms from text:', extractedData.bathrooms);
+                        }
+                    }
                 }
                 
-                // Square feet
-                const sqftText = extractFact('Living area') || extractFact('Sqft') || extractFact('Square Feet');
-                if (sqftText) {
-                    extractedData.sqft = parseInt(sqftText.replace(/[^0-9]/g, '')) || 0;
-                    console.log('📐 [C21] Sqft:', extractedData.sqft);
+                // Square feet (if not from JSON)
+                if (!extractedData.sqft) {
+                    const sqftText = extractFact('Living area') || extractFact('Sqft') || extractFact('Square Feet');
+                    if (sqftText) {
+                        extractedData.sqft = parseInt(sqftText.replace(/[^0-9]/g, '')) || 0;
+                        console.log('📐 [C21] Sqft:', extractedData.sqft);
+                    } else {
+                        // Try text search
+                        const bodyText = html;
+                        const sqftMatch = bodyText.match(/([\d,]+)\s*(?:sq\.?\s*ft|square\s*feet|sqft)\b/i);
+                        if (sqftMatch) {
+                            extractedData.sqft = parseInt(sqftMatch[1].replace(/,/g, ''));
+                            console.log('📐 [C21] Sqft from text:', extractedData.sqft);
+                        }
+                    }
                 }
                 
                 // Year built
@@ -2032,27 +2152,51 @@
                     console.log('🏘️ [C21] Type:', extractedData.propertyType);
                 }
                 
-                // Description
-                const descEl = doc.querySelector('.c21__DetailDescription, .property-description, [itemprop="description"]');
-                if (descEl) {
-                    extractedData.description = descEl.textContent.trim().substring(0, 1000); // Limit to 1000 chars
-                    console.log('📝 [C21] Description length:', extractedData.description.length);
+                // Description (if not from JSON)
+                if (!extractedData.description) {
+                    const descEl = doc.querySelector('.c21__DetailDescription, .property-description, [itemprop="description"]');
+                    if (descEl) {
+                        extractedData.description = descEl.textContent.trim().substring(0, 1000); // Limit to 1000 chars
+                        console.log('📝 [C21] Description length:', extractedData.description.length);
+                    }
                 }
                 
                 // MLS number
-                const mlsMatch = doc.body.textContent.match(/MLS[#:\s]*([A-Z0-9-]+)/i);
-                if (mlsMatch) {
-                    extractedData.mls = mlsMatch[1];
-                    console.log('🔑 [C21] MLS:', extractedData.mls);
+                if (!extractedData.mls) {
+                    const mlsMatch = html.match(/MLS[#:\s]*([A-Z0-9-]+)/i);
+                    if (mlsMatch) {
+                        extractedData.mls = mlsMatch[1];
+                        console.log('🔑 [C21] MLS:', extractedData.mls);
+                    }
                 }
                 
-                // Extract images
-                const imageElements = doc.querySelectorAll('img[src*="c21stores"], img.property-image, .gallery img');
-                extractedData.images = Array.from(imageElements)
-                    .map(img => img.src)
-                    .filter(src => src && src.startsWith('http'))
-                    .slice(0, 10); // Limit to 10 images
-                console.log('🖼️ [C21] Images found:', extractedData.images.length);
+                // Extract images (if not from JSON)
+                if (!extractedData.images || extractedData.images.length === 0) {
+                    const imageElements = doc.querySelectorAll('img[src*="c21stores"], img.property-image, .gallery img, img[src*="property"], img[src*="listing"]');
+                    extractedData.images = Array.from(imageElements)
+                        .map(img => img.src)
+                        .filter(src => src && src.startsWith('http') && !src.includes('logo') && !src.includes('icon'))
+                        .slice(0, 10); // Limit to 10 images
+                    console.log('🖼️ [C21] Images found:', extractedData.images.length);
+                }
+                
+                // If still no address, try to find it in raw HTML text
+                if (!extractedData.address) {
+                    // Look for common address patterns in the text
+                    const addressMatch = html.match(/(\d+\s+[A-Z][a-z]+\s+(?:Ave|St|Dr|Rd|Ln|Way|Blvd|Ct|Pl)[^,]*,\s*[A-Z][a-z]+,\s*[A-Z]{2}\s+\d{5})/i);
+                    if (addressMatch) {
+                        const fullAddress = addressMatch[1];
+                        const addressParts = fullAddress.split(',').map(p => p.trim());
+                        if (addressParts.length >= 3) {
+                            extractedData.address = addressParts[0];
+                            extractedData.city = addressParts[1];
+                            const stateZip = addressParts[2].split(/\s+/);
+                            extractedData.state = stateZip[0] || '';
+                            extractedData.zip = stateZip[1] || '';
+                            console.log('📍 [C21] Address from text:', fullAddress);
+                        }
+                    }
+                }
                 
                 console.log('✅ [C21] Extraction complete:', extractedData);
                 
