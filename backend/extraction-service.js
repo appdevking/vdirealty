@@ -173,11 +173,16 @@ async function extractListing(url) {
         
         console.log(`[Extraction] Navigating to URL...`);
         
-        // Navigate to page with timeout
-        await page.goto(url, {
-            waitUntil: 'networkidle2',
-            timeout: 30000
-        });
+        // Navigate to page with longer timeout and different wait strategy
+        try {
+            await page.goto(url, {
+                waitUntil: 'domcontentloaded', // Less strict than networkidle2
+                timeout: 45000 // 45 seconds
+            });
+        } catch (navError) {
+            console.log(`[Extraction] Navigation warning: ${navError.message}, continuing anyway...`);
+            // Some sites have resources that timeout but page still loads
+        }
         
         console.log(`[Extraction] Page loaded, waiting for content...`);
         
@@ -217,7 +222,10 @@ async function extractListing(url) {
         
         // Validate we got meaningful data
         if (!parsedData.address && !parsedData.price) {
-            throw new Error('Could not extract listing data. The page structure may not be supported.');
+            return {
+                success: false,
+                error: 'Could not extract listing data from this page. The page structure may not be supported yet. Please enter details manually.'
+            };
         }
         
         return {
@@ -228,9 +236,21 @@ async function extractListing(url) {
         
     } catch (error) {
         console.error(`[Extraction] Error:`, error.message);
+        
+        // Provide more specific error messages
+        let errorMessage = 'Failed to extract listing data.';
+        
+        if (error.message.includes('timeout')) {
+            errorMessage = 'The website took too long to load. Please try a different listing or enter details manually.';
+        } else if (error.message.includes('net::ERR_')) {
+            errorMessage = 'Could not connect to the website. Please check the URL and try again.';
+        } else if (error.message.includes('blocking')) {
+            errorMessage = 'This website is blocking automated access. Please try a different listing or enter details manually.';
+        }
+        
         return {
             success: false,
-            error: error.message
+            error: errorMessage
         };
     } finally {
         if (browser) {
