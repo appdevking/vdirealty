@@ -7,7 +7,7 @@
  */
 const CONFIG = {
     // API_BASE_URL: 'http://localhost:3000' // Uncomment for local development
-    API_BASE_URL: 'https://vdi-storage-production.up.railway.app' // Change this to your production backend URL when deploying
+    API_BASE_URL: 'http://52.14.248.239' // AWS EC2 backend (migration from Railway completed Feb 13, 2026)
 };
 
 // Prevent modification
