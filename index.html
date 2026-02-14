@@ -86,20 +86,15 @@
             padding: 0 20px;
         }
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary);
             letter-spacing: 1px;
             text-transform: uppercase;
-            border: 2px solid var(--primary);
-            padding: 8px 15px;
-            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
         }
-        .logo:hover {
-            background: var(--primary);
-            color: white;
-        }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links { display: flex; gap: 16px; align-items: center; }
         
         .nav-item {
             position: relative;
@@ -718,66 +713,26 @@
 
     <header>
         <div class="nav-container">
-            <div class="logo">VDI Realty</div>
-            <nav class="nav-links">
-                <div class="nav-item">
-                    <a href="listings.html" class="nav-highlight"><i class="fas fa-home"></i> Browse Listings</a>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="fsbo-listings.html" class="nav-highlight"><i class="fas fa-handshake"></i> FSBO</a>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="builder-listing.html" class="nav-highlight"><i class="fas fa-hammer"></i> New Construction</a>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="partner-listing.html"><i class="fas fa-plus-circle"></i> Add Listing</a>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="neighborhoods.html">Neighborhoods</a>
-                </div>
-                
-                <div class="nav-item dropdown">
-                    <a href="#services" class="dropdown-toggle">Services <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></a>
-                    <div class="dropdown-menu">
-                        <a href="property-management.html"><i class="fas fa-building"></i> Property Management</a>
-                        <a href="buyers-guide.html"><i class="fas fa-home"></i> Buyer's Guide</a>
-                        <a href="sellers-guide.html"><i class="fas fa-dollar-sign"></i> Seller's Guide</a>
-                        <a href="relocation.html"><i class="fas fa-map-marked-alt"></i> Relocation</a>
-                    </div>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="about.html">About</a>
-                </div>
-                
-                <div class="nav-item">
-                    <a href="#contact" class="btn-nav">Contact</a>
-                </div>
+            <div class="logo" style="border:none; font-size:1.3rem; padding:0;">VDI Realty</div>
+            <nav class="nav-links" style="gap:16px;">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listing.html">Builders</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="#contact">Contact</a>
             </nav>
-            <button class="menu-toggle" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" style="background:none; border:none; color:var(--primary);">
+                <span style="font-size:1.5rem;">☰</span>
             </button>
         </div>
     </header>
     
     <nav class="mobile-menu" id="mobileMenu">
-        <a href="listings.html" style="background: var(--accent); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0; font-weight: 700;"><i class="fas fa-home"></i> Browse All Listings</a>
-        <a href="fsbo-listings.html" style="background: var(--accent); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0; font-weight: 700;"><i class="fas fa-handshake"></i> FSBO Properties</a>
-        <a href="partner-listing.html" style="background: var(--primary); color: white; padding: 12px 20px; border-radius: 5px; margin: 10px 0; font-weight: 700;"><i class="fas fa-plus-circle"></i> Add Your Listing FREE</a>
-        <a href="fsbo.html"><i class="fas fa-file-invoice-dollar"></i> List FSBO Property</a>
-        <a href="neighborhoods.html">Neighborhoods</a>
-        <a href="#services" onclick="toggleMobileMenu()">Services</a>
-        <a href="property-management.html">Property Management</a>
-        <a href="buyers-guide.html">Buyer's Guide</a>
-        <a href="sellers-guide.html">Seller's Guide</a>
-        <a href="about.html">About</a>
-        <a href="testimonials.html">Testimonials</a>
-        <a href="tools.html"><i class="fas fa-calculator"></i> Calculators</a>
-        <a href="#contact" onclick="toggleMobileMenu()">Contact Us</a>
+        <a href="listings.html">Listings</a>
+        <a href="fsbo-listings.html">FSBO</a>
+        <a href="builder-listing.html">Builders</a>
+        <a href="relocation.html">Relocation</a>
+        <a href="#contact">Contact</a>
     </nav>
 
     <section class="hero">
