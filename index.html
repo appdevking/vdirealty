@@ -783,104 +783,56 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Find Your Next Property</h1>
-            <p>Browse property listings or list your property for FREE - No registration required</p>
+            <p>Browse listings or list your property for FREE.</p>
             <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
                 <a href="listings.html" class="hero-btn" style="background: var(--accent);">
-                    <i class="fas fa-search"></i> Browse All Listings
+                    Browse Listings
                 </a>
-                <a href="fsbo-listings.html" class="hero-btn" style="background: var(--secondary);">
-                    <i class="fas fa-handshake"></i> FSBO Properties
+                <a href="partner-listing.html" class="hero-btn" style="background: var(--primary); color: white;">
+                    Add Listing
                 </a>
-                <a href="builder-listing.html" class="hero-btn" style="background: linear-gradient(135deg, #2C5364, #203A43); color: white;">
-                    <i class="fas fa-hammer"></i> New Construction
-                </a>
-                <a href="partner-listing.html" class="hero-btn" style="background: white; color: var(--primary); border: 2px solid var(--primary);">
-                    <i class="fas fa-plus-circle"></i> Add Your Listing FREE
+                <a href="builder-listing.html" class="hero-btn" style="background: #2C5364; color: white;">
+                    Builder Listing
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- SIMPLIFIED STATS BAR (optional: remove if too busy) -->
+    <!--
     <div class="stats-bar">
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-plus-circle"></i></span>
             <span class="stat-label">New Listings Daily</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-handshake"></i></span>
             <span class="stat-label">FSBO Available</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-dollar-sign"></i> FREE</span>
             <span class="stat-label">No Fees to List</span>
         </div>
         <div class="stat-item">
-            <span class="stat-number"><i class="fas fa-clock"></i> 24/7</span>
             <span class="stat-label">Instant Publishing</span>
         </div>
     </div>
+    -->
 
-    <!-- Listing Options Showcase -->
-    <section style="padding: 80px 20px; background: white;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div class="section-title" style="margin-bottom: 50px;">
+    <!-- SIMPLIFIED PROPERTY SHOWCASE -->
+    <section style="padding: 60px 20px; background: white;">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div class="section-title" style="margin-bottom: 30px;">
                 <h2>Explore Properties</h2>
                 <div class="underline"></div>
-                <p style="margin-top: 15px; color: #666; font-size: 1.1rem;">
-                    Access traditional listings and for-sale-by-owner opportunities
-                </p>
             </div>
-            
-            <div class="listings-showcase-grid">
-                <!-- All Listings Card -->
-                <a href="listings.html" style="text-decoration: none; display: block; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.3s ease; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); min-height: 350px;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'">
-                    <div style="padding: 50px 40px; color: white;">
-                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.9;">
-                            <i class="fas fa-home"></i>
-                        </div>
-                        <h3 style="font-size: 2rem; margin-bottom: 15px; color: white;">All Listings</h3>
-                        <p style="font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; line-height: 1.6;">
-                            Browse our complete collection of residential, commercial, and investment properties
-                        </p>
-                        <div style="display: inline-block; background: var(--accent); color: white; padding: 12px 30px; border-radius: 5px; font-weight: 700; font-size: 1rem;">
-                            <i class="fas fa-arrow-right"></i> Browse All Listings
-                        </div>
-                    </div>
+            <div class="listings-showcase-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                <a href="listings.html" style="text-decoration: none; display: block; border-radius: 8px; background: var(--primary); color: white; padding: 40px 20px; text-align: center; font-size: 1.1rem; font-weight: 700;">
+                    All Listings
                 </a>
-                
-                <!-- FSBO Card -->
-                <a href="fsbo-listings.html" style="text-decoration: none; display: block; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.3s ease; background: linear-gradient(135deg, var(--accent) 0%, #b08d4b 100%); min-height: 350px;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'">
-                    <div style="padding: 50px 40px; color: white;">
-                        <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.9;">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <h3 style="font-size: 2rem; margin-bottom: 15px; color: white;">FSBO Properties</h3>
-                        <p style="font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; line-height: 1.6;">
-                            Discover For Sale By Owner listings - direct deals with no agent fees
-                        </p>
-                        <div style="display: inline-block; background: white; color: var(--accent); padding: 12px 30px; border-radius: 5px; font-weight: 700; font-size: 1rem;">
-                            <i class="fas fa-arrow-right"></i> View FSBO Listings
-                        </div>
-                    </div>
+                <a href="fsbo-listings.html" style="text-decoration: none; display: block; border-radius: 8px; background: var(--accent); color: white; padding: 40px 20px; text-align: center; font-size: 1.1rem; font-weight: 700;">
+                    FSBO Properties
                 </a>
-            </div>
-            
-            <!-- Add Listing CTA -->
-            <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; border: 2px dashed var(--accent);">
-                <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 15px;">
-                    <i class="fas fa-plus-circle" style="color: var(--accent);"></i> Got a Property to List?
-                </h3>
-                <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;">
-                    List for FREE in under 60 seconds - No registration, no hidden fees, no hassle
-                </p>
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <a href="partner-listing.html" style="display: inline-block; padding: 15px 35px; background: var(--primary); color: white; text-decoration: none; border-radius: 5px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='var(--secondary)'" onmouseout="this.style.background='var(--primary)'">
-                        <i class="fas fa-magic"></i> Quick Add Listing
-                    </a>
-                    <a href="fsbo.html" style="display: inline-block; padding: 15px 35px; background: var(--accent); color: white; text-decoration: none; border-radius: 5px; font-weight: 700; font-size: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='#b08d4b'" onmouseout="this.style.background='var(--accent)'">
-                        <i class="fas fa-file-invoice-dollar"></i> List FSBO Property
-                    </a>
-                </div>
+                <a href="builder-listing.html" style="text-decoration: none; display: block; border-radius: 8px; background: #2C5364; color: white; padding: 40px 20px; text-align: center; font-size: 1.1rem; font-weight: 700;">
+                    Builder Listings
+                </a>
             </div>
         </div>
     </section>
