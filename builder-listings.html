@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Construction & Builder Listings | VDI Realty</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="js/config.js"></script>
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        body { font-family: 'Lato', sans-serif; color: var(--text-main); background: var(--light-gray); margin: 0; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        header { background: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; padding: 1rem 0; }
+        .nav-container { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+        .nav-links { display: flex; gap: 16px; }
+        .nav-links a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .nav-links a:hover { color: var(--accent); }
+        .hero { background: linear-gradient(135deg, #2C5364, #203A43); color: white; padding: 60px 20px 40px; text-align: center; }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.1rem; max-width: 700px; margin: 0 auto; opacity: 0.95; }
+        .listings-container { max-width: 1200px; margin: 40px auto; padding: 0 20px 60px; }
+        .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .listing-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); transition: all 0.3s; }
+        .listing-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        .card-image { height: 220px; background-size: cover; background-position: center; position: relative; }
+        .card-badge { position: absolute; top: 15px; right: 15px; background: var(--accent); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .card-price { position: absolute; bottom: 15px; left: 15px; background: rgba(255,255,255,0.95); padding: 8px 15px; border-radius: 5px; font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .card-content { padding: 25px; }
+        .card-content h3 { color: var(--primary); margin-bottom: 10px; font-size: 1.3rem; }
+        .card-address { color: #666; margin-bottom: 15px; }
+        .card-stats { display: flex; gap: 20px; padding: 15px 0; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; margin: 15px 0; }
+        .stat { color: #666; font-size: 0.9rem; }
+        .card-description { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; }
+        @media (max-width: 768px) { .listings-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <nav class="nav-links">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+    <section class="hero">
+        <h1>New Construction & Builder Listings</h1>
+        <p>Browse homes and communities directly from builders. Find move-in ready, pre-construction, and upcoming developments.</p>
+    </section>
+    <div class="listings-container">
+        <div id="builderListings" class="listings-grid"></div>
+    </div>
+    <script>
+    // Load and display only builder/new construction listings
+    function loadBuilderListings() {
+        let listings = [];
+        try {
+            listings = JSON.parse(localStorage.getItem('listings')) || [];
+        } catch (e) {}
+        // Filter for builder/new construction
+        const builderListings = listings.filter(l => (l.listingSource === 'builder' || l.source === 'builder' || l.source === 'New Construction' || l.source === 'Builder'));
+        const container = document.getElementById('builderListings');
+        if (!builderListings.length) {
+            container.innerHTML = '<p style="color:#888; font-size:1.1rem;">No builder listings found. Check back soon!</p>';
+            return;
+        }
+        container.innerHTML = builderListings.map(listing => `
+            <div class="listing-card">
+                <div class="card-image" style="background-image:url('${(listing.images && listing.images[0]) || listing.mainImage || 'images/hero-cityscape-new.svg'}');">
+                    <div class="card-badge">New Construction</div>
+                    <div class="card-price">${listing.price ? '$' + Number(listing.price).toLocaleString() : 'Contact for Price'}</div>
+                </div>
+                <div class="card-content">
+                    <h3>${listing.address || 'New Home'}</h3>
+                    <div class="card-address">${[listing.city, listing.state, listing.zip].filter(Boolean).join(', ')}</div>
+                    <div class="card-stats">
+                        <span class="stat">${listing.bedrooms ? listing.bedrooms + ' Beds' : ''}</span>
+                        <span class="stat">${listing.bathrooms ? listing.bathrooms + ' Baths' : ''}</span>
+                        <span class="stat">${listing.sqft ? Number(listing.sqft).toLocaleString() + ' sqft' : ''}</span>
+                    </div>
+                    <div class="card-description">${listing.description || ''}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+    window.addEventListener('DOMContentLoaded', loadBuilderListings);
+    </script>
+</body>
+</html>
