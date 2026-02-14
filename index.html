@@ -750,10 +750,17 @@
                     Browse FSBO
                 </a>
             </div>
-            <div style="display: flex; justify-content: center; margin-top: 25px;">
-                <a href="partner-listing.html" class="hero-btn" style="background: var(--primary); color: white; min-width: 320px; font-size: 1.15rem; padding: 20px 0; font-weight: 800; letter-spacing: 1px;">
-                    Have a listing to add? Click here
-                </a>
+            <div style="display: flex; justify-content: center; margin-top: 25px; position: relative;">
+                <div class="dropdown" style="width: 320px;">
+                    <button class="hero-btn" id="startListingDropdownBtn" style="background: var(--primary); color: white; width: 100%; font-size: 1.15rem; padding: 20px 0; font-weight: 800; letter-spacing: 1px; border: none; cursor: pointer; border-radius: 3px;">
+                        Start Your Listing <i class="fas fa-caret-down" style="margin-left: 10px;"></i>
+                    </button>
+                    <div id="startListingDropdownMenu" style="display: none; position: absolute; left: 0; top: 100%; width: 100%; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 0 0 6px 6px; z-index: 10;">
+                        <a href="partner-listing.html" style="display: block; padding: 18px 30px; color: var(--primary); text-decoration: none; font-weight: 700; font-size: 1.05rem; border-bottom: 1px solid #eee; transition: background 0.2s;">Agent Listing</a>
+                        <a href="fsbo.html" style="display: block; padding: 18px 30px; color: var(--primary); text-decoration: none; font-weight: 700; font-size: 1.05rem; border-bottom: 1px solid #eee; transition: background 0.2s;">FSBO Listing</a>
+                        <a href="builder-listing.html" style="display: block; padding: 18px 30px; color: var(--primary); text-decoration: none; font-weight: 700; font-size: 1.05rem; transition: background 0.2s;">Builder Listing</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -796,7 +803,7 @@
             </div>
             <div style="display: flex; justify-content: center; margin-top: 25px;">
                 <a href="partner-listing.html" style="text-decoration: none; display: block; border-radius: 8px; background: var(--primary); color: white; padding: 40px 40px; text-align: center; font-size: 1.15rem; font-weight: 800; min-width: 320px; letter-spacing: 1px;">
-                    Have a listing to add? Click here
+                    Start Your Listing
                 </a>
             </div>
         </div>
@@ -1153,6 +1160,30 @@
     </footer>
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+        <script>
+        // Dropdown for Start Your Listing
+        const dropdownBtn = document.getElementById('startListingDropdownBtn');
+        const dropdownMenu = document.getElementById('startListingDropdownMenu');
+        if (dropdownBtn && dropdownMenu) {
+            dropdownBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            });
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+            // Optional: Hide dropdown on link click
+            dropdownMenu.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    dropdownMenu.style.display = 'none';
+                });
+            });
+        }
+        </script>
     
     <script>
         // ========================================
