@@ -8,50 +8,113 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 2em; }
     #chart-container { width: 80vw; max-width: 700px; margin: auto; }
+    #loginPrompt { max-width: 400px; margin: 3em auto; padding: 2em; background: #fff3f3; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+    #loginPrompt input { width: 100%; padding: 0.7em; margin-top: 1em; }
+    #loginPrompt button { margin-top: 1em; padding: 0.7em 1.5em; }
+    .error { color: #c0392b; margin-top: 1em; }
   </style>
 </head>
 <body>
   <h1>Website Visit Stats</h1>
-  <div id="chart-container">
+  <div id="chart-container" style="display:none;">
     <canvas id="visitsChart"></canvas>
   </div>
+  <div id="loginPrompt" style="display:none;">
+    <h2>Admin Login Required</h2>
+    <input type="password" id="adminPassInput" placeholder="Enter admin password" autofocus>
+    <button onclick="loginDashboard()">Login</button>
+    <div class="error" id="loginError" style="display:none;"></div>
+  </div>
   <script>
-    async function fetchStats() {
-      const res = await fetch('/api/visit-stats');
+    // Try to get admin password from localStorage
+    function getAdminPassword() {
+      return localStorage.getItem('adminPassword') || '';
+    }
+    function setAdminPassword(pw) {
+      localStorage.setItem('adminPassword', pw);
+    }
+    function clearAdminPassword() {
+      localStorage.removeItem('adminPassword');
+    }
+
+    async function fetchStats(password) {
+      const res = await fetch('/api/visit-stats', {
+        headers: { Authorization: password }
+      });
+      if (res.status === 401) throw new Error('unauthorized');
       return res.json();
     }
     function formatPage(page) {
       if (page === '/index.html') return 'Home';
       return page.replace(/^\//, '');
     }
-    async function renderChart() {
-      const stats = await fetchStats();
-      const pages = Object.keys(stats.pageVisits || {});
-      const counts = pages.map(p => stats.pageVisits[p]);
-      const ctx = document.getElementById('visitsChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: pages.map(formatPage),
-          datasets: [{
-            label: 'Visits',
-            data: counts,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)'
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: { display: true, text: 'Visits per Page' }
-          },
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
+    function showChart() {
+      document.getElementById('chart-container').style.display = '';
+      document.getElementById('loginPrompt').style.display = 'none';
     }
-    renderChart();
+    function showLogin() {
+      document.getElementById('chart-container').style.display = 'none';
+      document.getElementById('loginPrompt').style.display = '';
+      document.getElementById('adminPassInput').focus();
+    }
+    async function renderChart(password) {
+      try {
+        const stats = await fetchStats(password);
+        const pages = Object.keys(stats.pageVisits || {});
+        const counts = pages.map(p => stats.pageVisits[p]);
+        const ctx = document.getElementById('visitsChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: pages.map(formatPage),
+            datasets: [{
+              label: 'Visits',
+              data: counts,
+              backgroundColor: 'rgba(54, 162, 235, 0.6)'
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: true, text: 'Visits per Page' }
+            },
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }
+        });
+        showChart();
+      } catch (err) {
+        if (err.message === 'unauthorized') {
+          clearAdminPassword();
+          showLogin();
+        } else {
+          document.getElementById('loginError').textContent = 'Error loading stats.';
+          document.getElementById('loginError').style.display = 'block';
+        }
+      }
+    }
+    function loginDashboard() {
+      const pw = document.getElementById('adminPassInput').value;
+      if (!pw) return;
+      setAdminPassword(pw);
+      document.getElementById('loginError').style.display = 'none';
+      renderChart(pw);
+    }
+    // On load, try with stored password
+    (function() {
+      const pw = getAdminPassword();
+      if (pw) {
+        renderChart(pw);
+      } else {
+        showLogin();
+      }
+    })();
+    // Allow Enter key to submit login
+    document.getElementById('adminPassInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') loginDashboard();
+    });
   </script>
 </body>
 </html>

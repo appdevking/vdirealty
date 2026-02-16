@@ -331,6 +331,12 @@
         </div>
 
         <div class="dashboard-content">
+            <!-- Visit Dashboard Link -->
+            <div style="margin-bottom: 24px;">
+                <a href="#" id="visitDashboardLink" style="font-size:1.1rem; color:#2980b9; text-decoration:underline; display:inline-block;">
+                    <i class="fas fa-chart-bar"></i> View Visit Analytics Dashboard
+                </a>
+            </div>
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card active">
@@ -384,6 +390,33 @@
     </div>
 
     <script>
+        // Visit Dashboard Link handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const link = document.getElementById('visitDashboardLink');
+            if (link) {
+                link.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    // Open dashboard in new tab with admin password
+                    const password = adminPassword;
+                    // Open a new window and set Authorization header via fetch, then render
+                    const win = window.open();
+                    win.document.write('<h2>Loading Visit Dashboard...</h2>');
+                    try {
+                        const resp = await fetch('/dashboard/visits', { headers: { Authorization: password } });
+                        if (resp.ok) {
+                            const html = await resp.text();
+                            win.document.open();
+                            win.document.write(html);
+                            win.document.close();
+                        } else {
+                            win.document.body.innerHTML = '<h2>Unauthorized or error loading dashboard.</h2>';
+                        }
+                    } catch (err) {
+                        win.document.body.innerHTML = '<h2>Error loading dashboard.</h2>';
+                    }
+                });
+            }
+        });
         let adminPassword = '';
         let allListings = [];
         let filteredListings = [];
