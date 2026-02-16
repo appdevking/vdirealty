@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visit Stats Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    #chart-container { width: 80vw; max-width: 700px; margin: auto; }
+  </style>
+</head>
+<body>
+  <h1>Website Visit Stats</h1>
+  <div id="chart-container">
+    <canvas id="visitsChart"></canvas>
+  </div>
+  <script>
+    async function fetchStats() {
+      const res = await fetch('/api/visit-stats');
+      return res.json();
+    }
+    function formatPage(page) {
+      if (page === '/index.html') return 'Home';
+      return page.replace(/^\//, '');
+    }
+    async function renderChart() {
+      const stats = await fetchStats();
+      const pages = Object.keys(stats.pageVisits || {});
+      const counts = pages.map(p => stats.pageVisits[p]);
+      const ctx = document.getElementById('visitsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: pages.map(formatPage),
+          datasets: [{
+            label: 'Visits',
+            data: counts,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Visits per Page' }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+    renderChart();
+  </script>
+</body>
+</html>

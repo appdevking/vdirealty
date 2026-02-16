@@ -1,3 +1,28 @@
+// Run every week (Sunday at midnight) to archive and reset visit counts
+const scheduleVisitCountsReset = () => {
+    cron.schedule('0 0 * * 0', () => {
+        const fs = require('fs');
+        const path = require('path');
+        const visitCountsPath = path.join(__dirname, 'visit-counts.json');
+        const archiveDir = path.join(__dirname, 'visit-archive');
+        try {
+            if (!fs.existsSync(archiveDir)) {
+                fs.mkdirSync(archiveDir);
+            }
+            const now = new Date();
+            const weekStr = now.toISOString().slice(0,10);
+            const archivePath = path.join(archiveDir, `visit-counts-${weekStr}.json`);
+            if (fs.existsSync(visitCountsPath)) {
+                fs.copyFileSync(visitCountsPath, archivePath);
+                fs.writeFileSync(visitCountsPath, JSON.stringify({ pageVisits: {} }, null, 2));
+                console.log(`📊 Archived and reset visit counts for week: ${weekStr}`);
+            }
+        } catch (e) {
+            console.error('❌ Error archiving/resetting visit counts:', e);
+        }
+    });
+    console.log('✅ Visit counts reset scheduled (weekly, Sunday at midnight)');
+};
 const cron = require('node-cron');
 const { statements } = require('./database');
 const { sendReminderEmail } = require('./email-service');
@@ -82,5 +107,6 @@ const runImmediateChecks = async () => {
 module.exports = {
     scheduleExpirationCheck,
     scheduleReminderEmails,
-    runImmediateChecks
+    runImmediateChecks,
+    scheduleVisitCountsReset
 };

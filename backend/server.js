@@ -1,3 +1,7 @@
+// Serve the visit dashboard
+app.get('/dashboard/visits', (req, res) => {
+    res.sendFile(path.join(__dirname, 'visit-dashboard.html'));
+});
 require('dotenv').config();
 
 const express = require('express');
@@ -7,7 +11,7 @@ const path = require('path');
 const config = require('./config');
 const { initDatabase } = require('./database');
 const { initializeTransporter } = require('./email-service');
-const { scheduleExpirationCheck, scheduleReminderEmails, runImmediateChecks } = require('./cron-jobs');
+const { scheduleExpirationCheck, scheduleReminderEmails, runImmediateChecks, scheduleVisitCountsReset } = require('./cron-jobs');
 const fsboRoutes = require('./routes/fsbo-routes');
 const contactRoutes = require('./routes/contact-routes');
 
@@ -20,6 +24,7 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
     console.log('📁 Created uploads directory');
 }
+
 
 // Middleware - CORS configuration
 const corsOptions = {
@@ -37,6 +42,28 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+// --- Visit Logging Middleware ---
+const visitCountsPath = path.join(__dirname, 'visit-counts.json');
+function logVisit(req, res, next) {
+    // Only log GET requests to HTML pages (not API or static)
+    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+        let counts;
+        try {
+            counts = JSON.parse(fs.readFileSync(visitCountsPath, 'utf8'));
+        } catch (e) {
+            counts = { pageVisits: {} };
+        }
+        const page = req.path === '/' ? '/index.html' : req.path;
+        if (!counts.pageVisits[page]) {
+            counts.pageVisits[page] = 0;
+        }
+        counts.pageVisits[page] += 1;
+        fs.writeFileSync(visitCountsPath, JSON.stringify(counts, null, 2));
+    }
+    next();
+}
+app.use(logVisit);
+
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -45,6 +72,7 @@ app.use('/api/fsbo', fsboRoutes);
 app.use('/api/contact', contactRoutes);
 
 // Health check endpoint
+
 app.get('/api/health', (req, res) => {
     res.json({ 
         status: 'ok',
@@ -52,6 +80,16 @@ app.get('/api/health', (req, res) => {
         message: 'VDI Realty FSBO API is running',
         timestamp: new Date().toISOString()
     });
+});
+
+// --- Visit Stats API ---
+app.get('/api/visit-stats', (req, res) => {
+    try {
+        const counts = JSON.parse(fs.readFileSync(path.join(__dirname, 'visit-counts.json'), 'utf8'));
+        res.json(counts);
+    } catch (e) {
+        res.status(500).json({ error: 'Could not read visit stats' });
+    }
 });
 
 // Initialize database
@@ -68,10 +106,12 @@ try {
     console.log('ℹ️  Server will continue without email functionality');
 }
 
+
 // Schedule cron jobs
 console.log('⏰ Scheduling automated tasks...');
 scheduleExpirationCheck();
 scheduleReminderEmails();
+scheduleVisitCountsReset();
 
 // Run immediate checks on startup
 runImmediateChecks();
