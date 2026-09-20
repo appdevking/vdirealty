@@ -4,729 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VDI Realty | Browse Listings & FSBO Properties - List FREE</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🏠</text></svg>">
-    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
+
     <meta name="description" content="Browse residential & commercial property listings plus FSBO properties. List your property FREE - no registration required. Instant publishing, 24/7 access.">
     <meta name="keywords" content="real estate listings, FSBO, for sale by owner, property listings, homes for sale, commercial real estate, free property listing">
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
-    <style>
-        /* --- GLOBAL STYLES --- */
-        :root {
-            --primary: #0F2027;   /* Deep Dark Blue */
-            --secondary: #203A43; /* Teal-Grey */
-            --accent: #C5A059;    /* Gold/Brass */
-            --white: #ffffff;
-            --light-gray: #f8f9fa;
-            --text-main: #333333;
-        }
-        
-        html { scroll-behavior: smooth; }
-        
-        * { box-sizing: border-box; }
-        
-        body {
-            font-family: 'Lato', sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text-main);
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
-        
-        h1, h2, h3, h4 { 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            font-weight: 700;
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        .fade-in { animation: fadeIn 0.8s ease-out; }
-        .slide-in-left { animation: slideInLeft 0.8s ease-out; }
-        .slide-in-right { animation: slideInRight 0.8s ease-out; }
-        .scale-in { animation: scaleIn 0.6s ease-out; }
-
-        /* --- HEADER & NAV --- */
-        header {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 0.5rem 0;
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-        .logo {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border: none;
-            padding: 0;
-        }
-        .nav-links { display: flex; gap: 16px; align-items: center; }
-        
-        .nav-item {
-            position: relative;
-        }
-        
-        .nav-highlight {
-            background: linear-gradient(135deg, var(--accent) 0%, #b08d4b 100%);
-            padding: 10px 20px !important;
-            border-radius: 5px;
-            color: white !important;
-            font-weight: 700;
-            box-shadow: 0 2px 10px rgba(197, 160, 89, 0.3);
-        }
-        
-        .nav-highlight:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
-        }
-        
-        .nav-highlight:before {
-            display: none !important;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            position: relative;
-            padding-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .nav-links a:not(.btn-nav):before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:not(.btn-nav):hover:before { width: 100%; }
-        .nav-links a:hover { color: var(--accent); }
-        
-        /* Dropdown Menu */
-        .dropdown {
-            position: relative;
-        }
-        
-        .dropdown-toggle {
-            cursor: pointer;
-        }
-        
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            min-width: 220px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            border-radius: 8px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            padding: 10px 0;
-            z-index: 1000;
-        }
-        
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .dropdown-menu a {
-            display: block;
-            padding: 12px 20px;
-            color: var(--primary);
-            text-transform: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .dropdown-menu a:hover {
-            background: var(--light-gray);
-            color: var(--accent);
-            padding-left: 25px;
-        }
-        
-        .dropdown-menu a:before {
-            display: none;
-        }
-        .btn-nav {
-            background: var(--primary);
-            color: white !important;
-            padding: 12px 28px;
-            border-radius: 3px;
-            box-shadow: 0 2px 10px rgba(15, 32, 39, 0.2);
-        }
-        .btn-nav:hover {
-            background: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
-        }
-        
-        /* Mobile Menu */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--primary);
-            cursor: pointer;
-            z-index: 1001;
-        }
-        
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100vh;
-            background: white;
-            box-shadow: -2px 0 15px rgba(0,0,0,0.1);
-            padding: 80px 30px 30px;
-            transition: right 0.3s ease;
-            z-index: 1000;
-        }
-        
-        .mobile-menu.active { right: 0; }
-        
-        .mobile-menu a {
-            display: block;
-            padding: 15px 0;
-            text-decoration: none;
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 1rem;
-            text-transform: uppercase;
-            border-bottom: 1px solid #f0f0f0;
-            transition: all 0.3s;
-        }
-        
-        .mobile-menu a:hover {
-            color: var(--accent);
-            padding-left: 10px;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            background: linear-gradient(rgba(15, 32, 39, 0.7), rgba(15, 32, 39, 0.7)),
-                        url('images/hero-cityscape-new.svg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 0 20px;
-        }
-        .hero-content { 
-            max-width: 800px; 
-            animation: fadeIn 1.5s ease-out; 
-        }
-        .hero h1 { 
-            font-size: 3.5rem; 
-            font-weight: 800; 
-            margin-bottom: 20px; 
-            line-height: 1.1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            letter-spacing: -1px;
-        }
-        .hero p { 
-            font-size: 1.3rem; 
-            margin-bottom: 40px; 
-            font-weight: 300;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 0.3s forwards;
-        }
-        .hero-btn {
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            padding: 18px 45px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border-radius: 3px;
-            box-shadow: 0 4px 20px rgba(197, 160, 89, 0.4);
-            opacity: 0;
-            animation: fadeIn 1.5s ease-out 0.6s forwards;
-        }
-        .hero-btn:hover { 
-            background: #b08d4b;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(197, 160, 89, 0.5);
-        }
-
-        /* --- CORE VALUES --- */
-        .stats-bar {
-            background: var(--primary);
-            color: white;
-            padding: 50px 0;
-            display: flex;
-            justify-content: center;
-            gap: 80px;
-            flex-wrap: wrap;
-        }
-        .stat-item { 
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        .stat-item:hover { transform: translateY(-5px); }
-        .stat-number { 
-            font-size: 2.5rem; 
-            color: var(--accent); 
-            display: block; 
-            margin-bottom: 10px;
-            transition: transform 0.3s ease;
-        }
-        .stat-item:hover .stat-number { transform: scale(1.1); }
-        .stat-label { 
-            font-size: 1rem; 
-            font-weight: 600; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
-        }
-
-        /* --- QUICK LISTING CTA --- */
-        .quick-listing-cta {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 60px 20px;
-            border-top: 3px solid var(--accent);
-            border-bottom: 3px solid var(--accent);
-        }
-        .cta-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .cta-content h2 {
-            color: var(--primary);
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-        }
-        .cta-content p {
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-        .cta-steps {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 35px 0;
-            flex-wrap: wrap;
-        }
-        .cta-step {
-            flex: 1;
-            min-width: 200px;
-            max-width: 250px;
-        }
-        .cta-step-number {
-            background: var(--accent);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        .cta-step h4 {
-            color: var(--primary);
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-        .cta-step p {
-            font-size: 0.95rem;
-            color: #666;
-        }
-        .cta-btn {
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            padding: 18px 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border-radius: 5px;
-            box-shadow: 0 4px 20px rgba(197, 160, 89, 0.3);
-            margin-top: 15px;
-        }
-        .cta-btn:hover {
-            background: #b08d4b;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(197, 160, 89, 0.5);
-        }
-        .cta-btn i {
-            margin-right: 8px;
-        }
-
-        /* --- SERVICES GRID --- */
-        .services-section { padding: 100px 20px; background: var(--light-gray); }
-        .section-title { text-align: center; margin-bottom: 60px; }
-        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
-        .underline { width: 80px; height: 3px; background: var(--accent); margin: auto; }
-        
-        .grid-container {
-            max-width: 1200px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .service-card {
-            background: white;
-            padding: 40px;
-            border-bottom: 3px solid transparent;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        .service-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 3px;
-            background: var(--accent);
-            transition: left 0.4s ease;
-        }
-        .service-card:hover { 
-            transform: translateY(-10px); 
-            border-bottom: 3px solid var(--accent);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-        }
-        .service-card:hover:before { left: 0; }
-        .icon-box { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
-        .service-card h3 { margin-bottom: 15px; color: var(--primary); }
-        .link-text { color: var(--primary); font-weight: 700; text-decoration: none; display: inline-block; margin-top: 20px; border-bottom: 1px solid var(--accent); }
-
-        /* --- IMPROVED MARKET PULSE SECTION --- */
-        .market-section { 
-            padding: 100px 20px; 
-            background: linear-gradient(to bottom, #f8f9fa, #ffffff); 
-        }
-        .market-grid {
-            max-width: 1200px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: 1fr 1.5fr; /* Give more space to the Chart */
-            gap: 40px;
-            align-items: start;
-        }
-        /* Dashboard Card Styling */
-        .stat-card-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .local-stat-card {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-top: 4px solid var(--accent);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .local-stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .stat-icon {
-            font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 10px;
-            background: rgba(197, 160, 89, 0.1);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .local-stat-num { 
-            font-size: 1.8rem; 
-            font-weight: 800; 
-            color: var(--primary); 
-            line-height: 1.2;
-        }
-        .local-stat-title { 
-            font-size: 0.8rem; 
-            color: #7f8c8d; 
-            font-weight: 600;
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-        /* Widget Container Polish */
-        .widget-wrapper {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            height: 400px; 
-        }
-
-        /* --- SPLIT SECTIONS --- */
-        .split-section { display: flex; flex-wrap: wrap; }
-        .split-content {
-            flex: 1;
-            min-width: 400px;
-            padding: 80px 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .split-image {
-            flex: 1;
-            min-width: 400px;
-            background-size: cover;
-            background-position: center;
-            min-height: 400px;
-        }
-        .bg-dark { background: var(--secondary); color: white; }
-        .bg-dark h2 { color: white; }
-        .bg-white { background: white; }
-        
-        .check-list { list-style: none; padding: 0; margin-top: 20px; }
-        .check-list li { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .check-list i { color: var(--accent); }
-
-        /* --- CONTACT FORM --- */
-        .contact-section { padding: 100px 20px; background: var(--light-gray); text-align: center; }
-        .form-container {
-            background: white;
-            max-width: 800px;
-            margin: 40px auto 0;
-            padding: 50px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            border-top: 5px solid var(--primary);
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 2px solid #e0e0e0;
-            background: #f9f9f9;
-            font-family: 'Lato', sans-serif;
-            box-sizing: border-box;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-        input:focus, select:focus, textarea:focus { 
-            outline: none; 
-            border-color: var(--accent); 
-            background: white;
-            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
-            transform: translateY(-2px);
-        }
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            padding-right: 40px;
-        }
-        .btn-submit {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 18px 40px;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            border-radius: 3px;
-            font-weight: 700;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-submit:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .btn-submit:hover:before {
-            width: 300px;
-            height: 300px;
-        }
-        .btn-submit:hover { 
-            background: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.3);
-        }
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: #111;
-            color: #888;
-            padding: 60px 20px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        .footer-logo { font-size: 1.5rem; color: white; margin-bottom: 20px; display: inline-block; font-weight: 700; }
-
-        /* Scroll reveal */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Improved section spacing */
-        section { position: relative; }
-        
-        /* Listings showcase grid */
-        .listings-showcase-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        @media (max-width: 968px) {
-            .listings-showcase-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-        }
-        
-        @media (max-width: 968px) {
-            .hero h1 { font-size: 2.8rem; }
-            .hero p { font-size: 1.1rem; }
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .hero p { font-size: 1rem; }
-            .hero-content div { gap: 10px !important; }
-            .hero-btn { padding: 14px 25px; font-size: 0.9rem; }
-            .nav-links { display: none; }
-            .menu-toggle { display: block; }
-            .mobile-menu { display: block; }
-            .split-content { padding: 40px 20px; min-width: 100%; }
-            .split-image { min-width: 100%; min-height: 300px; }
-            .stats-bar { 
-                gap: 20px; 
-                padding: 40px 20px;
-                grid-template-columns: 1fr 1fr;
-                display: grid;
-            }
-            .market-grid { grid-template-columns: 1fr; }
-            .grid-container { grid-template-columns: 1fr; }
-            .form-container { padding: 30px 20px; }
-            .section-title h2 { font-size: 2rem; }
-        }
-        
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 1.8rem; }
-            .stat-card-grid { grid-template-columns: 1fr; }
-            .logo { font-size: 1.2rem; padding: 6px 12px; }
-        }
-    </style>
+    <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="home-pro.css">
 </head>
 <body>
+    <!-- Utility bar -->
+    <div class="utility-bar">
+        <div class="wrap">
+            <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
+            <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:veng@vdirealty.com">veng@vdirealty.com</a></span>
+        </div>
+    </div>
 
-    <header>
-        <div class="nav-container">
-            <div class="logo" style="border:none; font-size:1.3rem; padding:0;">VDI Realty</div>
-            <nav class="nav-links" style="gap:16px;">
+    <!-- Header -->
+    <header class="masthead">
+        <div class="wrap">
+            <a class="wordmark" href="index.html">VDI<span class="wm-dot">·</span>REALTY</a>
+            <nav class="main-nav">
                 <a href="listings.html">Listings</a>
                 <a href="fsbo-listings.html">FSBO</a>
                 <a href="builder-listings.html">Builders</a>
                 <a href="relocation.html">Relocation</a>
-                <a href="#contact">Contact</a>
+                <a href="#contact" class="nav-cta">Contact</a>
             </nav>
-            <button class="menu-toggle" onclick="toggleMobileMenu()" style="background:none; border:none; color:var(--primary);">
-                <span style="font-size:1.5rem;">☰</span>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
             </button>
         </div>
     </header>
-    
+
     <nav class="mobile-menu" id="mobileMenu">
         <a href="listings.html">Listings</a>
         <a href="fsbo-listings.html">FSBO</a>
@@ -735,382 +46,358 @@
         <a href="#contact">Contact</a>
     </nav>
 
+    <!-- Hero -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>Find Your Next Property</h1>
-            <p>Browse listings or list your property for FREE.</p>
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
-                <a href="listings.html" class="hero-btn" style="background: var(--accent);">
-                    Browse Agent Listing
-                </a>
-                <a href="builder-listings.html" class="hero-btn" style="background: #2C5364; color: white;">
-                    Browse Builder Listing
-                </a>
-                <a href="fsbo-listings.html" class="hero-btn" style="background: #C5A059; color: white;">
-                    Browse FSBO
-                </a>
-            </div>
-            <div style="display: flex; justify-content: center; margin-top: 25px; position: relative;">
-                <div class="dropdown" style="width: 320px;">
-                    <button class="hero-btn" id="startListingDropdownBtn" style="background: var(--primary); color: white; width: 100%; font-size: 1.15rem; padding: 20px 0; font-weight: 800; letter-spacing: 1px; border: none; cursor: pointer; border-radius: 3px;">
-                        Start Your Listing <i class="fas fa-caret-down" style="margin-left: 10px;"></i>
-                    </button>
-                    <div id="startListingDropdownMenu" style="display: none; position: absolute; left: 0; top: 100%; width: 100%; background: white; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border-radius: 0 0 6px 6px; z-index: 10;">
-                        <a href="partner-listing.html" style="display: block; padding: 18px 30px; color: var(--primary); text-decoration: none; font-weight: 700; font-size: 1.05rem; border-bottom: 1px solid #eee; transition: background 0.2s;">Agent Listing</a>
-                        <a href="fsbo.html" style="display: block; padding: 18px 30px; color: var(--primary); text-decoration: none; font-weight: 700; font-size: 1.05rem; border-bottom: 1px solid #eee; transition: background 0.2s;">FSBO Listing</a>
-                        <a href="builder-listing.html" style="display: block; padding: 18px 30px; color: var(--primary); text-decoration: none; font-weight: 700; font-size: 1.05rem; transition: background 0.2s;">Builder Listing</a>
+        <div class="wrap hero-inner">
+            <div class="hero-copy">
+                <span class="eyebrow eyebrow-light">VDI Realty · Brokered by Realty Connect</span>
+                <h1>Real estate,<br><em>on your terms.</em></h1>
+                <p class="lede">Search agent, builder, and for-sale-by-owner listings across Washington, Arizona, and New York — or publish your own listing in seconds. Free forever. No registration. No hidden fees.</p>
+                <div class="hero-ctas">
+                    <a href="listings.html" class="btn btn-gold">Browse listings <i class="fas fa-arrow-right"></i></a>
+                    <div class="listing-dropdown">
+                        <button class="btn btn-outline" id="startListingDropdownBtn">List your property — free <i class="fas fa-caret-down"></i></button>
+                        <div class="listing-menu" id="startListingDropdownMenu">
+                            <a href="partner-listing.html">Agent listing <small>List with a VDI Realty partner agent</small></a>
+                            <a href="fsbo.html">FSBO listing <small>Sell it yourself, keep the commission</small></a>
+                            <a href="builder-listing.html">Builder listing <small>Showcase new construction &amp; pre-sales</small></a>
+                        </div>
                     </div>
+                </div>
+                <ul class="hero-points">
+                    <li><i class="fas fa-check-circle"></i> 100% free to list</li>
+                    <li><i class="fas fa-check-circle"></i> No registration</li>
+                    <li><i class="fas fa-check-circle"></i> Instant publishing</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="services">
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <span class="eyebrow">What we do</span>
+                <h2>Every way to <em>move, buy,</em> or sell</h2>
+                <p class="lede">One brokerage network covering listings, FSBO, new construction, management, and relocation — pick your path.</p>
+            </div>
+            <div class="cards-grid">
+                <article class="svc-card reveal">
+                    <div class="svc-photo"><img src="images/interior-living-room.jpg" alt="Bright modern living room with large windows" loading="lazy"></div>
+                    <div class="svc-body">
+                        <h3>Browse all listings</h3>
+                        <p>Residential, commercial, and investment properties across Washington, Arizona, and New York — updated around the clock.</p>
+                        <a class="card-link" href="listings.html">View all properties <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="svc-card reveal">
+                    <div class="svc-photo"><img src="images/interior-kitchen.jpg" alt="High-end modern kitchen with marble island" loading="lazy"></div>
+                    <div class="svc-body">
+                        <h3>FSBO, direct from sellers</h3>
+                        <p>For-sale-by-owner listings with no agent commission in the middle — deal directly and keep more of the price.</p>
+                        <a class="card-link" href="fsbo-listings.html">Browse FSBO <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="svc-card reveal">
+                    <div class="svc-photo"><img src="images/hero-luxury-home.jpg" alt="Modern luxury home exterior at dusk" loading="lazy"></div>
+                    <div class="svc-body">
+                        <h3>List your property — free</h3>
+                        <p>Add photos and details, hit publish, and you're live. Free forever, no account required, no catch.</p>
+                        <a class="card-link" href="partner-listing.html">Add your listing <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="svc-card reveal">
+                    <div class="svc-photo"><img src="images/skyline-golden-hour.jpg" alt="City skyline at golden hour" loading="lazy"></div>
+                    <div class="svc-body">
+                        <h3>New construction</h3>
+                        <p>Upcoming communities, pre-construction, and move-in-ready builder homes.</p>
+                        <a class="card-link" href="builder-listings.html">See builder homes <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="svc-card reveal">
+                    <div class="svc-photo"><img src="images/interior-living-room.jpg" alt="Elegant living room interior" loading="lazy" style="object-position:center 70%"></div>
+                    <div class="svc-body">
+                        <h3>Property management</h3>
+                        <p>Full-service management for rentals — maximum return, minimal hassle.</p>
+                        <a class="card-link" href="property-management.html">How it works <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="svc-card reveal">
+                    <div class="svc-photo"><img src="images/lifestyle-moving-day.jpg" alt="Family settling into a bright new home on moving day" loading="lazy"></div>
+                    <div class="svc-body">
+                        <h3>Relocation</h3>
+                        <p>Moving across the country? We act as your eyes and ears on the ground.</p>
+                        <a class="card-link" href="relocation.html">Plan your move <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+            <div class="guides-strip reveal">
+                <p>New to the process? Start with our <em>free guides.</em></p>
+                <div class="guides-links">
+                    <a class="card-link" href="buyers-guide.html">Buyer's guide <i class="fas fa-arrow-right"></i></a>
+                    <a class="card-link" href="sellers-guide.html">Seller's guide <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SIMPLIFIED STATS BAR (optional: remove if too busy) -->
-    <!--
-    <div class="stats-bar">
-        <div class="stat-item">
-            <span class="stat-label">New Listings Daily</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">FSBO Available</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">No Fees to List</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">Instant Publishing</span>
-        </div>
-    </div>
-    -->
-
-
-    <!-- Quick Listing CTA -->
-
-    <!-- Listing Value Proposition Tagline -->
-    <div style="background: #fffbe6; border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); text-align: center; padding: 22px 10px; font-size: 1.18rem; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; margin-bottom: 0;">
-        <i class="fas fa-magic" style="color: var(--accent); margin-right: 8px;"></i>
-        List your property in seconds. No registration. Instant publishing. <span style="color: var(--accent); font-weight: 800;">100% free.</span>
-    </div>
-
-    <section class="services-section reveal" id="services">
-        <div class="section-title">
-            <h2>Our Expertise</h2>
-            <div class="underline"></div>
-        </div>
-        <div class="grid-container">
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-search"></i></div>
-                <h3>Browse All Listings</h3>
-                <p>Explore our growing collection of residential, commercial, and investment properties available now.</p>
-                <a href="listings.html" class="link-text">View All Properties →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-handshake"></i></div>
-                <h3>FSBO Properties</h3>
-                <p>Discover For Sale By Owner listings with direct deals and no agent commissions - save thousands.</p>
-                <a href="fsbo-listings.html" class="link-text">Browse FSBO Listings →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-plus-circle"></i></div>
-                <h3>List Your Property</h3>
-                <p>Add your listing in under 60 seconds - completely FREE with no registration or hidden fees required.</p>
-                <a href="partner-listing.html" class="link-text">Add Listing Now →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-building"></i></div>
-                <h3>Property Management</h3>
-                <p>Full-service management for rental properties, ensuring maximum returns with minimal hassle.</p>
-                <a href="property-management.html" class="link-text">Learn More →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-key"></i></div>
-                <h3>Buyer's Guide</h3>
-                <p>Step-by-step roadmap to navigate the home buying process with confidence.</p>
-                <a href="buyers-guide.html" class="link-text">Start Your Journey →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-tag"></i></div>
-                <h3>Seller's Guide</h3>
-                <p>Expert strategies to price, prepare, and sell your home for top dollar.</p>
-                <a href="sellers-guide.html" class="link-text">Sell Smart →</a>
-            </div>
-            <div class="service-card">
-                <div class="icon-box"><i class="fas fa-hammer"></i></div>
-                <h3>New Construction & Builder Listings</h3>
-                <p>Builders: Showcase your upcoming, pre-construction, or move-in ready homes. Add incentives, customization options, and more!</p>
-                <a href="builder-listing.html" class="link-text">Add Builder Listing →</a>
-                <a href="listings.html" class="link-text" style="margin-left:10px;">Browse New Construction →</a>
+    <!-- Lifestyle band -->
+    <section class="lifestyle-band">
+        <div class="wrap">
+            <div class="lifestyle-copy reveal">
+                <span class="eyebrow eyebrow-light">Relocation</span>
+                <h2>Your next chapter starts with the <em>right move.</em></h2>
+                <p>From neighborhood tours to virtual walkthroughs, our team guides every step of a long-distance move — before you ever pack a box.</p>
+                <a class="btn btn-gold" href="relocation.html">Explore relocation <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
 
-    <section class="market-section reveal" id="stats">
-        <div class="section-title">
-            <h2>Market Intelligence</h2>
-            <div class="underline"></div>
-            <p style="margin-top: 15px; color: #666; max-width: 700px; margin-left: auto; margin-right: auto; font-size: 1.05rem;">
-                Stay informed with key market indicators and local insights that drive smart real estate decisions.
-            </p>
+    <!-- Market snapshot -->
+    <section class="section" id="market">
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <span class="eyebrow">Market snapshot</span>
+                <h2>The market, <em>at a glance</em></h2>
+                <p class="lede">Key indicators for the greater metro area — the same numbers our team watches every morning.</p>
+            </div>
+            <div class="stat-row reveal">
+                <div class="stat">
+                    <div class="num" id="medianPrice">$540<span class="u">k</span></div>
+                    <div class="lbl">Median home price</div>
+                    <div class="trend up" id="priceChange"><i class="fas fa-arrow-up"></i> 3.2% YoY</div>
+                </div>
+                <div class="stat">
+                    <div class="num" id="daysOnMarket">32</div>
+                    <div class="lbl">Days on market</div>
+                    <div class="trend flat" id="domTrend"><i class="fas fa-minus"></i> Stable</div>
+                </div>
+                <div class="stat">
+                    <div class="num" id="saleToList">98<span class="u">%</span></div>
+                    <div class="lbl">Sale-to-list ratio</div>
+                    <div class="trend up" id="saleToListTrend"><i class="fas fa-arrow-up"></i> Strong</div>
+                </div>
+                <div class="stat">
+                    <div class="num" id="activeListings">150</div>
+                    <div class="lbl">Active listings</div>
+                    <div class="trend info" id="inventoryTrend"><i class="fas fa-info-circle"></i> Limited inventory</div>
+                </div>
+            </div>
+            <div class="rates-row reveal">
+                <div class="rate-card">
+                    <h4><i class="fas fa-chart-line"></i> Mortgage rates</h4>
+                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v">6.8%</span></div>
+                    <div class="meter"><i style="width:68%"></i></div>
+                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v">6.1%</span></div>
+                    <div class="meter"><i style="width:61%"></i></div>
+                </div>
+                <div class="rate-card">
+                    <h4><i class="fas fa-trending-up"></i> Market momentum</h4>
+                    <div class="rate-line"><span class="t">Buyer demand</span><span class="v pos">High</span></div>
+                    <div class="meter"><i style="width:85%"></i></div>
+                    <div class="rate-line"><span class="t">Inventory levels</span><span class="v warn">Low</span></div>
+                    <div class="meter"><i style="width:35%"></i></div>
+                </div>
+                <div class="rate-card">
+                    <h4><i class="fas fa-lightbulb"></i> Our read</h4>
+                    <p class="read-copy">With limited inventory and strong buyer demand, conditions favor sellers. Investors should focus on cash-flowing properties with long-term appreciation potential.</p>
+                </div>
+            </div>
+            <p class="disclaimer">Figures are metro-area estimates based on Dec 2025 data — not appraisals. Conditions vary by neighborhood.</p>
         </div>
-        
-        <div style="max-width: 1200px; margin: auto;">
-            
-            <!-- Local Market Stats -->
-            <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 50px 30px; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                <h3 style="color: white; text-align: center; font-size: 1.8rem; margin-bottom: 40px; font-weight: 700;">
-                    <i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:10px;"></i> 
-                    Greater Metro Area Snapshot
-                </h3>
-                
-                <div class="stat-card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; max-width: 1000px; margin: auto;">
-                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
-                        <div class="stat-icon"><i class="fas fa-tag"></i></div>
-                        <span class="local-stat-num" id="medianPrice">$540k</span>
-                        <span class="local-stat-title">Median Home Price</span>
-                        <div id="priceChange" style="margin-top: 8px; font-size: 0.75rem; color: #27ae60;">
-                            <i class="fas fa-arrow-up"></i> 3.2% YoY
-                        </div>
-                    </div>
-                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
-                        <div class="stat-icon"><i class="far fa-clock"></i></div>
-                        <span class="local-stat-num" id="daysOnMarket">32</span>
-                        <span class="local-stat-title">Days on Market</span>
-                        <div id="domTrend" style="margin-top: 8px; font-size: 0.75rem; color: #e67e22;">
-                            <i class="fas fa-minus"></i> Stable
-                        </div>
-                    </div>
-                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
-                        <div class="stat-icon"><i class="fas fa-percentage"></i></div>
-                        <span class="local-stat-num" id="saleToList">98%</span>
-                        <span class="local-stat-title">Sale to List Ratio</span>
-                        <div id="saleToListTrend" style="margin-top: 8px; font-size: 0.75rem; color: #27ae60;">
-                            <i class="fas fa-arrow-up"></i> Strong
-                        </div>
-                    </div>
-                    <div class="local-stat-card" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);">
-                        <div class="stat-icon"><i class="fas fa-home"></i></div>
-                        <span class="local-stat-num" id="activeListings">150</span>
-                        <span class="local-stat-title">Active Listings</span>
-                        <div id="inventoryTrend" style="margin-top: 8px; font-size: 0.75rem; color: #3498db;">
-                            <i class="fas fa-info-circle"></i> Limited Inventory
-                        </div>
-                    </div>
+    </section>
+
+    <!-- How free listing works -->
+    <section class="section section-alt" id="how">
+        <div class="wrap">
+            <div class="sec-head center reveal">
+                <span class="eyebrow">How it works</span>
+                <h2>Live in <em>under a minute</em></h2>
+                <p class="lede">Listing on VDI Realty is free, instant, and doesn't ask you to create an account.</p>
+            </div>
+            <div class="steps">
+                <div class="step reveal">
+                    <div class="n">01</div>
+                    <h3>Add your details</h3>
+                    <p>Describe the property, set your price, and upload photos. No registration, no credit card, no phone call required.</p>
+                </div>
+                <div class="step reveal">
+                    <div class="n">02</div>
+                    <h3>Publish instantly</h3>
+                    <p>Your listing goes live the moment you submit — visible to buyers browsing across three states.</p>
+                </div>
+                <div class="step reveal">
+                    <div class="n">03</div>
+                    <h3>Hear from buyers</h3>
+                    <p>Interested buyers reach out directly through the listing. You stay in control of every conversation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For professionals -->
+    <section class="section" id="professionals">
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <span class="eyebrow">For professionals</span>
+                <h2>Built for <em>builders,</em> investors &amp; movers</h2>
+            </div>
+
+            <div class="pro-row reveal">
+                <div class="pro-art"><img src="images/skyline-golden-hour.jpg" alt="City skyline at golden hour" loading="lazy"></div>
+                <div class="pro-copy">
+                    <h3>For <em>developers</em></h3>
+                    <p>You need more than a listing agent — you need a strategic partner who understands the full lifecycle of construction.</p>
+                    <ul class="check-list">
+                        <li><i class="fas fa-check-circle"></i> Off-market land identification</li>
+                        <li><i class="fas fa-check-circle"></i> Zoning &amp; permitting guidance</li>
+                        <li><i class="fas fa-check-circle"></i> Model home staffing solutions</li>
+                    </ul>
+                    <a class="btn btn-primary" href="builder-listing.html">Add a builder listing <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
 
-            <!-- Market Indicators Grid -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px;">
-                
-                <!-- Mortgage Rates Card -->
-                <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); border-top: 4px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 35px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 25px rgba(0,0,0,0.08)';">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                        <h4 style="color: var(--primary); font-size: 1.1rem; margin: 0;">Current Mortgage Rates</h4>
-                        <i class="fas fa-chart-line" style="font-size: 1.5rem; color: var(--accent); opacity: 0.6;"></i>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
-                            <span style="color: #666; font-size: 0.9rem;">30-Year Fixed</span>
-                            <span style="font-size: 1.8rem; font-weight: 700; color: var(--primary);">6.8%</span>
-                        </div>
-                        <div style="height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
-                            <div style="height: 100%; width: 68%; background: var(--accent);"></div>
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
-                            <span style="color: #666; font-size: 0.9rem;">15-Year Fixed</span>
-                            <span style="font-size: 1.8rem; font-weight: 700; color: var(--primary);">6.1%</span>
-                        </div>
-                        <div style="height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
-                            <div style="height: 100%; width: 61%; background: var(--accent);"></div>
-                        </div>
-                    </div>
-                    <p style="font-size: 0.75rem; color: #999; margin: 15px 0 0 0; text-align: center;">
-                        <i class="fas fa-sync-alt"></i> Updated Dec 2025
-                    </p>
+            <div class="pro-row flip reveal">
+                <div class="pro-art"><img src="images/lifestyle-moving-day.jpg" alt="Family settling into a new home" loading="lazy"></div>
+                <div class="pro-copy">
+                    <h3><em>Relocation,</em> handled</h3>
+                    <p>Moving across the country is complex. We simplify the transition by acting as your eyes and ears on the ground.</p>
+                    <ul class="check-list">
+                        <li><i class="fas fa-map-marker-alt"></i> Neighborhood &amp; commute analysis</li>
+                        <li><i class="fas fa-school"></i> School district performance reports</li>
+                        <li><i class="fas fa-video"></i> Virtual walkthroughs via FaceTime</li>
+                    </ul>
+                    <a class="btn btn-ghost" href="relocation.html">Explore relocation <i class="fas fa-arrow-right"></i></a>
                 </div>
-
-                <!-- Market Trends Card -->
-                <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); border-top: 4px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 35px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 25px rgba(0,0,0,0.08)';">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                        <h4 style="color: var(--primary); font-size: 1.1rem; margin: 0;">Market Trends</h4>
-                        <i class="fas fa-trending-up" style="font-size: 1.5rem; color: var(--accent); opacity: 0.6;"></i>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 18px;">
-                        <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #666; font-size: 0.85rem; font-weight: 600;">Buyer Demand</span>
-                                <span style="color: #27ae60; font-size: 0.85rem; font-weight: 700;">High</span>
-                            </div>
-                            <div style="height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
-                                <div style="height: 100%; width: 85%; background: linear-gradient(90deg, #27ae60, #2ecc71); border-radius: 3px;"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #666; font-size: 0.85rem; font-weight: 600;">Inventory Levels</span>
-                                <span style="color: #e74c3c; font-size: 0.85rem; font-weight: 700;">Low</span>
-                            </div>
-                            <div style="height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
-                                <div style="height: 100%; width: 35%; background: linear-gradient(90deg, #e74c3c, #e67e22); border-radius: 3px;"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                <span style="color: #666; font-size: 0.85rem; font-weight: 600;">Market Momentum</span>
-                                <span style="color: #27ae60; font-size: 0.85rem; font-weight: 700;">Strong</span>
-                            </div>
-                            <div style="height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
-                                <div style="height: 100%; width: 78%; background: linear-gradient(90deg, var(--accent), #d4a55a); border-radius: 3px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <p style="font-size: 0.75rem; color: #999; margin: 20px 0 0 0; text-align: center;">
-                        Seller's market conditions
-                    </p>
-                </div>
-
-                <!-- Investment Outlook Card -->
-                <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); border-top: 4px solid var(--accent); transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 35px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 25px rgba(0,0,0,0.08)';">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                        <h4 style="color: var(--primary); font-size: 1.1rem; margin: 0;">Investment Metrics</h4>
-                        <i class="fas fa-dollar-sign" style="font-size: 1.5rem; color: var(--accent); opacity: 0.6;"></i>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                        <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                            <div style="font-size: 0.75rem; color: #7f8c8d; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">Cap Rate</div>
-                            <div style="font-size: 1.6rem; font-weight: 700; color: var(--primary);">5.2%</div>
-                        </div>
-                        <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                            <div style="font-size: 0.75rem; color: #7f8c8d; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">ROI</div>
-                            <div style="font-size: 1.6rem; font-weight: 700; color: var(--primary);">8.4%</div>
-                        </div>
-                    </div>
-                    <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; border-left: 3px solid #3498db;">
-                        <div style="font-size: 0.8rem; color: #2c3e50; line-height: 1.5;">
-                            <strong>Outlook:</strong> Strong appreciation potential with steady rental demand in metro areas.
-                        </div>
-                    </div>
-                    <p style="font-size: 0.75rem; color: #999; margin: 15px 0 0 0; text-align: center;">
-                        Based on 12-month averages
-                    </p>
-                </div>
-
             </div>
 
-            <!-- Market Insights Banner -->
-            <div style="background: linear-gradient(90deg, rgba(197,160,89,0.1) 0%, rgba(197,160,89,0.05) 100%); padding: 30px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center;">
-                <p style="margin: 0; color: var(--text-main); font-size: 1rem; line-height: 1.6;">
-                    <i class="fas fa-lightbulb" style="color: var(--accent); margin-right: 8px;"></i>
-                    <strong>Market Insight:</strong> With limited inventory and strong buyer demand, now is an excellent time for sellers. 
-                    Investors should focus on cash-flowing properties with long-term appreciation potential.
-                </p>
-            </div>
-
-        </div>
-    </section>
-
-    <section class="split-section" id="builders">
-        <div class="split-image" style="background-image: url('images/construction-new.svg');"></div>
-        <div class="split-content bg-dark">
-            <h2>For Developers</h2>
-            <p>You need more than a listing agent; you need a strategic partner who understands the lifecycle of construction.</p>
-            <ul class="check-list">
-                <li><i class="fas fa-check-circle"></i> Off-Market Land Identification</li>
-                <li><i class="fas fa-check-circle"></i> Zoning & Permitting Guidance</li>
-                <li><i class="fas fa-check-circle"></i> Model Home Staffing Solutions</li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="split-section" id="network">
-        <div class="split-content bg-white">
-            <h2>The VDI Network</h2>
-            <p>We are well-connected so you don't have to be. We refer and introduce our clients to trusted experts to help them grow their business.</p>
-            <ul class="check-list">
-                <li><i class="fas fa-users"></i> <strong>Trusted Referrals:</strong> Direct introductions to vetted contractors, CPAs, and legal experts.</li>
-                <li><i class="fas fa-suitcase"></i> <strong>AirBnB Specialists:</strong> Connect with property managers who understand short-term rentals.</li>
-                <li><i class="fas fa-arrow-up"></i> <strong>Business Growth:</strong> We bring the team you need to scale your real estate portfolio.</li>
-            </ul>
-        </div>
-        <div class="split-image" style="background-image: url('images/investment-new.svg');"></div>
-    </section>
-
-    <section class="split-section" id="relocation">
-        <div class="split-image" style="background-image: url('images/relocation-new.svg');"></div>
-        <div class="split-content bg-dark">
-            <h2>Relocation Services</h2>
-            <p>Moving across the country is complex. We simplify the transition by acting as your eyes and ears on the ground.</p>
-            <ul class="check-list">
-                <li><i class="fas fa-map-marker-alt"></i> Neighborhood & Commute Analysis</li>
-                <li><i class="fas fa-school"></i> School District Performance Reports</li>
-                <li><i class="fas fa-video"></i> Virtual Walkthroughs via FaceTime</li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="contact-section reveal" id="contact">
-        <div class="section-title">
-            <h2>Get In Touch</h2>
-            <p style="margin-top: 10px; font-size: 1.1rem; color: #666;">Tell us about your project, investment goals, or inquire about a specific property.</p>
-        </div>
-        <div class="form-container">
-            <form id="contactForm" onsubmit="return sendEmail(event)">
-                <input type="text" name="name" id="name" placeholder="Full Name *" required>
-                <input type="email" name="email" id="email" placeholder="Email Address *" required>
-                <input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)">
-                <select name="interest" id="interest" required>
-                    <option value="" disabled selected>I am interested in... *</option>
-                    <option value="Property Inquiry">Property Inquiry</option>
-                    <option value="Schedule a Showing">Schedule a Showing</option>
-                    <option value="Request More Information">Request More Information</option>
-                    <option value="Make an Offer">Make an Offer</option>
-                    <option value="Ask a Question">Ask a Question About This Property</option>
-                    <option value="Buying or Selling a Home">Buying or Selling a Home</option>
-                    <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
-                    <option value="Builder / Development">Builder / Development</option>
-                    <option value="Relocation Services">Relocation Services</option>
-                </select>
-                <input type="hidden" name="property" id="property" value="">
-                <div id="propertyInfo" style="display: none; background: #f0f9ff; border-left: 4px solid var(--accent); padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-                    <strong style="color: var(--primary); display: block; margin-bottom: 8px;">
-                        <i class="fas fa-home"></i> Property Inquiry:
-                    </strong>
-                    <span id="propertyDetails" style="color: #555; font-size: 0.95rem;"></span>
+            <div class="network-band reveal">
+                <div>
+                    <h3>The VDI <em>network</em></h3>
+                    <p>We're well-connected so you don't have to be. We introduce our clients to trusted experts who help them grow.</p>
                 </div>
-                <textarea name="message" id="message" rows="5" placeholder="How can we help? *" required></textarea>
-                <div id="formMessage" style="margin-bottom: 15px; padding: 12px; border-radius: 3px; display: none;"></div>
-                <button type="submit" class="btn-submit" id="submitBtn">
-                    <span>Send Message</span>
-                </button>
-            </form>
-            <p style="margin-top: 20px; font-size: 0.85rem; color: #999; text-align: center;">
-                Or email us directly at <a href="mailto:veng@vdirealty.com" style="color: var(--accent); text-decoration: none; font-weight: 600;">veng@vdirealty.com</a>
-            </p>
+                <ul class="net-items">
+                    <li>
+                        <span class="net-ic"><i class="fas fa-users"></i></span>
+                        <div><strong>Trusted referrals</strong><span>Direct introductions to vetted contractors, CPAs, and legal experts.</span></div>
+                    </li>
+                    <li>
+                        <span class="net-ic"><i class="fas fa-suitcase"></i></span>
+                        <div><strong>Short-term rental specialists</strong><span>Connect with property managers who understand AirBnB-style rentals.</span></div>
+                    </li>
+                    <li>
+                        <span class="net-ic"><i class="fas fa-arrow-up"></i></span>
+                        <div><strong>Business growth</strong><span>We bring the team you need to scale your real estate portfolio.</span></div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 
+    <!-- Contact -->
+    <section class="section section-alt" id="contact">
+        <div class="wrap">
+            <div class="sec-head center reveal">
+                <span class="eyebrow">Get in touch</span>
+                <h2>Let's talk <em>property</em></h2>
+                <p class="lede">Questions about a listing, an investment, or your upcoming move — we read everything.</p>
+            </div>
+            <div class="contact-card reveal">
+                <div class="contact-info">
+                    <h3>Reach us <em>directly</em></h3>
+                    <p>Prefer email or a quick call? We typically reply within one business day.</p>
+                    <div class="c-line">
+                        <span class="c-ic"><i class="fas fa-phone"></i></span>
+                        <div><strong>Phone</strong><a href="tel:+12068800637">(206) 880-0637</a></div>
+                    </div>
+                    <div class="c-line">
+                        <span class="c-ic"><i class="fas fa-envelope"></i></span>
+                        <div><strong>Email</strong><a href="mailto:veng@vdirealty.com">veng@vdirealty.com</a></div>
+                    </div>
+                    <div class="c-line">
+                        <span class="c-ic"><i class="fas fa-map-marker-alt"></i></span>
+                        <div><strong>Service areas</strong><span class="v">Washington · Arizona · New York</span></div>
+                    </div>
+                    <p class="fine">VDI Realty · Brokered by Realty Connect</p>
+                </div>
+                <div class="contact-form-wrap">
+                    <h3>Send a message</h3>
+                    <p>Tell us about your project, investment goals, or a specific property.</p>
+                    <form id="contactForm" onsubmit="return sendEmail(event)">
+                        <div class="field"><input type="text" name="name" id="name" placeholder="Full Name *" required></div>
+                        <div class="field"><input type="email" name="email" id="email" placeholder="Email Address *" required></div>
+                        <div class="field"><input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)"></div>
+                        <div class="field">
+                            <select name="interest" id="interest" required>
+                                <option value="" disabled selected>I am interested in... *</option>
+                                <option value="Property Inquiry">Property Inquiry</option>
+                                <option value="Schedule a Showing">Schedule a Showing</option>
+                                <option value="Request More Information">Request More Information</option>
+                                <option value="Make an Offer">Make an Offer</option>
+                                <option value="Ask a Question">Ask a Question About This Property</option>
+                                <option value="Buying or Selling a Home">Buying or Selling a Home</option>
+                                <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
+                                <option value="Builder / Development">Builder / Development</option>
+                                <option value="Relocation Services">Relocation Services</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="property" id="property" value="">
+                        <div class="property-info" id="propertyInfo">
+                            <strong><i class="fas fa-home"></i> Property Inquiry:</strong>
+                            <span id="propertyDetails"></span>
+                        </div>
+                        <div class="field"><textarea name="message" id="message" rows="5" placeholder="How can we help? *" required></textarea></div>
+                        <div class="form-message" id="formMessage"></div>
+                        <button type="submit" class="btn btn-gold btn-submit" id="submitBtn"><span>Send Message</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <div class="footer-logo">VDI REALTY</div>
-        <p style="margin-top: 15px;"><i class="fas fa-map-marker-alt"></i> Serving Washington, Arizona & New York</p>
-        <p style="margin-top: 10px;">
-            <i class="fas fa-phone"></i> (206) 880-0637 | 
-            <i class="fas fa-envelope"></i> veng@vdirealty.com
-        </p>
-        <div style="margin: 25px 0; font-size: 1.5rem;">
-            <a href="#" style="color:#888; margin:0 10px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'"><i class="fab fa-linkedin"></i></a>
-            <a href="#" style="color:#888; margin:0 10px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'"><i class="fab fa-facebook"></i></a>
-            <a href="#" style="color:#888; margin:0 10px; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'"><i class="fab fa-instagram"></i></a>
+        <div class="wrap">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a class="wordmark" href="index.html" style="text-decoration:none">VDI<span class="wm-dot">·</span>REALTY</a>
+                    <p class="areas">Serving Washington, Arizona &amp; New York</p>
+                    <p>A brokerage network for buyers, sellers, builders, and investors — listings, FSBO, property management, and relocation.</p>
+                    <div class="foot-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5>Explore</h5>
+                    <ul class="foot-links">
+                        <li><a href="listings.html">All listings</a></li>
+                        <li><a href="fsbo-listings.html">FSBO listings</a></li>
+                        <li><a href="builder-listings.html">New construction</a></li>
+                        <li><a href="property-management.html">Property management</a></li>
+                        <li><a href="relocation.html">Relocation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <ul class="foot-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+12068800637">(206) 880-0637</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:veng@vdirealty.com">veng@vdirealty.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Washington · Arizona · New York</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>&copy; 2026 VDI Realty. All Rights Reserved. <span class="brokered">Brokered by Realty Connect</span></span>
+                <span><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a></span>
+            </div>
         </div>
-        <p style="margin-top: 20px;">
-            <a href="#" style="color:#666; margin:0 10px; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#666'">Privacy Policy</a> | 
-            <a href="#" style="color:#666; margin:0 10px; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#666'">Terms of Service</a>
-        </p>
-        <p style="margin-top: 20px; font-size: 0.85rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
-        <p style="margin-top: 8px; font-size: 0.85rem; color: #888;">Brokered by Realty Connect</p>
     </footer>
+
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 
         <script>
         // Dropdown for Start Your Listing
