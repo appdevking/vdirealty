@@ -23,6 +23,11 @@ console.log(`🗄️  Database location: ${config.dbPath}`);
 // Enable WAL mode for better concurrency
 db.pragma('journal_mode = WAL');
 
+// Enforce foreign keys explicitly — required for ON DELETE CASCADE on
+// photos/inquiries. (Some better-sqlite3 versions enable this by default,
+// others follow SQLite's default of OFF; be deterministic.)
+db.pragma('foreign_keys = ON');
+
 // Create tables
 const initDatabase = () => {
     // Listings table
@@ -62,6 +67,14 @@ const initDatabase = () => {
             leaseType TEXT,
             mlsNumber TEXT,
             externalUrl TEXT,
+            hideAddress INTEGER DEFAULT 1,
+            hideIdentity INTEGER DEFAULT 1,
+            moderationStatus TEXT DEFAULT 'pending',
+            sellerType TEXT DEFAULT 'owner' CHECK(sellerType IN ('owner', 'builder', 'broker')),
+            builderCompany TEXT,
+            brokerageName TEXT,
+            licenseNumber TEXT,
+            newConstruction INTEGER DEFAULT 0,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
@@ -80,6 +93,42 @@ const initDatabase = () => {
             displayOrder INTEGER DEFAULT 0,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (listingId) REFERENCES listings(id) ON DELETE CASCADE
+        )
+    `);
+
+    // Buyer inquiries on FSBO listings (relayed to seller without exposing seller email)
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS fsbo_inquiries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            listingId INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            message TEXT NOT NULL,
+            isRead INTEGER DEFAULT 0,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (listingId) REFERENCES listings(id) ON DELETE CASCADE
+        )
+    `);
+
+    // "Sell with VDI" seller-lead capture (homeowners + builders)
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS fsbo_seller_leads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            propertyAddress TEXT,
+            city TEXT,
+            state TEXT,
+            zip TEXT,
+            timeline TEXT,
+            priceExpectation TEXT,
+            message TEXT,
+            sellerType TEXT DEFAULT 'owner',
+            sourceListingId INTEGER,
+            contacted INTEGER DEFAULT 0,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
 
@@ -114,18 +163,30 @@ const runMigrations = () => {
         { name: 'leaseType', type: 'TEXT' },
         { name: 'mlsNumber', type: 'TEXT' },
         { name: 'externalUrl', type: 'TEXT' },
-        { name: 'listingSource', type: 'TEXT DEFAULT \'fsbo\'' }
+        { name: 'listingSource', type: 'TEXT DEFAULT \'fsbo\'' },
+        { name: 'hideAddress', type: 'INTEGER DEFAULT 1' },
+        { name: 'hideIdentity', type: 'INTEGER DEFAULT 1' },
+        { name: 'moderationStatus', type: 'TEXT DEFAULT \'pending\'' },
+        { name: 'sellerType', type: 'TEXT DEFAULT \'owner\'' },
+        { name: 'builderCompany', type: 'TEXT' },
+        { name: 'brokerageName', type: 'TEXT' },
+        { name: 'licenseNumber', type: 'TEXT' },
+        { name: 'newConstruction', type: 'INTEGER DEFAULT 0' }
     ];
     
     // Add missing columns
     let migrationsRun = 0;
     let listingSourceAdded = false;
+    let moderationAdded = false;
     newColumns.forEach(column => {
         if (!existingColumns.includes(column.name)) {
             console.log(`  ➕ Adding column: ${column.name} (${column.type})`);
             db.exec(`ALTER TABLE listings ADD COLUMN ${column.name} ${column.type}`);
             if (column.name === 'listingSource') {
                 listingSourceAdded = true;
+            }
+            if (column.name === 'moderationStatus') {
+                moderationAdded = true;
             }
             migrationsRun++;
         }
@@ -136,6 +197,13 @@ const runMigrations = () => {
     if (listingSourceAdded || existingColumns.includes('listingSource')) {
         db.exec(`UPDATE listings SET listingSource = 'fsbo' WHERE listingSource IS NULL`);
         console.log('  🔄 Updated NULL listingSource values to \'fsbo\'');
+    }
+
+    // Listings that already existed (and were already public) stay approved;
+    // only brand-new submissions go through the pending review queue.
+    if (moderationAdded) {
+        db.exec(`UPDATE listings SET moderationStatus = 'approved' WHERE moderationStatus = 'pending' OR moderationStatus IS NULL`);
+        console.log('  🔄 Existing listings marked approved (new submissions start as pending)');
     }
     
     // Make bedrooms and bathrooms nullable if they're NOT NULL (for older databases)
@@ -164,8 +232,10 @@ const statements = {
             features, description, privateContact, submissionDate, expirationDate,
             buildingClass, zoning, occupancyRate, capRate, grossIncome,
             operatingExpenses, numberOfUnits, parkingSpaces, leaseType,
-            mlsNumber, externalUrl, listingSource
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            mlsNumber, externalUrl, listingSource,
+            hideAddress, hideIdentity, moderationStatus, sellerType, builderCompany,
+            brokerageName, licenseNumber, newConstruction
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `),
 
     // Insert photo
@@ -174,17 +244,17 @@ const statements = {
         VALUES (?, ?, ?, ?, ?, ?, ?)
     `),
 
-    // Get all active listings
+    // Get all active listings (only approved, unexpired)
     getActiveListings: db.prepare(`
         SELECT * FROM listings 
-        WHERE status = 'active' AND expirationDate > datetime('now')
+        WHERE status = 'active' AND moderationStatus = 'approved' AND expirationDate > datetime('now')
         ORDER BY createdAt DESC
     `),
 
-    // Get active listings by source
+    // Get active listings by source (only approved, unexpired)
     getActiveListingsBySource: db.prepare(`
         SELECT * FROM listings 
-        WHERE status = 'active' AND expirationDate > datetime('now') 
+        WHERE status = 'active' AND moderationStatus = 'approved' AND expirationDate > datetime('now') 
         AND (listingSource = ? OR (listingSource IS NULL AND ? = 'fsbo'))
         ORDER BY createdAt DESC
     `),
@@ -228,6 +298,58 @@ const statements = {
     // Admin: Get all listings (including removed)
     getAllListings: db.prepare(`
         SELECT * FROM listings ORDER BY createdAt DESC
+    `),
+
+    // Moderation: update approval state
+    updateModerationStatus: db.prepare(`
+        UPDATE listings SET moderationStatus = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?
+    `),
+
+    // Moderation: pending queue
+    getPendingListings: db.prepare(`
+        SELECT * FROM listings WHERE moderationStatus = 'pending' AND status = 'active' ORDER BY createdAt DESC
+    `),
+
+    // Buyer inquiry: insert
+    insertInquiry: db.prepare(`
+        INSERT INTO fsbo_inquiries (listingId, name, email, phone, message)
+        VALUES (?, ?, ?, ?, ?)
+    `),
+
+    // Buyer inquiry: by listing (for seller dashboard / admin)
+    getInquiriesByListingId: db.prepare(`
+        SELECT * FROM fsbo_inquiries WHERE listingId = ? ORDER BY createdAt DESC
+    `),
+
+    // Buyer inquiry: all, newest first (admin)
+    getAllInquiries: db.prepare(`
+        SELECT i.*, l.address, l.city, l.state, l.zip, l.propertyType, l.price
+        FROM fsbo_inquiries i
+        LEFT JOIN listings l ON l.id = i.listingId
+        ORDER BY i.createdAt DESC
+    `),
+
+    // Buyer inquiry: mark read
+    markInquiryRead: db.prepare(`
+        UPDATE fsbo_inquiries SET isRead = 1 WHERE id = ?
+    `),
+
+    // Seller lead: insert
+    insertSellerLead: db.prepare(`
+        INSERT INTO fsbo_seller_leads (
+            name, email, phone, propertyAddress, city, state, zip,
+            timeline, priceExpectation, message, sellerType, sourceListingId
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `),
+
+    // Seller lead: all, newest first (admin)
+    getAllSellerLeads: db.prepare(`
+        SELECT * FROM fsbo_seller_leads ORDER BY createdAt DESC
+    `),
+
+    // Seller lead: mark contacted
+    markLeadContacted: db.prepare(`
+        UPDATE fsbo_seller_leads SET contacted = 1 WHERE id = ?
     `)
 };
 

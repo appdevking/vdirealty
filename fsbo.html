@@ -3,412 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Sale By Owner (FSBO) | List Your Property | VDI Realty</title>
-    
+    <title>List Your Property FREE | FSBO | VDI Realty</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
     <style>
-        /* --- GLOBAL STYLES --- */
         :root {
-            --primary: #0F2027;   /* Deep Dark Blue */
-            --secondary: #203A43; /* Teal-Grey */
-            --accent: #C5A059;    /* Gold/Brass */
+            --primary: #2c3e50;
+            --secondary: #f5f6fa;
+            --accent: #667eea;
+            --accent-dark: #5a67d8;
             --white: #ffffff;
-            --light-gray: #f8f9fa;
-            --text-main: #333333;
+            --panel: #ffffff;
+            --panel-2: #f8f9fa;
+            --text-main: #2c3e50;
+            --text-dim: #6b7a8d;
+            --border: #e0e0e0;
+            --danger: #e74c3c;
+            --success: #28a745;
         }
-        
         html { scroll-behavior: smooth; }
-        
         * { box-sizing: border-box; }
-        
         body {
             font-family: 'Lato', sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
+            background: var(--secondary);
             color: var(--text-main);
             line-height: 1.7;
             overflow-x: hidden;
         }
-        
-        h1, h2, h3, h4 { 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            font-weight: 700;
-        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
 
-        /* Header/Navigation */
+        /* ---------- Nav ---------- */
         .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0; position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 10px rgba(35,45,80,0.10);
+            border-bottom: 1px solid #e5e8ed;
         }
-        
         .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
+            max-width: 1400px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
         }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 1px;
-        }
-        
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--white); text-decoration: none; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
         .logo span { color: var(--accent); }
-        
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-        
-        .nav-links a:hover { color: var(--accent); }
+        .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
-        /* Hero Section */
+        /* ---------- Hero ---------- */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--white);
-            padding: 4rem 2rem;
-            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white); padding: 3.5rem 2rem; text-align: center;
+            border-bottom: 1px solid #e5e8ed;
+        }
+        .hero h1 { font-size: 2.6rem; margin-bottom: 1rem; color: var(--white); }
+        .hero h1 i { color: #ffe08a; }
+        .hero p { font-size: 1.15rem; max-width: 800px; margin: 0 auto; color: var(--text-dim); }
+        .hero .hero-highlight { color: #ffe08a; font-weight: 700; }
+        .free-badge {
+            display: inline-block; margin-top: 1.2rem; background: var(--accent); color: #ffffff;
+            font-weight: 800; font-family: 'Montserrat', sans-serif; letter-spacing: 1px;
+            padding: 0.6rem 1.6rem; border-radius: 50px; font-size: 0.95rem; text-transform: uppercase;
         }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--white);
-        }
+        .container { max-width: 900px; margin: 2.5rem auto; padding: 0 1.5rem; }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
+        /* ---------- Info panels ---------- */
+        .info-panel {
+            background: var(--panel); border-left: 4px solid var(--accent);
+            padding: 1.4rem 1.6rem; margin-bottom: 1.6rem; border-radius: 8px;
+            border-top: 1px solid #e5e8ed; border-right: 1px solid #e5e8ed; border-bottom: 1px solid #e5e8ed;
         }
+        .info-panel h3 { color: var(--primary); margin-bottom: 0.8rem; font-size: 1.1rem; }
+        .info-panel h3 i { color: var(--accent); margin-right: 0.5rem; }
+        .info-panel ul { margin: 0; padding-left: 1.4rem; }
+        .info-panel li { margin-bottom: 0.4rem; color: var(--text-dim); }
+        .info-panel li strong { color: var(--text-main); }
 
-        .hero-highlight {
-            color: var(--accent);
-            font-weight: 600;
+        /* ---------- Lead CTA box ---------- */
+        .lead-cta {
+            background: linear-gradient(135deg, #fff7e6 0%, #fdeec9 100%);
+            border: 1px solid var(--accent); border-radius: 12px;
+            padding: 2rem; margin-bottom: 2rem; text-align: center;
         }
-
-        /* Main Container */
-        .container {
-            max-width: 900px;
-            margin: 3rem auto;
-            padding: 0 2rem;
+        .lead-cta h2 { color: var(--accent); font-size: 1.5rem; margin-bottom: 0.6rem; }
+        .lead-cta p { color: var(--text-dim); max-width: 640px; margin: 0 auto 1.4rem; }
+        .btn-gold {
+            background: var(--accent); color: #ffffff; border: none; cursor: pointer;
+            padding: 0.9rem 2.2rem; font-size: 1rem; font-weight: 700; font-family: 'Montserrat', sans-serif;
+            border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s;
+            display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none;
         }
+        .btn-gold:hover { background: #8b96f2; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.35); }
 
-        /* Info Section */
-        .info-section {
-            background: var(--light-gray);
-            border-left: 4px solid var(--accent);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
+        /* ---------- Seller type radio cards ---------- */
+        .type-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .type-card { position: relative; }
+        .type-card input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+        .type-card label {
+            display: block; background: var(--panel); border: 2px solid var(--border);
+            border-radius: 12px; padding: 1.4rem 1rem; text-align: center; cursor: pointer; transition: all 0.25s;
         }
-
-        .info-section h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
+        .type-card label i { font-size: 2rem; color: var(--accent); display: block; margin-bottom: 0.7rem; }
+        .type-card label .tc-title { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary); display: block; margin-bottom: 0.3rem; }
+        .type-card label .tc-sub { font-size: 0.85rem; color: var(--text-dim); display: block; }
+        .type-card input[type="radio"]:checked + label {
+            border-color: var(--accent); background: #e9edfd;
+            box-shadow: 0 0 0 3px rgba(201,164,92,0.15);
         }
+        .type-card input[type="radio"]:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-        .info-section ul {
-            margin: 0;
-            padding-left: 1.5rem;
+        /* ---------- Form ---------- */
+        .fsbo-form { background: var(--panel); padding: 2rem; border-radius: 12px; border: 1px solid #e5e8ed; box-shadow: 0 4px 20px rgba(35,45,80,0.10); }
+        .form-section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 2px solid #e5e8ed; }
+        .form-section:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .form-section h2 { color: var(--primary); margin-bottom: 1.4rem; font-size: 1.35rem; display: flex; align-items: center; gap: 0.6rem; }
+        .form-section h2 i { color: var(--accent); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary); font-size: 0.95rem; }
+        .form-group label .required { color: var(--danger); margin-left: 3px; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"],
+        .form-group input[type="number"], .form-group select, .form-group textarea {
+            width: 100%; padding: 0.8rem; border: 2px solid var(--border); border-radius: 6px;
+            font-size: 1rem; font-family: 'Lato', sans-serif; background: #ffffff; color: var(--text-main);
+            transition: border-color 0.3s;
         }
-
-        .info-section li {
-            margin-bottom: 0.5rem;
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(201,164,92,0.12);
         }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        .form-help { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; font-style: italic; }
+        .conditional { display: none; }
+        .conditional.show { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Form Styles */
-        .fsbo-form {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
+        /* ---------- Privacy panel ---------- */
+        .privacy-panel { background: #12161f; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 1.2rem; }
+        .check-row { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1rem; }
+        .check-row:last-child { margin-bottom: 0; }
+        .check-row input[type="checkbox"] { width: 1.2rem; height: 1.2rem; margin-top: 0.25rem; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+        .check-row label { cursor: pointer; font-weight: 600; color: var(--primary); }
+        .check-row .check-desc { font-size: 0.9rem; color: var(--text-dim); margin-top: 0.25rem; font-weight: 400; }
 
-        .form-section {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid var(--light-gray);
-        }
-
-        .form-section:last-child {
-            border-bottom: none;
-        }
-
-        .form-section h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-section h2 i {
-            color: var(--accent);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
-
-        .form-group label .required {
-            color: #e74c3c;
-            margin-left: 3px;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-family: 'Lato', sans-serif;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-help {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.3rem;
-            font-style: italic;
-        }
-
-        /* File Upload Styles */
+        /* ---------- File upload ---------- */
         .file-upload-area {
-            border: 2px dashed var(--accent);
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            background: #fafafa;
-            cursor: pointer;
-            transition: all 0.3s;
+            border: 2px dashed var(--accent); border-radius: 8px; padding: 2rem; text-align: center;
+            background: #ffffff; cursor: pointer; transition: all 0.3s;
         }
-
-        .file-upload-area:hover {
-            background: #f0f0f0;
-            border-color: var(--primary);
-        }
-
-        .file-upload-area i {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .file-upload-area input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-text {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .file-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .preview-item {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            aspect-ratio: 1;
-            background: #f0f0f0;
-        }
-
-        .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
+        .file-upload-area:hover { background: #f5f6fa; }
+        .file-upload-area i { font-size: 2.6rem; color: var(--accent); margin-bottom: 0.8rem; }
+        .file-upload-area input[type="file"] { display: none; }
+        .file-upload-text { color: var(--primary); font-weight: 600; margin-bottom: 0.4rem; }
+        .file-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .preview-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: #f5f6fa; }
+        .preview-item img { width: 100%; height: 100%; object-fit: cover; }
         .preview-item .remove-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(231, 76, 60, 0.9);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
+            position: absolute; top: 5px; right: 5px; background: rgba(231,76,60,0.9); color: white;
+            border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
         }
 
-        /* Checkbox Group */
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.8rem;
-        }
+        /* ---------- Features ---------- */
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.7rem; }
+        .checkbox-item { display: flex; align-items: center; gap: 0.5rem; }
+        .checkbox-item input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); cursor: pointer; }
+        .checkbox-item label { margin: 0; font-weight: 400; cursor: pointer; }
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        /* ---------- Honeypot (offscreen, NOT type=hidden) ---------- */
+        .hp-field { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 
-        .checkbox-item input[type="checkbox"] {
-            width: auto;
-            cursor: pointer;
-        }
+        /* ---------- Turnstile ---------- */
+        #turnstile-slot { margin: 1.5rem 0; display: flex; justify-content: center; min-height: 0; }
 
-        .checkbox-item label {
-            margin: 0;
-            font-weight: 400;
-            cursor: pointer;
+        /* ---------- Moderation / EHO notices ---------- */
+        .moderation-note {
+            background: #fef6e0; border: 1px solid #f0d9a0; border-radius: 8px;
+            padding: 1.2rem 1.4rem; margin-bottom: 1.5rem; color: #93a0f5; font-size: 0.95rem;
         }
+        .moderation-note i { color: var(--accent); margin-right: 0.4rem; }
+        .eho-note {
+            display: flex; align-items: center; gap: 0.8rem; justify-content: center;
+            color: var(--text-dim); font-size: 0.9rem; margin-top: 1.2rem; text-align: center;
+        }
+        .eho-note i { color: var(--accent); font-size: 1.4rem; }
 
-        /* Submit Button */
         .submit-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--white);
-            border: none;
-            padding: 1rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 1rem;
+            background: var(--accent); color: #ffffff; border: none; padding: 1rem 3rem;
+            font-size: 1.1rem; font-weight: 800; font-family: 'Montserrat', sans-serif;
+            border-radius: 50px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.3s; width: 100%; margin-top: 0.5rem;
         }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(15, 32, 39, 0.3);
+        .submit-btn:hover { background: #8b96f2; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102,126,234,0.35); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .form-error {
+            display: none; background: #fdecea; border: 1px solid #fdecea; color: #c0392b;
+            padding: 1rem 1.2rem; border-radius: 8px; margin-bottom: 1.5rem;
         }
+        .form-error.show { display: block; }
 
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .success-message { display: none; background: #122619; border: 2px solid var(--success); color: #bfe6c9; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center; }
+        .success-message.show { display: block; animation: fadeIn 0.4s ease; }
+        .success-message i.fa-check-circle { font-size: 3rem; color: var(--success); margin-bottom: 1rem; }
+        .success-message h2 { margin-bottom: 0.8rem; color: #d8f0dd; }
+
+        /* ---------- Reserved ad slots (inactive) ---------- */
+        /* Flip to display:block when the ad program launches. Invisible & empty at launch. */
+        .ad-slot { display: none !important; width: 0; height: 0; overflow: hidden; padding: 0; margin: 0; border: 0; }
+
+        /* ---------- Modal ---------- */
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
+        .modal.active { display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-content {
+            background: var(--panel); border: 1px solid #eef0f4; border-radius: 12px; max-width: 640px; width: 100%;
+            max-height: 92vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(35,45,80,0.14); animation: slideUp 0.3s ease;
         }
-
-        /* Success Message */
-        .success-message {
-            display: none;
-            background: #d4edda;
-            border: 2px solid #28a745;
-            color: #155724;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            text-align: center;
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.6rem 2rem;
+            border-radius: 12px 12px 0 0; position: relative; border-bottom: 1px solid #eef0f4;
         }
-
-        .success-message i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #28a745;
+        .modal-header h2 { margin: 0 0 0.4rem 0; display: flex; align-items: center; gap: 0.7rem; font-size: 1.4rem; }
+        .modal-header h2 i { color: #ffe08a; }
+        .modal-header p { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+        .modal-close {
+            position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.08); border: none; color: white;
+            font-size: 1.2rem; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s;
         }
-
-        .success-message.show {
-            display: block;
+        .modal-close:hover { background: rgba(255,255,255,0.18); transform: rotate(90deg); }
+        .modal-body { padding: 2rem; }
+        .seller-toggle { display: flex; gap: 0.8rem; margin-bottom: 1.4rem; }
+        .seller-toggle label {
+            flex: 1; text-align: center; padding: 0.8rem; border: 2px solid var(--border); border-radius: 8px;
+            cursor: pointer; font-weight: 600; color: var(--text-dim); transition: all 0.25s; position: relative;
         }
+        .seller-toggle input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+        .seller-toggle input[type="radio"]:checked + span { color: var(--primary); }
+        .seller-toggle label:has(input:checked) { border-color: var(--accent); background: #e9edfd; color: var(--primary); }
 
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--white);
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
+        /* ---------- Footer ---------- */
+        footer { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: var(--white); text-align: center; padding: 2.5rem 2rem; margin-top: 4rem; border-top: 1px solid rgba(255,255,255,0.25); }
+        footer p { margin: 0.4rem 0; color: var(--text-dim); }
+        footer .footer-brand { color: var(--primary); font-weight: 700; font-family: 'Montserrat', sans-serif; }
+        footer .footer-brand span { color: #ffe08a; }
+        footer a { color: #ffe08a; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .footer-eho { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-top: 1rem; font-size: 0.85rem; color: #6b7a8d; }
+        .footer-eho i { color: #ffe08a; }
 
-        footer p {
-            margin: 0.5rem 0;
-            opacity: 0.9;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .checkbox-group {
-                grid-template-columns: 1fr;
-            }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 1.9rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .type-selector { grid-template-columns: 1fr; }
+            .fsbo-form { padding: 1.3rem; }
+            .modal-body { padding: 1.4rem; }
         }
     </style>
 </head>
@@ -419,407 +270,633 @@
             <a href="index.html" class="logo">VDI <span>REALTY</span></a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="listings.html">Listings</a></li>
                 <li><a href="fsbo-listings.html">Browse FSBO</a></li>
-                <li><a href="fsbo.html">List Property</a></li>
-                <li><a href="tools.html">Tools</a></li>
+                <li><a href="fsbo.html" class="active">List Property</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
-        <h1><i class="fas fa-home"></i> For Sale By Owner (FSBO)</h1>
-        <p>List your property directly with <span class="hero-highlight">no account needed</span>. Fill out the form below to get your property in front of potential buyers.</p>
+        <h1><i class="fas fa-tag"></i> List Your Property FREE</h1>
+        <p>Post your property on VDI Realty's free listing board. <span class="hero-highlight">Free for 14 days</span> — no account needed, no commissions, no catch. Relist free anytime.</p>
+        <span class="free-badge"><i class="fas fa-gift"></i> 100% Free Listing</span>
     </section>
 
-    <!-- Main Content -->
     <div class="container">
-        <!-- Information Section -->
-        <div class="info-section">
-            <h3><i class="fas fa-info-circle"></i> Why List with VDI Realty FSBO?</h3>
-            <ul>
-                <li><strong>No Account Required:</strong> Simple, straightforward listing process</li>
-                <li><strong>Quick Exposure:</strong> Get your property listed in minutes</li>
-                <li><strong>Privacy Protected:</strong> Choose to keep your contact info private - buyers contact you through VDI Realty</li>
-                <li><strong>Scam Prevention:</strong> Optional contact protection prevents email harvesting and phishing</li>
-                <li><strong>Full Control:</strong> You manage your listing and choose which inquiries to respond to</li>
-                <li><strong>Professional Platform:</strong> Your listing appears alongside our featured properties</li>
-                <li><strong>Free to List:</strong> No upfront fees to post your property</li>
-            </ul>
-        </div>
-
-        <!-- Listing Duration Notice -->
-        <div class="info-section" style="background: #fff3cd; border-left-color: #ffc107;">
-            <h3><i class="fas fa-clock"></i> Listing Duration & Renewal</h3>
-            <ul>
-                <li><strong>Active for 2 Weeks:</strong> Your listing will be automatically removed after 14 days to keep our listings fresh and current</li>
-                <li><strong>Unlimited Relisting:</strong> You can relist your property as many times as you want - completely free!</li>
-                <li><strong>Email Reminder:</strong> We'll send you a reminder 2 days before your listing expires</li>
-                <li><strong>Easy Renewal:</strong> Simply resubmit the form to extend your listing for another 2 weeks</li>
-                <li><strong>Why 2 Weeks?</strong> This ensures all listings are current and sellers are actively engaged</li>
-            </ul>
-        </div>
-
-        <!-- Success Message -->
-        <div class="success-message" id="successMessage">
+        <!-- Success message -->
+        <div class="success-message" id="successMessage" role="status">
             <i class="fas fa-check-circle"></i>
-            <h2>Listing Submitted Successfully!</h2>
-            <p>Thank you for listing your property with VDI Realty. We will review your submission and contact you shortly.</p>
-            <div style="margin-top: 1.5rem; padding: 1rem; background: #fff3cd; border-radius: 8px; color: #856404;">
-                <strong><i class="fas fa-clock"></i> Important:</strong>
-                <ul style="text-align: left; margin: 0.5rem 0 0 1.5rem; padding: 0;">
-                    <li>Your listing will be active for <strong>14 days (2 weeks)</strong></li>
-                    <li>After 14 days, your listing will be automatically removed</li>
-                    <li>We'll send you a reminder email 2 days before expiration</li>
-                    <li>You can relist <strong>unlimited times</strong> for free - just resubmit this form!</li>
+            <h2>Listing Submitted for Review</h2>
+            <p id="successText">Thank you. Your listing has been submitted for review and will appear publicly once approved.</p>
+            <div style="margin-top:1.2rem; padding:1rem; background:#fef6e0; border-radius:8px; color:#a8760f; text-align:left; font-size:0.95rem;">
+                <strong><i class="fas fa-info-circle"></i> What happens next:</strong>
+                <ul style="margin:0.5rem 0 0 1.4rem; padding:0;">
+                    <li>Our team reviews every listing before it goes live — usually within <strong>1 business day</strong>.</li>
+                    <li>Your listing stays live for <strong>14 days</strong>, then auto-expires.</li>
+                    <li>You can <strong>relist free</strong> anytime by resubmitting this form.</li>
                 </ul>
             </div>
         </div>
 
-        <!-- FSBO Form -->
-        <form class="fsbo-form" id="fsboForm" enctype="multipart/form-data">
-            
-            <!-- Contact Information -->
-            <div class="form-section">
-                <h2><i class="fas fa-user"></i> Your Contact Information</h2>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name <span class="required">*</span></label>
-                        <input type="text" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name <span class="required">*</span></label>
-                        <input type="text" name="lastName" required>
-                    </div>
-                </div>
+        <div id="formWrap">
+            <!-- How it works -->
+            <div class="info-panel">
+                <h3><i class="fas fa-info-circle"></i> How the free listing works</h3>
+                <ul>
+                    <li><strong>Post in minutes</strong> — describe the property, add photos, set your price.</li>
+                    <li><strong>Reviewed before going live</strong> — listings are checked for quality and accuracy, usually within 1 business day.</li>
+                    <li><strong>Free for 14 days</strong> — your listing auto-expires after 14 days to keep the board fresh; relist free as often as you like.</li>
+                    <li><strong>Your privacy, your choice</strong> — hide your street address and name, and keep buyer messages routed through VDI Realty.</li>
+                </ul>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Email Address <span class="required">*</span></label>
-                        <input type="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number <span class="required">*</span></label>
-                        <input type="tel" name="phone" required>
-                    </div>
-                </div>
+            <!-- Lead CTA -->
+            <div class="lead-cta">
+                <h2><i class="fas fa-handshake"></i> Rather have a pro handle it?</h2>
+                <p>Selling on your own takes time — pricing, showings, paperwork, negotiation. VDI Realty can list and sell your home for you while you stay in control of the big decisions.</p>
+                <button class="btn-gold" id="openLeadModal"><i class="fas fa-comments"></i> Want VDI Realty to sell your home for you instead?</button>
+            </div>
 
-                <div class="form-group" style="background: #f0f8ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent);">
-                    <div class="checkbox-item" style="margin-bottom: 1rem;">
-                        <input type="checkbox" name="privateContact" id="privateContact" checked>
-                        <label for="privateContact" style="font-weight: 600; color: var(--primary); cursor: pointer;">
-                            <i class="fas fa-shield-alt" style="color: var(--accent);"></i> Keep my contact information private (Recommended)
-                        </label>
-                    </div>
-                    <div style="font-size: 0.9rem; color: #555; line-height: 1.6; padding-left: 1.5rem;">
-                        <strong>How it works:</strong>
-                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-                            <li>Your email and phone number will NOT be displayed publicly on the listing</li>
-                            <li>Interested buyers will see a "Contact Seller" button instead</li>
-                            <li>When buyers click the button, VDI Realty forwards their message to you</li>
-                            <li>You choose which inquiries to respond to - protecting you from scammers and spam</li>
-                            <li>Your contact info is only shared when YOU decide to reply</li>
-                        </ul>
-                        <p style="margin: 0.5rem 0 0 0;"><em><i class="fas fa-info-circle"></i> Uncheck this box only if you want your contact information visible to all viewers.</em></p>
-                    </div>
+            <!-- Seller type selector -->
+            <h2 style="color:var(--primary); margin-bottom:1rem; font-size:1.3rem;">I'm posting as:</h2>
+            <div class="type-selector" role="radiogroup" aria-label="I am posting as">
+                <div class="type-card">
+                    <input type="radio" name="sellerTypeRadio" id="type-owner" value="owner" checked>
+                    <label for="type-owner">
+                        <i class="fas fa-home"></i>
+                        <span class="tc-title">Homeowner</span>
+                        <span class="tc-sub">Selling your own property</span>
+                    </label>
+                </div>
+                <div class="type-card">
+                    <input type="radio" name="sellerTypeRadio" id="type-builder" value="builder">
+                    <label for="type-builder">
+                        <i class="fas fa-hard-hat"></i>
+                        <span class="tc-title">Builder / Developer</span>
+                        <span class="tc-sub">New builds & developments</span>
+                    </label>
+                </div>
+                <div class="type-card">
+                    <input type="radio" name="sellerTypeRadio" id="type-broker" value="broker">
+                    <label for="type-broker">
+                        <i class="fas fa-briefcase"></i>
+                        <span class="tc-title">Broker / Agent</span>
+                        <span class="tc-sub">Licensed professional</span>
+                    </label>
                 </div>
             </div>
 
-            <!-- Property Details -->
-            <div class="form-section">
-                <h2><i class="fas fa-building"></i> Property Details</h2>
-                
-                <div class="form-group">
-                    <label>Property Address <span class="required">*</span></label>
-                    <input type="text" name="address" required placeholder="123 Main Street">
+            <!-- FSBO Form -->
+            <form class="fsbo-form" id="fsboForm" enctype="multipart/form-data" novalidate>
+                <!-- Honeypot (offscreen; bots fill it, humans never see it) -->
+                <div class="hp-field" aria-hidden="true">
+                    <label>Website <input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>City <span class="required">*</span></label>
-                        <input type="text" name="city" required>
+                <!-- Contact information -->
+                <div class="form-section">
+                    <h2><i class="fas fa-user"></i> Your Contact Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required autocomplete="family-name">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>State <span class="required">*</span></label>
-                        <input type="text" name="state" required value="WA">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" required autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <!-- Broker-only fields -->
+                    <div class="conditional" id="brokerFields">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="brokerageName">Brokerage Name <span class="required">*</span></label>
+                                <input type="text" id="brokerageName" name="brokerageName" placeholder="e.g. Realty Connect">
+                                <div class="form-help">Shown on your listing per WA advertising rules.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="licenseNumber">License Number <span class="required">*</span></label>
+                                <input type="text" id="licenseNumber" name="licenseNumber" placeholder="e.g. 12345">
+                                <div class="form-help">Kept private — for verification only.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Builder-only fields -->
+                    <div class="conditional" id="builderFields">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="builderCompany">Company Name <span class="required">*</span></label>
+                                <input type="text" id="builderCompany" name="builderCompany" placeholder="e.g. Evergreen Homes LLC">
+                            </div>
+                            <div class="form-group" style="display:flex; align-items:flex-end;">
+                                <div class="check-row" style="margin-bottom:0;">
+                                    <input type="checkbox" id="newConstruction" name="newConstruction" value="true">
+                                    <label for="newConstruction">New construction</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>ZIP Code <span class="required">*</span></label>
-                        <input type="text" name="zip" required pattern="[0-9]{5}">
-                    </div>
-                    <div class="form-group">
-                        <label>Property Type <span class="required">*</span></label>
-                        <select name="propertyType" required>
-                            <option value="">Select Type</option>
-                            <option value="Single Family">Single Family Home</option>
-                            <option value="Condo">Condo</option>
-                            <option value="Townhouse">Townhouse</option>
-                            <option value="Multi-Family">Multi-Family</option>
-                            <option value="Land">Land</option>
-                            <option value="Commercial">Commercial</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Asking Price <span class="required">*</span></label>
-                        <input type="number" name="price" required min="0" step="1000" placeholder="500000">
-                        <div class="form-help">Enter price in dollars (e.g., 500000 for $500,000)</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Square Footage <span class="required">*</span></label>
-                        <input type="number" name="sqft" required min="0" placeholder="2000">
+                <!-- Privacy controls -->
+                <div class="form-section">
+                    <h2><i class="fas fa-shield-alt"></i> Privacy Controls</h2>
+                    <div class="privacy-panel">
+                        <div class="check-row">
+                            <input type="checkbox" id="showAddress" name="showAddress">
+                            <label for="showAddress">Show exact street address publicly
+                                <div class="check-desc">When unchecked (recommended), only your city, state, and ZIP are shown publicly.</div>
+                            </label>
+                        </div>
+                        <div class="check-row">
+                            <input type="checkbox" id="showName" name="showName">
+                            <label for="showName">Show my name publicly
+                                <div class="check-desc">When unchecked (recommended), your listing shows without a name attached.</div>
+                            </label>
+                        </div>
+                        <div class="check-row">
+                            <input type="checkbox" id="privateContact" name="privateContact" checked>
+                            <label for="privateContact">Route buyer messages through VDI Realty
+                                <div class="check-desc">Your email and phone are never displayed publicly. Interested buyers send a message through our site and we forward it to you — you choose which inquiries to answer.</div>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-row">
+                <!-- Property details -->
+                <div class="form-section">
+                    <h2><i class="fas fa-building"></i> Property Details</h2>
                     <div class="form-group">
-                        <label>Bedrooms <span class="required">*</span></label>
-                        <input type="number" name="bedrooms" required min="0" max="20">
+                        <label for="address">Property Address <span class="required">*</span></label>
+                        <input type="text" id="address" name="address" required placeholder="123 Main Street" autocomplete="street-address">
+                        <div class="form-help">Your exact address is only shown publicly if you check "Show exact street address" above.</div>
                     </div>
-                    <div class="form-group">
-                        <label>Bathrooms <span class="required">*</span></label>
-                        <input type="number" name="bathrooms" required min="0" max="20" step="0.5">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City <span class="required">*</span></label>
+                            <input type="text" id="city" name="city" required autocomplete="address-level2">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State <span class="required">*</span></label>
+                            <input type="text" id="state" name="state" required maxlength="2" value="WA" style="text-transform:uppercase;" placeholder="WA">
+                            <div class="form-help">2-letter code (WA, AZ, NY)</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="zip">ZIP Code <span class="required">*</span></label>
+                            <input type="text" id="zip" name="zip" required pattern="[0-9]{5}" maxlength="5" placeholder="98004" autocomplete="postal-code">
+                        </div>
+                        <div class="form-group">
+                            <label for="propertyType">Property Type <span class="required">*</span></label>
+                            <select id="propertyType" name="propertyType" required>
+                                <option value="">Select Type</option>
+                                <option value="Single Family">Single Family Home</option>
+                                <option value="Condo">Condo</option>
+                                <option value="Townhouse">Townhouse</option>
+                                <option value="Multi-Family">Multi-Family</option>
+                                <option value="Land">Land</option>
+                                <option value="Commercial">Commercial</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="price">Asking Price (USD) <span class="required">*</span></label>
+                            <input type="number" id="price" name="price" required min="0" step="1000" placeholder="500000">
+                            <div class="form-help">Enter the full amount in dollars, e.g. 500000 for $500,000</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sqft">Square Footage <span class="required">*</span></label>
+                            <input type="number" id="sqft" name="sqft" required min="0" placeholder="2000">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bedrooms">Bedrooms <span class="required">*</span></label>
+                            <input type="number" id="bedrooms" name="bedrooms" required min="0" max="30" placeholder="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="bathrooms">Bathrooms <span class="required">*</span></label>
+                            <input type="number" id="bathrooms" name="bathrooms" required min="0" max="30" step="0.5" placeholder="2">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="yearBuilt">Year Built</label>
+                            <input type="number" id="yearBuilt" name="yearBuilt" min="1700" max="2100" placeholder="2000">
+                        </div>
+                        <div class="form-group">
+                            <label for="lotSize">Lot Size (acres)</label>
+                            <input type="number" id="lotSize" name="lotSize" min="0" step="0.01" placeholder="0.25">
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Year Built</label>
-                        <input type="number" name="yearBuilt" min="1800" max="2025" placeholder="2000">
+                <!-- Features -->
+                <div class="form-section">
+                    <h2><i class="fas fa-star"></i> Property Features</h2>
+                    <div class="checkbox-group" id="featuresGroup">
+                        <div class="checkbox-item"><input type="checkbox" id="f-pool" value="Pool"><label for="f-pool">Pool</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-garage" value="Garage"><label for="f-garage">Garage</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-fireplace" value="Fireplace"><label for="f-fireplace">Fireplace</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-ac" value="Central AC"><label for="f-ac">Central AC</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-hardwood" value="Hardwood Floors"><label for="f-hardwood">Hardwood Floors</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-kitchen" value="Updated Kitchen"><label for="f-kitchen">Updated Kitchen</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-basement" value="Finished Basement"><label for="f-basement">Finished Basement</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-smart" value="Smart Home"><label for="f-smart">Smart Home</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-deck" value="Deck / Patio"><label for="f-deck">Deck / Patio</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-view" value="View"><label for="f-view">View</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-waterfront" value="Waterfront"><label for="f-waterfront">Waterfront</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="f-ad" value="ADU / Guest House"><label for="f-ad">ADU / Guest House</label></div>
                     </div>
-                    <div class="form-group">
-                        <label>Lot Size (acres)</label>
-                        <input type="number" name="lotSize" min="0" step="0.01" placeholder="0.25">
+                    <div class="form-group" style="margin-top:1.2rem;">
+                        <label for="featuresOther">Other features (comma separated)</label>
+                        <input type="text" id="featuresOther" placeholder="e.g. EV charger, RV parking, solar panels">
                     </div>
                 </div>
+
+                <!-- Description -->
+                <div class="form-section">
+                    <h2><i class="fas fa-file-alt"></i> Property Description</h2>
+                    <div class="form-group">
+                        <label for="description">Description <span class="required">*</span></label>
+                        <textarea id="description" name="description" required placeholder="Describe the property itself — layout, finishes, recent upgrades, lot, and nearby amenities."></textarea>
+                        <div class="form-help">Tip: focus on the property's features. Listings must comply with fair housing law — describe the property, not who should buy it.</div>
+                    </div>
+                </div>
+
+                <!-- Photos -->
+                <div class="form-section">
+                    <h2><i class="fas fa-camera"></i> Property Photos</h2>
+                    <div class="form-group">
+                        <label>Upload Photos <span class="required">*</span></label>
+                        <div class="file-upload-area" id="uploadArea" role="button" tabindex="0" aria-label="Upload photos">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <div class="file-upload-text">Click or tap to upload photos</div>
+                            <div class="form-help">Images only, up to 10 photos, 5MB max each</div>
+                            <input type="file" id="photoUpload" accept="image/*" multiple>
+                        </div>
+                        <div class="file-preview" id="filePreview"></div>
+                    </div>
+                </div>
+
+                <!-- Turnstile -->
+                <div id="turnstile-slot"></div>
+
+                <!-- Moderation notice near submit -->
+                <div class="moderation-note">
+                    <i class="fas fa-shield-check"></i>
+                    <strong>Reviewed before going live.</strong> Every listing is checked by our team before it appears publicly — usually within 1 business day. Your listing stays live for <strong id="durationDaysText">14</strong> days, then auto-expires. You can relist free anytime.
+                </div>
+
+                <div class="form-error" id="formError" role="alert"></div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> Submit Listing for Review
+                </button>
+
+                <div class="eho-note">
+                    <i class="fas fa-house-chimney"></i>
+                    <span>VDI Realty supports Equal Housing Opportunity. All listings are subject to the Federal Fair Housing Act, which prohibits discrimination based on race, color, religion, sex, handicap, familial status, or national origin.</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AD SLOT (reserved, inactive): future monetization — brokers / loan officers / escrow-title. Keep display:none until ad program launches. -->
+    <div class="ad-slot" aria-hidden="true" data-ad-slot="fsbo-form-bottom"></div>
+
+    <!-- Lead capture modal -->
+    <div class="modal" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" data-close="leadModal" aria-label="Close"><i class="fas fa-times"></i></button>
+                <h2 id="leadModalTitle"><i class="fas fa-handshake"></i> Let VDI Realty Sell Your Home</h2>
+                <p>Tell us about your property and we'll reach out with a plan to sell it for you.</p>
             </div>
-
-            <!-- Property Features -->
-            <div class="form-section">
-                <h2><i class="fas fa-star"></i> Property Features</h2>
-                
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Pool" id="pool">
-                        <label for="pool">Pool</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Garage" id="garage">
-                        <label for="garage">Garage</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Fireplace" id="fireplace">
-                        <label for="fireplace">Fireplace</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Central AC" id="ac">
-                        <label for="ac">Central AC</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Hardwood Floors" id="hardwood">
-                        <label for="hardwood">Hardwood Floors</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Updated Kitchen" id="kitchen">
-                        <label for="kitchen">Updated Kitchen</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Finished Basement" id="basement">
-                        <label for="basement">Finished Basement</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="features" value="Smart Home" id="smarthome">
-                        <label for="smarthome">Smart Home</label>
-                    </div>
+            <div class="modal-body">
+                <div class="form-error" id="leadError" role="alert"></div>
+                <div id="leadSuccess" style="display:none; text-align:center; padding:1.5rem 0;">
+                    <i class="fas fa-check-circle" style="font-size:3rem; color:var(--success); margin-bottom:1rem;"></i>
+                    <h3 style="color:var(--primary);">Request received!</h3>
+                    <p style="color:var(--text-dim);">Thanks — a VDI Realty representative will contact you shortly.</p>
                 </div>
-            </div>
-
-            <!-- Property Description -->
-            <div class="form-section">
-                <h2><i class="fas fa-file-alt"></i> Property Description</h2>
-                
-                <div class="form-group">
-                    <label>Description <span class="required">*</span></label>
-                    <textarea name="description" required placeholder="Describe your property, its unique features, recent upgrades, neighborhood amenities, etc."></textarea>
-                    <div class="form-help">Include any special features, recent renovations, neighborhood highlights, or selling points</div>
-                </div>
-            </div>
-
-            <!-- Photo Upload -->
-            <div class="form-section">
-                <h2><i class="fas fa-camera"></i> Property Photos</h2>
-                
-                <div class="form-group">
-                    <label>Upload Photos <span class="required">*</span></label>
-                    <div class="file-upload-area" onclick="document.getElementById('photoUpload').click()">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <div class="file-upload-text">Click to upload photos</div>
-                        <div class="form-help">Upload up to 10 photos (JPEG, PNG, max 5MB each)</div>
-                        <input type="file" id="photoUpload" name="photos" multiple accept="image/*" onchange="handleFileSelect(event)">
+                <form id="leadForm" novalidate>
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:0.5rem; font-weight:600; color:var(--primary);">I am a:</label>
+                        <div class="seller-toggle">
+                            <label><input type="radio" name="leadSellerType" value="owner" checked><span><i class="fas fa-home"></i> Homeowner</span></label>
+                            <label><input type="radio" name="leadSellerType" value="builder"><span><i class="fas fa-hard-hat"></i> Builder / Developer</span></label>
+                        </div>
                     </div>
-                    <div class="file-preview" id="filePreview"></div>
-                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="leadName">Full Name <span class="required" style="color:var(--danger);">*</span></label>
+                            <input type="text" id="leadName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="leadPhone">Phone <span class="required" style="color:var(--danger);">*</span></label>
+                            <input type="tel" id="leadPhone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="leadEmail">Email <span class="required" style="color:var(--danger);">*</span></label>
+                        <input type="email" id="leadEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="leadAddress">Property Address</label>
+                        <input type="text" id="leadAddress" placeholder="Street address of the property you'd like to sell">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="leadCity">City</label><input type="text" id="leadCity"></div>
+                        <div class="form-group"><label for="leadState">State</label><input type="text" id="leadState" maxlength="2" placeholder="WA" style="text-transform:uppercase;"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="leadZip">ZIP</label><input type="text" id="leadZip" maxlength="5" placeholder="98004"></div>
+                        <div class="form-group">
+                            <label for="leadTimeline">Timeline</label>
+                            <select id="leadTimeline">
+                                <option value="">Select</option>
+                                <option value="ASAP">ASAP</option>
+                                <option value="1-3 months">1–3 months</option>
+                                <option value="3-6 months">3–6 months</option>
+                                <option value="6+ months">6+ months</option>
+                                <option value="Just exploring">Just exploring</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="leadPrice">Price Expectation</label>
+                        <input type="text" id="leadPrice" placeholder="e.g. $650,000">
+                    </div>
+                    <div class="form-group">
+                        <label for="leadMessage">Message</label>
+                        <textarea id="leadMessage" placeholder="Anything else you'd like us to know?"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" id="leadSubmitBtn"><i class="fas fa-paper-plane"></i> Request a Call Back</button>
+                </form>
             </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="submit-btn">
-                <i class="fas fa-paper-plane"></i> Submit Listing
-            </button>
-        </form>
+        </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 VDI Realty. All Rights Reserved.</p>
-        <p style="margin-top: 8px; font-size: 0.85rem; color: #888;">Brokered by Realty Connect</p>
-        <p>Residential, Commercial & Investment Property Solutions</p>
+        <p class="footer-brand">VDI <span>REALTY</span></p>
+        <p>Brokered by Realty Connect &nbsp;|&nbsp; <a href="tel:+12068800637">(206) 880-0637</a> &nbsp;|&nbsp; <a href="mailto:veng@vdirealty.com">veng@vdirealty.com</a> &nbsp;|&nbsp; <a href="https://www.vdirealty.com">www.vdirealty.com</a></p>
+        <p style="font-size:0.85rem;">Residential, Commercial &amp; Investment Property Solutions</p>
+        <div class="footer-eho">
+            <i class="fas fa-house-chimney"></i>
+            <span>Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</span>
+        </div>
+        <p style="font-size:0.8rem; margin-top:0.6rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
     </footer>
 
-    <!-- Configuration -->
-    <script src="js/config.js"></script>
-
     <script>
-        // File preview handling
+        /* ================= Config ================= */
+        const API_BASE_URL = (location.hostname === 'www.vdirealty.com' || location.hostname === 'vdirealty.com')
+            ? 'https://api.vdirealty.com' : 'http://localhost:3000';
+
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const $ = id => document.getElementById(id);
+
+        let siteConfig = { turnstileSiteKey: null, listingDurationDays: 14 };
+        let turnstileWidgetId = null;
+
+        /* ================= Site config + Turnstile ================= */
+        async function loadSiteConfig() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/fsbo/site-config`);
+                if (!res.ok) throw new Error('config unavailable');
+                const data = await res.json();
+                siteConfig = {
+                    turnstileSiteKey: data.turnstileSiteKey || null,
+                    listingDurationDays: data.listingDurationDays || 14
+                };
+                $('durationDaysText').textContent = siteConfig.listingDurationDays;
+            } catch (e) {
+                console.warn('Could not load site config; using defaults.', e);
+            }
+            if (siteConfig.turnstileSiteKey) {
+                const s = document.createElement('script');
+                s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+                s.async = true; s.defer = true;
+                s.onload = () => {
+                    turnstileWidgetId = turnstile.render('#turnstile-slot', { sitekey: siteConfig.turnstileSiteKey });
+                };
+                document.head.appendChild(s);
+            }
+        }
+        loadSiteConfig();
+
+        /* ================= Seller type selector ================= */
+        const brokerFields = $('brokerFields'), builderFields = $('builderFields');
+        function updateSellerType() {
+            const val = document.querySelector('input[name="sellerTypeRadio"]:checked').value;
+            brokerFields.classList.toggle('show', val === 'broker');
+            builderFields.classList.toggle('show', val === 'builder');
+            $('brokerageName').required = (val === 'broker');
+            $('licenseNumber').required = (val === 'broker');
+            $('builderCompany').required = (val === 'builder');
+        }
+        document.querySelectorAll('input[name="sellerTypeRadio"]').forEach(r => r.addEventListener('change', updateSellerType));
+        updateSellerType();
+
+        /* ================= Photo upload ================= */
         let selectedFiles = [];
+        const MAX_PHOTOS = 10, MAX_SIZE = 5 * 1024 * 1024;
+        const uploadArea = $('uploadArea'), photoInput = $('photoUpload'), preview = $('filePreview');
 
-        function handleFileSelect(event) {
-            const files = Array.from(event.target.files);
-            const preview = document.getElementById('filePreview');
-            
-            // Limit to 10 photos
-            if (selectedFiles.length + files.length > 10) {
-                alert('Maximum 10 photos allowed');
-                return;
+        uploadArea.addEventListener('click', () => photoInput.click());
+        uploadArea.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); photoInput.click(); } });
+
+        photoInput.addEventListener('change', e => {
+            const files = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+            const nonImages = e.target.files.length - files.length;
+            if (nonImages > 0) alert('Only image files are accepted.');
+            if (selectedFiles.length + files.length > MAX_PHOTOS) {
+                alert(`Maximum ${MAX_PHOTOS} photos allowed.`);
             }
-
-            // Validate file size (5MB max)
-            const oversizedFiles = files.filter(file => file.size > 5 * 1024 * 1024);
-            if (oversizedFiles.length > 0) {
-                alert('Some files exceed 5MB limit and will not be uploaded');
-                return;
-            }
-
-            files.forEach((file, index) => {
-                if (file.size <= 5 * 1024 * 1024) {
-                    selectedFiles.push(file);
-                    
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const previewItem = document.createElement('div');
-                        previewItem.className = 'preview-item';
-                        previewItem.innerHTML = `
-                            <img src="${e.target.result}" alt="Preview">
-                            <button type="button" class="remove-btn" onclick="removeFile(${selectedFiles.length - 1})">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        `;
-                        preview.appendChild(previewItem);
-                    };
-                    reader.readAsDataURL(file);
-                }
+            files.slice(0, MAX_PHOTOS - selectedFiles.length).forEach(f => {
+                if (f.size > MAX_SIZE) { alert(`"${f.name}" exceeds the 5MB limit and was skipped.`); return; }
+                selectedFiles.push(f);
             });
-        }
+            photoInput.value = '';
+            renderPreview();
+        });
 
-        function removeFile(index) {
-            selectedFiles.splice(index, 1);
-            updatePreview();
-        }
-
-        function updatePreview() {
-            const preview = document.getElementById('filePreview');
+        function renderPreview() {
             preview.innerHTML = '';
-            
-            selectedFiles.forEach((file, index) => {
+            selectedFiles.forEach((file, i) => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
-                    previewItem.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview">
-                        <button type="button" class="remove-btn" onclick="removeFile(${index})">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    `;
-                    preview.appendChild(previewItem);
+                reader.onload = e => {
+                    const item = document.createElement('div');
+                    item.className = 'preview-item';
+                    const img = document.createElement('img');
+                    img.src = e.target.result; img.alt = 'Photo preview ' + (i + 1);
+                    const btn = document.createElement('button');
+                    btn.type = 'button'; btn.className = 'remove-btn'; btn.setAttribute('aria-label', 'Remove photo');
+                    btn.innerHTML = '<i class="fas fa-times"></i>';
+                    btn.addEventListener('click', () => { selectedFiles.splice(i, 1); renderPreview(); });
+                    item.appendChild(img); item.appendChild(btn);
+                    preview.appendChild(item);
                 };
                 reader.readAsDataURL(file);
             });
         }
 
-        // Form submission
-        document.getElementById('fsboForm').addEventListener('submit', async function(e) {
+        /* ================= Modal helpers ================= */
+        function openModal(id) { $(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal(id) { $(id).classList.remove('active'); document.body.style.overflow = ''; }
+        $('openLeadModal').addEventListener('click', () => openModal('leadModal'));
+        document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.close)));
+        document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); }));
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') document.querySelectorAll('.modal.active').forEach(m => closeModal(m.id));
+        });
+
+        /* ================= Lead form ================= */
+        $('leadForm').addEventListener('submit', async e => {
             e.preventDefault();
-            
-            // Validate at least one photo
-            if (selectedFiles.length === 0) {
-                alert('Please upload at least one photo of your property');
+            const err = $('leadError'); err.classList.remove('show'); err.textContent = '';
+            const name = $('leadName').value.trim(), phone = $('leadPhone').value.trim(), email = $('leadEmail').value.trim();
+            if (!name || !phone || !email) { err.textContent = 'Please provide your name, phone, and email.'; err.classList.add('show'); return; }
+            const btn = $('leadSubmitBtn');
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            const payload = {
+                name, email, phone,
+                propertyAddress: $('leadAddress').value.trim(),
+                city: $('leadCity').value.trim(),
+                state: $('leadState').value.trim().toUpperCase(),
+                zip: $('leadZip').value.trim(),
+                timeline: $('leadTimeline').value,
+                priceExpectation: $('leadPrice').value.trim(),
+                message: $('leadMessage').value.trim(),
+                sellerType: document.querySelector('input[name="leadSellerType"]:checked').value
+            };
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/fsbo/leads`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.success) throw new Error(data.error || data.message || 'Submission failed');
+                $('leadForm').style.display = 'none';
+                $('leadSuccess').style.display = 'block';
+            } catch (ex) {
+                err.textContent = 'Something went wrong sending your request. Please call us at (206) 880-0637 instead.';
+                err.classList.add('show');
+                console.error(ex);
+            } finally {
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Request a Call Back';
+            }
+        });
+
+        /* ================= FSBO form submit ================= */
+        function showFormError(msg) {
+            const el = $('formError');
+            el.textContent = msg; el.classList.add('show');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        $('fsboForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            $('formError').classList.remove('show');
+
+            // Honeypot: silently "succeed" without sending
+            if ($('website').value.trim() !== '') {
+                $('formWrap').querySelector('.fsbo-form').style.display = 'none';
+                $('successMessage').classList.add('show');
+                $('successMessage').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
 
-            const submitBtn = this.querySelector('.submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            const form = e.target;
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+            if (selectedFiles.length === 0) { showFormError('Please upload at least one photo of your property.'); return; }
+            const zip = $('zip').value.trim();
+            if (!/^\d{5}$/.test(zip)) { showFormError('Please enter a valid 5-digit ZIP code.'); return; }
 
-            // Collect form data
-            const formData = new FormData(this);
-            
-            // Add selected files to form data (use 'photos' as the field name for backend)
-            selectedFiles.forEach((file) => {
-                formData.append('photos', file);
-            });
-
-            // Collect checked features
-            const features = Array.from(document.querySelectorAll('input[name="features"]:checked'))
-                .map(cb => cb.value);
-            formData.set('features', features.join(', '));
-
-            // Add privacy preference
-            const privateContact = document.getElementById('privateContact').checked;
-            formData.set('privateContact', privateContact);
+            const sellerType = document.querySelector('input[name="sellerTypeRadio"]:checked').value;
+            const btn = $('submitBtn');
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
             try {
-                // Use API URL from config
-                const API_URL = `${CONFIG.API_BASE_URL}/api/fsbo/submit`;
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: formData
-                    // Note: Don't set Content-Type header - browser will set it with boundary for multipart/form-data
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Submission failed');
+                const fd = new FormData();
+                const v = id => $(id).value.trim();
+                fd.append('firstName', v('firstName'));
+                fd.append('lastName', v('lastName'));
+                fd.append('email', v('email'));
+                fd.append('phone', v('phone'));
+                fd.append('sellerType', sellerType);
+                if (sellerType === 'broker') {
+                    fd.append('brokerageName', v('brokerageName'));
+                    fd.append('licenseNumber', v('licenseNumber'));
                 }
-                
-                // Show success message
-                document.getElementById('successMessage').classList.add('show');
-                document.querySelector('.fsbo-form').style.display = 'none';
-                
-                // Scroll to success message
-                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
-
-                // Log form data (remove in production)
-                console.log('Form submitted with data:');
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
+                if (sellerType === 'builder') {
+                    fd.append('builderCompany', v('builderCompany'));
+                    if ($('newConstruction').checked) fd.append('newConstruction', 'true');
                 }
-                
-            } catch (error) {
-                alert('There was an error submitting your listing. Please try again or contact us directly.');
-                console.error('Submission error:', error);
+                // Privacy: unchecked = keep private (backend default 'true')
+                fd.append('hideAddress', $('showAddress').checked ? 'false' : 'true');
+                fd.append('hideIdentity', $('showName').checked ? 'false' : 'true');
+                fd.append('privateContact', $('privateContact').checked ? 'true' : 'false');
+
+                fd.append('address', v('address'));
+                fd.append('city', v('city'));
+                fd.append('state', v('state').toUpperCase());
+                fd.append('zip', zip);
+                fd.append('propertyType', $('propertyType').value);
+                fd.append('price', v('price'));
+                fd.append('sqft', v('sqft'));
+                fd.append('bedrooms', v('bedrooms'));
+                fd.append('bathrooms', v('bathrooms'));
+                if (v('yearBuilt')) fd.append('yearBuilt', v('yearBuilt'));
+                if (v('lotSize')) fd.append('lotSize', v('lotSize'));
+
+                const checked = Array.from(document.querySelectorAll('#featuresGroup input[type="checkbox"]:checked')).map(c => c.value);
+                const other = v('featuresOther');
+                if (other) checked.push(...other.split(',').map(s => s.trim()).filter(Boolean));
+                fd.append('features', checked.join(', '));
+                fd.append('description', $('description').value.trim());
+
+                selectedFiles.forEach(f => fd.append('photos', f, f.name));
+
+                // Turnstile token
+                if (turnstileWidgetId !== null && typeof turnstile !== 'undefined') {
+                    const token = turnstile.getResponse(turnstileWidgetId);
+                    if (!token) { showFormError('Please complete the verification check before submitting.'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Listing for Review'; return; }
+                    fd.append('cf-turnstile-response', token);
+                }
+
+                const res = await fetch(`${API_BASE_URL}/api/fsbo/submit`, { method: 'POST', body: fd });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.success) throw new Error(data.error || data.message || 'Submission failed');
+
+                if (data.message) $('successText').textContent = data.message;
+                form.style.display = 'none';
+                $('successMessage').classList.add('show');
+                $('successMessage').scrollIntoView({ behavior: 'smooth' });
+            } catch (ex) {
+                console.error('Submission error:', ex);
+                showFormError('There was a problem submitting your listing: ' + ex.message + ' Please try again, or contact us at (206) 880-0637.');
+                if (turnstileWidgetId !== null && typeof turnstile !== 'undefined') turnstile.reset(turnstileWidgetId);
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Listing';
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Listing for Review';
             }
         });
     </script>

@@ -20,6 +20,11 @@ const initializeTransporter = () => {
     } else if (config.email.service === 'gmail') {
         transporter = nodemailer.createTransport({
             service: 'gmail',
+            // Fail fast instead of hanging the event loop when the mail
+            // provider is unreachable (observed: spinning CPU + stalled requests)
+            connectionTimeout: 15000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000,
             auth: {
                 user: config.email.user,
                 pass: config.email.password
@@ -31,6 +36,9 @@ const initializeTransporter = () => {
             host: config.email.host,
             port: config.email.port,
             secure: config.email.secure,
+            connectionTimeout: 15000,
+            greetingTimeout: 10000,
+            socketTimeout: 15000,
             auth: {
                 user: config.email.user,
                 pass: config.email.password
@@ -334,10 +342,255 @@ const sendContactEmail = async (contactData) => {
     }
 };
 
+// Escape user-supplied text before embedding in HTML emails
+const escapeHtml = (value) => {
+    if (value === null || value === undefined) return '';
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+};
+
+// Relay a buyer's inquiry to the seller (seller's real email never shown to buyer)
+const sendInquiryToSeller = async (listing, inquiry) => {
+    const displayAddress = listing.hideAddress
+        ? `${listing.city}, ${listing.state} ${listing.zip}`
+        : `${listing.address}, ${listing.city}, ${listing.state} ${listing.zip}`;
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: listing.email,
+        replyTo: inquiry.email,
+        subject: `New buyer inquiry: ${displayAddress} - VDI Realty FSBO`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #0F2027, #203A43); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+                    .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+                    .info-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+                    .detail-row { padding: 8px 0; border-bottom: 1px solid #eee; }
+                    .detail-label { font-weight: bold; color: #0F2027; }
+                    .message-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #C5A059; }
+                    .footer { text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>📩 New Buyer Inquiry</h1>
+                    </div>
+                    <div class="content">
+                        <p>Hello ${escapeHtml(listing.firstName)},</p>
+                        <p>Someone is interested in your FSBO listing:</p>
+                        <div class="info-box">
+                            <div class="detail-row"><span class="detail-label">Property:</span> ${escapeHtml(displayAddress)}</div>
+                            <div class="detail-row"><span class="detail-label">List Price:</span> $${Number(listing.price).toLocaleString()}</div>
+                        </div>
+                        <h3 style="color: #0F2027;">Buyer Details:</h3>
+                        <div class="info-box">
+                            <div class="detail-row"><span class="detail-label">Name:</span> ${escapeHtml(inquiry.name)}</div>
+                            <div class="detail-row"><span class="detail-label">Email:</span> ${escapeHtml(inquiry.email)}</div>
+                            <div class="detail-row"><span class="detail-label">Phone:</span> ${escapeHtml(inquiry.phone || 'Not provided')}</div>
+                        </div>
+                        <div class="message-box">
+                            <strong>Their message:</strong>
+                            <p>${escapeHtml(inquiry.message).replace(/\n/g, '<br>')}</p>
+                        </div>
+                        <p><strong>Tip:</strong> you can reply directly to this email — it will go straight to the buyer. Your email address stays private until you choose to share it.</p>
+                        <p>Best regards,<br><strong>VDI Realty Team</strong></p>
+                    </div>
+                    <div class="footer">
+                        <p>&copy; ${new Date().getFullYear()} VDI Realty. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Inquiry relay sent to seller for listing ${listing.id}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error relaying inquiry to seller:', error);
+        return false;
+    }
+};
+
+// Notify seller their listing was approved and is live
+const sendApprovalEmail = async (listing) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: listing.email,
+        subject: 'Your FSBO listing is now live! - VDI Realty',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #0F2027, #203A43); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+                    .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; }
+                    .button { display: inline-block; background: #C5A059; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; margin: 20px 0; }
+                    .footer { text-align: center; margin-top: 30px; color: #666; font-size: 0.9em; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🎉 Your Listing is Live!</h1>
+                    </div>
+                    <div class="content">
+                        <p>Hello ${escapeHtml(listing.firstName)},</p>
+                        <p>Great news — your FSBO listing for <strong>${escapeHtml(listing.address)}, ${escapeHtml(listing.city)}, ${escapeHtml(listing.state)} ${escapeHtml(listing.zip)}</strong> has been reviewed and is now live on VDI Realty.</p>
+                        <p><strong>Share it everywhere!</strong> Every view is a potential buyer. Post your listing link on social media, neighborhood groups, and anywhere buyers look.</p>
+                        <p style="margin-top: 20px;">
+                            <a href="${config.websiteUrl}/fsbo-listings.html" class="button">View Your Listing</a>
+                        </p>
+                        <p>Your listing stays active for <strong>14 days</strong> (until ${new Date(listing.expirationDate).toLocaleDateString()}). We'll remind you before it expires so you can relist for free.</p>
+                        <p>Changed your mind about selling on your own? <a href="${config.websiteUrl}/contact.html">Let VDI Realty sell it for you</a> — we'd be glad to help.</p>
+                        <p>Best regards,<br><strong>VDI Realty Team</strong></p>
+                    </div>
+                    <div class="footer">
+                        <p>&copy; ${new Date().getFullYear()} VDI Realty. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Approval email sent to ${listing.email}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending approval email:', error);
+        return false;
+    }
+};
+
+// Notify seller their listing was not approved
+const sendRejectionEmail = async (listing, reason) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: listing.email,
+        subject: 'Update on your FSBO listing - VDI Realty',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">Update on your FSBO listing</h2>
+                    <p>Hello ${escapeHtml(listing.firstName)},</p>
+                    <p>Thanks for submitting your FSBO listing for <strong>${escapeHtml(listing.address)}, ${escapeHtml(listing.city)}, ${escapeHtml(listing.state)} ${escapeHtml(listing.zip)}</strong>. After review, we weren't able to publish it this time${reason ? ` — ${escapeHtml(reason)}` : ''}.</p>
+                    <p>You're welcome to fix this and submit again — it's always free. Or if you'd rather have a professional handle it, <a href="${config.websiteUrl}/contact.html">VDI Realty would be glad to sell your home for you</a>.</p>
+                    <p>Best regards,<br><strong>VDI Realty Team</strong></p>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Rejection email sent to ${listing.email}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending rejection email:', error);
+        return false;
+    }
+};
+
+// Alert Veng about a new "Sell with VDI" lead
+const sendSellerLeadNotification = async (lead) => {
+    const isBuilder = lead.sellerType === 'builder';
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: config.adminEmail,
+        subject: `${isBuilder ? '🏗️ NEW BUILDER LEAD' : '🏠 NEW SELLER LEAD'}: ${lead.name} - VDI Realty`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">${isBuilder ? '🏗️ New Builder Lead' : '🏠 New Seller Lead'}</h2>
+                    <p><strong>Someone wants VDI Realty to help sell their ${isBuilder ? 'properties' : 'home'}!</strong></p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(lead.name)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(lead.email)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(lead.phone || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Property</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml([lead.propertyAddress, lead.city, lead.state, lead.zip].filter(Boolean).join(', ') || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Timeline</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(lead.timeline || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Price expectation</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(lead.priceExpectation || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Type</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${isBuilder ? 'Builder / Developer' : 'Homeowner'}</td></tr>
+                    </table>
+                    ${lead.message ? `<p><strong>Their message:</strong><br>${escapeHtml(lead.message).replace(/\n/g, '<br>')}</p>` : ''}
+                    <p style="color: #666; font-size: 0.9em;">Submitted ${new Date(lead.createdAt || Date.now()).toLocaleString()}. Reply to ${escapeHtml(lead.email)} to follow up.</p>
+                </div>
+            </body>
+            </html>
+        `,
+        replyTo: lead.email
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Seller lead notification sent to ${config.adminEmail}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending seller lead notification:', error);
+        return false;
+    }
+};
+
+// Confirm to the lead that VDI received their request
+const sendSellerLeadConfirmation = async (lead) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: lead.email,
+        subject: 'We received your request - VDI Realty',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">Thanks, ${escapeHtml(lead.name)}!</h2>
+                    <p>We've received your request to have <strong>VDI Realty</strong> help sell your ${lead.sellerType === 'builder' ? 'properties' : 'home'}. A member of our team will reach out shortly to talk next steps.</p>
+                    <p>In the meantime, if you have questions, call us at <strong>(206) 880-0637</strong> or reply to this email.</p>
+                    <p>Best regards,<br><strong>VDI Realty Team</strong><br><span style="color:#666; font-size: 0.9em;">Brokered by Realty Connect</span></p>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Seller lead confirmation sent to ${lead.email}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending seller lead confirmation:', error);
+        return false;
+    }
+};
+
 module.exports = {
     initializeTransporter,
     sendConfirmationEmail,
     sendReminderEmail,
     sendAdminNotification,
-    sendContactEmail
+    sendContactEmail,
+    sendInquiryToSeller,
+    sendApprovalEmail,
+    sendRejectionEmail,
+    sendSellerLeadNotification,
+    sendSellerLeadConfirmation
 };
