@@ -582,6 +582,75 @@ const sendSellerLeadConfirmation = async (lead) => {
     }
 };
 
+// Alert Veng/Jae about a new technical help request from the FSBO posting flow
+const sendHelpRequestNotification = async (req_) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: config.adminEmail,
+        subject: `🛠️ TECH HELP REQUEST: ${req_.name} - FSBO posting`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">🛠️ New Technical Help Request</h2>
+                    <p><strong>Someone needs help with the FSBO listing form.</strong> Jae handles these directly.</p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.name)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.email)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.phone || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Issue</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.issue || 'Not specified')}</td></tr>
+                    </table>
+                    ${req_.message ? `<p><strong>Their description:</strong><br>${escapeHtml(req_.message).replace(/\n/g, '<br>')}</p>` : ''}
+                    <p style="color: #666; font-size: 0.9em;">Submitted ${new Date(req_.createdAt || Date.now()).toLocaleString()}. Reply to ${escapeHtml(req_.email)} to help them out.</p>
+                </div>
+            </body>
+            </html>
+        `,
+        replyTo: req_.email
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Help request notification sent to ${config.adminEmail}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending help request notification:', error);
+        return false;
+    }
+};
+
+// Confirm to the user that their help request was received
+const sendHelpRequestConfirmation = async (req_) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: req_.email,
+        subject: 'We got your help request - VDI Realty',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">Thanks, ${escapeHtml(req_.name)}!</h2>
+                    <p>We've received your help request about the <strong>free listing form</strong>. A member of our team will reach out shortly to get you unstuck.</p>
+                    <p>If it's urgent, call us at <strong>(206) 880-0637</strong> or just reply to this email.</p>
+                    <p>Best regards,<br><strong>VDI Realty Team</strong><br><span style="color:#666; font-size: 0.9em;">Brokered by Realty Connect</span></p>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Help request confirmation sent to ${req_.email}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending help request confirmation:', error);
+        return false;
+    }
+};
+
 module.exports = {
     initializeTransporter,
     sendConfirmationEmail,
@@ -592,5 +661,7 @@ module.exports = {
     sendApprovalEmail,
     sendRejectionEmail,
     sendSellerLeadNotification,
-    sendSellerLeadConfirmation
+    sendSellerLeadConfirmation,
+    sendHelpRequestNotification,
+    sendHelpRequestConfirmation
 };

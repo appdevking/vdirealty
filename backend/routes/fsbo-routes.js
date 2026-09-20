@@ -23,7 +23,9 @@ const {
     sendApprovalEmail,
     sendRejectionEmail,
     sendSellerLeadNotification,
-    sendSellerLeadConfirmation
+    sendSellerLeadConfirmation,
+    sendHelpRequestNotification,
+    sendHelpRequestConfirmation
 } = require('../email-service');
 const config = require('../config');
 // Extraction is optional: puppeteer isn't a declared dependency, so don't
@@ -754,6 +756,60 @@ router.post(
             res.json({ success: true, message: 'Thanks! We received your request and will reach out shortly.' });
         } catch (error) {
             console.error('[API] Error capturing lead:', error);
+            res.status(500).json({ error: 'Failed to submit your request.' });
+        }
+    }
+);
+
+/* ------------------------------------------------------------------ */
+/* Technical help requests — "stuck on the listing form?" button.      */
+/* Notifications go to the admin inbox, which Jae monitors and answers */
+/* directly.                                                           */
+/* ------------------------------------------------------------------ */
+
+router.post(
+    '/help-request',
+    rateLimit('fsbo-help', 5, 60 * 60 * 1000),
+    async (req, res) => {
+        try {
+            const body = req.body || {};
+            if (isBot(body)) {
+                console.log('[API] Honeypot tripped on /help-request from', req.ip);
+                return res.json({ success: true, message: 'Thanks! We received your request.' });
+            }
+
+            const captcha = await verifyTurnstile(body['cf-turnstile-response'], req.ip);
+            if (!captcha.ok) return res.status(400).json({ error: captcha.error });
+
+            const name = str(body.name, 120);
+            const email = str(body.email, 160);
+            const issue = str(body.issue, 160);
+            const message = str(body.message, 3000);
+
+            if (!name) return res.status(400).json({ error: 'Your name is required.' });
+            if (!EMAIL_RE.test(email)) return res.status(400).json({ error: 'A valid email address is required.' });
+            if (!message) return res.status(400).json({ error: 'Please describe the issue you ran into.' });
+
+            const helpReq = {
+                name,
+                email,
+                phone: normalizePhone(body.phone) || null,
+                issue: issue || null,
+                message
+            };
+
+            const result = statements.insertHelpRequest.run(
+                helpReq.name, helpReq.email, helpReq.phone, helpReq.issue, helpReq.message
+            );
+            helpReq.id = Number(result.lastInsertRowid);
+            helpReq.createdAt = new Date().toISOString();
+
+            sendHelpRequestNotification(helpReq).catch((err) => console.error('[API] Help request notification error:', err.message));
+            sendHelpRequestConfirmation(helpReq).catch((err) => console.error('[API] Help request confirmation error:', err.message));
+
+            res.json({ success: true, message: 'Thanks! We received your help request and will reach out shortly.' });
+        } catch (error) {
+            console.error('[API] Error capturing help request:', error);
             res.status(500).json({ error: 'Failed to submit your request.' });
         }
     }

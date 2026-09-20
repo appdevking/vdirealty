@@ -570,6 +570,12 @@
                     <i class="fas fa-paper-plane"></i> Submit Listing for Review
                 </button>
 
+                <div style="text-align:center; margin-top:1rem;">
+                    <button type="button" id="openHelpModal" style="background:none; border:none; cursor:pointer; color:var(--accent); font-size:0.95rem; text-decoration:underline; font-family:inherit;">
+                        <i class="fas fa-life-ring"></i> Having trouble posting? Click here for technical help
+                    </button>
+                </div>
+
                 <div class="eho-note">
                     <i class="fas fa-house-chimney"></i>
                     <span>VDI Realty supports Equal Housing Opportunity. All listings are subject to the Federal Fair Housing Act, which prohibits discrimination based on race, color, religion, sex, handicap, familial status, or national origin.</span>
@@ -649,6 +655,62 @@
                         <textarea id="leadMessage" placeholder="Anything else you'd like us to know?"></textarea>
                     </div>
                     <button type="submit" class="submit-btn" id="leadSubmitBtn"><i class="fas fa-paper-plane"></i> Request a Call Back</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical help modal -->
+    <div class="modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" data-close="helpModal" aria-label="Close"><i class="fas fa-times"></i></button>
+                <h2 id="helpModalTitle"><i class="fas fa-life-ring"></i> Need a Hand Posting?</h2>
+                <p>Stuck on the listing form? Tell us what's happening and we'll help you get it posted.</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-error" id="helpError" role="alert"></div>
+                <div id="helpSuccess" style="display:none; text-align:center; padding:1.5rem 0;">
+                    <i class="fas fa-check-circle" style="font-size:3rem; color:var(--success); margin-bottom:1rem;"></i>
+                    <h3 style="color:var(--primary);">Help request received!</h3>
+                    <p style="color:var(--text-dim);">Thanks — our team will reach out shortly to help you finish posting.</p>
+                </div>
+                <form id="helpForm" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="helpName">Full Name <span class="required" style="color:var(--danger);">*</span></label>
+                            <input type="text" id="helpName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="helpEmail">Email <span class="required" style="color:var(--danger);">*</span></label>
+                            <input type="email" id="helpEmail" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="helpPhone">Phone (optional)</label>
+                            <input type="tel" id="helpPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="helpIssue">What's the issue?</label>
+                            <select id="helpIssue">
+                                <option value="">Select</option>
+                                <option value="photo-upload">Photo upload isn't working</option>
+                                <option value="form-error">Form shows an error</option>
+                                <option value="cant-submit">Can't submit the form</option>
+                                <option value="listing-not-showing">My listing isn't showing up</option>
+                                <option value="edit-listing">Need to edit my listing</option>
+                                <option value="other">Something else</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="helpMessage">Describe the problem <span class="required" style="color:var(--danger);">*</span></label>
+                        <textarea id="helpMessage" placeholder="What were you trying to do, and what happened?" required></textarea>
+                    </div>
+                    <!-- Honeypot -->
+                    <input type="text" id="helpWebsite" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+                    <button type="submit" class="submit-btn" id="helpSubmitBtn"><i class="fas fa-paper-plane"></i> Send Help Request</button>
                 </form>
             </div>
         </div>
@@ -803,6 +865,39 @@
                 console.error(ex);
             } finally {
                 btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Request a Call Back';
+            }
+        });
+
+        /* ================= Help form ================= */
+        $('openHelpModal').addEventListener('click', () => openModal('helpModal'));
+        $('helpForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const err = $('helpError'); err.classList.remove('show'); err.textContent = '';
+            const name = $('helpName').value.trim(), email = $('helpEmail').value.trim(), message = $('helpMessage').value.trim();
+            if (!name || !email || !message) { err.textContent = 'Please provide your name, email, and a description of the problem.'; err.classList.add('show'); return; }
+            const btn = $('helpSubmitBtn');
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            const payload = {
+                name, email, message,
+                phone: $('helpPhone').value.trim(),
+                issue: $('helpIssue').value,
+                website: $('helpWebsite').value
+            };
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/fsbo/help-request`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.success) throw new Error(data.error || data.message || 'Submission failed');
+                $('helpForm').style.display = 'none';
+                $('helpSuccess').style.display = 'block';
+            } catch (ex) {
+                err.textContent = 'Something went wrong sending your request. Please call us at (206) 880-0637 instead.';
+                err.classList.add('show');
+                console.error(ex);
+            } finally {
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Help Request';
             }
         });
 

@@ -132,6 +132,20 @@ const initDatabase = () => {
         )
     `);
 
+    // Technical help requests for the FSBO posting flow (answered by Jae)
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS fsbo_help_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            issue TEXT,
+            message TEXT,
+            status TEXT DEFAULT 'open',
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
     // Create indexes for better performance
     db.exec(`
         CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
@@ -350,6 +364,23 @@ const statements = {
     // Seller lead: mark contacted
     markLeadContacted: db.prepare(`
         UPDATE fsbo_seller_leads SET contacted = 1 WHERE id = ?
+    `),
+
+    // Technical help request: insert
+    insertHelpRequest: db.prepare(`
+        INSERT INTO fsbo_help_requests (
+            name, email, phone, issue, message, status
+        ) VALUES (?, ?, ?, ?, ?, 'open')
+    `),
+
+    // Technical help request: all, newest first (admin)
+    getAllHelpRequests: db.prepare(`
+        SELECT * FROM fsbo_help_requests ORDER BY createdAt DESC
+    `),
+
+    // Technical help request: mark resolved
+    markHelpRequestResolved: db.prepare(`
+        UPDATE fsbo_help_requests SET status = 'resolved' WHERE id = ?
     `)
 };
 
