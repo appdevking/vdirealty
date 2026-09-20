@@ -1,7 +1,3 @@
-// Serve the visit dashboard
-app.get('/dashboard/visits', (req, res) => {
-    res.sendFile(path.join(__dirname, 'visit-dashboard.html'));
-});
 require('dotenv').config();
 
 const express = require('express');
@@ -90,6 +86,11 @@ app.get('/api/visit-stats', (req, res) => {
     } catch (e) {
         res.status(500).json({ error: 'Could not read visit stats' });
     }
+});
+
+// Serve the visit dashboard
+app.get('/dashboard/visits', (req, res) => {
+    res.sendFile(path.join(__dirname, 'visit-dashboard.html'));
 });
 
 // Initialize database
