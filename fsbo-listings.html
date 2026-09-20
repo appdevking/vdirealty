@@ -119,6 +119,14 @@
             padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700; z-index: 2;
             font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0.4px;
         }
+        /* Demo/sample listings: AI-generated illustration, never a real photo. */
+        .sample-img-tag {
+            position: absolute; bottom: 0.9rem; left: 0.9rem; background: rgba(21,21,25,0.85); color: #ffe08a;
+            padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.72rem; font-weight: 700; z-index: 2;
+            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0.4px;
+            border: 1px solid rgba(255,224,138,0.5);
+        }
+        .detail-gallery { position: relative; }
         .card-body { padding: 1.4rem; display: flex; flex-direction: column; flex: 1; }
         .card-price { font-size: 1.8rem; font-weight: 800; color: var(--accent); font-family: 'Montserrat', sans-serif; margin-bottom: 0.3rem; }
         .card-loc { color: var(--text-dim); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
@@ -641,6 +649,7 @@
                     <img class="card-img" src="${esc(img)}" alt="Property photo" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
                     <span class="seller-badge">${sellerBadge(l)}</span>
                     ${isNew ? '<span class="new-tag">New</span>' : ''}
+                    ${l.isDemo ? '<span class="sample-img-tag"><i class="fas fa-image"></i> Sample image — not the actual property</span>' : ''}
                     ${photos.length > 1 ? `<span class="photo-count"><i class="fas fa-images"></i> ${photos.length}</span>` : ''}
                 </div>
                 <div class="card-body">
@@ -767,6 +776,7 @@
             box.innerHTML = `
                 <div class="detail-gallery">
                     <img class="detail-main-img" id="detailMainImg" src="${esc(photos[0] || PLACEHOLDER_IMG)}" alt="Property photo" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
+                    ${l.isDemo ? '<span class="sample-img-tag"><i class="fas fa-image"></i> Sample image — not the actual property</span>' : ''}
                     ${photos.length > 1 ? `<div class="gallery-thumbs">${photos.map((p, i) => `<img src="${esc(p)}" data-i="${i}" class="${i === 0 ? 'active' : ''}" alt="Photo ${i + 1}" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : ''}
                 </div>
                 <div class="detail-body">

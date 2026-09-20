@@ -95,6 +95,8 @@ function serializePublicListing(row, req) {
     const sellerType = SELLER_TYPES.includes(row.sellerType) ? row.sellerType : 'owner';
     const out = {
         id: row.id,
+        // Demo/sample listings use AI-generated illustrations, never real photos.
+        isDemo: /^\[DEMO\]/i.test(row.description || ''),
         sellerType,
         sellerLabel: sellerType === 'builder'
             ? 'Builder / Developer'
@@ -568,7 +570,9 @@ router.get('/l/:id', (req, res) => {
 
         const photoHtml = pub.photos.slice(0, 6).map((p) =>
             `<img src="${esc(p.url.startsWith('http') ? p.url : absoluteUrl(req, p.url))}" alt="${esc(title)}" style="max-width:100%;border-radius:8px;margin-bottom:12px;" loading="lazy">`
-        ).join('');
+        ).join('') + (pub.isDemo
+            ? `<p style="font-size:0.85rem;color:#6b7a8d;font-style:italic;">Sample illustration — not a photograph of the actual property. Demo listing for preview purposes.</p>`
+            : '');
 
         res.send(`<!DOCTYPE html>
 <html lang="en">

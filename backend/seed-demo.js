@@ -94,7 +94,7 @@ const DEMO_LISTINGS = [
     // ---- Homeowners (For Sale By Owner) ----
     {
         sellerType: 'owner', hideAddress: true, hideIdentity: true,
-        address: '1234 148th Ave SE', city: 'Bellevue', state: 'WA', zip: '98007',
+        address: '1234 Sample Lane', city: 'Bellevue', state: 'WA', zip: '98007',
         propertyType: 'Single Family', price: 1250000, sqft: 2850,
         bedrooms: 4, bathrooms: 3, yearBuilt: 2019, lotSize: 0.18,
         features: 'Garage, Central AC, Updated Kitchen, Smart Home',
@@ -102,7 +102,7 @@ const DEMO_LISTINGS = [
     },
     {
         sellerType: 'owner', hideAddress: false, hideIdentity: true,
-        address: '8820 N 19th Ave', city: 'Phoenix', state: 'AZ', zip: '85021',
+        address: '5678 Example Blvd', city: 'Phoenix', state: 'AZ', zip: '85021',
         propertyType: 'Condo', price: 389000, sqft: 1180,
         bedrooms: 2, bathrooms: 2, yearBuilt: 2005,
         features: 'Pool, Garage, Central AC',
@@ -111,7 +111,7 @@ const DEMO_LISTINGS = [
     {
         sellerType: 'owner', hideAddress: true, hideIdentity: false,
         firstName: 'Demo', lastName: 'Seller',
-        address: '41-22 149th St', city: 'Flushing', state: 'NY', zip: '11355',
+        address: '9999 Demo Street', city: 'Flushing', state: 'NY', zip: '11355',
         propertyType: 'Multi-Family', price: 1680000, sqft: 3400,
         bedrooms: 6, bathrooms: 4, yearBuilt: 1938, lotSize: 0.09,
         features: 'Finished Basement, Hardwood Floors',
@@ -121,7 +121,7 @@ const DEMO_LISTINGS = [
     {
         sellerType: 'builder', builderCompany: 'Cedarline Homes', newConstruction: true,
         hideAddress: false, hideIdentity: true,
-        address: '15990 NE 85th St', city: 'Redmond', state: 'WA', zip: '98052',
+        address: '4321 Illustration Way', city: 'Redmond', state: 'WA', zip: '98052',
         propertyType: 'Single Family', price: 1450000, sqft: 3120,
         bedrooms: 5, bathrooms: 3.5, yearBuilt: 2026, lotSize: 0.14,
         features: 'Garage, Central AC, Smart Home, Fireplace, Hardwood Floors',
@@ -130,7 +130,7 @@ const DEMO_LISTINGS = [
     {
         sellerType: 'builder', builderCompany: 'Sonoran Vista Builders', newConstruction: true,
         hideAddress: true, hideIdentity: true,
-        address: '7000 E Shea Blvd', city: 'Scottsdale', state: 'AZ', zip: '85254',
+        address: '8765 Sample Court', city: 'Scottsdale', state: 'AZ', zip: '85254',
         propertyType: 'Townhouse', price: 725000, sqft: 1980,
         bedrooms: 3, bathrooms: 2.5, yearBuilt: 2026,
         features: 'Pool, Garage, Central AC, Smart Home',
@@ -139,7 +139,7 @@ const DEMO_LISTINGS = [
     {
         sellerType: 'builder', builderCompany: 'Liberty Corner Builders', newConstruction: false,
         hideAddress: true, hideIdentity: true,
-        address: '220 36th St', city: 'Brooklyn', state: 'NY', zip: '11232',
+        address: '2468 Example Avenue', city: 'Brooklyn', state: 'NY', zip: '11232',
         propertyType: 'Condo', price: 890000, sqft: 1240,
         bedrooms: 2, bathrooms: 2, yearBuilt: 2024,
         features: 'Central AC, Hardwood Floors, Updated Kitchen',
@@ -150,7 +150,7 @@ const DEMO_LISTINGS = [
         sellerType: 'broker', brokerageName: 'Demo Realty Group', licenseNumber: 'WA-DEMO-12345',
         firstName: 'Demo', lastName: 'Agent',
         hideAddress: false, hideIdentity: true,
-        address: '1200 Westlake Ave N', city: 'Seattle', state: 'WA', zip: '98109',
+        address: '1357 Demo Place', city: 'Seattle', state: 'WA', zip: '98109',
         propertyType: 'Condo', price: 650000, sqft: 980,
         bedrooms: 2, bathrooms: 2, yearBuilt: 2018,
         features: 'Central AC, Garage, Smart Home',
@@ -160,7 +160,7 @@ const DEMO_LISTINGS = [
         sellerType: 'broker', brokerageName: 'Demo Realty Group', licenseNumber: 'AZ-DEMO-67890',
         firstName: 'Demo', lastName: 'Broker',
         hideAddress: true, hideIdentity: true,
-        address: '4500 E Speedway Blvd', city: 'Tucson', state: 'AZ', zip: '85712',
+        address: '9753 Sample Drive', city: 'Tucson', state: 'AZ', zip: '85712',
         propertyType: 'Single Family', price: 540000, sqft: 2100,
         bedrooms: 3, bathrooms: 2, yearBuilt: 1998, lotSize: 0.22,
         features: 'Pool, Garage, Fireplace, Central AC',
@@ -187,11 +187,16 @@ function seedDemo() {
 
     console.log('🌱 Seeding demo FSBO data (LOCAL PREVIEW ONLY)...');
     const ids = [];
-    for (const demo of DEMO_LISTINGS) {
+    const DEMO_PHOTO_BASE = 'https://www.vdirealty.com/images/demo-fsbo'; // AI-generated sample illustrations
+    for (let i = 0; i < DEMO_LISTINGS.length; i++) {
+        const demo = DEMO_LISTINGS[i];
         const r = statements.insertListing.run(...listingParams(demo));
-        ids.push(Number(r.lastInsertRowid));
+        const id = Number(r.lastInsertRowid);
+        ids.push(id);
+        // One AI-generated sample illustration per demo listing (never a real photo).
+        statements.insertPhoto.run(id, `demo-${i + 1}.jpg`, `demo-${i + 1}.jpg`, `${DEMO_PHOTO_BASE}/demo-${i + 1}.jpg`, null, 'image/jpeg', 0);
     }
-    console.log(`   ✅ ${ids.length} demo listings inserted (3 owner, 3 builder, 2 broker) — all [DEMO]-marked, approved, active.`);
+    console.log(`   ✅ ${ids.length} demo listings inserted (3 owner, 3 builder, 2 broker) — all [DEMO]-marked, approved, active, each with 1 sample illustration.`);
 
     // One demo buyer inquiry on the first listing
     statements.insertInquiry.run(
