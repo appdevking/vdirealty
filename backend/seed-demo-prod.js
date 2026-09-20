@@ -19,14 +19,6 @@
  *   node backend/seed-demo-prod.js --confirm-production --clear
  * ========================================================================== */
 
-if (!process.argv.includes('--confirm-production')) {
-    console.error('⛔ Refusing to seed: pass --confirm-production to run this on the server.');
-    process.exit(1);
-}
-
-const config = require('./config');
-console.log(`ℹ️  Target database: ${config.dbPath}`);
-
 const { db, statements } = require('./database');
 
 const DEMO_EMAIL = 'demo-poster@vdirealty.example'; // invalid TLD: can never receive real mail
@@ -207,9 +199,16 @@ function seedDemo() {
     );
     console.log('   ✅ 1 demo seller lead inserted.');
     console.log('\nDone. Verify via GET https://api.vdirealty.com/api/fsbo/listings');
+    return { listings: ids.length, inquiries: 1, leads: 1 };
 }
 
 if (require.main === module) {
+    if (!process.argv.includes('--confirm-production')) {
+        console.error('⛔ Refusing to seed: pass --confirm-production to run this on the server.');
+        process.exit(1);
+    }
     if (process.argv.includes('--clear')) clearDemo();
     else seedDemo();
 }
+
+module.exports = { seedDemo, clearDemo };
