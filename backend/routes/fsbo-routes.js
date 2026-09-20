@@ -897,27 +897,4 @@ router.post('/admin/leads/:id/contacted', adminAuth, (req, res) => {
     }
 });
 
-/* ------------------------------------------------------------------
- * ONE-TIME demo seed — TEMPORARY, remove after 2026-09-20.
- * Veng-approved: inserts the 8 clearly-marked [DEMO] listings (+1 demo
- * inquiry, +1 demo lead) so the live board isn't empty during review.
- * Guarded by a single-use token (NOT the admin password); refuses to
- * run twice. Only INSERTS demo-marked rows — cannot modify real data.
- * ------------------------------------------------------------------ */
-const ONETIME_SEED_TOKEN = 'b52aea177ec7dc187ffc9b2ace3d0d89';
-router.post('/_seed_once', (req, res) => {
-    if (req.query.t !== ONETIME_SEED_TOKEN) {
-        return res.status(404).json({ error: 'Not found' });
-    }
-    try {
-        const { seedDemo } = require('../seed-demo-prod');
-        const result = seedDemo();
-        console.log('[API] One-time demo seed executed:', JSON.stringify(result));
-        res.json({ ok: true, result });
-    } catch (error) {
-        console.error('[API] One-time demo seed failed:', error);
-        res.status(500).json({ ok: false, error: error.message });
-    }
-});
-
 module.exports = router;
