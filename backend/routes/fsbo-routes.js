@@ -901,4 +901,44 @@ router.post('/admin/leads/:id/contacted', adminAuth, (req, res) => {
     }
 });
 
+/* ------------------------------------------------------------------
+ * ONE-TIME demo update — TEMPORARY, remove after 2026-09-20.
+ * Veng-approved: replaces demo street addresses with clearly fictitious
+ * names and attaches one AI-generated sample illustration per demo
+ * listing. Only touches [DEMO]-marked rows (demo-poster@vdirealty.example).
+ * ------------------------------------------------------------------ */
+const ONETIME_DEMO_UPDATE_TOKEN = '4f6018250632394b327c63ead262651b';
+router.post('/_demos_update_once', (req, res) => {
+    if (req.query.t !== ONETIME_DEMO_UPDATE_TOKEN) {
+        return res.status(404).json({ error: 'Not found' });
+    }
+    try {
+        const { db, statements } = require('../database');
+        const DEMO_EMAIL = 'demo-poster@vdirealty.example';
+        const FICTIONAL_ADDRESSES = [
+            '1234 Sample Lane', '5678 Example Blvd', '9999 Demo Street',
+            '4321 Illustration Way', '8765 Sample Court', '2468 Example Avenue',
+            '1357 Demo Place', '9753 Sample Drive'
+        ];
+        const PHOTO_BASE = 'https://www.vdirealty.com/images/demo-fsbo';
+        const demos = db.prepare(`SELECT id FROM listings WHERE email = ? ORDER BY id`).all(DEMO_EMAIL);
+        let photosAdded = 0;
+        demos.forEach((d, i) => {
+            db.prepare(`UPDATE listings SET address = ? WHERE id = ?`)
+                .run(FICTIONAL_ADDRESSES[i % FICTIONAL_ADDRESSES.length], d.id);
+            const existing = db.prepare(`SELECT COUNT(*) AS n FROM photos WHERE listingId = ?`).get(d.id).n;
+            if (!existing) {
+                statements.insertPhoto.run(d.id, `demo-${i + 1}.jpg`, `demo-${i + 1}.jpg`,
+                    `${PHOTO_BASE}/demo-${i + 1}.jpg`, null, 'image/jpeg', 0);
+                photosAdded++;
+            }
+        });
+        console.log(`[API] One-time demo update: ${demos.length} addresses, ${photosAdded} photos.`);
+        res.json({ ok: true, updated: demos.length, photosAdded });
+    } catch (error) {
+        console.error('[API] One-time demo update failed:', error);
+        res.status(500).json({ ok: false, error: error.message });
+    }
+});
+
 module.exports = router;
