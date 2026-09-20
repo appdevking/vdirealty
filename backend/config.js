@@ -25,7 +25,7 @@ module.exports = {
     
     // Website
     websiteUrl: process.env.WEBSITE_URL || 'http://localhost:5500',
-    adminEmail: process.env.ADMIN_EMAIL || 'info@vdirealty.com',
+    adminEmail: process.env.ADMIN_EMAIL || 'veng@vdirealty.com',
     
     // Admin
     adminPassword: process.env.ADMIN_PASSWORD || 'admin123', // Change this in production!
