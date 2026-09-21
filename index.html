@@ -960,5 +960,28 @@
     })();
     </script>
 
-    </body>
+    <script>
+/* Deal Drop attribution: beacon UTM-tagged visits (video description links) to the API. */
+(function () {
+  try {
+    var q = new URLSearchParams(location.search);
+    if (!(q.get('utm_source') || q.get('utm_medium') || q.get('utm_campaign'))) return;
+    var payload = JSON.stringify({
+      page: location.pathname,
+      utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'),
+      utm_campaign: q.get('utm_campaign'), utm_content: q.get('utm_content'),
+      referrer: document.referrer || ''
+    });
+    var url = 'https://api.vdirealty.com/api/stats/attribution/pixel';
+    if (navigator.sendBeacon) {
+      var blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+    } else {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: payload, keepalive: true }).catch(function () {});
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
 </html>
