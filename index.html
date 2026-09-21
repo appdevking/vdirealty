@@ -186,10 +186,11 @@
             <div class="rates-row reveal">
                 <div class="rate-card">
                     <h4><i class="fas fa-chart-line"></i> Mortgage rates</h4>
-                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v">6.8%</span></div>
-                    <div class="meter"><i style="width:68%"></i></div>
-                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v">6.1%</span></div>
-                    <div class="meter"><i style="width:61%"></i></div>
+                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v" id="rate30">6.8%</span></div>
+                    <div class="meter"><i id="meter30" style="width:68%"></i></div>
+                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v" id="rate15">6.1%</span></div>
+                    <div class="meter"><i id="meter15" style="width:61%"></i></div>
+                    <div class="rate-updated" id="ratesUpdated" style="font-size:0.8rem; color:#888; margin-top:8px;">Rates update automatically each week.</div>
                 </div>
                 <div class="rate-card">
                     <h4><i class="fas fa-trending-up"></i> Market momentum</h4>
@@ -203,7 +204,7 @@
                     <p class="read-copy">With limited inventory and strong buyer demand, conditions favor sellers. Investors should focus on cash-flowing properties with long-term appreciation potential.</p>
                 </div>
             </div>
-            <p class="disclaimer">Figures are metro-area estimates based on Dec 2025 data — not appraisals. Conditions vary by neighborhood.</p>
+            <p class="disclaimer">Mortgage rates refresh automatically each week from Freddie Mac's national survey. Other figures are metro-area estimates — not appraisals. Conditions vary by neighborhood.</p>
         </div>
     </section>
 
@@ -928,6 +929,36 @@
         defer>
     </script>
     -->
+
+    <script>
+    // Auto-updating market snapshot: weekly mortgage rates + live listing count.
+    // Falls back silently to the hardcoded values if the API is unreachable.
+    (function () {
+        var API = 'https://api.vdirealty.com';
+        function setRate(elId, meterId, val) {
+            var el = document.getElementById(elId);
+            if (!el || typeof val !== 'number') return;
+            el.textContent = val.toFixed(2) + '%';
+            var meter = document.getElementById(meterId);
+            if (meter) meter.style.width = Math.min(100, Math.round(val * 10)) + '%';
+        }
+        fetch(API + '/api/market/rates').then(function (r) { return r.json(); }).then(function (d) {
+            if (!d || !d.success || !d.rates) return;
+            setRate('rate30', 'meter30', d.rates.thirtyYear.value);
+            setRate('rate15', 'meter15', d.rates.fifteenYear.value);
+            var note = document.getElementById('ratesUpdated');
+            if (note && d.rates.thirtyYear.weekOf) {
+                var dt = new Date(d.rates.thirtyYear.weekOf + 'T12:00:00');
+                note.textContent = 'Auto-updated · week of ' + dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+        }).catch(function () {});
+        fetch(API + '/api/fsbo/listings').then(function (r) { return r.json(); }).then(function (d) {
+            if (!d || !d.success || typeof d.count !== 'number') return;
+            var el = document.getElementById('activeListings');
+            if (el) el.textContent = d.count;
+        }).catch(function () {});
+    })();
+    </script>
 
     </body>
 </html>
