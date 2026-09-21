@@ -158,143 +158,54 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
         
-        .card-image {
-            height: 220px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
+        .card-img-wrap { position: relative; height: 230px; overflow: hidden; background: #eef1f4; flex-shrink: 0; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* Swipeable photo carousel on listing cards */
-        .card-image.carousel {
-            overflow: hidden;
-            touch-action: pan-y;
-            cursor: pointer;
-            background: #eef1f4;
-        }
-
-        .carousel-track {
-            display: flex;
-            height: 100%;
-            transition: transform 0.35s ease;
-        }
-
-        .carousel-slide {
-            flex: 0 0 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-        }
-
+        /* Swipeable photo carousel (Zillow-style dots pill) */
+        .card-img-wrap.carousel { overflow: hidden; touch-action: pan-y; cursor: pointer; }
+        .carousel-track { display: flex; height: 100%; transition: transform 0.35s ease; }
+        .carousel-slide { flex: 0 0 100%; height: 100%; background-size: cover; background-position: center; }
         .carousel-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            background: rgba(0, 0, 0, 0.45);
-            padding: 7px 12px;
-            border-radius: 16px;
-            z-index: 3;
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 7px; background: rgba(0, 0, 0, 0.45);
+            padding: 7px 12px; border-radius: 16px; z-index: 3;
+        }
+        .carousel-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); border: none; padding: 0; cursor: pointer; }
+        .carousel-dot.active { background: #fff; width: 9px; height: 9px; }
+
+        .seller-badge {
+            position: absolute; top: 0.9rem; left: 0.9rem; background: rgba(21,21,25,0.85); color: var(--accent);
+            padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0.4px; z-index: 2;
+            border: 1px solid rgba(201,164,92,0.5);
+        }
+        .new-tag {
+            position: absolute; top: 0.9rem; right: 0.9rem; background: #1e7e34; color: #fff;
+            padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700; z-index: 2;
+        }
+        .sample-img-tag {
+            position: absolute; bottom: 0.9rem; left: 0.9rem; background: rgba(21,21,25,0.85); color: #ffe08a;
+            padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.72rem; font-weight: 700; z-index: 2;
+            font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0.4px;
+            border: 1px solid rgba(255,224,138,0.5);
         }
 
-        .carousel-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            border: none;
-            padding: 0;
-            cursor: pointer;
+        .card-body { padding: 1.4rem; display: flex; flex-direction: column; flex: 1; }
+        .card-price { font-size: 1.8rem; font-weight: 800; color: var(--accent); font-family: 'Montserrat', sans-serif; margin-bottom: 0.3rem; }
+        .card-loc { color: #666; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+        .card-loc i { color: var(--accent); }
+        .card-specs { display: flex; gap: 1.2rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+        .card-specs span { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-main); font-size: 0.92rem; font-weight: 600; }
+        .card-specs i { color: var(--accent); }
+        .card-meta { font-size: 0.85rem; color: #666; margin-bottom: 0.9rem; }
+        .card-meta .broker-line { color: var(--accent); font-weight: 600; }
+        .card-meta .nc-tag {
+            display: inline-block; background: #eef4ff; color: #2C5364; border: 1px solid #d4e2f2;
+            padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.4px; margin-left: 0.4rem;
         }
+        .card-actions { display: flex; gap: 0.7rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid #e5e8ed; flex-wrap: wrap; }
 
-        .carousel-dot.active {
-            background: #fff;
-            width: 9px;
-            height: 9px;
-        }
-        
-        .card-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--accent);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-        
-        .card-price {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(255,255,255,0.95);
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .card-content {
-            padding: 25px;
-        }
-        
-        .card-content h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-        
-        .card-address {
-            color: #666;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .card-stats {
-            display: flex;
-            gap: 20px;
-            padding: 15px 0;
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-            margin: 15px 0;
-        }
-        
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .stat i {
-            color: var(--accent);
-        }
-        
-        .card-description {
-            color: #666;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
         
         .listings-header {
             display: flex;
@@ -842,37 +753,42 @@
             const detailUrl = listingUrl || (listing.id ? `fsbo-listings.html#listing-${listing.id}` : '');
             const imageClickHandler = detailUrl ? `onclick="window.open('${detailUrl}', '_blank'); return false;"` : '';
             
-            // Get badge text based on listing source
-            let badgeText = listing.status || listing.propertyType || 'Active';
-            let badgeStyle = '';
-            
-            if (listing.listingSource === 'builder') {
+            // Seller badge + meta (mirrors the FSBO page card)
+            let badgeText = listing.sellerLabel || 'For Sale By Owner';
+            if (listing.listingSource === 'builder' || listing.newConstruction || listing.constructionStatus) {
                 badgeText = 'New Construction';
-                badgeStyle = 'background: linear-gradient(135deg, #2C5364, #203A43); font-weight: 700;';
-            } else if (listing.constructionStatus) {
-                badgeText = listing.constructionStatus;
-                badgeStyle = 'background: linear-gradient(135deg, #2C5364, #203A43); font-weight: 700;';
+            } else if (listing.listingSource === 'partner') {
+                badgeText = listing.brokerageName || 'Partner Listing';
             }
+            const isNew = listing.createdAt && (Date.now() - new Date(listing.createdAt).getTime()) < 7 * 24 * 3600 * 1000;
+
+            let meta = '';
+            if (listing.listingSource === 'partner' && listing.brokerageName) {
+                meta += `<div class="broker-line"><i class="fas fa-briefcase"></i> Listed by ${listing.brokerageName}</div>`;
+            }
+            if (listing.listingSource === 'builder') {
+                meta += `<div>${listing.builderCompany ? listing.builderCompany : 'Builder / Developer'}${listing.newConstruction ? '<span class="nc-tag">New Construction</span>' : ''}</div>`;
+            }
+            if (listing.displayName) meta += `<div><i class="fas fa-user"></i> ${listing.displayName}</div>`;
             
             card.innerHTML = `
-                <div class="card-image carousel" ${imageClickHandler}>
-                    <div class="carousel-track">${slidesHtml}</div>
-                    <span class="card-badge" style="${badgeStyle}">${badgeText}</span>
-                    <div class="card-price">${formattedPrice}</div>
-                    ${dotsHtml}
+                <div class="card-img-wrap${hasMultiplePhotos ? ' carousel' : ''}" ${imageClickHandler}>
+                    ${hasMultiplePhotos
+                        ? `<div class="carousel-track">${slidesHtml}</div>${dotsHtml}`
+                        : `<div class="carousel-slide" style="background-image: url('${photoUrls[0]}');"></div>`}
+                    <span class="seller-badge">${badgeText}</span>
+                    ${isNew ? '<span class="new-tag">New</span>' : ''}
+                    ${listing.isDemo ? '<span class="sample-img-tag"><i class="fas fa-image"></i> Sample image — not the actual property</span>' : ''}
                 </div>
-                <div class="card-content">
-                    <h3>${listing.address || 'Address not provided'}</h3>
-                    <div class="card-address">
-                        <i class="fas fa-map-marker-alt"></i>
-                        ${locationText || 'Location not specified'}
+                <div class="card-body">
+                    <div class="card-price">${formattedPrice}</div>
+                    <div class="card-loc"><i class="fas fa-map-marker-alt"></i><span>${locationText || 'Location not specified'}</span></div>
+                    <div class="card-specs">
+                        ${listing.bedrooms ? `<span><i class="fas fa-bed"></i> ${listing.bedrooms} bd</span>` : ''}
+                        ${listing.bathrooms ? `<span><i class="fas fa-bath"></i> ${listing.bathrooms} ba</span>` : ''}
+                        ${listing.sqft ? `<span><i class="fas fa-ruler-combined"></i> ${parseInt(listing.sqft).toLocaleString()} sqft</span>` : ''}
                     </div>
-                    <div class="card-stats">
-                        ${listing.bedrooms ? `<div class="stat"><i class="fas fa-bed"></i> ${listing.bedrooms} Beds</div>` : ''}
-                        ${listing.bathrooms ? `<div class="stat"><i class="fas fa-bath"></i> ${listing.bathrooms} Baths</div>` : ''}
-                        ${listing.sqft ? `<div class="stat"><i class="fas fa-ruler-combined"></i> ${parseInt(listing.sqft).toLocaleString()} sqft</div>` : ''}
-                    </div>
-                    <p class="card-description">${listing.description || 'Contact us for more details about this property.'}</p>
+                    ${meta ? `<div class="card-meta">${meta}</div>` : ''}
                     <div class="card-actions">
                         <a href="#" class="btn btn-primary" onclick="contactAboutListing(${listing.id ? "'" + listing.id + "'" : 'null'}, '${listing.address || 'this property'}', ${listing.price || 0}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft || 0}); return false;">
                             <i class="fas fa-envelope"></i> Contact
@@ -887,7 +803,7 @@
 
             // Wire up the swipeable carousel (only when there are multiple photos)
             if (hasMultiplePhotos) {
-                const carousel = card.querySelector('.carousel');
+                const carousel = card.querySelector('.card-img-wrap');
                 const track = card.querySelector('.carousel-track');
                 const dots = Array.from(card.querySelectorAll('.carousel-dot'));
                 const n = photoUrls.length;
