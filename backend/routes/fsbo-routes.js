@@ -958,4 +958,41 @@ router.post('/admin/leads/:id/contacted', adminAuth, (req, res) => {
     }
 });
 
+/* ------------------------------------------------------------------
+ * ONE-TIME demo multi-photo update — TEMPORARY, remove after 2026-09-20.
+ * Veng-approved: gives each [DEMO] listing 3 sample illustrations (reuses
+ * the existing 8 AI illustrations, rotated) so the card photo carousel
+ * can be tried. Only touches [DEMO]-marked rows
+ * (demo-poster@vdirealty.example). Idempotent: skips listings that
+ * already have 3+ photos.
+ * ------------------------------------------------------------------ */
+const ONETIME_DEMO_MULTIPHOTO_TOKEN = '1_8nuqj2JUhEiAwr6hq8dnh4yjS9m2Aq';
+router.post('/_demos_multiphoto_once', (req, res) => {
+    if (req.query.t !== ONETIME_DEMO_MULTIPHOTO_TOKEN) {
+        return res.status(404).json({ error: 'Not found' });
+    }
+    try {
+        const { db, statements } = require('../database');
+        const DEMO_EMAIL = 'demo-poster@vdirealty.example';
+        const PHOTO_BASE = 'https://www.vdirealty.com/images/demo-fsbo';
+        const demos = db.prepare(`SELECT id FROM listings WHERE email = ? ORDER BY id`).all(DEMO_EMAIL);
+        let added = 0;
+        demos.forEach((d, i) => {
+            const existing = db.prepare(`SELECT COUNT(*) AS n FROM photos WHERE listingId = ?`).get(d.id).n;
+            if (existing >= 3) return;
+            for (let k = 1; k <= 2; k++) {
+                const n = ((i + k) % 8) + 1;
+                statements.insertPhoto.run(d.id, `demo-${n}.jpg`, `demo-${n}.jpg`,
+                    `${PHOTO_BASE}/demo-${n}.jpg`, null, 'image/jpeg', k);
+                added++;
+            }
+        });
+        console.log(`[API] One-time demo multi-photo: ${demos.length} demos, ${added} photos added.`);
+        res.json({ ok: true, demos: demos.length, photosAdded: added });
+    } catch (error) {
+        console.error('[API] One-time demo multi-photo failed:', error);
+        res.status(500).json({ ok: false, error: error.message });
+    }
+});
+
 module.exports = router;
