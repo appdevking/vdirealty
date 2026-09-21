@@ -104,6 +104,17 @@
         .listing-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
         .card-img-wrap { position: relative; height: 230px; overflow: hidden; background: #f8f9fa; flex-shrink: 0; }
         .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* Swipeable photo carousel (Zillow-style dots pill) */
+        .card-img-wrap.carousel { touch-action: pan-y; cursor: pointer; }
+        .carousel-track { display: flex; height: 100%; transition: transform 0.35s ease; }
+        .carousel-slide { flex: 0 0 100%; height: 100%; background-size: cover; background-position: center; }
+        .carousel-dots {
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 7px; background: rgba(0,0,0,0.45);
+            padding: 7px 12px; border-radius: 16px; z-index: 3;
+        }
+        .carousel-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5); border: none; padding: 0; cursor: pointer; }
+        .carousel-dot.active { background: #fff; width: 9px; height: 9px; }
         .seller-badge {
             position: absolute; top: 0.9rem; left: 0.9rem; background: rgba(21,21,25,0.85); color: var(--accent);
             padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
@@ -627,7 +638,9 @@
         function buildCard(l) {
             const photos = (l.photos || []).map(p => photoUrl(p.url)).filter(Boolean);
             const img = photos[0] || PLACEHOLDER_IMG;
+            const hasMultiplePhotos = photos.length > 1;
             const isNew = l.createdAt && (Date.now() - new Date(l.createdAt).getTime()) < 7 * 24 * 3600 * 1000;
+            let justSwiped = false;
 
             const card = document.createElement('article');
             card.className = 'listing-card';
@@ -645,12 +658,14 @@
             if (l.displayName) meta += `<div><i class="fas fa-user"></i> ${esc(l.displayName)}</div>`;
 
             card.innerHTML = `
-                <div class="card-img-wrap">
-                    <img class="card-img" src="${esc(img)}" alt="Property photo" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
+                <div class="card-img-wrap${hasMultiplePhotos ? ' carousel' : ''}">
+                    ${hasMultiplePhotos
+                        ? `<div class="carousel-track">${photos.map(u => `<div class="carousel-slide" style="background-image:url('${esc(u)}')"></div>`).join('')}</div>
+                           <div class="carousel-dots">${photos.map((_, i) => `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}" data-act="dot" aria-label="Photo ${i + 1}"></button>`).join('')}</div>`
+                        : `<img class="card-img" src="${esc(img)}" alt="Property photo" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">`}
                     <span class="seller-badge">${sellerBadge(l)}</span>
                     ${isNew ? '<span class="new-tag">New</span>' : ''}
                     ${l.isDemo ? '<span class="sample-img-tag"><i class="fas fa-image"></i> Sample image — not the actual property</span>' : ''}
-                    ${photos.length > 1 ? `<span class="photo-count"><i class="fas fa-images"></i> ${photos.length}</span>` : ''}
                 </div>
                 <div class="card-body">
                     <div class="card-price">${esc(money(l.price))}</div>
@@ -668,13 +683,46 @@
                 </div>`;
 
             card.addEventListener('click', e => {
-                const act = e.target.closest('[data-act]')?.dataset.act;
+                if (justSwiped) { justSwiped = false; return; }
+                const el = e.target.closest('[data-act]');
+                const act = el?.dataset.act;
                 if (act === 'share') { e.stopPropagation(); shareListing(l); return; }
+                if (act === 'dot') { e.stopPropagation(); goPhoto(parseInt(el.dataset.i, 10)); return; }
                 openDetail(l.id);
             });
             card.addEventListener('keydown', e => {
                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(l.id); }
             });
+
+            // Swipeable carousel: horizontal swipe changes photo, vertical scroll untouched,
+            // and a swipe never opens the detail view
+            function goPhoto(i) {
+                const track = card.querySelector('.carousel-track');
+                const dots = card.querySelectorAll('.carousel-dot');
+                if (!track) return;
+                const n = photos.length;
+                photoIdx = (i + n) % n;
+                track.style.transform = `translateX(-${photoIdx * 100}%)`;
+                dots.forEach((d, di) => d.classList.toggle('active', di === photoIdx));
+            }
+            let photoIdx = 0;
+            if (hasMultiplePhotos) {
+                const wrap = card.querySelector('.card-img-wrap');
+                let startX = 0, startY = 0;
+                wrap.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    justSwiped = false;
+                }, { passive: true });
+                wrap.addEventListener('touchend', (e) => {
+                    const dx = e.changedTouches[0].clientX - startX;
+                    const dy = e.changedTouches[0].clientY - startY;
+                    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+                        justSwiped = true;
+                        goPhoto(photoIdx + (dx < 0 ? 1 : -1));
+                    }
+                }, { passive: true });
+            }
             return card;
         }
 
