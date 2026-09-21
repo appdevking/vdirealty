@@ -42,6 +42,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // --- Visit Logging Middleware ---
 const visitCountsPath = path.join(__dirname, 'visit-counts.json');
+const attribPath = path.join(__dirname, 'visit-attribution.json');
 function logVisit(req, res, next) {
     // Only log GET requests to HTML pages (not API or static)
     if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
@@ -57,10 +58,53 @@ function logVisit(req, res, next) {
         }
         counts.pageVisits[page] += 1;
         fs.writeFileSync(visitCountsPath, JSON.stringify(counts, null, 2));
+
+        // Attribution: log visits carrying UTM params (video description links)
+        const q = req.query || {};
+        if (q.utm_source || q.utm_medium || q.utm_campaign) {
+            let log = [];
+            try {
+                log = JSON.parse(fs.readFileSync(attribPath, 'utf8'));
+                if (!Array.isArray(log)) log = [];
+            } catch (e) { log = []; }
+            log.push({
+                ts: new Date().toISOString(),
+                page,
+                utm_source: (q.utm_source || '').slice(0, 40),
+                utm_medium: (q.utm_medium || '').slice(0, 40),
+                utm_campaign: (q.utm_campaign || '').slice(0, 60),
+                utm_content: (q.utm_content || '').slice(0, 80),
+                referrer: (req.get('referer') || '').slice(0, 200)
+            });
+            // cap log size
+            if (log.length > 5000) log = log.slice(log.length - 5000);
+            try { fs.writeFileSync(attribPath, JSON.stringify(log)); } catch (e) {}
+        }
     }
     next();
 }
 app.use(logVisit);
+
+// Public aggregate attribution stats (counts only, no personal data)
+app.get('/api/stats/attribution', (req, res) => {
+    let log = [];
+    try {
+        log = JSON.parse(fs.readFileSync(attribPath, 'utf8'));
+        if (!Array.isArray(log)) log = [];
+    } catch (e) { log = []; }
+    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const byContent = {};
+    const bySource = {};
+    let total = 0;
+    for (const e of log) {
+        if (new Date(e.ts).getTime() < cutoff) continue;
+        total++;
+        const ckey = `${e.utm_source || '?'} / ${e.utm_content || '?'}`;
+        byContent[ckey] = (byContent[ckey] || 0) + 1;
+        bySource[e.utm_source || '?'] = (bySource[e.utm_source || '?'] || 0) + 1;
+    }
+    res.json({ total30d: total, bySource, byContent });
+});
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
