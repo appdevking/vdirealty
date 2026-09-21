@@ -632,7 +632,7 @@ ${pub.features ? `<p><strong>Features:</strong> ${esc(pub.features)}</p>` : ''}
      Keep style="display:none" until the ad program launches. Must never push the CTAs above. -->
 <div class="ad-slot" aria-hidden="true" style="display:none"></div>
 <div class="disclosure">
-<p>VDI Realty &middot; Brokered by Realty Connect &middot; (206) 880-0637 &middot; veng@vdirealty.com</p>
+<p>VDI Realty &middot; Brokered by Realty Connect &middot; (206) 880-0637 &middot; sales@vdirealty.com</p>
 <p>Equal Housing Opportunity. All listings are offered without regard to race, color, religion, sex, disability, familial status, or national origin. Price and property details are provided by the poster; buyers should independently verify all information.</p>
 </div>
 </div>
