@@ -52,7 +52,7 @@
                 <a href="fsbo-listings.html">FSBO</a>
                 <a href="builder-listings.html">Builders</a>
                 <a href="relocation.html">Relocation</a>
-                <a href="#contact">Contact</a>
+                <a href="index.html#contact">Contact</a>
             </nav>
         </div>
     </header>
@@ -68,37 +68,53 @@
         <div id="builderListings" class="listings-grid"></div>
     </div>
     <script>
-    // Load and display only builder/new construction listings
+    // Load builder listings from the live VDI Realty API (sellerType = builder)
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
     function loadBuilderListings() {
-        let listings = [];
-        try {
-            listings = JSON.parse(localStorage.getItem('listings')) || [];
-        } catch (e) {}
-        // Filter for builder/new construction
-        const builderListings = listings.filter(l => (l.listingSource === 'builder' || l.source === 'builder' || l.source === 'New Construction' || l.source === 'Builder'));
-        const container = document.getElementById('builderListings');
-        if (!builderListings.length) {
+        var container = document.getElementById('builderListings');
+        container.innerHTML = '<p style="color:#888; font-size:1.1rem;">Loading builder listings&hellip;</p>';
+        var base = (typeof API_BASE_URL !== 'undefined' && API_BASE_URL) ? API_BASE_URL : 'https://api.vdirealty.com';
+        fetch(base + '/api/fsbo/listings').then(function (r) { return r.json(); }).then(function (d) {
+            var listings = (d && d.listings) || [];
+            var builderListings = listings.filter(function (l) { return l.sellerType === 'builder'; });
+            if (!builderListings.length) {
+                container.innerHTML = '<p style="color:#888; font-size:1.1rem;">No builder listings found. Check back soon!</p>';
+                return;
+            }
+            container.innerHTML = builderListings.map(function (listing) {
+                var photo = (listing.photos && listing.photos[0] && listing.photos[0].url) || 'images/hero-cityscape-new.svg';
+                var badge = listing.newConstruction ? 'New Construction' : 'Builder Listing';
+                var title = listing.builderCompany || listing.address || 'New Home';
+                var loc = [listing.city, listing.state, listing.zip].filter(Boolean).join(', ');
+                var demoTag = listing.isDemo ? '<div style="margin-top:10px; font-size:0.8rem; color:#999;">Sample illustration &mdash; not the actual property</div>' : '';
+                return '' +
+                '<a href="fsbo-listings.html#listing-' + listing.id + '" style="text-decoration:none; color:inherit; display:block;">' +
+                '<div class="listing-card">' +
+                    '<div class="card-image" style="background-image:url(\'' + esc(photo) + '\');">' +
+                        '<div class="card-badge">' + badge + '</div>' +
+                        '<div class="card-price">' + (listing.price ? '$' + Number(listing.price).toLocaleString() : 'Contact for Price') + '</div>' +
+                    '</div>' +
+                    '<div class="card-content">' +
+                        '<h3>' + esc(title) + '</h3>' +
+                        '<div class="card-address">' + esc(loc) + '</div>' +
+                        '<div class="card-stats">' +
+                            '<span class="stat">' + (listing.bedrooms ? listing.bedrooms + ' Beds' : '') + '</span>' +
+                            '<span class="stat">' + (listing.bathrooms ? listing.bathrooms + ' Baths' : '') + '</span>' +
+                            '<span class="stat">' + (listing.sqft ? Number(listing.sqft).toLocaleString() + ' sqft' : '') + '</span>' +
+                        '</div>' +
+                        '<div class="card-description">' + esc(listing.description || '') + '</div>' +
+                        demoTag +
+                    '</div>' +
+                '</div>' +
+                '</a>';
+            }).join('');
+        }).catch(function () {
             container.innerHTML = '<p style="color:#888; font-size:1.1rem;">No builder listings found. Check back soon!</p>';
-            return;
-        }
-        container.innerHTML = builderListings.map(listing => `
-            <div class="listing-card">
-                <div class="card-image" style="background-image:url('${(listing.images && listing.images[0]) || listing.mainImage || 'images/hero-cityscape-new.svg'}');">
-                    <div class="card-badge">New Construction</div>
-                    <div class="card-price">${listing.price ? '$' + Number(listing.price).toLocaleString() : 'Contact for Price'}</div>
-                </div>
-                <div class="card-content">
-                    <h3>${listing.address || 'New Home'}</h3>
-                    <div class="card-address">${[listing.city, listing.state, listing.zip].filter(Boolean).join(', ')}</div>
-                    <div class="card-stats">
-                        <span class="stat">${listing.bedrooms ? listing.bedrooms + ' Beds' : ''}</span>
-                        <span class="stat">${listing.bathrooms ? listing.bathrooms + ' Baths' : ''}</span>
-                        <span class="stat">${listing.sqft ? Number(listing.sqft).toLocaleString() + ' sqft' : ''}</span>
-                    </div>
-                    <div class="card-description">${listing.description || ''}</div>
-                </div>
-            </div>
-        `).join('');
+        });
     }
     window.addEventListener('DOMContentLoaded', loadBuilderListings);
     </script>
