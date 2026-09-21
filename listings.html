@@ -164,6 +164,57 @@
             background-position: center;
             position: relative;
         }
+
+        /* Swipeable photo carousel on listing cards */
+        .card-image.carousel {
+            overflow: hidden;
+            touch-action: pan-y;
+            cursor: pointer;
+            background: #eef1f4;
+        }
+
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.35s ease;
+        }
+
+        .carousel-slide {
+            flex: 0 0 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 7px 12px;
+            border-radius: 16px;
+            z-index: 3;
+        }
+
+        .carousel-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: #fff;
+            width: 9px;
+            height: 9px;
+        }
         
         .card-badge {
             position: absolute;
@@ -756,22 +807,23 @@
             const card = document.createElement('div');
             card.className = 'listing-card';
             
-            // Get photo URL - handle both partner submissions and regular listings
-            let photoUrl = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800';
-            if (listing.allPhotos && listing.allPhotos.length > 0) {
-                photoUrl = listing.allPhotos[0];
-            } else if (Array.isArray(listing.photos) && listing.photos.length > 0) {
-                // API returns photos as [{id, url}, ...]
-                const firstPhoto = listing.photos[0];
-                const firstUrl = firstPhoto && (firstPhoto.url || firstPhoto);
-                if (typeof firstUrl === 'string' && firstUrl) {
-                    photoUrl = firstUrl;
-                }
-            } else if (typeof listing.photos === 'string' && listing.photos) {
-                photoUrl = listing.photos;
-            } else if (listing.mainImage) {
-                photoUrl = listing.mainImage;
-            }
+            // Collect all photo URLs - API photos, partner submissions, legacy formats
+            const PHOTO_FALLBACK = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800';
+            const photoUrls = [];
+            const addPhotoUrl = (u) => {
+                if (typeof u === 'string' && u && !photoUrls.includes(u)) photoUrls.push(u);
+            };
+            if (Array.isArray(listing.allPhotos)) listing.allPhotos.forEach(addPhotoUrl);
+            if (Array.isArray(listing.photos)) listing.photos.forEach((p) => addPhotoUrl(p && (p.url || p)));
+            if (typeof listing.photos === 'string') addPhotoUrl(listing.photos);
+            addPhotoUrl(listing.mainImage);
+            if (photoUrls.length === 0) photoUrls.push(PHOTO_FALLBACK);
+
+            const hasMultiplePhotos = photoUrls.length > 1;
+            const slidesHtml = photoUrls.map((u) => `<div class="carousel-slide" style="background-image: url('${u}');"></div>`).join('');
+            const dotsHtml = hasMultiplePhotos
+                ? `<div class="carousel-dots">${photoUrls.map((_, i) => `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>`
+                : '';
             
             const formattedPrice = new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -784,9 +836,11 @@
             const zip = listing.zipCode || listing.zip || '';
             const locationText = [city, state, zip].filter(Boolean).join(', ');
             
-            // Get the original listing URL
+            // Get the original listing URL (partner/builder listings link out;
+            // FSBO listings deep-link into the FSBO detail view)
             const listingUrl = listing.sourceUrl || listing.externalUrl || '';
-            const imageClickHandler = listingUrl ? `onclick="window.open('${listingUrl}', '_blank'); return false;" style="cursor: pointer;"` : '';
+            const detailUrl = listingUrl || (listing.id ? `fsbo-listings.html#listing-${listing.id}` : '');
+            const imageClickHandler = detailUrl ? `onclick="window.open('${detailUrl}', '_blank'); return false;"` : '';
             
             // Get badge text based on listing source
             let badgeText = listing.status || listing.propertyType || 'Active';
@@ -801,9 +855,11 @@
             }
             
             card.innerHTML = `
-                <div class="card-image" style="background-image: url('${photoUrl}');" ${imageClickHandler}>
+                <div class="card-image carousel" ${imageClickHandler}>
+                    <div class="carousel-track">${slidesHtml}</div>
                     <span class="card-badge" style="${badgeStyle}">${badgeText}</span>
                     <div class="card-price">${formattedPrice}</div>
+                    ${dotsHtml}
                 </div>
                 <div class="card-content">
                     <h3>${listing.address || 'Address not provided'}</h3>
@@ -824,11 +880,60 @@
                         <a href="#" class="btn btn-buyer-assist" onclick="requestBuyerAssistance('${listing.address || 'this property'}', ${listing.price || 0}, ${listing.bedrooms || 0}, ${listing.bathrooms || 0}, ${listing.sqft || 0}); return false;">
                             <i class="fas fa-handshake"></i> Get Represented
                         </a>
-                        ${listingUrl ? `<a href="${listingUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
+                        ${detailUrl ? `<a href="${detailUrl}" target="_blank" class="btn btn-secondary"><i class="fas fa-external-link-alt"></i> Details</a>` : ''}
                     </div>
                 </div>
             `;
-            
+
+            // Wire up the swipeable carousel (only when there are multiple photos)
+            if (hasMultiplePhotos) {
+                const carousel = card.querySelector('.carousel');
+                const track = card.querySelector('.carousel-track');
+                const dots = Array.from(card.querySelectorAll('.carousel-dot'));
+                const n = photoUrls.length;
+                let idx = 0;
+                const go = (i) => {
+                    idx = (i + n) % n;
+                    track.style.transform = `translateX(-${idx * 100}%)`;
+                    dots.forEach((d, di) => d.classList.toggle('active', di === idx));
+                };
+                dots.forEach((d) => d.addEventListener('click', (e) => { e.stopPropagation(); go(parseInt(d.dataset.i, 10)); }));
+
+                // Swipe (touch) or drag (mouse): horizontal movement changes photo,
+                // vertical page scroll is untouched
+                let startX = 0, startY = 0, justSwiped = false, dragging = false;
+                const onStart = (x, y) => { startX = x; startY = y; justSwiped = false; };
+                const onEnd = (x, y) => {
+                    const dx = x - startX;
+                    const dy = y - startY;
+                    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+                        justSwiped = true;
+                        go(idx + (dx < 0 ? 1 : -1));
+                    }
+                };
+                carousel.addEventListener('touchstart', (e) => {
+                    onStart(e.touches[0].clientX, e.touches[0].clientY);
+                }, { passive: true });
+                carousel.addEventListener('touchend', (e) => {
+                    onEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+                }, { passive: true });
+                carousel.addEventListener('mousedown', (e) => {
+                    dragging = true;
+                    onStart(e.clientX, e.clientY);
+                });
+                window.addEventListener('mouseup', (e) => {
+                    if (dragging) { dragging = false; onEnd(e.clientX, e.clientY); }
+                });
+                // A swipe must not trigger the image click (open listing link)
+                carousel.addEventListener('click', (e) => {
+                    if (justSwiped) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        justSwiped = false;
+                    }
+                }, true);
+            }
+
             return card;
         }
         
