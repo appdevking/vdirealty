@@ -13,6 +13,7 @@ const SERIES = {
 };
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 let cache = { at: 0, data: null };
+let lastError = null;
 
 function fetchSeries(seriesId) {
     return new Promise((resolve, reject) => {
@@ -69,6 +70,7 @@ router.get('/rates', async (req, res) => {
         cache = { at: Date.now(), data };
         res.json(data);
     } catch (err) {
+        lastError = `${new Date().toISOString()} — ${err.message}`;
         console.error('[market] rate fetch failed:', err.message);
         if (cache.data) return res.json({ ...cache.data, stale: true });
         res.status(502).json({ success: false, error: 'rate feed unavailable' });
@@ -82,6 +84,7 @@ router.get('/status', (req, res) => {
         cached: !!cache.data,
         cachedAt: cache.at ? new Date(cache.at).toISOString() : null,
         stale: cache.data ? Date.now() - cache.at > CACHE_TTL_MS : null,
+        lastError,
     });
 });
 
