@@ -1132,6 +1132,18 @@
             
             document.getElementById('investmentResult').classList.add('show');
         }
+
+        // Prefill the mortgage calculator with the live 30-year rate (falls back to 6.5).
+        (function () {
+            fetch('https://api.vdirealty.com/api/market/rates').then(function (r) { return r.json(); }).then(function (d) {
+                if (d && d.success && d.rates && typeof d.rates.thirtyYear.value === 'number') {
+                    var input = document.getElementById('interestRate');
+                    if (input && !input.dataset.userEdited) input.value = d.rates.thirtyYear.value.toFixed(2);
+                }
+            }).catch(function () {});
+            var input = document.getElementById('interestRate');
+            if (input) input.addEventListener('input', function () { input.dataset.userEdited = '1'; });
+        })();
     </script>
 
 </body>
