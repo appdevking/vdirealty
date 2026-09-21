@@ -146,6 +146,23 @@ const initDatabase = () => {
         )
     `);
 
+    // SMS subscribers for the text-a-ZIP lead flow.
+    // status: 'inquiry' (texted a ZIP, no marketing consent), 'alerts' (opted in
+    // via YES), 'unsubscribed' (STOP).
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS fsbo_sms_subscribers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            phone TEXT NOT NULL UNIQUE,
+            status TEXT NOT NULL DEFAULT 'inquiry',
+            lastZip TEXT,
+            zipQueryCount INTEGER DEFAULT 0,
+            alertConsentAt DATETIME,
+            unsubscribedAt DATETIME,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
     // Create indexes for better performance
     db.exec(`
         CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
@@ -381,6 +398,47 @@ const statements = {
     // Technical help request: mark resolved
     markHelpRequestResolved: db.prepare(`
         UPDATE fsbo_help_requests SET status = 'resolved' WHERE id = ?
+    `),
+
+    // SMS subscriber: upsert by phone (E.164 from Twilio).
+    // Status is never changed here — a STOP'd user texting a ZIP still gets the
+    // one-time reply but stays unsubscribed until they send START.
+    upsertSmsSubscriber: db.prepare(`
+        INSERT INTO fsbo_sms_subscribers (phone, status, lastZip, zipQueryCount, updatedAt)
+        VALUES (?, 'inquiry', ?, 1, CURRENT_TIMESTAMP)
+        ON CONFLICT(phone) DO UPDATE SET
+            lastZip = excluded.lastZip,
+            zipQueryCount = fsbo_sms_subscribers.zipQueryCount + 1,
+            updatedAt = CURRENT_TIMESTAMP
+    `),
+
+    // SMS subscriber: fetch by phone
+    getSmsSubscriber: db.prepare(`
+        SELECT * FROM fsbo_sms_subscribers WHERE phone = ?
+    `),
+
+    // SMS subscriber: set alerts consent (opt in via YES)
+    setSmsAlertsConsent: db.prepare(`
+        UPDATE fsbo_sms_subscribers
+        SET status = 'alerts', alertConsentAt = CURRENT_TIMESTAMP,
+            unsubscribedAt = NULL, updatedAt = CURRENT_TIMESTAMP
+        WHERE phone = ?
+    `),
+
+    // SMS subscriber: unsubscribe (STOP)
+    unsubscribeSmsSubscriber: db.prepare(`
+        UPDATE fsbo_sms_subscribers
+        SET status = 'unsubscribed', unsubscribedAt = CURRENT_TIMESTAMP,
+            updatedAt = CURRENT_TIMESTAMP
+        WHERE phone = ?
+    `),
+
+    // SMS subscriber: resubscribe via START (only if a ZIP was ever given)
+    resubscribeSmsSubscriber: db.prepare(`
+        UPDATE fsbo_sms_subscribers
+        SET status = 'alerts', alertConsentAt = CURRENT_TIMESTAMP,
+            unsubscribedAt = NULL, updatedAt = CURRENT_TIMESTAMP
+        WHERE phone = ? AND lastZip IS NOT NULL
     `)
 };
 

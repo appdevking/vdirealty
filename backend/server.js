@@ -9,6 +9,7 @@ const { initDatabase } = require('./database');
 const { initializeTransporter } = require('./email-service');
 const { scheduleExpirationCheck, scheduleReminderEmails, runImmediateChecks, scheduleVisitCountsReset } = require('./cron-jobs');
 const fsboRoutes = require('./routes/fsbo-routes');
+const fsboSmsRoutes = require('./routes/fsbo-sms-routes');
 const contactRoutes = require('./routes/contact-routes');
 
 // Initialize Express app
@@ -65,6 +66,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
 app.use('/api/fsbo', fsboRoutes);
+app.use('/api/fsbo/sms', fsboSmsRoutes);
 app.use('/api/contact', contactRoutes);
 
 // Health check endpoint
