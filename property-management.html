@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property Management Services | VDI Realty</title>
+    <meta name="description" content="VDI Realty's property management division is launching in Seattle–Eastside, Phoenix Metro, and NYC Metro. Founding partners get hands-on, founder-led management of multi-family properties. Free consultation.">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -75,6 +76,73 @@
         }
         
         .back-link:hover { color: var(--accent); }
+
+        /* Site nav */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .main-nav a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .main-nav a:hover { color: var(--accent); }
+
+        .nav-cta {
+            background: var(--primary);
+            color: white !important;
+            padding: 10px 24px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            color: white !important;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-size: 1.2rem;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 10px 20px 20px;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 12px 0;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+
+        .mobile-menu a:last-child { border-bottom: none; }
+        .mobile-menu.active { display: block; }
         
         /* Hero */
         .hero {
@@ -321,12 +389,147 @@
             color: var(--accent);
         }
         
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-left: 56px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: linear-gradient(var(--accent), rgba(197,160,89,0.15));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 0 0 38px;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-number {
+            position: absolute;
+            left: -56px;
+            top: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 12px rgba(15,32,39,0.25);
+        }
+
+        .timeline-content h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .timeline-content p { color: #666; }
+
+        /* Vacancy calculator */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .calc-grid label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .calc-grid input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Lato', sans-serif;
+            width: 100%;
+        }
+
+        .calc-grid input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .calc-results {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0 15px;
+        }
+
+        .calc-result-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+        }
+
+        .calc-result-card span {
+            display: block;
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .calc-result-card strong {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #calcVerdict {
+            font-weight: 700;
+            color: var(--primary);
+            flex-basis: 100%;
+        }
+
+        .calc-note {
+            color: #999;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .main-nav { display: none; }
+            .menu-toggle { display: block; }
+        }
+
         @media (max-width: 768px) {
             .hero { background-attachment: scroll; }
             .hero h1 { font-size: 2rem; }
             .two-column { grid-template-columns: 1fr; gap: 40px; }
             .features-grid { grid-template-columns: 1fr; }
             .hero-stats { gap: 30px; }
+            .timeline { padding-left: 48px; }
+            .timeline::before { left: 15px; }
+            .timeline-number { left: -48px; width: 34px; height: 34px; font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -335,11 +538,28 @@
     <header>
         <div class="nav-container">
             <a href="index.html" class="logo">VDI Realty</a>
-            <a href="index.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
+            <nav class="main-nav">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="fsbo-guide.html">Guide</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="index.html#contact" class="nav-cta">Contact</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="listings.html">Listings</a>
+        <a href="fsbo-listings.html">FSBO</a>
+        <a href="builder-listings.html">Builders</a>
+        <a href="fsbo-guide.html">Guide</a>
+        <a href="relocation.html">Relocation</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
 
     <section class="hero">
         <span class="launch-badge">Now Launching</span>
@@ -355,12 +575,12 @@
                 <span class="stat-label">Launch Markets</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">Multi</span>
-                <span class="stat-label">Family Focus Only</span>
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Multi-Family Focus</span>
             </div>
             <div class="stat-item">
                 <span class="stat-number">Free</span>
-                <span class="stat-label">Consultation</span>
+                <span class="stat-label">Consultation &amp; Proposal</span>
             </div>
         </div>
     </section>
@@ -537,6 +757,37 @@
                 Consider a unit renting for $2,000/month. A single vacant month costs <strong>$2,000 in rent you'll never recover</strong> — before turnover costs. Say a full year of professional management ran about <strong>$1,920</strong>. If better marketing and faster placement save you even one vacancy, management has more than paid for itself.
             </p>
             <p style="color: #999; font-size: 0.85rem; margin-top: 10px;">Illustrative example only — actual rents, fees, and results vary by property and market. Not a guarantee of performance.</p>
+        </div>
+
+        <div class="info-box" style="max-width: 900px; margin: 40px auto 0;">
+            <h3><i class="fas fa-calculator" style="color: var(--accent); margin-right: 10px;"></i>Run your own numbers</h3>
+            <p style="color: #666; line-height: 1.8;">Plug in your property's figures to see what vacancy is really costing you — and how it compares with a management quote.</p>
+            <div class="calc-grid">
+                <label>Average rent per unit ($/mo)
+                    <input id="calcRent" type="number" value="2000" min="0" inputmode="numeric">
+                </label>
+                <label>Number of units
+                    <input id="calcUnits" type="number" value="10" min="1" inputmode="numeric">
+                </label>
+                <label>Vacant months per unit / year
+                    <input id="calcVac" type="number" value="1" min="0" step="0.5" inputmode="decimal">
+                </label>
+                <label>Management quote (% of rent)
+                    <input id="calcFee" type="number" value="8" min="0" max="100" step="0.5" inputmode="decimal">
+                </label>
+            </div>
+            <div class="calc-results">
+                <div class="calc-result-card">
+                    <span>Yearly vacancy cost</span>
+                    <strong id="calcVacCost">$20,000</strong>
+                </div>
+                <div class="calc-result-card">
+                    <span>Yearly management cost</span>
+                    <strong id="calcMgmtCost">$19,200</strong>
+                </div>
+                <p id="calcVerdict"></p>
+            </div>
+            <p class="calc-note">Illustrative estimate only — actual rents, vacancy, and fees vary by property and market. Not a guarantee of performance.</p>
         </div>
     </section>
 
@@ -754,10 +1005,59 @@
         <p style="margin-top: 10px;">
             <a href="index.html">Home</a> |
             <a href="tel:2068800637">206-880-0637</a> |
-            <a href="mailto:veng@vdirealty.com">veng@vdirealty.com</a>
+            <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a>
         </p>
         <p style="margin-top: 12px; font-size: 0.8rem; color: #777; max-width: 700px; margin-left: auto; margin-right: auto;">Equal Housing Opportunity. VDI Realty does not discriminate on the basis of race, color, religion, sex, handicap, familial status, or national origin.</p>
     </footer>
 
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle i');
+            menu.classList.toggle('active');
+            if (menu.classList.contains('active')) {
+                toggle.classList.remove('fa-bars');
+                toggle.classList.add('fa-times');
+            } else {
+                toggle.classList.remove('fa-times');
+                toggle.classList.add('fa-bars');
+            }
+        }
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (menu && menu.classList.contains('active')) {
+                if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+                    toggleMobileMenu();
+                }
+            }
+        });
+
+        function fmt(n) {
+            return '$' + Math.round(n).toLocaleString('en-US');
+        }
+        function updateCalc() {
+            const rent = parseFloat(document.getElementById('calcRent').value) || 0;
+            const units = parseFloat(document.getElementById('calcUnits').value) || 0;
+            const vacMo = parseFloat(document.getElementById('calcVac').value) || 0;
+            const feePct = parseFloat(document.getElementById('calcFee').value) || 0;
+            const vacCost = rent * units * vacMo;
+            const mgmtCost = rent * units * 12 * feePct / 100;
+            document.getElementById('calcVacCost').textContent = fmt(vacCost);
+            document.getElementById('calcMgmtCost').textContent = fmt(mgmtCost);
+            const verdict = document.getElementById('calcVerdict');
+            if (vacCost > 0 && mgmtCost > 0) {
+                verdict.textContent = vacCost >= mgmtCost
+                    ? 'At these numbers, the rent lost to vacancy would more than cover a year of professional management.'
+                    : 'At these numbers, vacancy is costing less than management — but faster placement still protects your cash flow.';
+            } else {
+                verdict.textContent = '';
+            }
+        }
+        ['calcRent', 'calcUnits', 'calcVac', 'calcFee'].forEach(function(id) {
+            document.getElementById(id).addEventListener('input', updateCalc);
+        });
+        updateCalc();
+    </script>
 </body>
 </html>
