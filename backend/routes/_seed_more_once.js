@@ -70,17 +70,14 @@ router.post('/_seed_more_once', (req, res) => {
         return res.status(403).json({ error: 'Forbidden' });
     }
     try {
-        const existing = db.prepare(
-            `SELECT COUNT(*) AS n FROM photos WHERE path LIKE '%demo-9.jpg'`
-        ).get().n;
-        if (existing > 0) {
-            return res.json({ ok: true, alreadySeeded: true });
-        }
         const now = new Date();
         const submissionDate = now.toISOString();
         const expirationDate = new Date(now.getTime() + DAYS * 24 * 60 * 60 * 1000).toISOString();
         const ids = [];
+        const skipped = [];
         for (const f of MORE_DEMOS) {
+            const exists = db.prepare(`SELECT COUNT(*) AS n FROM photos WHERE path LIKE ?`).get('%' + f.photo).n;
+            if (exists > 0) { skipped.push(f.photo); continue; }
             const r = statements.insertListing.run(
                 f.firstName || 'Demo', f.lastName || 'Poster', DEMO_EMAIL,
                 f.phone || '555-010-0000', f.address, f.city, f.state, f.zip,
@@ -100,7 +97,7 @@ router.post('/_seed_more_once', (req, res) => {
             const photoUrl = `${DEMO_PHOTO_BASE}/${f.photo}`;
             statements.insertPhoto.run(id, f.photo, f.photo, photoUrl, null, 'image/jpeg', 0);
         }
-        res.json({ ok: true, seeded: ids.length, ids });
+        res.json({ ok: true, seeded: ids.length, ids, skipped });
     } catch (e) {
         console.error('[seed-more] error:', e.message);
         res.status(500).json({ ok: false, error: e.message });
