@@ -106,6 +106,7 @@ function serializePublicListing(row, req) {
                 ? 'Listed by Agent'
                 : 'For Sale By Owner',
         propertyType: row.propertyType,
+        listingSource: row.listingSource || 'fsbo',
         price: row.price,
         sqft: row.sqft,
         bedrooms: row.bedrooms,
