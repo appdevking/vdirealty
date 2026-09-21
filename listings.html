@@ -685,7 +685,7 @@
             
             // Try backend API first
             try {
-                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings?source=partner`, {
+                const response = await fetch(`${API_BASE_URL}/api/fsbo/listings`, {
                     signal: AbortSignal.timeout(5000) // 5 second timeout
                 });
                 
@@ -835,7 +835,11 @@
             const cityFilter = document.getElementById('filterCity').value.toLowerCase().trim();
             
             const filtered = allListings.filter(listing => {
-                const matchesSource = !source || listing.listingSource === source;
+                const listingSource = listing.listingSource || 'fsbo';
+                const matchesSource = !source ||
+                    (source === 'builder'
+                        ? (listingSource === 'builder' || !!listing.newConstruction)
+                        : listingSource === source);
                 const matchesType = !type || listing.propertyType === type;
                 const matchesPrice = (listing.price || 0) >= minPrice && (listing.price || 0) <= maxPrice;
                 const matchesBeds = !minBeds || (listing.bedrooms && listing.bedrooms >= minBeds);
