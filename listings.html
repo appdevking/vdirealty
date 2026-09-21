@@ -104,32 +104,295 @@
             margin-bottom: 15px;
         }
         
-        /* Filters */
-        .filters {
-            background: white;
-            padding: 25px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            margin: -30px 20px 40px;
-            border-radius: 10px;
-            position: relative;
-            z-index: 10;
+        /* Sticky filter bar (mobile-first) */
+        .filter-bar {
+            position: sticky;
+            top: 72px; /* refined by JS to sit exactly under the sticky header */
+            z-index: 900;
+            background: #ffffff;
+            border-bottom: 1px solid #e9edf1;
+            box-shadow: 0 2px 12px rgba(15, 32, 39, 0.07);
+            padding: 10px 16px;
         }
         
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+        .filter-bar-inner {
             max-width: 1200px;
-            margin: auto;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
         
-        .filter-group select,
-        .filter-group input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
+        .filter-search {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: #f3f5f7;
+            border: 1px solid #e2e6ea;
+            border-radius: 999px;
+            padding: 0 16px;
+            height: 44px;
+            cursor: text;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        
+        .filter-search:focus-within {
+            border-color: var(--accent);
+            background: #ffffff;
+        }
+        
+        .filter-search i {
+            color: #9aa3ab;
+            font-size: 0.9rem;
+        }
+        
+        .filter-search input {
+            border: none;
+            background: transparent;
+            outline: none;
             font-size: 0.95rem;
+            font-family: 'Lato', sans-serif;
+            width: 100%;
+            color: var(--text-main);
+        }
+        
+        .filter-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 44px;
+            padding: 0 18px;
+            border-radius: 999px;
+            border: 1.5px solid var(--primary);
+            background: #ffffff;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+        }
+        
+        .filter-badge {
+            display: none;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 5px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        
+        .filter-btn.has-filters .filter-badge {
+            display: inline-flex;
+        }
+        
+        /* Filter bottom sheet */
+        .filter-sheet-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .filter-sheet-wrap.open {
+            visibility: visible;
+            pointer-events: auto;
+        }
+        
+        .sheet-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 32, 39, 0.45);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        
+        .filter-sheet-wrap.open .sheet-backdrop {
+            opacity: 1;
+        }
+        
+        .filter-sheet {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            border-radius: 20px 20px 0 0;
+            max-height: 88vh;
+            max-height: 88dvh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(103%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0.35, 1);
+            box-shadow: 0 -10px 44px rgba(15, 32, 39, 0.22);
+        }
+        
+        .filter-sheet-wrap.open .filter-sheet {
+            transform: translateY(0);
+        }
+        
+        .sheet-handle {
+            width: 42px;
+            height: 5px;
+            border-radius: 999px;
+            background: #dfe4e8;
+            margin: 10px auto 2px;
+            flex-shrink: 0;
+        }
+        
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 22px 12px;
+            border-bottom: 1px solid #eef1f4;
+            flex-shrink: 0;
+        }
+        
+        .sheet-header h2 {
+            font-size: 1.15rem;
+            margin: 0;
+            color: var(--primary);
+        }
+        
+        .sheet-close {
+            border: none;
+            background: #f3f5f7;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 0.95rem;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sheet-body {
+            overflow-y: auto;
+            padding: 18px 22px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .sheet-group label {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #8a939b;
+            margin-bottom: 7px;
+        }
+        
+        .sheet-group select,
+        .sheet-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e2e6ea;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            background: #ffffff;
+            appearance: none;
+        }
+        
+        .sheet-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a939b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+        }
+        
+        .sheet-group select:focus,
+        .sheet-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .sheet-price-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .sheet-footer {
+            display: flex;
+            gap: 12px;
+            padding: 14px 22px calc(18px + env(safe-area-inset-bottom));
+            border-top: 1px solid #eef1f4;
+            flex-shrink: 0;
+            background: #ffffff;
+        }
+        
+        .sheet-clear {
+            flex: 0 0 auto;
+            border: 1.5px solid #e2e6ea;
+            background: #ffffff;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 999px;
+            padding: 0 20px;
+            height: 48px;
+            cursor: pointer;
+        }
+        
+        .sheet-apply {
+            flex: 1;
+            border: none;
+            background: var(--accent);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            height: 48px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(197, 160, 89, 0.4);
+        }
+        
+        @media (min-width: 769px) {
+            .filter-sheet {
+                left: 50%;
+                right: auto;
+                bottom: auto;
+                top: 50%;
+                width: 560px;
+                max-width: calc(100vw - 40px);
+                border-radius: 16px;
+                transform: translate(-50%, -48%) scale(0.98);
+                opacity: 0;
+            }
+            
+            .filter-sheet-wrap.open .filter-sheet {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            
+            .sheet-handle {
+                display: none;
+            }
         }
         
         /* Listings Grid */
@@ -301,8 +564,21 @@
                 grid-template-columns: 1fr;
             }
             
-            .filters-grid {
-                grid-template-columns: 1fr;
+            .hero {
+                padding: 30px 16px 26px;
+            }
+            
+            .hero h1 {
+                font-size: 1.7rem;
+                margin-bottom: 8px;
+            }
+            
+            .hero p {
+                font-size: 0.92rem;
+            }
+            
+            .filter-bar {
+                padding: 8px 12px;
             }
         }
         
@@ -512,46 +788,74 @@
         <p>Discover investment properties, commercial real estate, and partner listings all in one place</p>
     </section>
 
-    <div class="filters">
-        <div class="filters-grid">
-            <div class="filter-group">
-                <select id="filterSource" onchange="filterListings()">
-                    <option value="">All Sources</option>
-                    <option value="fsbo">FSBO</option>
-                    <option value="partner">Partner Listings</option>
-                    <option value="builder">New Construction</option>
-                </select>
+    <div class="filter-bar" id="filterBar">
+        <div class="filter-bar-inner">
+            <label class="filter-search" for="filterCity">
+                <i class="fas fa-search"></i>
+                <input type="text" id="filterCity" placeholder="Search city..." oninput="filterListings()" aria-label="Search listings by city" autocomplete="off">
+            </label>
+            <button type="button" class="filter-btn" id="filterBtn" onclick="openFilterSheet()" aria-haspopup="dialog">
+                <i class="fas fa-sliders-h"></i><span>Filters</span>
+                <span class="filter-badge" id="filterBadge">0</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-sheet-wrap" id="filterSheetWrap" aria-hidden="true">
+        <div class="sheet-backdrop" onclick="closeFilterSheet()"></div>
+        <div class="filter-sheet" role="dialog" aria-modal="true" aria-label="Listing filters">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <h2>Filters</h2>
+                <button type="button" class="sheet-close" onclick="closeFilterSheet()" aria-label="Close filters">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="filter-group">
-                <select id="filterType" onchange="filterListings()">
-                    <option value="">All Property Types</option>
-                    <option value="Single Family">Single Family</option>
-                    <option value="Single Family Home">Single Family Home</option>
-                    <option value="Condo">Condo</option>
-                    <option value="Townhouse">Townhouse</option>
-                    <option value="Multi-Family">Multi-Family</option>
-                    <option value="Land">Land</option>
-                    <option value="Commercial">Commercial</option>
-                </select>
+            <div class="sheet-body">
+                <div class="sheet-group">
+                    <label for="filterSource">Listing source</label>
+                    <select id="filterSource" onchange="filterListings()">
+                        <option value="">All Sources</option>
+                        <option value="fsbo">FSBO</option>
+                        <option value="partner">Partner Listings</option>
+                        <option value="builder">New Construction</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label for="filterType">Property type</label>
+                    <select id="filterType" onchange="filterListings()">
+                        <option value="">All Property Types</option>
+                        <option value="Single Family">Single Family</option>
+                        <option value="Single Family Home">Single Family Home</option>
+                        <option value="Condo">Condo</option>
+                        <option value="Townhouse">Townhouse</option>
+                        <option value="Multi-Family">Multi-Family</option>
+                        <option value="Land">Land</option>
+                        <option value="Commercial">Commercial</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label>Price range</label>
+                    <div class="sheet-price-row">
+                        <input type="number" id="filterMinPrice" placeholder="Min price" onchange="filterListings()" aria-label="Minimum price" min="0" inputmode="numeric">
+                        <input type="number" id="filterMaxPrice" placeholder="Max price" onchange="filterListings()" aria-label="Maximum price" min="0" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="sheet-group">
+                    <label for="filterBeds">Bedrooms</label>
+                    <select id="filterBeds" onchange="filterListings()">
+                        <option value="">Any Beds</option>
+                        <option value="1">1+ Beds</option>
+                        <option value="2">2+ Beds</option>
+                        <option value="3">3+ Beds</option>
+                        <option value="4">4+ Beds</option>
+                        <option value="5">5+ Beds</option>
+                    </select>
+                </div>
             </div>
-            <div class="filter-group">
-                <input type="number" id="filterMinPrice" placeholder="Min Price" onchange="filterListings()">
-            </div>
-            <div class="filter-group">
-                <input type="number" id="filterMaxPrice" placeholder="Max Price" onchange="filterListings()">
-            </div>
-            <div class="filter-group">
-                <select id="filterBeds" onchange="filterListings()">
-                    <option value="">Any Beds</option>
-                    <option value="1">1+ Beds</option>
-                    <option value="2">2+ Beds</option>
-                    <option value="3">3+ Beds</option>
-                    <option value="4">4+ Beds</option>
-                    <option value="5">5+ Beds</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <input type="text" id="filterCity" placeholder="Enter city..." oninput="filterListings()">
+            <div class="sheet-footer">
+                <button type="button" class="sheet-clear" onclick="clearAllFilters()">Clear all</button>
+                <button type="button" class="sheet-apply" id="applyFiltersBtn" onclick="closeFilterSheet()">Show homes</button>
             </div>
         </div>
     </div>
@@ -877,6 +1181,85 @@
             });
             
             displayListings(filtered);
+            if (typeof refreshFilterUI === 'function') refreshFilterUI();
+        }
+        
+        // ---- Mobile filter bar + bottom sheet ----
+        // Keep the sticky filter bar tucked exactly under the sticky site header.
+        function positionFilterBar() {
+            var header = document.querySelector('header');
+            var bar = document.getElementById('filterBar');
+            if (header && bar) bar.style.top = header.offsetHeight + 'px';
+        }
+        
+        function openFilterSheet() {
+            var wrap = document.getElementById('filterSheetWrap');
+            if (!wrap) return;
+            refreshFilterUI();
+            wrap.classList.add('open');
+            wrap.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeFilterSheet() {
+            var wrap = document.getElementById('filterSheetWrap');
+            if (!wrap) return;
+            wrap.classList.remove('open');
+            wrap.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+        
+        // Badge count of active filters + "Show N homes" label. Read-only w.r.t. logic.
+        function refreshFilterUI() {
+            var ids = ['filterSource', 'filterType', 'filterMinPrice', 'filterMaxPrice', 'filterBeds'];
+            var count = 0;
+            ids.forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el && String(el.value).trim() !== '') count++;
+            });
+            var city = document.getElementById('filterCity');
+            if (city && city.value.trim() !== '') count++;
+            
+            var btn = document.getElementById('filterBtn');
+            var badge = document.getElementById('filterBadge');
+            if (btn && badge) {
+                badge.textContent = count;
+                btn.classList.toggle('has-filters', count > 0);
+                btn.classList.toggle('active', count > 0);
+            }
+            var apply = document.getElementById('applyFiltersBtn');
+            var nEl = document.getElementById('listingCount');
+            if (apply && nEl) {
+                var n = parseInt(nEl.textContent, 10);
+                if (isNaN(n)) n = 0;
+                apply.textContent = 'Show ' + n + (n === 1 ? ' home' : ' homes');
+            }
+        }
+        
+        function clearAllFilters() {
+            ['filterSource', 'filterType', 'filterBeds'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            ['filterMinPrice', 'filterMaxPrice', 'filterCity'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            filterListings();
+        }
+        
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeFilterSheet();
+        });
+        window.addEventListener('resize', positionFilterBar);
+        window.addEventListener('load', function () {
+            positionFilterBar();
+            refreshFilterUI();
+        });
+        // In case the script runs after load (cached page), position immediately too.
+        if (document.readyState === 'complete') {
+            positionFilterBar();
+            refreshFilterUI();
         }
         
         // Sort listings
