@@ -760,7 +760,14 @@
             let photoUrl = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800';
             if (listing.allPhotos && listing.allPhotos.length > 0) {
                 photoUrl = listing.allPhotos[0];
-            } else if (listing.photos) {
+            } else if (Array.isArray(listing.photos) && listing.photos.length > 0) {
+                // API returns photos as [{id, url}, ...]
+                const firstPhoto = listing.photos[0];
+                const firstUrl = firstPhoto && (firstPhoto.url || firstPhoto);
+                if (typeof firstUrl === 'string' && firstUrl) {
+                    photoUrl = firstUrl;
+                }
+            } else if (typeof listing.photos === 'string' && listing.photos) {
                 photoUrl = listing.photos;
             } else if (listing.mainImage) {
                 photoUrl = listing.mainImage;
