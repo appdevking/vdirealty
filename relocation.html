@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relocation Services | VDI Realty</title>
-    
+    <title>Relocating for Work? | VDI Realty</title>
+    <meta name="description" content="Moving to Seattle, Phoenix, or New York for work? VDI Realty tours homes for you on live video before you fly out, with a custom area guide and remote closing support.">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --primary: #0F2027;
@@ -17,278 +16,140 @@
             --light-gray: #f8f9fa;
             --text-main: #333333;
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Lato', sans-serif;
-            color: var(--text-main);
-            line-height: 1.7;
-        }
-        
+        body { font-family: 'Lato', sans-serif; color: var(--text-main); line-height: 1.7; }
         h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
-        
-        /* Header */
+
         header {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255,255,255,0.98);
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 1rem 0;
+            position: sticky; top: 0; z-index: 1000; padding: 1rem 0;
         }
-        
         .nav-container {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+            max-width: 1200px; margin: auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 20px;
         }
-        
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border: 2px solid var(--primary);
-            padding: 8px 15px;
-            text-decoration: none;
-            transition: all 0.3s;
+            font-size: 1.5rem; font-weight: 800; color: var(--primary);
+            letter-spacing: 1px; text-transform: uppercase;
+            border: 2px solid var(--primary); padding: 8px 15px;
+            text-decoration: none; transition: all 0.3s;
         }
-        
-        .logo:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
+        .logo:hover { background: var(--primary); color: white; }
         .back-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.3s;
+            color: var(--primary); text-decoration: none; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; transition: color 0.3s;
         }
-        
         .back-link:hover { color: var(--accent); }
-        
-        /* Hero */
+
         .hero {
-            background: linear-gradient(rgba(15, 32, 39, 0.8), rgba(15, 32, 39, 0.8)),
+            background: linear-gradient(rgba(15,32,39,0.82), rgba(15,32,39,0.82)),
                         url('images/relocation-new.svg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            padding: 120px 20px 80px;
-            text-align: center;
-            color: white;
+            background-size: cover; background-position: center;
+            padding: 110px 20px 90px; text-align: center; color: white;
         }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .hero h1 { font-size: 3rem; margin-bottom: 18px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.25rem; max-width: 720px; margin: 0 auto; opacity: 0.95; }
+        .hero-metros { margin-top: 22px; font-size: 1.05rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+        .hero-cta { margin-top: 30px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-block; background: var(--accent); color: white;
+            padding: 15px 38px; text-decoration: none; border-radius: 4px;
+            font-weight: 700; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
         }
-        
-        .hero p {
-            font-size: 1.3rem;
-            max-width: 700px;
-            margin: 0 auto;
-            opacity: 0.95;
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .btn-outline { background: transparent; border: 2px solid white; color: white; }
+        .btn-outline:hover { background: white; color: var(--primary); }
+
+        .content-section { padding: 80px 20px; max-width: 1200px; margin: auto; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-title p { color: #666; max-width: 700px; margin: auto; }
+        .underline { width: 80px; height: 3px; background: var(--accent); margin: 0 auto 15px; }
+
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .step {
+            background: white; padding: 36px 30px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); text-align: center;
         }
-        
-        /* Content Sections */
-        .content-section {
-            padding: 80px 20px;
-            max-width: 1200px;
-            margin: auto;
+        .step-num {
+            width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
+            color: white; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
         }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
+        .step h3 { color: var(--primary); margin-bottom: 12px; }
+
+        /* Metro tabs */
+        .metro-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+        .metro-tab {
+            background: white; border: 2px solid #e0e0e0; color: var(--primary);
+            padding: 12px 26px; border-radius: 30px; font-family: 'Montserrat', sans-serif;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.25s;
         }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-        
-        .underline {
-            width: 80px;
-            height: 3px;
-            background: var(--accent);
-            margin: 0 auto 15px;
-        }
-        
-        /* Features Grid */
+        .metro-tab:hover { border-color: var(--accent); color: var(--accent); }
+        .metro-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .metro-panel { display: none; }
+        .metro-panel.active { display: block; }
+        .metro-intro { text-align: center; color: #666; max-width: 720px; margin: 0 auto 34px; font-size: 1.08rem; }
+
         .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 40px;
         }
-        
         .feature-card {
-            background: white;
-            padding: 35px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.3s;
+            background: white; padding: 34px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); transition: all 0.3s;
         }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        .feature-card i { font-size: 2.6rem; color: var(--accent); margin-bottom: 18px; }
+        .feature-card h3 { color: var(--primary); margin-bottom: 12px; }
+
+        .hood { text-align: left; }
+        .hood h3 { color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .hood h3 i { font-size: 1.3rem; margin: 0; }
+        .hood p { margin-bottom: 8px; font-size: 0.98rem; }
+        .hood .price { color: var(--accent); font-weight: 700; }
+
+        .band { background: var(--light-gray); border-radius: 10px; padding: 50px 40px; margin-bottom: 60px; }
+        .band h3 { text-align: center; color: var(--primary); margin-bottom: 12px; font-size: 1.8rem; }
+        .band > p { text-align: center; color: #666; margin-bottom: 30px; max-width: 640px; margin-left: auto; margin-right: auto; }
+        .school-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .school-list a {
+            background: white; padding: 18px 20px; border-radius: 8px; text-decoration: none;
+            color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.2s;
         }
-        
-        .feature-card i {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 20px;
+        .school-list a:hover { color: var(--accent); transform: translateY(-2px); }
+        .school-list a i { color: var(--accent); }
+
+        .recruiter-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 60px 40px; border-radius: 10px; text-align: center; margin-bottom: 60px;
         }
-        
-        .feature-card h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-        
-        /* Two Column Layout */
-        .two-column {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            margin: 60px 0;
-            align-items: start;
-        }
-        
-        .column h3 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-        
-        .checklist {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .checklist li {
-            padding: 12px 0;
-            display: flex;
-            align-items: start;
-            gap: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .checklist i {
-            color: var(--accent);
-            margin-top: 3px;
-            flex-shrink: 0;
-        }
-        
-        /* Testimonial */
-        .testimonial {
-            background: var(--light-gray);
-            padding: 50px;
-            border-radius: 10px;
-            border-left: 5px solid var(--accent);
-            margin: 60px 0;
-            font-style: italic;
-        }
-        
-        .testimonial-text {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: var(--text-main);
-            margin-bottom: 20px;
-        }
-        
-        .testimonial-author {
-            font-style: normal;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .testimonial-title {
-            font-style: normal;
-            color: #666;
-            font-size: 0.95rem;
-        }
-        
-        /* CTA Section */
+        .recruiter-box h2 { color: white; margin-bottom: 16px; }
+        .recruiter-box p { max-width: 640px; margin: 0 auto 28px; opacity: 0.92; font-size: 1.08rem; }
+
+        .faq { max-width: 740px; margin: 0 auto 60px; }
+        .faq-item { background: var(--light-gray); border-radius: 8px; padding: 22px 26px; margin-bottom: 14px; }
+        .faq-item strong { color: var(--primary); display: block; margin-bottom: 6px; }
+
         .cta-section {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            border-radius: 10px;
-            margin: 60px 0;
+            color: white; padding: 70px 30px; text-align: center; border-radius: 10px; margin-bottom: 20px;
         }
-        
-        .cta-section h2 {
-            color: white;
-            margin-bottom: 20px;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: white;
-            color: var(--primary);
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 3px;
-            font-weight: 700;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .btn:hover {
-            background: var(--accent);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        /* Download Box */
-        .download-box {
-            background: linear-gradient(135deg, rgba(197,160,89,0.1), rgba(197,160,89,0.05));
-            padding: 40px;
-            border-radius: 10px;
-            border: 2px dashed var(--accent);
-            text-align: center;
-        }
-        
-        .download-box i {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
-        
-        .download-box h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-        
-        /* Footer */
-        footer {
-            background: #111;
-            color: #888;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
+        .cta-section h2 { color: white; margin-bottom: 16px; font-size: 2.2rem; }
+        .cta-section p { max-width: 600px; margin: 0 auto 30px; opacity: 0.92; }
+        .cta-contact { margin-top: 26px; font-size: 1.1rem; opacity: 0.9; }
+        .cta-contact a { color: var(--accent); text-decoration: none; font-weight: 700; }
+
+        .disclaimer { font-size: 0.85rem; color: #999; text-align: center; margin-top: 30px; max-width: 800px; margin-left: auto; margin-right: auto; }
+
+        footer { background: #111; color: #888; padding: 40px 20px; text-align: center; }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
-            .two-column { grid-template-columns: 1fr; gap: 40px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .testimonial { padding: 30px 20px; }
+            .section-title h2 { font-size: 1.9rem; }
+            .band { padding: 36px 22px; }
         }
     </style>
 </head>
@@ -297,616 +158,313 @@
     <header>
         <div class="nav-container">
             <a href="index.html" class="logo">VDI Realty</a>
-            <a href="index.html#relocation" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Home
-            </a>
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
         </div>
     </header>
 
     <section class="hero">
-        <h1>Corporate Relocation Services</h1>
-        <p>Moving across the country is complex. We simplify the transition by acting as your eyes and ears on the ground.</p>
-        <div style="margin-top: 30px; background: #fffbe6; border-radius: 8px; padding: 18px 24px; max-width: 700px; margin-left: auto; margin-right: auto; color: var(--primary); font-size: 1.15rem; font-weight: 600;">
-            <i class="fas fa-user-tie" style="color: var(--accent); margin-right: 8px;"></i>
-            <strong>This page is designed for recruiters and new hires relocating to the Greater Metro Area. Share this resource to help your team move with confidence!</strong>
+        <h1>Moving for Work?</h1>
+        <p>Tour homes on live video before you board the plane. We act as your eyes on the ground — shortlisting homes, walking them with your family on video, and handling the details until you land.</p>
+        <div class="hero-metros">Seattle–Eastside &nbsp;·&nbsp; Phoenix Metro &nbsp;·&nbsp; NYC Metro</div>
+        <div class="hero-cta">
+            <a href="index.html#contact" class="btn">Start My Free Relocation Plan</a>
+            <a href="listings.html" class="btn btn-outline">Browse Current Listings</a>
         </div>
     </section>
 
     <section class="content-section">
         <div class="section-title">
-            <h2>Concierge-Level Support for New Hires</h2>
+            <h2>How It Works</h2>
             <div class="underline"></div>
-            <p style="color: #666; max-width: 700px; margin: auto;">Specialized relocation services for new employees and their families—coordinated with your HR team for a seamless transition.</p>
+            <p>Built for busy professionals relocating for tech, finance, healthcare, and corporate roles.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Tell Us Your Criteria</h3>
+                <p>A 20-minute call about your budget, commute, must-haves, and timeline. We build your custom area guide and a shortlist of homes that actually fit.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Tour Homes on Video</h3>
+                <p>We walk through shortlisted homes live on video with you and your family — opening closets, checking water pressure, filming the commute route. No surprises later.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Land With Keys Ready</h3>
+                <p>We coordinate inspections, paperwork, and remote closing around your start date, so you can focus on the new job — not the logistics.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="padding-top: 0;">
+        <div class="section-title">
+            <h2>Pick Your Metro</h2>
+            <div class="underline"></div>
+            <p>Neighborhood snapshots for the three metros we serve. Price ranges are rough estimates for orientation only — not appraisals.</p>
+        </div>
+
+        <div class="metro-tabs">
+            <button class="metro-tab active" data-metro="seattle">Seattle–Eastside</button>
+            <button class="metro-tab" data-metro="phoenix">Phoenix Metro</button>
+            <button class="metro-tab" data-metro="nyc">NYC Metro</button>
+        </div>
+
+        <!-- SEATTLE -->
+        <div class="metro-panel active" id="metro-seattle">
+            <p class="metro-intro">Tech workers heading to Amazon, Microsoft, Google, Meta, and Boeing. The Eastside (Bellevue, Redmond, Kirkland) pairs top-rated schools with short commutes to the region's biggest campuses.</p>
+            <div class="features-grid">
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Bellevue</h3>
+                    <p>Downtown high-rises, established neighborhoods, and highly rated public schools. Short commute to Microsoft's Redmond campus and downtown Seattle.</p>
+                    <p class="price">Typical range: ~$900K – $2M+</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Redmond</h3>
+                    <p>Home of Microsoft's main campus. Mix of townhomes and single-family neighborhoods with trail access along the Sammamish River.</p>
+                    <p class="price">Typical range: ~$800K – $1.6M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Kirkland</h3>
+                    <p>Waterfront downtown, Google's Kirkland campus, and walkable shops and restaurants along Lake Washington.</p>
+                    <p class="price">Typical range: ~$850K – $1.8M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Issaquah &amp; Sammamish</h3>
+                    <p>Newer construction, highly rated schools, and trail access at the foot of the Cascades. Popular with buyers wanting more space.</p>
+                    <p class="price">Typical range: ~$900K – $1.7M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Seattle — North End</h3>
+                    <p>Ballard, Fremont, and Green Lake offer walkable urban villages with character homes. Good fit for Amazon and South Lake Union commuters.</p>
+                    <p class="price">Typical range: ~$750K – $1.5M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Renton &amp; Bothell</h3>
+                    <p>More home for the budget with growing downtowns. Renton sits near Boeing and Sea-Tac; Bothell feeds the I-405 tech corridor.</p>
+                    <p class="price">Typical range: ~$600K – $1.1M</p>
+                </div>
+            </div>
+            <div class="band">
+                <h3><i class="fas fa-school" style="color: var(--accent); margin-right: 10px;"></i>School Districts to Know</h3>
+                <p>School fit drives many relocation decisions. Check current ratings and boundaries directly:</p>
+                <div class="school-list">
+                    <a href="https://www.bsd405.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Bellevue School District</a>
+                    <a href="https://www.lwsd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Lake Washington (Redmond/Kirkland)</a>
+                    <a href="https://www.issaquah.wednet.edu/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Issaquah School District</a>
+                    <a href="https://www.nsd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Northshore (Bothell/Woodinville)</a>
+                    <a href="https://www.mercerislandschools.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Mercer Island School District</a>
+                    <a href="https://www.greatschools.org/washington/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — Washington</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHOENIX -->
+        <div class="metro-panel" id="metro-phoenix">
+            <p class="metro-intro">Semiconductor, tech, healthcare, and finance workers heading to Intel, TSMC, Honeywell, American Express, and Banner Health. The Valley offers newer homes, master-planned communities, and no state income-tax shock for many movers.</p>
+            <div class="features-grid">
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Scottsdale</h3>
+                    <p>Upscale dining, golf, and Old Town nightlife. Strong draw for executives and buyers wanting a polished, amenity-rich base.</p>
+                    <p class="price">Typical range: ~$650K – $1.5M+</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Chandler</h3>
+                    <p>Intel's Chandler campus anchors this family-oriented East Valley hub with highly rated schools and master-planned neighborhoods.</p>
+                    <p class="price">Typical range: ~$550K – $1M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Gilbert</h3>
+                    <p>One of the Valley's most requested suburbs — newer builds, community events, and a strong school reputation.</p>
+                    <p class="price">Typical range: ~$550K – $950K</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Tempe</h3>
+                    <p>Home to Arizona State University. Lively, central, and well-connected by light rail — a fit for younger professionals.</p>
+                    <p class="price">Typical range: ~$450K – $800K</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Phoenix — Arcadia &amp; Desert Ridge</h3>
+                    <p>Arcadia offers character homes near Camelback Mountain; Desert Ridge brings newer master-planned living in North Phoenix near TSMC.</p>
+                    <p class="price">Typical range: ~$600K – $1.4M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Peoria &amp; North Glendale</h3>
+                    <p>Value picks on the northwest side with newer construction and easy freeway access to the Loop 303 employment corridor.</p>
+                    <p class="price">Typical range: ~$450K – $750K</p>
+                </div>
+            </div>
+            <div class="band">
+                <h3><i class="fas fa-school" style="color: var(--accent); margin-right: 10px;"></i>School Districts to Know</h3>
+                <p>School fit drives many relocation decisions. Check current ratings and boundaries directly:</p>
+                <div class="school-list">
+                    <a href="https://www.susd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Scottsdale Unified</a>
+                    <a href="https://www.cusd80.com/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Chandler Unified</a>
+                    <a href="https://www.gilbertschools.net/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Gilbert Public Schools</a>
+                    <a href="https://www.pvdistrict.net/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Paradise Valley Unified</a>
+                    <a href="https://www.dvusd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Deer Valley Unified</a>
+                    <a href="https://www.greatschools.org/arizona/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — Arizona</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NYC -->
+        <div class="metro-panel" id="metro-nyc">
+            <p class="metro-intro">Finance, tech, media, and healthcare professionals heading to Manhattan, Brooklyn, and the surrounding suburbs. NYC moves hinge on commute math — subway lines, PATH, and Metro-North shape every shortlist.</p>
+            <div class="features-grid">
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Manhattan</h3>
+                    <p>Condos and co-ops near the Financial District, Midtown, and Hudson Yards. Walk-to-work living at a premium — co-op boards add steps to the process.</p>
+                    <p class="price">Typical range: ~$1M – $3M+</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Brooklyn</h3>
+                    <p>Park Slope, Williamsburg, and Brooklyn Heights blend brownstones, new condos, and strong subway access to Manhattan offices.</p>
+                    <p class="price">Typical range: ~$900K – $2.5M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Queens</h3>
+                    <p>Astoria and Forest Hills offer relative value with quick Midtown commutes. Diverse neighborhoods with deep transit options.</p>
+                    <p class="price">Typical range: ~$650K – $1.4M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Hoboken &amp; Jersey City</h3>
+                    <p>PATH-train access to Manhattan, waterfront views, and newer high-rises. Popular with finance commuters wanting more space per dollar.</p>
+                    <p class="price">Typical range: ~$750K – $1.8M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Westchester</h3>
+                    <p>Scarsdale, White Plains, and Yonkers offer suburban living on Metro-North lines into Grand Central. A classic family relocation corridor.</p>
+                    <p class="price">Typical range: ~$700K – $1.8M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>Long Island — Nassau</h3>
+                    <p>Great Neck, Manhasset, and Garden City pair LIRR commutes with highly regarded schools. Single-family homes dominate.</p>
+                    <p class="price">Typical range: ~$800K – $2M</p>
+                </div>
+            </div>
+            <div class="band">
+                <h3><i class="fas fa-school" style="color: var(--accent); margin-right: 10px;"></i>Schools to Know</h3>
+                <p>NYC public schools run through one citywide Department of Education; suburbs have their own districts. Check current ratings and boundaries directly:</p>
+                <div class="school-list">
+                    <a href="https://www.schools.nyc.gov/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>NYC Dept. of Education</a>
+                    <a href="https://www.greatneck.k12.ny.us/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Great Neck (Nassau)</a>
+                    <a href="https://www.scarsdaleschools.k12.ny.us/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Scarsdale (Westchester)</a>
+                    <a href="https://www.hoboken.k12.nj.us/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Hoboken Public Schools</a>
+                    <a href="https://www.greatschools.org/new-york/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — New York</a>
+                    <a href="https://www.greatschools.org/new-jersey/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — New Jersey</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="padding-top: 0;">
+        <div class="section-title">
+            <h2>What's Included — Free</h2>
+            <div class="underline"></div>
+            <p>There's no charge for the relocation consultation or the shortlist. If you buy through us, the seller typically covers the buyer's agent compensation.</p>
         </div>
 
         <div class="features-grid">
-                        <div class="feature-card" style="background: #e9f7ef; border: 2px solid var(--accent);">
-                            <i class="fas fa-briefcase"></i>
-                            <h3>New Hire Support</h3>
-                            <p>We work directly with recruiters and HR to provide custom area guides, group consultations, and priority scheduling for new hires.</p>
-                        </div>
-                    <!-- Quick Start Checklist for New Hires -->
-                    <div class="section-title" style="margin-top: 40px;">
-                        <h2>Quick Start Checklist for Relocating Employees</h2>
-                        <div class="underline"></div>
-                    </div>
-                    <div style="max-width: 700px; margin: 0 auto 40px auto; background: #f8f9fa; border-radius: 8px; padding: 24px; font-size: 1.08rem;">
-                        <ol style="margin-left: 20px;">
-                            <li>Schedule your complimentary relocation consultation.</li>
-                            <li>Receive your custom area guide and property shortlist.</li>
-                            <li>Join virtual tours with your family or partner.</li>
-                            <li>Coordinate move-in and closing with our team.</li>
-                            <li>Get ongoing support for local resources and settling in.</li>
-                        </ol>
-                    </div>
             <div class="feature-card">
                 <i class="fas fa-map-marked-alt"></i>
-                <h3>Neighborhood Analysis</h3>
-                <p>Detailed reports on neighborhoods, commute times, local amenities, and lifestyle fit tailored to your preferences.</p>
+                <h3>Custom Area Guide</h3>
+                <p>Neighborhoods, commute times, and lifestyle notes matched to your criteria — not a generic PDF.</p>
             </div>
-
-            <div class="feature-card">
-                <i class="fas fa-school"></i>
-                <h3>School District Reports</h3>
-                <p>Comprehensive analysis of school performance, ratings, programs, and enrollment information for families.</p>
-            </div>
-
             <div class="feature-card">
                 <i class="fas fa-video"></i>
-                <h3>Virtual Tours</h3>
-                <p>Live FaceTime walkthroughs of properties so you can explore homes from anywhere in the world.</p>
+                <h3>Live Video Walkthroughs</h3>
+                <p>We tour shortlisted homes with you on live video, with your family or partner on the call.</p>
             </div>
-
             <div class="feature-card">
                 <i class="fas fa-clipboard-check"></i>
-                <h3>Pre-Qualified Listings</h3>
-                <p>We screen properties based on your criteria before you even board a plane, saving you time and energy.</p>
+                <h3>Pre-Screened Shortlist</h3>
+                <p>We screen listings against your must-haves and rule out the duds before you spend a minute on them.</p>
             </div>
-
             <div class="feature-card">
                 <i class="fas fa-handshake"></i>
-                <h3>Local Expert Network</h3>
-                <p>Introductions to movers, utility providers, inspectors, and contractors who will make your move seamless.</p>
+                <h3>Local Network</h3>
+                <p>Introductions to lenders, inspectors, movers, and contractors we've worked with in each metro.</p>
             </div>
-
             <div class="feature-card">
-                <i class="fas fa-calendar-alt"></i>
-                <h3>Flexible Scheduling</h3>
-                <p>We work around your corporate timeline, coordinating viewings and closings to match your start date.</p>
+                <i class="fas fa-file-signature"></i>
+                <h3>Remote Closing Support</h3>
+                <p>Paperwork, inspections, and closing coordinated around your start date — including remote options where available.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Offer Strategy</h3>
+                <p>Competitive markets move fast. We advise on pricing and terms using current market data — estimates, never appraisals.</p>
             </div>
         </div>
 
-        <!-- Detailed Neighborhoods Section -->
-        <div class="section-title" style="margin-top: 80px;">
-            <h2>Explore Popular Neighborhoods</h2>
-            <div class="underline"></div>
-            <p style="color: #666; max-width: 700px; margin: auto;">Discover the unique character and amenities of top neighborhoods perfect for relocating professionals and families</p>
+        <div class="recruiter-box">
+            <h2>Hiring Into These Metros? Send Us Your New Hires.</h2>
+            <p>Recruiters and HR teams: share this page with incoming employees. We'll give each new hire the same white-glove treatment — area guide, video tours, and a smooth landing — at no cost to your team.</p>
+            <a href="index.html#contact" class="btn">Partner With Us</a>
         </div>
 
-        <div class="features-grid" style="margin-bottom: 80px;">
-            <div class="feature-card" style="text-align: left;">
-                <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="font-size: 1.3rem; margin-right: 10px;"></i>Downtown/Urban Core</h3>
-                <p style="margin-bottom: 15px;"><strong>Best for:</strong> Young professionals, walkable lifestyle enthusiasts</p>
-                <p style="margin-bottom: 15px;"><strong>Highlights:</strong> Restaurants, nightlife, cultural venues, high-rise condos</p>
-                <p style="margin-bottom: 15px;"><strong>Avg. Home Price:</strong> $450K - $800K</p>
-                <p style="font-size: 0.9rem;">
-                    <a href="https://www.realtor.com/" target="_blank" style="color: var(--accent); text-decoration: none;">View Listings</a> | 
-                    <a href="https://www.city-data.com/" target="_blank" style="color: var(--accent); text-decoration: none;">Demographics</a>
-                </p>
-            </div>
-
-            <div class="feature-card" style="text-align: left;">
-                <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="font-size: 1.3rem; margin-right: 10px;"></i>Suburban Family Areas</h3>
-                <p style="margin-bottom: 15px;"><strong>Best for:</strong> Families, top-rated schools, spacious yards</p>
-                <p style="margin-bottom: 15px;"><strong>Highlights:</strong> Parks, rec centers, excellent schools, family-friendly</p>
-                <p style="margin-bottom: 15px;"><strong>Avg. Home Price:</strong> $350K - $650K</p>
-                <p style="font-size: 0.9rem;">
-                    <a href="https://www.realtor.com/" target="_blank" style="color: var(--accent); text-decoration: none;">View Listings</a> | 
-                    <a href="https://www.greatschools.org/" target="_blank" style="color: var(--accent); text-decoration: none;">School Ratings</a>
-                </p>
-            </div>
-
-            <div class="feature-card" style="text-align: left;">
-                <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="font-size: 1.3rem; margin-right: 10px;"></i>Historic Districts</h3>
-                <p style="margin-bottom: 15px;"><strong>Best for:</strong> Character homes, established neighborhoods</p>
-                <p style="margin-bottom: 15px;"><strong>Highlights:</strong> Tree-lined streets, vintage architecture, local shops</p>
-                <p style="margin-bottom: 15px;"><strong>Avg. Home Price:</strong> $300K - $550K</p>
-                <p style="font-size: 0.9rem;">
-                    <a href="https://www.realtor.com/" target="_blank" style="color: var(--accent); text-decoration: none;">View Listings</a> | 
-                    <a href="https://www.city-data.com/" target="_blank" style="color: var(--accent); text-decoration: none;">Area Info</a>
-                </p>
-            </div>
-
-            <div class="feature-card" style="text-align: left;">
-                <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="font-size: 1.3rem; margin-right: 10px;"></i>Waterfront Communities</h3>
-                <p style="margin-bottom: 15px;"><strong>Best for:</strong> Outdoor enthusiasts, luxury living</p>
-                <p style="margin-bottom: 15px;"><strong>Highlights:</strong> Lake/river access, boating, scenic views, recreation</p>
-                <p style="margin-bottom: 15px;"><strong>Avg. Home Price:</strong> $500K - $1.2M</p>
-                <p style="font-size: 0.9rem;">
-                    <a href="https://www.realtor.com/" target="_blank" style="color: var(--accent); text-decoration: none;">View Listings</a> | 
-                    <a href="https://www.city-data.com/" target="_blank" style="color: var(--accent); text-decoration: none;">Demographics</a>
-                </p>
-            </div>
-
-            <div class="feature-card" style="text-align: left;">
-                <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="font-size: 1.3rem; margin-right: 10px;"></i>New Development Areas</h3>
-                <p style="margin-bottom: 15px;"><strong>Best for:</strong> Modern amenities, new construction</p>
-                <p style="margin-bottom: 15px;"><strong>Highlights:</strong> New builds, master-planned communities, modern infrastructure</p>
-                <p style="margin-bottom: 15px;"><strong>Avg. Home Price:</strong> $400K - $750K</p>
-                <p style="font-size: 0.9rem;">
-                    <a href="https://www.realtor.com/" target="_blank" style="color: var(--accent); text-decoration: none;">View Listings</a> | 
-                    <a href="https://www.newhomesource.com/" target="_blank" style="color: var(--accent); text-decoration: none;">New Homes</a>
-                </p>
-            </div>
-
-            <div class="feature-card" style="text-align: left;">
-                <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-map-marker-alt" style="font-size: 1.3rem; margin-right: 10px;"></i>Golf Course Communities</h3>
-                <p style="margin-bottom: 15px;"><strong>Best for:</strong> Active adults, retirees, golf enthusiasts</p>
-                <p style="margin-bottom: 15px;"><strong>Highlights:</strong> Golf access, clubhouses, manicured landscaping, amenities</p>
-                <p style="margin-bottom: 15px;"><strong>Avg. Home Price:</strong> $450K - $900K</p>
-                <p style="font-size: 0.9rem;">
-                    <a href="https://www.realtor.com/" target="_blank" style="color: var(--accent); text-decoration: none;">View Listings</a> | 
-                    <a href="https://www.golfcommunityreviews.com/" target="_blank" style="color: var(--accent); text-decoration: none;">Community Reviews</a>
-                </p>
-            </div>
-        </div>
-
-        <!-- Schools & Education Section -->
         <div class="section-title">
-            <h2>Metro Seattle Area Schools & Education</h2>
+            <h2>Common Questions</h2>
             <div class="underline"></div>
-            <p style="color: #666; max-width: 700px; margin: auto;">Comprehensive information about top-rated school districts in the Greater Seattle area</p>
         </div>
-
-        <!-- Top School Districts -->
-        <div style="margin-bottom: 60px;">
-            <h3 style="text-align: center; color: var(--primary); margin-bottom: 40px; font-size: 2rem;">Top-Rated Public School Districts</h3>
-            
-            <div class="features-grid">
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-school" style="font-size: 1.2rem; margin-right: 8px;"></i>Bellevue School District</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Rating:</strong> ⭐ 9/10 on GreatSchools</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Students:</strong> ~20,000</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Notable:</strong> High test scores, strong STEM programs</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Serves Bellevue, Clyde Hill, Medina, Yarrow Point, Beaux Arts Village</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a href="https://www.bsd405.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">🌐 District Website</a>
-                        <a href="https://www.greatschools.org/washington/bellevue/bellevue-school-district/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">📊 GreatSchools</a>
-                    </div>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-school" style="font-size: 1.2rem; margin-right: 8px;"></i>Lake Washington School District</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Rating:</strong> ⭐ 9/10 on GreatSchools</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Students:</strong> ~30,000</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Notable:</strong> Excellent academics, technology integration</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Serves Redmond, Kirkland, Sammamish</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a href="https://www.lwsd.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">🌐 District Website</a>
-                        <a href="https://www.greatschools.org/washington/redmond/lake-washington-school-district/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">📊 GreatSchools</a>
-                    </div>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-school" style="font-size: 1.2rem; margin-right: 8px;"></i>Northshore School District</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Rating:</strong> ⭐ 8/10 on GreatSchools</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Students:</strong> ~23,000</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Notable:</strong> Strong AP programs, diverse offerings</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Serves Bothell, Woodinville, Kenmore</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a href="https://www.nsd.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">🌐 District Website</a>
-                        <a href="https://www.greatschools.org/washington/bothell/northshore-school-district/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">📊 GreatSchools</a>
-                    </div>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-school" style="font-size: 1.2rem; margin-right: 8px;"></i>Issaquah School District</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Rating:</strong> ⭐ 8/10 on GreatSchools</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Students:</strong> ~20,000</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Notable:</strong> High graduation rates, college prep focus</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Serves Issaquah, Sammamish, parts of Bellevue</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a href="https://www.issaquah.wednet.edu/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">🌐 District Website</a>
-                        <a href="https://www.greatschools.org/washington/issaquah/issaquah-school-district/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">📊 GreatSchools</a>
-                    </div>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-school" style="font-size: 1.2rem; margin-right: 8px;"></i>Mercer Island School District</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Rating:</strong> ⭐ 9/10 on GreatSchools</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Students:</strong> ~4,500</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Notable:</strong> Consistently top-ranked, small class sizes</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Serves Mercer Island</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a href="https://www.mercerislandschools.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">🌐 District Website</a>
-                        <a href="https://www.greatschools.org/washington/mercer-island/mercer-island-school-district/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">📊 GreatSchools</a>
-                    </div>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-school" style="font-size: 1.2rem; margin-right: 8px;"></i>Seattle Public Schools</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Rating:</strong> ⭐ 6-9/10 (varies by school)</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Students:</strong> ~50,000+</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Notable:</strong> Diverse options, special programs</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Serves Seattle city limits</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <a href="https://www.seattleschools.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">🌐 District Website</a>
-                        <a href="https://www.greatschools.org/washington/seattle/seattle-public-schools/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">📊 GreatSchools</a>
-                    </div>
-                </div>
+        <div class="faq">
+            <div class="faq-item">
+                <strong>How do we start?</strong>
+                Reach out through the contact form or by phone. We'll schedule a 20-minute call to learn your criteria and timeline.
             </div>
-        </div>
-
-        <!-- Private Schools -->
-        <div style="margin-bottom: 60px;">
-            <h3 style="text-align: center; color: var(--primary); margin-bottom: 40px; font-size: 2rem;">Notable Private Schools</h3>
-            
-            <div class="features-grid">
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;">Lakeside School</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Type:</strong> Independent, Co-ed</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Grades:</strong> 5-12</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Location:</strong> Seattle</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Elite college prep, notable alumni include Bill Gates and Paul Allen</p>
-                    <a href="https://www.lakesideschool.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Visit Website →</a>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;">University Prep</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Type:</strong> Independent, Co-ed</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Grades:</strong> 6-12</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Location:</strong> Seattle</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Rigorous academics, strong arts and athletics programs</p>
-                    <a href="https://www.universityprep.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Visit Website →</a>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;">The Bush School</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Type:</strong> Independent, Co-ed</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Grades:</strong> K-12</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Location:</strong> Seattle</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Progressive education, strong community focus</p>
-                    <a href="https://www.bush.edu/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Visit Website →</a>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;">Eastside Preparatory</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Type:</strong> Independent, Co-ed</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Grades:</strong> 5-12</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Location:</strong> Kirkland</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Personalized learning, small class sizes</p>
-                    <a href="https://www.eastsideprep.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Visit Website →</a>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;">Seattle Academy (SAAS)</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Type:</strong> Independent, Co-ed</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Grades:</strong> 6-12</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Location:</strong> Seattle (Capitol Hill)</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Urban campus, diverse student body, strong academics</p>
-                    <a href="https://www.seattleacademy.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Visit Website →</a>
-                </div>
-
-                <div class="feature-card" style="text-align: left;">
-                    <h3 style="color: var(--accent); margin-bottom: 15px;">Forest Ridge School</h3>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Type:</strong> Catholic, All-girls</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Grades:</strong> 5-12</p>
-                    <p style="margin-bottom: 10px; font-size: 0.95rem;"><strong>Location:</strong> Bellevue</p>
-                    <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">Sacred Heart education, leadership development</p>
-                    <a href="https://www.forestridge.org/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">Visit Website →</a>
-                </div>
+            <div class="faq-item">
+                <strong>Can my family join the video tours?</strong>
+                Yes — we encourage it. Everyone who has a say in the move should see the homes live.
             </div>
-        </div>
-
-        <!-- Higher Education -->
-        <div style="background: var(--light-gray); padding: 50px; border-radius: 10px; margin-bottom: 60px;">
-            <h3 style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 2rem;">Higher Education in Seattle</h3>
-            <div class="features-grid">
-                <div style="text-align: center;">
-                    <i class="fas fa-university" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 15px;"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">University of Washington</h4>
-                    <p style="font-size: 0.9rem; margin-bottom: 10px;">Top-ranked public university, renowned for research</p>
-                    <a href="https://www.washington.edu/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">uw.edu →</a>
-                </div>
-                <div style="text-align: center;">
-                    <i class="fas fa-university" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 15px;"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Seattle University</h4>
-                    <p style="font-size: 0.9rem; margin-bottom: 10px;">Private Jesuit university in Capitol Hill</p>
-                    <a href="https://www.seattleu.edu/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">seattleu.edu →</a>
-                </div>
-                <div style="text-align: center;">
-                    <i class="fas fa-university" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 15px;"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Seattle Pacific University</h4>
-                    <p style="font-size: 0.9rem; margin-bottom: 10px;">Christian university in Fremont neighborhood</p>
-                    <a href="https://www.spu.edu/" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">spu.edu →</a>
-                </div>
+            <div class="faq-item">
+                <strong>What does it cost?</strong>
+                The consultation, area guide, and video tours are free. Buyer-agent compensation is typically paid by the seller.
             </div>
-        </div>
-
-        <div class="two-column">
-            <div class="column">
-                <h3>What's Included</h3>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Initial Consultation:</strong> 60-minute video call to understand your needs, timeline, and preferences</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Custom Area Guide:</strong> Personalized report covering neighborhoods, schools, and amenities</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Curated Property List:</strong> Hand-selected homes matching your criteria</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Virtual Walkthroughs:</strong> Live video tours with Q&A</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Commute Analysis:</strong> Drive-time maps to your office</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Market Insights:</strong> Pricing analysis and negotiation support</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>Closing Coordination:</strong> Remote closing options when possible</span>
-                    </li>
-                </ul>
+            <div class="faq-item">
+                <strong>What if I need to rent first?</strong>
+                We can help you evaluate rental options near your office while you get to know the area before buying.
             </div>
-
-            <div class="column">
-                <h3>Why Choose VDI for Relocation?</h3>
-                <p style="margin-bottom: 20px;">Relocating for work is stressful enough without worrying about finding the right home in an unfamiliar city. Our relocation service removes that burden.</p>
-                
-                <p style="margin-bottom: 20px;"><strong>We understand:</strong></p>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-briefcase"></i>
-                        <span>You have limited time to find a home</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-plane"></i>
-                        <span>Flying in for viewings is expensive and exhausting</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-home"></i>
-                        <span>You need local expertise you can trust</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-users"></i>
-                        <span>Your family's needs come first</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-clock"></i>
-                        <span>Timing is critical to your start date</span>
-                    </li>
-                </ul>
-
-                <p style="margin-top: 20px; padding: 20px; background: var(--light-gray); border-radius: 8px;">
-                    <strong>Our Promise:</strong> We'll treat your relocation with the same care and urgency we would our own family's move.
-                </p>
+            <div class="faq-item">
+                <strong>Do you work with our company's relocation package?</strong>
+                Yes — we coordinate with corporate relocation timelines and lump-sum or managed relocation benefits.
             </div>
-        </div>
-
-        <!-- Local Resources & Utilities -->
-        <div class="section-title" style="margin-top: 80px;">
-            <h2>Essential Local Resources</h2>
-            <div class="underline"></div>
-            <p style="color: #666; max-width: 700px; margin: auto;">Everything you need to get settled in your new community</p>
-            <!-- Recommended Local Service Providers -->
-            <div class="section-title" style="margin-top: 40px;">
-                <h3 style="color: var(--accent);">Recommended Local Service Providers</h3>
-                <div class="underline" style="width: 40px; height: 2px; margin-bottom: 20px;"></div>
-                <p style="color: #888; max-width: 600px; margin: auto; font-size: 1rem;">Trusted professionals to help with every aspect of your move—contact us for introductions or use the links below.</p>
-            </div>
-            <div class="features-grid" style="margin-bottom: 40px;">
-                <div class="feature-card">
-                    <i class="fas fa-hand-holding-usd"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Lender</h4>
-                    <p style="margin-bottom: 10px;">Mortgage specialists for home financing.</p>
-                    <a href="#" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.95rem;">View Lender Options</a>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-building"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Builder</h4>
-                    <p style="margin-bottom: 10px;">Local builders for new construction and renovations.</p>
-                    <a href="#" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.95rem;">View Builder Directory</a>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-bolt"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Electrician</h4>
-                    <p style="margin-bottom: 10px;">Licensed electricians for repairs and upgrades.</p>
-                    <a href="#" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.95rem;">Find Electricians</a>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-file-signature"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Escrow & Title</h4>
-                    <p style="margin-bottom: 10px;">Trusted escrow and title companies for secure closings.</p>
-                    <a href="#" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.95rem;">View Escrow Services</a>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-truck-moving"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">Moving Company</h4>
-                    <p style="margin-bottom: 10px;">Professional movers for local and long-distance relocations.</p>
-                    <a href="#" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.95rem;">View Moving Companies</a>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-tools"></i>
-                    <h4 style="color: var(--primary); margin-bottom: 10px;">General Contractor</h4>
-                    <p style="margin-bottom: 10px;">Renovation and repair specialists.</p>
-                    <a href="#" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 0.95rem;">Find Contractors</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="two-column" style="margin-bottom: 60px;">
-            <div class="column">
-                <h3><i class="fas fa-bolt" style="color: var(--accent); margin-right: 10px;"></i>Utilities & Services</h3>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-plug"></i>
-                        <span><strong>Electric & Gas:</strong> <a href="https://www.energy.gov/" target="_blank" style="color: var(--accent);">Find Local Providers</a></span>
-                    </li>
-                    <li>
-                        <i class="fas fa-tint"></i>
-                        <span><strong>Water & Sewer:</strong> Contact local municipality for setup</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-wifi"></i>
-                        <span><strong>Internet & Cable:</strong> <a href="https://www.highspeedinternet.com/" target="_blank" style="color: var(--accent);">Compare Providers</a></span>
-                    </li>
-                    <li>
-                        <i class="fas fa-trash"></i>
-                        <span><strong>Trash & Recycling:</strong> Municipal services information</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-phone"></i>
-                        <span><strong>Phone Services:</strong> <a href="https://www.whistleout.com/" target="_blank" style="color: var(--accent);">Plan Comparison</a></span>
-                    </li>
-                </ul>
-
-                <h3 style="margin-top: 40px;"><i class="fas fa-hospital" style="color: var(--accent); margin-right: 10px;"></i>Healthcare</h3>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-stethoscope"></i>
-                        <span><strong>Find Doctors:</strong> <a href="https://www.healthgrades.com/" target="_blank" style="color: var(--accent);">Healthgrades</a> | <a href="https://www.zocdoc.com/" target="_blank" style="color: var(--accent);">Zocdoc</a></span>
-                    </li>
-                    <li>
-                        <i class="fas fa-hospital-alt"></i>
-                        <span><strong>Hospitals & Urgent Care:</strong> Local emergency facilities directory</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-tooth"></i>
-                        <span><strong>Dental Care:</strong> <a href="https://www.deltadentalins.com/" target="_blank" style="color: var(--accent);">Find Dentists</a></span>
-                    </li>
-                    <li>
-                        <i class="fas fa-pills"></i>
-                        <span><strong>Pharmacies:</strong> CVS, Walgreens, local options</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="column">
-                <h3><i class="fas fa-car" style="color: var(--accent); margin-right: 10px;"></i>Transportation & DMV</h3>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-id-card"></i>
-                        <span><strong>Driver's License:</strong> <a href="https://www.dmv.org/" target="_blank" style="color: var(--accent);">DMV.org State Guide</a></span>
-                    </li>
-                    <li>
-                        <i class="fas fa-file-alt"></i>
-                        <span><strong>Vehicle Registration:</strong> Transfer requirements and fees</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-bus"></i>
-                        <span><strong>Public Transit:</strong> Local bus and rail system information</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-plane"></i>
-                        <span><strong>Airports:</strong> <a href="https://www.google.com/travel/flights" target="_blank" style="color: var(--accent);">Nearby Airport Info</a></span>
-                    </li>
-                </ul>
-
-                <h3 style="margin-top: 40px;"><i class="fas fa-shopping-cart" style="color: var(--accent); margin-right: 10px;"></i>Shopping & Dining</h3>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-utensils"></i>
-                        <span><strong>Restaurants:</strong> <a href="https://www.yelp.com/" target="_blank" style="color: var(--accent);">Yelp</a> | <a href="https://www.opentable.com/" target="_blank" style="color: var(--accent);">OpenTable</a></span>
-                    </li>
-                    <li>
-                        <i class="fas fa-store"></i>
-                        <span><strong>Grocery Stores:</strong> Whole Foods, Trader Joe's, local markets</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-shopping-bag"></i>
-                        <span><strong>Shopping Centers:</strong> Malls and retail districts</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-seedling"></i>
-                        <span><strong>Farmers Markets:</strong> Weekend markets and local produce</span>
-                    </li>
-                </ul>
-
-                <h3 style="margin-top: 40px;"><i class="fas fa-dumbbell" style="color: var(--accent); margin-right: 10px;"></i>Recreation & Fitness</h3>
-                <ul class="checklist">
-                    <li>
-                        <i class="fas fa-running"></i>
-                        <span><strong>Gyms & Fitness:</strong> <a href="https://www.classpass.com/" target="_blank" style="color: var(--accent);">ClassPass</a> local studios</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-tree"></i>
-                        <span><strong>Parks & Trails:</strong> <a href="https://www.alltrails.com/" target="_blank" style="color: var(--accent);">AllTrails</a> hiking and biking</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-palette"></i>
-                        <span><strong>Arts & Culture:</strong> Museums, theaters, galleries</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Cost of Living Comparison -->
-        <div style="background: var(--light-gray); padding: 50px; border-radius: 10px; margin-bottom: 60px;">
-            <h3 style="text-align: center; color: var(--primary); margin-bottom: 30px;">Cost of Living Comparison</h3>
-            <p style="text-align: center; margin-bottom: 25px;">Compare your current city to understand how expenses may change:</p>
-            <div style="text-align: center;">
-                <a href="https://www.nerdwallet.com/cost-of-living-calculator" target="_blank" class="btn" style="background: var(--primary); color: white; margin: 0 10px 10px;">NerdWallet Calculator</a>
-                <a href="https://www.bestplaces.net/cost-of-living/" target="_blank" class="btn" style="background: var(--primary); color: white; margin: 0 10px 10px;">BestPlaces.net</a>
-                <a href="https://www.expatistan.com/cost-of-living" target="_blank" class="btn" style="background: var(--primary); color: white; margin: 0 10px 10px;">Expatistan</a>
-            </div>
-        </div>
-
-        <div class="testimonial">
-            <div class="testimonial-text">
-                "When my company relocated me from Boston to Phoenix, I was overwhelmed. VDI sent me a custom neighborhood guide, set up virtual tours, and even visited homes on my behalf. By the time I flew in for a weekend, I had three finalists to choose from. We closed remotely and moved in seamlessly. I can't imagine doing this without them."
-            </div>
-            <div class="testimonial-author">— Sarah M., Technology Executive</div>
-            <div class="testimonial-title">Relocated from Boston, MA</div>
-        </div>
-
-        <div class="download-box">
-            <i class="fas fa-file-download"></i>
-            <h3>Download Our Relocation Guide</h3>
-            <p style="margin-bottom: 25px; color: #666;">A comprehensive 20-page guide covering everything you need to know about relocating to the Greater Metro Area. <br><strong>Recruiters:</strong> Contact us for bulk guides or group presentations.</p>
-            <a href="relocation-guide.pdf" class="btn" style="background: var(--accent); color: white; font-weight: 700;">Download PDF Guide</a>
-            <a href="index.html#contact" class="btn" style="background: var(--primary); color: white; margin-left: 10px;">Request Custom Guide</a>
         </div>
 
         <div class="cta-section">
-            <h2>For Recruiters & HR Teams</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Want to help your new hires relocate with ease? Contact us to schedule group consultations, request bulk guides, or arrange a custom presentation for your team.
-            </p>
-            <a href="index.html#contact" class="btn">Contact for Recruiter Support</a>
-                <!-- FAQ for Relocating Employees -->
-                <div class="section-title" style="margin-top: 60px;">
-                    <h2>FAQ for Relocating Employees</h2>
-                    <div class="underline"></div>
-                </div>
-                <div style="max-width: 700px; margin: 0 auto 40px auto; background: #f8f9fa; border-radius: 8px; padding: 24px; font-size: 1.08rem;">
-                    <ul style="margin-left: 20px;">
-                        <li><strong>How do I get started?</strong> Schedule a consultation and tell us your needs.</li>
-                        <li><strong>Can my family join virtual tours?</strong> Yes, we encourage family participation in all virtual and in-person tours.</li>
-                        <li><strong>What’s included in the relocation service?</strong> Custom area guides, property shortlist, virtual tours, closing coordination, and ongoing support.</li>
-                        <li><strong>Can recruiters request bulk guides?</strong> Absolutely—contact us for group resources or presentations.</li>
-                        <li><strong>Is there a cost?</strong> Most services are complimentary for corporate clients and new hires.</li>
-                    </ul>
-                </div>
+            <h2>Your Home Search Starts Before You Land</h2>
+            <p>Tell us where you're headed and when. We'll send your custom area guide and first shortlist within two business days.</p>
+            <a href="index.html#contact" class="btn">Start My Free Relocation Plan</a>
+            <div class="cta-contact">
+                Prefer to talk? Call or text <a href="tel:+12068800637">206-880-0637</a> · <a href="mailto:veng@vdirealty.com">veng@vdirealty.com</a>
+            </div>
         </div>
+
+        <p class="disclaimer">Neighborhood price ranges shown are rough market estimates for general orientation only and are not appraisals. Equal Housing Opportunity. VDI Realty does not discriminate on the basis of race, color, religion, sex, handicap, familial status, or national origin.</p>
     </section>
 
     <footer>
         <p>&copy; 2026 VDI Realty. All Rights Reserved.</p>
         <p style="margin-top: 8px; font-size: 0.85rem; color: #888;">Brokered by Realty Connect</p>
         <p style="margin-top: 10px;">
-            <a href="index.html" style="color: #666; text-decoration: none;">Home</a> | 
+            <a href="index.html" style="color: #666; text-decoration: none;">Home</a> |
+            <a href="tel:+12068800637" style="color: #666; text-decoration: none;">206-880-0637</a> |
             <a href="mailto:veng@vdirealty.com" style="color: #666; text-decoration: none;">veng@vdirealty.com</a>
         </p>
     </footer>
+
+    <script>
+        document.querySelectorAll('.metro-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.metro-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.metro-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('metro-' + tab.dataset.metro).classList.add('active');
+                window.scrollTo({ top: document.querySelector('.metro-tabs').offsetTop - 90, behavior: 'smooth' });
+            });
+        });
+    </script>
 
 </body>
 </html>
