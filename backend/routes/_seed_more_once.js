@@ -42,7 +42,7 @@ const MORE_DEMOS = [
         listingSource: 'fsbo', sellerType: 'owner',
         hideAddress: true, hideIdentity: true,
         address: '9753 Example Ridge Road', city: 'Spokane', state: 'WA', zip: '99217',
-        propertyType: 'Land', price: 185000, sqft: null,
+        propertyType: 'Land', price: 185000, sqft: 0,
         bedrooms: null, bathrooms: null, yearBuilt: null, lotSize: 1.25,
         features: 'Water/Septic Feasible, Mountain Views',
         description: 'Build-ready 1.25-acre lot with territorial views. Power at street; perc test on file. Buyer to verify all utilities and zoning.',
