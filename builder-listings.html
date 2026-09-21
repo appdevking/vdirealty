@@ -40,7 +40,7 @@
         .card-stats { display: flex; gap: 20px; padding: 15px 0; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; margin: 15px 0; }
         .stat { color: #666; font-size: 0.9rem; }
         .card-description { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; }
-        @media (max-width: 768px) { .listings-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } }
+        @media (max-width: 768px) { .listings-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.5rem; } .nav-container { flex-wrap: wrap; gap: 10px; } .nav-links { flex-wrap: wrap; gap: 10px 14px; font-size: 0.9rem; } .card-stats { flex-wrap: wrap; gap: 10px 16px; } }
     </style>
 </head>
 <body>
@@ -62,11 +62,15 @@
     </section>
     <div style="max-width: 1200px; margin: 30px auto 0; padding: 0 20px 30px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
         <a href="builder-listing.html" style="background: var(--accent); color: white; padding: 16px 32px; border-radius: 6px; font-weight: 700; text-decoration: none; font-size: 1.1rem;">+ Add Builder Listing</a>
-        <button onclick="window.location.href='index.html?interest=Builder%20Listing%20Request&message=I%20would%20like%20to%20list%20my%20pre-sale%20property%20with%20VDI%20Realty.%20Please%20see%20the%20link(s)%20below%20for%20property%20details.%20If%20you%20require%20additional%20information%2C%20please%20let%20me%20know.%0A%0AProperty%201%3A%20'#contact'" style="background: var(--primary); color: white; padding: 16px 32px; border-radius: 6px; font-weight: 700; font-size: 1.1rem; border: none; cursor: pointer;">Let us list for you</button>
+        <button onclick="window.location.href='index.html?interest=Builder%20%2F%20Development&message=I%20would%20like%20to%20list%20my%20pre-sale%20property%20with%20VDI%20Realty.%20Please%20see%20the%20link(s)%20below%20for%20property%20details.%20If%20you%20require%20additional%20information%2C%20please%20let%20me%20know.%0A%0AProperty%201%3A%20'#contact'" style="background: var(--primary); color: white; padding: 16px 32px; border-radius: 6px; font-weight: 700; font-size: 1.1rem; border: none; cursor: pointer;">Let us list for you</button>
     </div>
     <div class="listings-container">
         <div id="builderListings" class="listings-grid"></div>
     </div>
+    <footer style="background: var(--primary); color: rgba(255,255,255,0.75); text-align: center; padding: 28px 20px; font-size: 0.85rem;">
+        <div style="font-weight: 700; color: #fff; letter-spacing: 1px; margin-bottom: 6px;">VDI REALTY</div>
+        <div>Brokered by Realty Connect &nbsp;·&nbsp; Equal Housing Opportunity</div>
+    </footer>
     <script>
     // Load builder listings from the live VDI Realty API (sellerType = builder)
     function esc(s) {
