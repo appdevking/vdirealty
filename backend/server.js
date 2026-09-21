@@ -43,6 +43,25 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // --- Visit Logging Middleware ---
 const visitCountsPath = path.join(__dirname, 'visit-counts.json');
 const attribPath = path.join(__dirname, 'visit-attribution.json');
+function recordAttribution({ page, utm_source, utm_medium, utm_campaign, utm_content, referrer }) {
+    if (!utm_source && !utm_medium && !utm_campaign) return;
+    let log = [];
+    try {
+        log = JSON.parse(fs.readFileSync(attribPath, 'utf8'));
+        if (!Array.isArray(log)) log = [];
+    } catch (e) { log = []; }
+    log.push({
+        ts: new Date().toISOString(),
+        page: (page || '/').slice(0, 100),
+        utm_source: (utm_source || '').slice(0, 40),
+        utm_medium: (utm_medium || '').slice(0, 40),
+        utm_campaign: (utm_campaign || '').slice(0, 60),
+        utm_content: (utm_content || '').slice(0, 80),
+        referrer: (referrer || '').slice(0, 200)
+    });
+    if (log.length > 5000) log = log.slice(log.length - 5000);
+    try { fs.writeFileSync(attribPath, JSON.stringify(log)); } catch (e) {}
+}
 function logVisit(req, res, next) {
     // Only log GET requests to HTML pages (not API or static)
     if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
@@ -61,29 +80,27 @@ function logVisit(req, res, next) {
 
         // Attribution: log visits carrying UTM params (video description links)
         const q = req.query || {};
-        if (q.utm_source || q.utm_medium || q.utm_campaign) {
-            let log = [];
-            try {
-                log = JSON.parse(fs.readFileSync(attribPath, 'utf8'));
-                if (!Array.isArray(log)) log = [];
-            } catch (e) { log = []; }
-            log.push({
-                ts: new Date().toISOString(),
-                page,
-                utm_source: (q.utm_source || '').slice(0, 40),
-                utm_medium: (q.utm_medium || '').slice(0, 40),
-                utm_campaign: (q.utm_campaign || '').slice(0, 60),
-                utm_content: (q.utm_content || '').slice(0, 80),
-                referrer: (req.get('referer') || '').slice(0, 200)
-            });
-            // cap log size
-            if (log.length > 5000) log = log.slice(log.length - 5000);
-            try { fs.writeFileSync(attribPath, JSON.stringify(log)); } catch (e) {}
-        }
+        recordAttribution({
+            page,
+            utm_source: q.utm_source, utm_medium: q.utm_medium,
+            utm_campaign: q.utm_campaign, utm_content: q.utm_content,
+            referrer: req.get('referer')
+        });
     }
     next();
 }
 app.use(logVisit);
+
+// Attribution pixel: static pages beacon UTM visits here (CORS-open to the site).
+app.post('/api/stats/attribution/pixel', (req, res) => {
+    const b = req.body || {};
+    recordAttribution({
+        page: b.page, utm_source: b.utm_source, utm_medium: b.utm_medium,
+        utm_campaign: b.utm_campaign, utm_content: b.utm_content,
+        referrer: b.referrer
+    });
+    res.json({ ok: true });
+});
 
 // Public aggregate attribution stats (counts only, no personal data)
 app.get('/api/stats/attribution', (req, res) => {
