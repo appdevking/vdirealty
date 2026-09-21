@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concierge Listing Service | VDI Realty</title>
+    <meta name="description" content="Paste your listing link and we do the rest. VDI Realty's concierge listing service for builders, agents, and homeowners — free for 14 days.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="js/config.js"></script>
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        body { font-family: 'Lato', sans-serif; color: var(--text-main); background: var(--light-gray); margin: 0; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        header { background: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; padding: 1rem 0; }
+        .nav-container { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+        .nav-links { display: flex; gap: 16px; }
+        .nav-links a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .nav-links a:hover { color: var(--accent); }
+        .hero { background: linear-gradient(135deg, #2C5364, #203A43); color: white; padding: 60px 20px 48px; text-align: center; }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 12px; }
+        .hero p { font-size: 1.1rem; max-width: 700px; margin: 0 auto; opacity: 0.95; line-height: 1.6; }
+        .steps { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; max-width: 1000px; margin: 36px auto 0; padding: 0 20px; }
+        .step { background: #fff; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); padding: 24px; flex: 1 1 240px; max-width: 300px; text-align: center; }
+        .step .num { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; font-size: 1.2rem; margin-bottom: 12px; }
+        .step h3 { color: var(--primary); font-size: 1.05rem; margin: 0 0 8px; }
+        .step p { color: #666; font-size: 0.95rem; line-height: 1.55; margin: 0; }
+        .form-wrap { max-width: 720px; margin: 36px auto 60px; padding: 0 20px; }
+        .form-card { background: #fff; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); padding: 36px; }
+        .form-card h2 { color: var(--primary); margin-top: 0; }
+        .field { margin-bottom: 18px; }
+        .field label { display: block; font-weight: 700; margin-bottom: 6px; color: var(--primary); font-size: 0.95rem; }
+        .field input[type="text"], .field input[type="email"], .field input[type="url"], .field input[type="tel"], .field select, .field textarea {
+            width: 100%; padding: 12px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; font-family: 'Lato', sans-serif; box-sizing: border-box;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(197,160,89,0.25); }
+        .field .hint { font-size: 0.85rem; color: #888; margin-top: 4px; }
+        .checkbox-row { display: flex; gap: 10px; align-items: flex-start; margin: 22px 0; font-size: 0.95rem; line-height: 1.5; }
+        .checkbox-row input { margin-top: 4px; }
+        .submit-btn { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 16px 32px; font-size: 1.1rem; font-weight: 700; cursor: pointer; width: 100%; font-family: 'Montserrat', sans-serif; }
+        .submit-btn:hover { background: #b08d4a; }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .form-msg { margin-top: 18px; padding: 14px 16px; border-radius: 6px; display: none; font-size: 0.98rem; line-height: 1.5; }
+        .form-msg.success { display: block; background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+        .form-msg.error { display: block; background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb; }
+        .hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        footer { background: var(--primary); color: rgba(255,255,255,0.75); text-align: center; padding: 28px 20px; font-size: 0.85rem; }
+        footer .brand { font-weight: 700; color: #fff; letter-spacing: 1px; margin-bottom: 6px; }
+        @media (max-width: 768px) {
+            .nav-container { flex-wrap: wrap; gap: 10px; }
+            .nav-links { flex-wrap: wrap; gap: 10px 14px; font-size: 0.9rem; }
+            .hero h1 { font-size: 1.6rem; }
+            .form-card { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <nav class="nav-links">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="index.html#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Paste a link. We do the rest.</h1>
+        <p>Our free concierge listing service for builders, agents, and homeowners. Drop in a link to your listing — Zillow, Redfin, MLS, your own website, anything — and our team builds your VDI Realty listing for you. Free for 14 days.</p>
+    </section>
+
+    <div class="steps">
+        <div class="step">
+            <div class="num">1</div>
+            <h3>You paste the link</h3>
+            <p>One link to your listing or property page, plus your contact info. Takes about a minute.</p>
+        </div>
+        <div class="step">
+            <div class="num">2</div>
+            <h3>We build the listing</h3>
+            <p>Our team pulls the details and photos from your link and creates the listing for you.</p>
+        </div>
+        <div class="step">
+            <div class="num">3</div>
+            <h3>You review, then it's live</h3>
+            <p>We send it to you for a quick review. Once approved, it's live on VDI Realty for 14 days, free.</p>
+        </div>
+    </div>
+
+    <div class="form-wrap">
+        <div class="form-card">
+            <h2>Request your concierge listing</h2>
+            <form id="conciergeForm" novalidate>
+                <div class="field">
+                    <label for="name">Full name *</label>
+                    <input type="text" id="name" name="name" required maxlength="120" autocomplete="name">
+                </div>
+                <div class="field">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required maxlength="160" autocomplete="email">
+                    <div class="hint">We'll send your listing here for review before it goes live.</div>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone (optional)</label>
+                    <input type="tel" id="phone" name="phone" maxlength="30" autocomplete="tel">
+                </div>
+                <div class="field">
+                    <label for="posterType">I am a *</label>
+                    <select id="posterType" name="posterType" required>
+                        <option value="owner">Homeowner selling my own home</option>
+                        <option value="builder">Builder / Developer</option>
+                        <option value="broker">Real estate agent</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="company">Company / Brokerage (if applicable)</label>
+                    <input type="text" id="company" name="company" maxlength="160" placeholder="e.g. Cedarline Homes or Realty Connect">
+                </div>
+                <div class="field">
+                    <label for="listingUrl">Listing link *</label>
+                    <input type="url" id="listingUrl" name="listingUrl" required maxlength="2000" placeholder="https://www.zillow.com/homedetails/..." inputmode="url">
+                    <div class="hint">Any public link with the property details — Zillow, Redfin, MLS, or your own site. Note: some sites block automated access; if we can't open your link, we'll ask you for the details directly.</div>
+                </div>
+                <div class="field">
+                    <label for="notes">Anything we should know? (optional)</label>
+                    <textarea id="notes" name="notes" rows="4" maxlength="3000" placeholder="e.g. pre-sale community, 12 homes available, price range, contact preference..."></textarea>
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="consent" name="consent" required>
+                    <label for="consent" style="font-weight:400; color: var(--text-main);">I confirm I have the authority to share this listing's details and photos with VDI Realty, and I understand the listing will be reviewed before it is published. *</label>
+                </div>
+                <div class="hp" aria-hidden="true">
+                    <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">Send my link — we'll do the rest</button>
+                <div class="form-msg" id="formMsg" role="status"></div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="brand">VDI REALTY</div>
+        <div>Brokered by Realty Connect &nbsp;·&nbsp; Equal Housing Opportunity</div>
+    </footer>
+
+    <script>
+    (function () {
+        // Pre-select poster type from ?type=builder|broker|owner
+        var params = new URLSearchParams(window.location.search);
+        var t = (params.get('type') || '').toLowerCase();
+        if (t === 'builder' || t === 'broker' || t === 'owner') {
+            document.getElementById('posterType').value = t;
+        }
+
+        var form = document.getElementById('conciergeForm');
+        var msg = document.getElementById('formMsg');
+        var btn = document.getElementById('submitBtn');
+
+        function showMsg(text, kind) {
+            msg.textContent = text;
+            msg.className = 'form-msg ' + kind;
+            msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            msg.className = 'form-msg';
+
+            var name = document.getElementById('name').value.trim();
+            var email = document.getElementById('email').value.trim();
+            var listingUrl = document.getElementById('listingUrl').value.trim();
+            var consent = document.getElementById('consent').checked;
+
+            if (!name) return showMsg('Please enter your name.', 'error');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showMsg('Please enter a valid email address.', 'error');
+            if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(listingUrl)) return showMsg('Please paste a valid listing link starting with http:// or https://.', 'error');
+            if (!consent) return showMsg('Please confirm you have the authority to share this listing\u2019s details and photos.', 'error');
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            var base = (typeof API_BASE_URL !== 'undefined' && API_BASE_URL) ? API_BASE_URL : 'https://api.vdirealty.com';
+            fetch(base + '/api/fsbo/concierge', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    phone: document.getElementById('phone').value.trim(),
+                    posterType: document.getElementById('posterType').value,
+                    company: document.getElementById('company').value.trim(),
+                    listingUrl: listingUrl,
+                    notes: document.getElementById('notes').value.trim(),
+                    consent: consent,
+                    website: form.website.value // honeypot
+                })
+            })
+            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+            .then(function (res) {
+                if (res.ok && res.d && res.d.success) {
+                    form.reset();
+                    showMsg('Thanks! We got your link. Our team will build your listing and send it to you for review — usually within 1 business day.', 'success');
+                } else {
+                    showMsg((res.d && res.d.error) || 'Something went wrong. Please try again.', 'error');
+                }
+            })
+            .catch(function () {
+                showMsg('Something went wrong. Please check your connection and try again.', 'error');
+            })
+            .finally(function () {
+                btn.disabled = false;
+                btn.textContent = "Send my link \u2014 we'll do the rest";
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

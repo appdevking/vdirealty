@@ -146,6 +146,25 @@ const initDatabase = () => {
         )
     `);
 
+    // Concierge listing requests — "paste a link, we do the rest" intake for
+    // builders/developers/agents/homeowners. Jae (or the team) creates the
+    // actual listing from the link; nothing here auto-publishes.
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS fsbo_concierge_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            posterType TEXT NOT NULL DEFAULT 'owner',
+            company TEXT,
+            listingUrl TEXT NOT NULL,
+            notes TEXT,
+            consent INTEGER DEFAULT 0,
+            status TEXT DEFAULT 'open',
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
     // SMS subscribers for the text-a-ZIP lead flow.
     // status: 'inquiry' (texted a ZIP, no marketing consent), 'alerts' (opted in
     // via YES), 'unsubscribed' (STOP).
@@ -398,6 +417,23 @@ const statements = {
     // Technical help request: mark resolved
     markHelpRequestResolved: db.prepare(`
         UPDATE fsbo_help_requests SET status = 'resolved' WHERE id = ?
+    `),
+
+    // Concierge request: insert
+    insertConciergeRequest: db.prepare(`
+        INSERT INTO fsbo_concierge_requests (
+            name, email, phone, posterType, company, listingUrl, notes, consent, status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'open')
+    `),
+
+    // Concierge request: all, newest first (admin)
+    getAllConciergeRequests: db.prepare(`
+        SELECT * FROM fsbo_concierge_requests ORDER BY createdAt DESC
+    `),
+
+    // Concierge request: mark done
+    markConciergeRequestDone: db.prepare(`
+        UPDATE fsbo_concierge_requests SET status = 'done' WHERE id = ?
     `),
 
     // SMS subscriber: upsert by phone (E.164 from Twilio).

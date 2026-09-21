@@ -25,7 +25,9 @@ const {
     sendSellerLeadNotification,
     sendSellerLeadConfirmation,
     sendHelpRequestNotification,
-    sendHelpRequestConfirmation
+    sendHelpRequestConfirmation,
+    sendConciergeRequestNotification,
+    sendConciergeRequestConfirmation
 } = require('../email-service');
 const config = require('../config');
 // Extraction is optional: puppeteer isn't a declared dependency, so don't
@@ -817,6 +819,73 @@ router.post(
 );
 
 /* ------------------------------------------------------------------ */
+/* Concierge listing requests — "paste a link, we do the rest."      */
+/* Builders, agents, and homeowners submit a listing link; Jae (or    */
+/* the team) builds the actual listing from it. Nothing auto-publishes*/
+/* — created listings go through the normal moderation review.       */
+/* ------------------------------------------------------------------ */
+
+const POSTER_TYPES = ['owner', 'builder', 'broker'];
+const URL_RE = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+
+router.post(
+    '/concierge',
+    rateLimit('fsbo-concierge', 5, 60 * 60 * 1000), // 5 requests / hour / IP
+    async (req, res) => {
+        try {
+            const body = req.body || {};
+            if (isBot(body)) {
+                console.log('[API] Honeypot tripped on /concierge from', req.ip);
+                return res.json({ success: true, message: 'Thanks! We received your request.' });
+            }
+
+            const captcha = await verifyTurnstile(body['cf-turnstile-response'], req.ip);
+            if (!captcha.ok) return res.status(400).json({ error: captcha.error });
+
+            const name = str(body.name, 120);
+            const email = str(body.email, 160);
+            const listingUrl = str(body.listingUrl, 2000);
+            const posterType = POSTER_TYPES.includes(body.posterType) ? body.posterType : 'owner';
+            const company = str(body.company, 160);
+            const notes = str(body.notes, 3000);
+            const consent = boolish(body.consent);
+
+            if (!name) return res.status(400).json({ error: 'Your name is required.' });
+            if (!EMAIL_RE.test(email)) return res.status(400).json({ error: 'A valid email address is required.' });
+            if (!URL_RE.test(listingUrl)) return res.status(400).json({ error: 'Please paste a valid listing link (starting with http:// or https://).' });
+            if (!consent) return res.status(400).json({ error: 'Please confirm you have the authority to share this listing\'s details and photos.' });
+
+            const conciergeReq = {
+                name,
+                email,
+                phone: normalizePhone(body.phone) || null,
+                posterType,
+                company: company || null,
+                listingUrl,
+                notes: notes || null,
+                consent: consent ? 1 : 0
+            };
+
+            const result = statements.insertConciergeRequest.run(
+                conciergeReq.name, conciergeReq.email, conciergeReq.phone,
+                conciergeReq.posterType, conciergeReq.company, conciergeReq.listingUrl,
+                conciergeReq.notes, conciergeReq.consent
+            );
+            conciergeReq.id = Number(result.lastInsertRowid);
+            conciergeReq.createdAt = new Date().toISOString();
+
+            sendConciergeRequestNotification(conciergeReq).catch((err) => console.error('[API] Concierge notification error:', err.message));
+            sendConciergeRequestConfirmation(conciergeReq).catch((err) => console.error('[API] Concierge confirmation error:', err.message));
+
+            res.json({ success: true, message: 'Thanks! We got your listing link and will build your listing for you.' });
+        } catch (error) {
+            console.error('[API] Error capturing concierge request:', error);
+            res.status(500).json({ error: 'Failed to submit your request.' });
+        }
+    }
+);
+
+/* ------------------------------------------------------------------ */
 /* Admin                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -830,9 +899,31 @@ const adminAuth = (req, res, next) => {
     }
 };
 
-// Admin: all listings (including pending / rejected / removed)
-router.get('/admin/listings', adminAuth, (req, res) => {
+// Admin: all concierge requests, newest first
+router.get('/admin/concierge', adminAuth, (req, res) => {
     try {
+        const requests = statements.getAllConciergeRequests.all();
+        res.json({ success: true, count: requests.length, requests });
+    } catch (error) {
+        console.error('[API] Error fetching concierge requests:', error);
+        res.status(500).json({ error: 'Failed to fetch concierge requests' });
+    }
+});
+
+// Admin: mark a concierge request done
+router.post('/admin/concierge/:id/done', adminAuth, (req, res) => {
+    try {
+        const id = toInt(req.params.id) || 0;
+        statements.markConciergeRequestDone.run(id);
+        res.json({ success: true, message: 'Concierge request marked done.' });
+    } catch (error) {
+        console.error('[API] Error updating concierge request:', error);
+        res.status(500).json({ error: 'Failed to update concierge request' });
+    }
+});
+
+// Admin: all listings (including pending / rejected / removed)
+router.get('/admin/listings', adminAuth, (req, res) => {    try {
         const listings = statements.getAllListings.all().map(serializeAdminListing);
         res.json({ success: true, listings });
     } catch (error) {

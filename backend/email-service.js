@@ -651,6 +651,81 @@ const sendHelpRequestConfirmation = async (req_) => {
     }
 };
 
+// Notify the admin inbox about a new concierge listing request.
+// Jae (or the team) opens the link, builds the listing, and publishes it
+// after the normal moderation review.
+const sendConciergeRequestNotification = async (req_) => {
+    const typeLabels = { owner: 'Homeowner', builder: 'Builder / Developer', broker: 'Real estate agent' };
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: config.adminEmail,
+        subject: `🏡 CONCIERGE LISTING: ${req_.name} (${typeLabels[req_.posterType] || req_.posterType})`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">🏡 New Concierge Listing Request</h2>
+                    <p><strong>Someone pasted a listing link and wants us to do the rest.</strong> Open the link, build the listing from it, and run it through the normal moderation review before publishing.</p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.name)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.email)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.phone || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">They are a</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(typeLabels[req_.posterType] || req_.posterType)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Company / Brokerage</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.company || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Listing link</td><td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="${escapeHtml(req_.listingUrl)}">${escapeHtml(req_.listingUrl)}</a></td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Authority confirmed</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${req_.consent ? 'Yes' : 'No'}</td></tr>
+                    </table>
+                    ${req_.notes ? `<p><strong>Their notes:</strong><br>${escapeHtml(req_.notes).replace(/\n/g, '<br>')}</p>` : ''}
+                    <p style="color: #666; font-size: 0.9em;">Submitted ${new Date(req_.createdAt || Date.now()).toLocaleString()}. Note: Zillow/Redfin links usually block automated access — you may need to ask the requester for details or photos.</p>
+                </div>
+            </body>
+            </html>
+        `,
+        replyTo: req_.email
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Concierge request notification sent to ${config.adminEmail}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending concierge request notification:', error);
+        return false;
+    }
+};
+
+// Confirm to the requester that their concierge request was received
+const sendConciergeRequestConfirmation = async (req_) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: req_.email,
+        subject: 'We got your listing link - VDI Realty',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">Thanks, ${escapeHtml(req_.name)}!</h2>
+                    <p>We've received your listing link. Our team will review it and build your listing for you — <strong>you don't need to do anything else</strong>.</p>
+                    <p>We'll reach out at <strong>${escapeHtml(req_.email)}</strong> once your listing is ready for review, usually within 1 business day.</p>
+                    <p>Best regards,<br><strong>VDI Realty Team</strong><br><span style="color:#666; font-size: 0.9em;">Brokered by Realty Connect</span></p>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Concierge request confirmation sent to ${req_.email}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending concierge request confirmation:', error);
+        return false;
+    }
+};
+
 module.exports = {
     initializeTransporter,
     sendConfirmationEmail,
@@ -663,5 +738,7 @@ module.exports = {
     sendSellerLeadNotification,
     sendSellerLeadConfirmation,
     sendHelpRequestNotification,
-    sendHelpRequestConfirmation
+    sendHelpRequestConfirmation,
+    sendConciergeRequestNotification,
+    sendConciergeRequestConfirmation
 };
