@@ -100,6 +100,19 @@
             margin: 0 auto 30px;
             opacity: 0.95;
         }
+
+        .launch-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 8px 22px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+        }
         
         .hero-stats {
             display: flex;
@@ -232,119 +245,6 @@
             flex-shrink: 0;
         }
         
-        /* Pricing Table */
-        .pricing-section {
-            background: var(--light-gray);
-            padding: 80px 20px;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        
-        .pricing-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        .pricing-card.featured {
-            border: 3px solid var(--accent);
-            transform: scale(1.05);
-        }
-        
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
-        }
-        
-        .pricing-card h3 {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .price {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 20px 0;
-        }
-        
-        .price span {
-            font-size: 1rem;
-            color: #666;
-            font-weight: normal;
-        }
-        
-        .pricing-features {
-            list-style: none;
-            padding: 0;
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .pricing-features li {
-            padding: 10px 0;
-            color: #666;
-            display: flex;
-            align-items: start;
-            gap: 10px;
-        }
-        
-        .pricing-features i {
-            color: var(--accent);
-            margin-top: 3px;
-        }
-        
-        /* Process Timeline */
-        .timeline {
-            position: relative;
-            padding: 40px 0;
-        }
-        
-        .timeline-item {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 40px;
-            position: relative;
-        }
-        
-        .timeline-number {
-            width: 60px;
-            height: 60px;
-            background: var(--accent);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            flex-shrink: 0;
-        }
-        
-        .timeline-content {
-            flex: 1;
-        }
-        
-        .timeline-content h4 {
-            color: var(--primary);
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
-        
-        .timeline-content p {
-            color: #666;
-        }
-        
         /* CTA Section */
         .cta-section {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -427,7 +327,6 @@
             .two-column { grid-template-columns: 1fr; gap: 40px; }
             .features-grid { grid-template-columns: 1fr; }
             .hero-stats { gap: 30px; }
-            .pricing-card.featured { transform: scale(1); }
         }
     </style>
 </head>
@@ -443,20 +342,21 @@
     </header>
 
     <section class="hero">
+        <span class="launch-badge">Now Launching</span>
         <h1><i class="fas fa-building"></i> Multi-Family Property Management</h1>
-        <p>Specialized management services for apartment complexes, new-build multi-family developments, and property investors seeking to maximize returns and minimize hassles.</p>
+        <p>We're opening our property management division and looking for a small number of founding partners — apartment owners and developers who want hands-on, founder-led management from day one.</p>
         <div class="hero-stats">
             <div class="stat-item">
-                <span class="stat-number">10+</span>
-                <span class="stat-label">Years Real Estate Experience</span>
+                <span class="stat-number">1</span>
+                <span class="stat-label">Point of Contact</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">24/7</span>
-                <span class="stat-label">Property Support</span>
+                <span class="stat-number">3</span>
+                <span class="stat-label">Launch Markets</span>
             </div>
             <div class="stat-item">
-                <span class="stat-number">100%</span>
-                <span class="stat-label">Dedicated Service</span>
+                <span class="stat-number">Multi</span>
+                <span class="stat-label">Family Focus Only</span>
             </div>
             <div class="stat-item">
                 <span class="stat-number">Free</span>
@@ -508,9 +408,9 @@
 
     <section class="content-section">
         <div class="section-title">
-            <h2>Specialized Multi-Family Property Management</h2>
+            <h2>What We'll Handle For You</h2>
             <div class="underline"></div>
-            <p style="color: #666; max-width: 800px; margin: auto;">VDI Realty is launching comprehensive property management services specifically designed for apartment complexes, new-build multi-family developments, and investment portfolios. Partner with us from day one.</p>
+            <p style="color: #666; max-width: 800px; margin: auto;">As a founding partner, these are the services we're offering from day one — delivered directly by our founding team, not handed off to a call center.</p>
         </div>
 
         <div class="features-grid">
@@ -519,12 +419,11 @@
                 <h3>Apartment Complex Management</h3>
                 <p>Full-service management for your multi-unit properties:</p>
                 <ul>
-                    <li>Tenant screening & placement</li>
+                    <li>Tenant screening &amp; placement</li>
                     <li>Lease administration</li>
-                    <li>Rent collection & accounting</li>
-                    <li>Property maintenance coordination</li>
-                    <li>Vendor & contractor management</li>
-                    <li>Compliance & risk management</li>
+                    <li>Rent collection &amp; accounting</li>
+                    <li>Maintenance coordination</li>
+                    <li>Compliance &amp; risk management</li>
                 </ul>
             </div>
 
@@ -534,67 +433,59 @@
                 <p>Specialized support for new developments:</p>
                 <ul>
                     <li>Pre-construction planning</li>
-                    <li>Market analysis & rental pricing</li>
-                    <li>Marketing & advertising strategy</li>
-                    <li>Rapid tenant placement</li>
-                    <li>Bulk move-in coordination</li>
-                    <li>Stabilization to full occupancy</li>
+                    <li>Market analysis &amp; rental pricing (estimates)</li>
+                    <li>Marketing &amp; advertising strategy</li>
+                    <li>Tenant placement</li>
+                    <li>Move-in coordination</li>
+                    <li>Stabilization support</li>
                 </ul>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-chart-line"></i>
-                <h3>Investment Portfolio Optimization</h3>
-                <p>Maximize returns across your properties:</p>
+                <h3>Portfolio Support</h3>
+                <p>Straightforward oversight across your properties:</p>
                 <ul>
-                    <li>Portfolio-wide analytics</li>
-                    <li>Revenue optimization strategies</li>
-                    <li>Expense reduction programs</li>
+                    <li>Regular performance reviews</li>
+                    <li>Expense tracking &amp; budgeting</li>
                     <li>Capital improvement planning</li>
-                    <li>Quarterly performance reviews</li>
-                    <li>Long-term value enhancement</li>
+                    <li>Long-term value focus</li>
                 </ul>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-tools"></i>
-                <h3>Maintenance & Operations</h3>
-                <p>24/7 maintenance and facility management:</p>
+                <h3>Maintenance Coordination</h3>
+                <p>One point of contact for everything that breaks:</p>
                 <ul>
-                    <li>Emergency maintenance response</li>
-                    <li>Preventive maintenance programs</li>
-                    <li>Vetted contractor network</li>
+                    <li>Maintenance request handling</li>
+                    <li>Preventive maintenance planning</li>
+                    <li>Contractor scheduling &amp; follow-up</li>
                     <li>Quality control inspections</li>
-                    <li>Common area management</li>
-                    <li>Energy efficiency initiatives</li>
+                    <li>Common area oversight</li>
                 </ul>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-users"></i>
                 <h3>Resident Relations</h3>
-                <p>Professional tenant services and retention:</p>
+                <p>Professional, human tenant communication:</p>
                 <ul>
-                    <li>24/7 resident support line</li>
-                    <li>Online resident portal</li>
-                    <li>Community building programs</li>
-                    <li>Lease renewal campaigns</li>
+                    <li>Clear, responsive communication</li>
+                    <li>Lease renewal management</li>
                     <li>Conflict resolution</li>
-                    <li>Tenant satisfaction surveys</li>
                 </ul>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-file-invoice-dollar"></i>
                 <h3>Financial Management</h3>
-                <p>Transparent accounting and reporting:</p>
+                <p>Numbers you can actually read:</p>
                 <ul>
                     <li>Monthly owner statements</li>
                     <li>Detailed expense tracking</li>
-                    <li>Budget preparation & analysis</li>
+                    <li>Budget preparation &amp; analysis</li>
                     <li>Year-end tax documentation</li>
-                    <li>Online owner portal access</li>
-                    <li>Custom reporting capabilities</li>
                 </ul>
             </div>
         </div>
@@ -602,9 +493,9 @@
 
     <section class="content-section" style="background: var(--light-gray); padding: 80px 20px;">
         <div class="section-title">
-            <h2>Where We Manage</h2>
+            <h2>Where We're Launching</h2>
             <div class="underline"></div>
-            <p style="color: #666; max-width: 800px; margin: auto;">Focused coverage in three major rental regions — deep local knowledge instead of thin national spread.</p>
+            <p style="color: #666; max-width: 800px; margin: auto;">We're accepting founding partners in three rental regions — deep local focus instead of thin national spread.</p>
         </div>
 
         <div class="features-grid">
@@ -621,87 +512,37 @@
             <div class="feature-card">
                 <i class="fas fa-building"></i>
                 <h3>NYC Metro</h3>
-                <p>New York City's boroughs and nearby New Jersey communities. Layered local regulations reward experienced hands — we navigate the rules, compliance, and dense-market operations for you.</p>
+                <p>New York City's boroughs and nearby New Jersey communities. Layered local regulations reward careful operators — we navigate the rules and compliance requirements for you.</p>
             </div>
-        </div>
-    </section>
-
-    <section class="pricing-section">
-        <div class="section-title">
-            <h2>Competitive Management Fees</h2>
-            <div class="underline"></div>
-            <p style="color: #666; max-width: 700px; margin: auto;">Flexible pricing structures designed for multi-family and portfolio owners. Custom quotes based on property size and scope.</p>
-        </div>
-
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>Small Multi-Family</h3>
-                <p style="color: #666; margin-bottom: 20px; font-size: 0.9rem;">2-10 units</p>
-                <div class="price">7-9%<span> of monthly rent</span></div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> Full-service management</li>
-                    <li><i class="fas fa-check"></i> Tenant screening & placement</li>
-                    <li><i class="fas fa-check"></i> Rent collection</li>
-                    <li><i class="fas fa-check"></i> Maintenance coordination</li>
-                    <li><i class="fas fa-check"></i> Monthly financial reporting</li>
-                    <li><i class="fas fa-check"></i> Online owner portal</li>
-                </ul>
-            </div>
-
-            <div class="pricing-card featured">
-                <h3>Apartment Complex</h3>
-                <p style="color: #666; margin-bottom: 20px; font-size: 0.9rem;">11-50+ units</p>
-                <div class="price">5-7%<span> of monthly rent</span></div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> Everything in Small Multi-Family</li>
-                    <li><i class="fas fa-check"></i> Volume discount pricing</li>
-                    <li><i class="fas fa-check"></i> Dedicated property manager</li>
-                    <li><i class="fas fa-check"></i> On-site presence options</li>
-                    <li><i class="fas fa-check"></i> Quarterly property inspections</li>
-                    <li><i class="fas fa-check"></i> Priority maintenance response</li>
-                    <li><i class="fas fa-check"></i> Portfolio-wide analytics</li>
-                </ul>
-            </div>
-
-            <div class="pricing-card">
-                <h3>New-Build Lease-Up</h3>
-                <p style="color: #666; margin-bottom: 20px; font-size: 0.9rem;">Pre-leasing support</p>
-                <div class="price">Custom<span> pricing per project</span></div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> Pre-construction consultation</li>
-                    <li><i class="fas fa-check"></i> Market analysis & pricing</li>
-                    <li><i class="fas fa-check"></i> Marketing campaign design</li>
-                    <li><i class="fas fa-check"></i> Rapid tenant placement</li>
-                    <li><i class="fas fa-check"></i> Bulk move-in coordination</li>
-                    <li><i class="fas fa-check"></i> Transition to ongoing management</li>
-                    <li><i class="fas fa-check"></i> Custom lease-up benchmarks in every proposal</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="info-box" style="max-width: 1200px; margin: 60px auto 0;">
-            <h3>What's Included</h3>
-            <p style="color: #666; line-height: 1.8;">
-                <strong>No Hidden Fees:</strong> Management fee includes tenant screening, lease preparation, monthly accounting, and routine inspections<br>
-                <strong>Transparent Pricing:</strong> No markups on maintenance or repairs - you pay actual contractor costs<br>
-                <strong>No Vacancy Fees:</strong> We only earn when your property generates income<br>
-                <strong>Flexible Contracts:</strong> 12-month agreements with 60-day cancellation notice - no long-term lock-in<br>
-                <strong>Volume Discounts:</strong> Significant savings for properties with 20+ units or multiple buildings
-            </p>
-        </div>
-
-        <div class="info-box" style="max-width: 1200px; margin: 40px auto 0;">
-            <h3><i class="fas fa-calculator" style="color: var(--accent); margin-right: 10px;"></i>The Cost of an Empty Unit</h3>
-            <p style="color: #666; line-height: 1.8;">
-                Consider a unit renting for $2,000/month. A single vacant month costs <strong>$2,000 in rent you'll never recover</strong> — before turnover costs. A full year of professional management at 8% runs about <strong>$1,920</strong>. If better marketing and faster placement save you even one vacancy, management has more than paid for itself.
-            </p>
-            <p style="color: #999; font-size: 0.85rem; margin-top: 10px;">Illustrative example only — actual rents, fees, and results vary by property and market. Not a guarantee of performance.</p>
         </div>
     </section>
 
     <section class="content-section">
         <div class="section-title">
-            <h2>Our Partnership Process</h2>
+            <h2>Founding Partner Pricing</h2>
+            <div class="underline"></div>
+            <p style="color: #666; max-width: 800px; margin: auto;">We're not publishing a rate card yet. Founding partners get a custom written proposal with real numbers for their property — and preferential pricing locked in from the start.</p>
+        </div>
+
+        <div class="info-box" style="max-width: 900px; margin: 0 auto;">
+            <h3>How pricing works at launch</h3>
+            <p style="color: #666; line-height: 1.8;">
+                Tell us about your property and we'll put together a written proposal: what's included, what it costs, and how either side can end the agreement. No fine print, no surprises — you'll see everything before you commit.
+            </p>
+        </div>
+
+        <div class="info-box" style="max-width: 900px; margin: 40px auto 0;">
+            <h3><i class="fas fa-calculator" style="color: var(--accent); margin-right: 10px;"></i>The Cost of an Empty Unit</h3>
+            <p style="color: #666; line-height: 1.8;">
+                Consider a unit renting for $2,000/month. A single vacant month costs <strong>$2,000 in rent you'll never recover</strong> — before turnover costs. Say a full year of professional management ran about <strong>$1,920</strong>. If better marketing and faster placement save you even one vacancy, management has more than paid for itself.
+            </p>
+            <p style="color: #999; font-size: 0.85rem; margin-top: 10px;">Illustrative example only — actual rents, fees, and results vary by property and market. Not a guarantee of performance.</p>
+        </div>
+    </section>
+
+    <section class="content-section" style="padding-top: 40px;">
+        <div class="section-title">
+            <h2>How We'll Get Started</h2>
             <div class="underline"></div>
         </div>
 
@@ -710,7 +551,7 @@
                 <div class="timeline-number">1</div>
                 <div class="timeline-content">
                     <h4>Initial Consultation</h4>
-                    <p>Schedule a free consultation to discuss your property, investment goals, current challenges, and expectations. We'll provide an honest assessment of whether we're a good fit and answer all your questions about our services.</p>
+                    <p>A free, honest conversation about your property, your goals, and whether we're a good fit. No pitch decks, no pressure.</p>
                 </div>
             </div>
 
@@ -718,31 +559,31 @@
                 <div class="timeline-number">2</div>
                 <div class="timeline-content">
                     <h4>Property Assessment</h4>
-                    <p>We'll tour your property (or review plans for new construction), evaluate current operations if applicable, assess maintenance needs, and conduct a comprehensive market analysis to benchmark performance.</p>
+                    <p>We'll tour your property (or review plans for new construction), look at current operations if applicable, and benchmark it against the local market.</p>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="timeline-number">3</div>
                 <div class="timeline-content">
-                    <h4>Custom Proposal</h4>
-                    <p>Receive a detailed management proposal including pricing specific to your property type, recommended services, marketing strategy, improvement recommendations, and projected financial performance. Delivered within 48 hours.</p>
+                    <h4>Written Proposal</h4>
+                    <p>You'll receive a written proposal with clear pricing, the services included, and straightforward agreement terms — everything in plain language before you decide.</p>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="timeline-number">4</div>
                 <div class="timeline-content">
-                    <h4>Agreement & Transition</h4>
-                    <p>Sign the management agreement and we begin the transition process: tenant file review, vendor coordination, bank account setup, system implementation, and communication with existing tenants (if applicable).</p>
+                    <h4>Agreement &amp; Transition</h4>
+                    <p>Once you sign, we map out the transition together: tenant files, vendor coordination, financial setup, and communication with existing tenants. We'll put the timeline in writing before anything moves.</p>
                 </div>
             </div>
 
             <div class="timeline-item">
                 <div class="timeline-number">5</div>
                 <div class="timeline-content">
-                    <h4>Launch & Operations</h4>
-                    <p>Full management begins with your dedicated account manager. For occupied properties, we take over rent collection, maintenance, and tenant relations. For new builds, we execute the lease-up marketing campaign.</p>
+                    <h4>Launch &amp; Operations</h4>
+                    <p>Full management begins with you working directly with our founding team — rent collection, maintenance coordination, and tenant relations, all through one point of contact.</p>
                 </div>
             </div>
 
@@ -750,7 +591,7 @@
                 <div class="timeline-number">6</div>
                 <div class="timeline-content">
                     <h4>Ongoing Partnership</h4>
-                    <p>Regular performance reports, proactive property maintenance, continuous optimization, and direct access to decision-makers. We grow your investment value through strategic management.</p>
+                    <p>Regular statements, proactive maintenance, and direct access to the people making decisions. As a founding partner, your feedback shapes how we grow.</p>
                 </div>
             </div>
         </div>
@@ -764,53 +605,53 @@
 
         <div class="two-column">
             <div class="column">
-                <h3>Our Expertise</h3>
+                <h3>What You Get</h3>
                 <ul class="checklist">
                     <li>
                         <i class="fas fa-city"></i>
-                        <span><strong>Multi-Family Specialists:</strong> Focused exclusively on apartment complexes and multi-unit properties - not distracted by single-family homes</span>
+                        <span><strong>Multi-family focus:</strong> Apartments and multi-unit properties are all we do — not a side line next to single-family sales.</span>
                     </li>
                     <li>
                         <i class="fas fa-map-marker-alt"></i>
-                        <span><strong>Local Market Knowledge:</strong> On-the-ground rental expertise across our three core regions — Seattle–Eastside, Phoenix Metro, and NYC Metro — covering demographics, rent trends, and investment opportunities</span>
+                        <span><strong>Three launch markets:</strong> Seattle–Eastside, Phoenix Metro, and NYC Metro — places we know, not places we're guessing about.</span>
                     </li>
                     <li>
                         <i class="fas fa-handshake"></i>
-                        <span><strong>Builder & Developer Focus:</strong> Dedicated outreach and lease-up programs built for developers and contractors bringing new multi-family projects to market</span>
+                        <span><strong>Builder &amp; developer friendly:</strong> Lease-up support for new multi-family projects, starting before construction wraps.</span>
                     </li>
                     <li>
-                        <i class="fas fa-laptop"></i>
-                        <span><strong>Technology-Driven:</strong> Modern property management software, online portals, and digital payment systems</span>
+                        <i class="fas fa-file-alt"></i>
+                        <span><strong>Straightforward systems:</strong> Clear monthly statements and direct communication. We'll walk you through exactly how reporting and rent collection work — no black boxes.</span>
                     </li>
                     <li>
                         <i class="fas fa-shield-alt"></i>
-                        <span><strong>Risk Management:</strong> Comprehensive insurance requirements, legal compliance, and tenant screening protocols</span>
+                        <span><strong>Careful screening &amp; compliance:</strong> Thorough tenant screening and lease processes handled per fair-housing rules.</span>
                     </li>
                 </ul>
             </div>
 
             <div class="column">
-                <h3>Your Benefits</h3>
+                <h3>Why It Matters</h3>
                 <ul class="checklist">
                     <li>
                         <i class="fas fa-chart-line"></i>
-                        <span><strong>Maximize ROI:</strong> Data-driven pricing strategies and expense management to optimize your investment returns</span>
+                        <span><strong>Honest numbers:</strong> Rental pricing based on current market data — always presented as estimates, never appraisals.</span>
                     </li>
                     <li>
                         <i class="fas fa-clock"></i>
-                        <span><strong>Save Time:</strong> We handle all day-to-day operations - from maintenance calls to lease renewals</span>
+                        <span><strong>Your time back:</strong> Day-to-day operations, maintenance calls, and lease renewals handled for you.</span>
                     </li>
                     <li>
                         <i class="fas fa-home"></i>
-                        <span><strong>Maintain Property Value:</strong> Proactive maintenance and regular inspections protect your long-term investment</span>
+                        <span><strong>Property looked after:</strong> Proactive maintenance and regular inspections protect your long-term investment.</span>
                     </li>
                     <li>
                         <i class="fas fa-balance-scale"></i>
-                        <span><strong>Stay Compliant:</strong> We navigate complex landlord-tenant laws, Fair Housing regulations, and local codes</span>
+                        <span><strong>Compliance covered:</strong> Landlord-tenant rules, fair housing, and local codes built into how we operate.</span>
                     </li>
                     <li>
                         <i class="fas fa-smile"></i>
-                        <span><strong>Peace of Mind:</strong> 24/7 emergency support means you're never on call</span>
+                        <span><strong>One point of contact:</strong> Maintenance requests come to us, not your personal phone — and you always know who's handling them.</span>
                     </li>
                 </ul>
             </div>
@@ -821,7 +662,7 @@
                 <i class="fas fa-star" style="color: var(--accent);"></i> Founding Partner Opportunity
             </h3>
             <p style="color: #666; font-size: 1.1rem; line-height: 1.8; max-width: 900px; margin: 0 auto 30px;">
-                As we launch our property management division, we're seeking <strong>founding partners</strong> who value quality service and long-term relationships. Early clients receive preferential pricing, dedicated attention, and the opportunity to shape our services to meet your specific needs. If you own or manage apartment complexes, new multi-family developments, or investment portfolios, let's discuss how we can grow together.
+                We're keeping the founding group small on purpose. Early partners get preferential pricing, direct access to the founding team, and a real say in how we build this division. If you own apartment complexes, new multi-family developments, or investment portfolios in our launch markets, let's talk.
             </p>
             <a href="index.html#contact" class="btn" style="background: var(--accent); color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; font-weight: 700; display: inline-block;">
                 <i class="fas fa-calendar-check"></i> Schedule Consultation
@@ -839,44 +680,44 @@
             <div class="column">
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>Do you currently manage properties?</h3>
-                    <p style="color: #666;">We're launching our property management division and actively seeking founding partners. This means you'll receive dedicated, personalized service and preferential pricing as we build this part of our business. Our team brings extensive real estate experience and strong industry relationships.</p>
+                    <p style="color: #666;">Not yet — we're launching, which is exactly why founding partners get our full attention and preferential pricing. You'll work directly with the founding team and help shape how we operate.</p>
                 </div>
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>What size properties do you work with?</h3>
-                    <p style="color: #666;">We specialize in multi-family properties from small duplexes to large apartment complexes (50+ units). We're particularly interested in partnering with developers on new-build projects and investors with multi-unit portfolios. Single-family homes are not our focus.</p>
+                    <p style="color: #666;">We focus on multi-family properties, from small duplexes up to large apartment complexes. We're especially interested in partnering with developers on new-build projects and investors with multi-unit portfolios. Single-family homes are not our focus.</p>
                 </div>
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>Can you help with new construction lease-up?</h3>
-                    <p style="color: #666;">Absolutely! We offer specialized lease-up services including pre-construction planning, marketing strategy, rapid tenant placement, and bulk move-in coordination. We can start working with you before construction is complete.</p>
+                    <p style="color: #666;">Yes. We offer lease-up support including pre-construction planning, marketing strategy, tenant placement, and move-in coordination — and we can start working with you before construction is complete.</p>
                 </div>
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>What makes VDI different from other property managers?</h3>
-                    <p style="color: #666;">We focus exclusively on multi-family properties, offer transparent pricing with no hidden fees, use modern technology platforms, and provide dedicated account management. As founding partners, you'll have direct access to decision-makers, not just an account rep.</p>
+                    <p style="color: #666;">We're small on purpose right now: multi-family only, transparent written pricing, and you deal directly with the people running the business — not a call center queue.</p>
                 </div>
             </div>
 
             <div class="column">
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>How quickly can you take over management?</h3>
-                    <p style="color: #666;">We can typically transition existing properties within 30 days. This includes property assessment, tenant file review, financial account setup, and vendor onboarding. For new construction, we can begin marketing 60-90 days before completion.</p>
+                    <p style="color: #666;">We'll map out a transition plan together after your consultation and put the timeline in writing before you sign anything. Typical handoffs run a few weeks, depending on the property.</p>
                 </div>
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>Do you require long-term contracts?</h3>
-                    <p style="color: #666;">Our standard agreement is 12 months with 60-day notice for cancellation. We believe in earning your business through excellent service, not trapping you in long-term contracts. Flexibility is important to us.</p>
+                    <p style="color: #666;">You'll see the full agreement terms in your written proposal — including how either side can end it — before you commit to anything. No fine-print traps.</p>
                 </div>
 
                 <div class="info-box">
-                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>What technology do you use?</h3>
-                    <p style="color: #666;">We use industry-leading property management software with online portals for owners and tenants, digital rent collection, maintenance request tracking, and comprehensive reporting. Everything is accessible 24/7 from your computer or mobile device.</p>
+                    <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>How will I see what's happening with my property?</h3>
+                    <p style="color: #666;">Through clear monthly statements and direct access to the team managing your property. During your consultation we'll walk you through exactly how reporting and rent collection work.</p>
                 </div>
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>How do I get started?</h3>
-                    <p style="color: #666;">Schedule a free consultation below. We'll discuss your property, review your goals, provide a market analysis, and create a custom management proposal. No obligation - just an honest conversation about whether we're a good fit.</p>
+                    <p style="color: #666;">Schedule a free consultation below. We'll discuss your property, review your goals, and put together a written proposal. No obligation — just an honest conversation about whether we're a good fit.</p>
                 </div>
 
                 <div class="info-box">
@@ -886,12 +727,12 @@
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>Do I keep control of my property?</h3>
-                    <p style="color: #666;">Yes. You set the goals and approve major decisions and spending above an agreed threshold. We run the day-to-day — and the online owner portal gives you full visibility into finances, maintenance, and occupancy anytime.</p>
+                    <p style="color: #666;">Yes. You set the goals and approve major decisions and spending above an agreed threshold. We run the day-to-day and keep you posted with regular statements.</p>
                 </div>
 
                 <div class="info-box">
                     <h3><i class="fas fa-question-circle" style="color: var(--accent); margin-right: 10px;"></i>I'm unhappy with my current manager. Can you take over?</h3>
-                    <p style="color: #666;">Absolutely — transitions are our specialty. We review your existing leases and financials, coordinate the handoff, notify tenants, and typically complete the switch within 30 days with no interruption to rent collection.</p>
+                    <p style="color: #666;">We can help with that. We'll review your existing leases and financials, coordinate the handoff, notify tenants, and keep rent collection running during the switch.</p>
                 </div>
             </div>
         </div>
