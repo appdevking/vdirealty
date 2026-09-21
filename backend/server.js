@@ -12,7 +12,6 @@ const fsboRoutes = require('./routes/fsbo-routes');
 const fsboSmsRoutes = require('./routes/fsbo-sms-routes');
 const contactRoutes = require('./routes/contact-routes');
 const marketRoutes = require('./routes/market-routes');
-const seedMoreOnce = require('./routes/_seed_more_once'); // TEMP one-time demo seed — remove after use
 
 // Initialize Express app
 const app = express();
@@ -67,7 +66,6 @@ app.use(logVisit);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
-app.use('/api/fsbo', seedMoreOnce); // TEMP one-time demo seed — remove after use
 app.use('/api/fsbo', fsboRoutes);
 app.use('/api/fsbo/sms', fsboSmsRoutes);
 app.use('/api/contact', contactRoutes);
