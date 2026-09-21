@@ -845,6 +845,14 @@
                     interestSelect.value = urlParams.get('interest');
                 }
             }
+
+            // Pre-fill message textarea (e.g. from builder-listings "Let us list for you")
+            if (urlParams.has('message')) {
+                const messageField = document.getElementById('message');
+                if (messageField) {
+                    messageField.value = urlParams.get('message');
+                }
+            }
             
             // Handle property inquiry from listings page
             if (urlParams.has('property')) {
