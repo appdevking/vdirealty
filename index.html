@@ -161,33 +161,33 @@
             </div>
             <div class="stat-row reveal">
                 <div class="stat">
-                    <div class="num" id="medianPrice">$540<span class="u">k</span></div>
+                    <div class="num" id="medianPrice">$750<span class="u">k</span></div>
                     <div class="lbl">Median home price</div>
-                    <div class="trend up" id="priceChange"><i class="fas fa-arrow-up"></i> 3.2% YoY</div>
+                    <div class="trend down" id="priceChange"><i class="fas fa-arrow-down"></i> -3.2% YoY</div>
                 </div>
                 <div class="stat">
-                    <div class="num" id="daysOnMarket">32</div>
+                    <div class="num" id="daysOnMarket">45</div>
                     <div class="lbl">Days on market</div>
-                    <div class="trend flat" id="domTrend"><i class="fas fa-minus"></i> Stable</div>
+                    <div class="trend flat" id="domTrend"><i class="fas fa-minus"></i> 2.3% longer YoY</div>
                 </div>
                 <div class="stat">
-                    <div class="num" id="saleToList">98<span class="u">%</span></div>
+                    <div class="num" id="saleToList">98.6<span class="u">%</span></div>
                     <div class="lbl">Sale-to-list ratio</div>
-                    <div class="trend up" id="saleToListTrend"><i class="fas fa-arrow-up"></i> Strong</div>
+                    <div class="trend flat" id="saleToListTrend"><i class="fas fa-minus"></i> U.S. average</div>
                 </div>
                 <div class="stat">
-                    <div class="num" id="activeListings">150</div>
+                    <div class="num" id="activeListings">12,712</div>
                     <div class="lbl">Active listings</div>
-                    <div class="trend info" id="inventoryTrend"><i class="fas fa-info-circle"></i> Limited inventory</div>
+                    <div class="trend up" id="inventoryTrend"><i class="fas fa-arrow-up"></i> +27.3% YoY</div>
                 </div>
             </div>
             <div class="rates-row reveal">
                 <div class="rate-card">
                     <h4><i class="fas fa-chart-line"></i> Mortgage rates</h4>
-                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v" id="rate30">6.8%</span></div>
-                    <div class="meter"><i id="meter30" style="width:68%"></i></div>
-                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v" id="rate15">6.1%</span></div>
-                    <div class="meter"><i id="meter15" style="width:61%"></i></div>
+                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v" id="rate30">6.95%</span></div>
+                    <div class="meter"><i id="meter30" style="width:69.5%"></i></div>
+                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v" id="rate15">6.26%</span></div>
+                    <div class="meter"><i id="meter15" style="width:62.6%"></i></div>
                     <div class="rate-updated" id="ratesUpdated" style="font-size:0.8rem; color:#888; margin-top:8px;">Rates update automatically each week.</div>
                 </div>
                 <div class="rate-card">
@@ -331,8 +331,10 @@
                                 <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
                                 <option value="Builder / Development">Builder / Development</option>
                                 <option value="Relocation Services">Relocation Services</option>
+                                <option value="Free Market Analysis">Free Market Analysis</option>
                             </select>
                         </div>
+                        <div class="field"><input type="text" name="neighborhoods" id="neighborhoods" placeholder="Neighborhoods you're eyeing (for market analysis requests)"></div>
                         <input type="hidden" name="property" id="property" value="">
                         <div class="property-info" id="propertyInfo">
                             <strong><i class="fas fa-home"></i> Property Inquiry:</strong>
@@ -538,10 +540,10 @@
             // Adapt based on actual Zillow API response structure
             // This is a placeholder - adjust to your API response
             return {
-                medianPrice: data.medianPrice || '$540k',
-                daysOnMarket: data.avgDaysOnMarket || 32,
-                saleToList: data.saleToListRatio || 98,
-                activeListings: data.totalListings || 150,
+                medianPrice: data.medianPrice || '$750k',
+                daysOnMarket: data.avgDaysOnMarket || 45,
+                saleToList: data.saleToListRatio || 98.6,
+                activeListings: data.totalListings || 12712,
                 lastUpdated: new Date().toLocaleString()
             };
         }
