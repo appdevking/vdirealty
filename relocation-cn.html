@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>因工作搬迁？| VDI Realty</title>
+    <meta name="description" content="因工作搬到西雅图、凤凰城或纽约？VDI Realty 在您登机前通过视频直播带您看房，并提供定制区域指南和远程过户支持。">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Lato', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; color: var(--text-main); line-height: 1.8; }
+        h1, h2, h3 { font-family: 'Montserrat', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; font-weight: 700; }
+
+        header {
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 1rem 0;
+        }
+        .nav-container {
+            max-width: 1200px; margin: auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 20px;
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 800; color: var(--primary);
+            letter-spacing: 1px; text-transform: uppercase;
+            border: 2px solid var(--primary); padding: 8px 15px;
+            text-decoration: none; transition: all 0.3s;
+        }
+        .logo:hover { background: var(--primary); color: white; }
+        .back-link {
+            color: var(--primary); text-decoration: none; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent); }
+        .lang-switch { font-weight: 700; color: var(--primary); white-space: nowrap; }
+        .lang-switch a { color: var(--accent); text-decoration: none; font-weight: 700; }
+
+        .hero {
+            background: linear-gradient(rgba(15,32,39,0.82), rgba(15,32,39,0.82)),
+                        url('images/relocation-new.svg');
+            background-size: cover; background-position: center;
+            padding: 110px 20px 90px; text-align: center; color: white;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 18px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.25rem; max-width: 720px; margin: 0 auto; opacity: 0.95; }
+        .hero-metros { margin-top: 22px; font-size: 1.05rem; letter-spacing: 2px; color: var(--accent); font-weight: 700; }
+        .hero-cta { margin-top: 30px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-block; background: var(--accent); color: white;
+            padding: 15px 38px; text-decoration: none; border-radius: 4px;
+            font-weight: 700; transition: all 0.3s; letter-spacing: 1px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .btn-outline { background: transparent; border: 2px solid white; color: white; }
+        .btn-outline:hover { background: white; color: var(--primary); }
+
+        .content-section { padding: 80px 20px; max-width: 1200px; margin: auto; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-title p { color: #666; max-width: 700px; margin: auto; }
+        .underline { width: 80px; height: 3px; background: var(--accent); margin: 0 auto 15px; }
+
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .step {
+            background: white; padding: 36px 30px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); text-align: center;
+        }
+        .step-num {
+            width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
+            color: white; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+        }
+        .step h3 { color: var(--primary); margin-bottom: 12px; }
+
+        /* Metro tabs */
+        .metro-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+        .metro-tab {
+            background: white; border: 2px solid #e0e0e0; color: var(--primary);
+            padding: 12px 26px; border-radius: 30px; font-family: 'Montserrat', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.25s;
+        }
+        .metro-tab:hover { border-color: var(--accent); color: var(--accent); }
+        .metro-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .metro-panel { display: none; }
+        .metro-panel.active { display: block; }
+        .metro-intro { text-align: center; color: #666; max-width: 720px; margin: 0 auto 34px; font-size: 1.08rem; }
+
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 40px;
+        }
+        .feature-card {
+            background: white; padding: 34px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); transition: all 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        .feature-card i { font-size: 2.6rem; color: var(--accent); margin-bottom: 18px; }
+        .feature-card h3 { color: var(--primary); margin-bottom: 12px; }
+
+        .hood { text-align: left; }
+        .hood h3 { color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .hood h3 i { font-size: 1.3rem; margin: 0; }
+        .hood p { margin-bottom: 8px; font-size: 0.98rem; }
+        .hood .price { color: var(--accent); font-weight: 700; }
+
+        .band { background: var(--light-gray); border-radius: 10px; padding: 50px 40px; margin-bottom: 60px; }
+        .band h3 { text-align: center; color: var(--primary); margin-bottom: 12px; font-size: 1.8rem; }
+        .band > p { text-align: center; color: #666; margin-bottom: 30px; max-width: 640px; margin-left: auto; margin-right: auto; }
+        .school-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .school-list a {
+            background: white; padding: 18px 20px; border-radius: 8px; text-decoration: none;
+            color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.2s;
+        }
+        .school-list a:hover { color: var(--accent); transform: translateY(-2px); }
+        .school-list a i { color: var(--accent); }
+
+        .recruiter-box {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 60px 40px; border-radius: 10px; text-align: center; margin-bottom: 60px;
+        }
+        .recruiter-box h2 { color: white; margin-bottom: 16px; }
+        .recruiter-box p { max-width: 640px; margin: 0 auto 28px; opacity: 0.92; font-size: 1.08rem; }
+
+        .faq { max-width: 740px; margin: 0 auto 60px; }
+        .faq-item { background: var(--light-gray); border-radius: 8px; padding: 22px 26px; margin-bottom: 14px; }
+        .faq-item strong { color: var(--primary); display: block; margin-bottom: 6px; }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 70px 30px; text-align: center; border-radius: 10px; margin-bottom: 20px;
+        }
+        .cta-section h2 { color: white; margin-bottom: 16px; font-size: 2.2rem; }
+        .cta-section p { max-width: 600px; margin: 0 auto 30px; opacity: 0.92; }
+        .cta-contact { margin-top: 26px; font-size: 1.1rem; opacity: 0.9; }
+        .cta-contact a { color: var(--accent); text-decoration: none; font-weight: 700; }
+
+        .disclaimer { font-size: 0.85rem; color: #999; text-align: center; margin-top: 30px; max-width: 800px; margin-left: auto; margin-right: auto; }
+
+        footer { background: #111; color: #888; padding: 40px 20px; text-align: center; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .section-title h2 { font-size: 1.9rem; }
+            .band { padding: 36px 22px; }
+        }
+    </style>
+    <link rel="alternate" hreflang="zh-CN" href="https://www.vdirealty.com/relocation-cn.html" />
+    <link rel="alternate" hreflang="en" href="https://www.vdirealty.com/relocation.html" />
+    <link rel="alternate" hreflang="x-default" href="https://www.vdirealty.com/relocation.html" />
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">VDI Realty</a>
+            <div style="display: flex; align-items: center; gap: 18px;">
+                <span class="lang-switch">中文 <span style="color:#ccc;">|</span> <a href="relocation.html">EN</a></span>
+                <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> 返回首页</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>因工作搬迁？</h1>
+        <p>登机前，先通过视频直播看房。我们是您在当地的眼睛——为您筛选房源、陪您和家人视频看房，直到您落地安顿，全程打理细节。</p>
+        <div class="hero-metros">西雅图–东区 &nbsp;·&nbsp; 凤凰城都会区 &nbsp;·&nbsp; 纽约都会区</div>
+        <div class="hero-cta">
+            <a href="index.html#contact" class="btn">开始我的免费搬迁计划</a>
+            <a href="listings.html" class="btn btn-outline">浏览当前房源</a>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-title">
+            <h2>服务流程</h2>
+            <div class="underline"></div>
+            <p>专为因科技、金融、医疗和企业职位而搬迁的忙碌专业人士打造。</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>告诉我们您的需求</h3>
+                <p>20 分钟电话沟通：预算、通勤、必备条件和时间表。我们为您定制区域指南，并筛选出真正符合的房源。</p>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>视频直播看房</h3>
+                <p>我们陪您和家人视频直播看入围房源——打开衣柜、检查水压、拍摄通勤路线。杜绝意外。</p>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>落地即拿钥匙</h3>
+                <p>我们围绕您的入职日期协调验房、文件和远程过户，让您专注新工作，不被琐事分心。</p>
+            </div>
+        </div>
+    </section>
+    <section class="content-section" style="padding-top: 0;">
+        <div class="section-title">
+            <h2>选择您的都会区</h2>
+            <div class="underline"></div>
+            <p>我们服务的三个都会区的社区速览。价格区间仅为大致参考，帮助您建立概念——不是评估报告。</p>
+        </div>
+
+        <div class="metro-tabs">
+            <button class="metro-tab active" data-metro="seattle">西雅图–东区</button>
+            <button class="metro-tab" data-metro="phoenix">凤凰城都会区</button>
+            <button class="metro-tab" data-metro="nyc">纽约都会区</button>
+        </div>
+
+        <!-- SEATTLE -->
+        <div class="metro-panel active" id="metro-seattle">
+            <p class="metro-intro">前往亚马逊、微软、谷歌、Meta 和波音的科技从业者。东区（贝尔维尤、雷德蒙德、柯克兰）将口碑很好的公立学校与通往本地区最大园区的短通勤结合在一起。</p>
+            <div class="features-grid">
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>贝尔维尤 Bellevue</h3>
+                    <p>市中心高层住宅、成熟社区和评价很高的公立学校。通往微软雷德蒙德园区和西雅图市中心都很方便。</p>
+                    <p class="price">参考价位：约 $900K – $2M+</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>雷德蒙德 Redmond</h3>
+                    <p>微软主园区所在地。联排别墅和独栋住宅社区兼备，沿萨马米什河（Sammamish River）有多条步道。</p>
+                    <p class="price">参考价位：约 $800K – $1.6M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>柯克兰 Kirkland</h3>
+                    <p>湖畔市中心、谷歌柯克兰园区，华盛顿湖畔步行可达的商店和餐厅。</p>
+                    <p class="price">参考价位：约 $850K – $1.8M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>伊瑟阔 &amp; 萨马米什 Issaquah &amp; Sammamish</h3>
+                    <p>新建住宅多、学校口碑好，喀斯喀特山麓步道环绕。想要更大居住空间的买家很青睐这里。</p>
+                    <p class="price">参考价位：约 $900K – $1.7M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>西雅图北区 Seattle — North End</h3>
+                    <p>巴拉德（Ballard）、弗里蒙特（Fremont）和绿湖（Green Lake）拥有步行可达的特色街区和有味道的老房子。适合在亚马逊和南联合湖通勤的人。</p>
+                    <p class="price">参考价位：约 $750K – $1.5M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>伦顿 &amp; 博塞尔 Renton &amp; Bothell</h3>
+                    <p>同样的预算买到更大的房子，市中心都在发展中。伦顿靠近波音和西塔机场；博塞尔连接 I-405 科技走廊。</p>
+                    <p class="price">参考价位：约 $600K – $1.1M</p>
+                </div>
+            </div>
+            <div class="band">
+                <h3><i class="fas fa-school" style="color: var(--accent); margin-right: 10px;"></i>值得了解的学区</h3>
+                <p>学区往往是搬迁决策的关键。请直接查询最新评分和学区边界：</p>
+                <div class="school-list">
+                    <a href="https://www.bsd405.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Bellevue School District（贝尔维尤学区）</a>
+                    <a href="https://www.lwsd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Lake Washington（雷德蒙德/柯克兰学区）</a>
+                    <a href="https://www.issaquah.wednet.edu/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Issaquah School District（伊瑟阔学区）</a>
+                    <a href="https://www.nsd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Northshore（博塞尔/伍丁维尔学区）</a>
+                    <a href="https://www.mercerislandschools.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Mercer Island School District（默瑟岛学区）</a>
+                    <a href="https://www.greatschools.org/washington/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — 华盛顿州</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHOENIX -->
+        <div class="metro-panel" id="metro-phoenix">
+            <p class="metro-intro">前往英特尔、台积电、霍尼韦尔、美国运通和 Banner Health 的半导体、科技、医疗和金融从业者。山谷地区（The Valley）房源较新、总体规划社区成熟，而且对许多搬迁者来说没有州所得税的冲击。</p>
+            <div class="features-grid">
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>斯科茨代尔 Scottsdale</h3>
+                    <p>高档餐饮、高尔夫和老城夜生活。深受高管欢迎，是设施完善的高端居住之选。</p>
+                    <p class="price">参考价位：约 $650K – $1.5M+</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>钱德勒 Chandler</h3>
+                    <p>英特尔钱德勒园区所在地，适合家庭的东谷中心，学校口碑好，总体规划社区成熟。</p>
+                    <p class="price">参考价位：约 $550K – $1M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>吉尔伯特 Gilbert</h3>
+                    <p>山谷地区最受欢迎的郊区之一——新建住宅多、社区活动丰富、学区口碑好。</p>
+                    <p class="price">参考价位：约 $550K – $950K</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>坦佩 Tempe</h3>
+                    <p>亚利桑那州立大学所在地。充满活力、位置居中，轻轨连接便利——适合年轻专业人士。</p>
+                    <p class="price">参考价位：约 $450K – $800K</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>凤凰城 Arcadia &amp; Desert Ridge</h3>
+                    <p>Arcadia 在骆驼背山（Camelback Mountain）附近有特色老宅；Desert Ridge 是北凤凰城靠近台积电的新总体规划社区。</p>
+                    <p class="price">参考价位：约 $600K – $1.4M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>皮奥里亚 &amp; 北格兰岱尔 Peoria &amp; North Glendale</h3>
+                    <p>西北侧的高性价比之选，新建住宅多，经 Loop 303 高速方便前往就业走廊。</p>
+                    <p class="price">参考价位：约 $450K – $750K</p>
+                </div>
+            </div>
+            <div class="band">
+                <h3><i class="fas fa-school" style="color: var(--accent); margin-right: 10px;"></i>值得了解的学区</h3>
+                <p>学区往往是搬迁决策的关键。请直接查询最新评分和学区边界：</p>
+                <div class="school-list">
+                    <a href="https://www.susd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Scottsdale Unified（斯科茨代尔联合学区）</a>
+                    <a href="https://www.cusd80.com/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Chandler Unified（钱德勒联合学区）</a>
+                    <a href="https://www.gilbertschools.net/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Gilbert Public Schools（吉尔伯特公立学校）</a>
+                    <a href="https://www.pvdistrict.net/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Paradise Valley Unified（天堂谷联合学区）</a>
+                    <a href="https://www.dvusd.org/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Deer Valley Unified（鹿谷联合学区）</a>
+                    <a href="https://www.greatschools.org/arizona/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — 亚利桑那州</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NYC -->
+        <div class="metro-panel" id="metro-nyc">
+            <p class="metro-intro">前往曼哈顿、布鲁克林及周边郊区的金融、科技、媒体和医疗从业者。在纽约搬家，通勤就是一道数学题——地铁线路、PATH 和 Metro-North 火车决定了每一份候选清单。</p>
+            <div class="features-grid">
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>曼哈顿 Manhattan</h3>
+                    <p>金融区、中城和哈德逊城市广场（Hudson Yards）附近的公寓（condo）和合作公寓（co-op）。步行上班的生活溢价很高——合作公寓的董事会审批会增加流程。</p>
+                    <p class="price">参考价位：约 $1M – $3M+</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>布鲁克林 Brooklyn</h3>
+                    <p>公园坡（Park Slope）、威廉斯堡（Williamsburg）和布鲁克林高地（Brooklyn Heights）：褐石老宅、新公寓与通往曼哈顿办公室的便捷地铁兼备。</p>
+                    <p class="price">参考价位：约 $900K – $2.5M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>皇后区 Queens</h3>
+                    <p>阿斯托里亚（Astoria）和森林小丘（Forest Hills）性价比相对更高，通勤中城很快。社区多元，交通选择丰富。</p>
+                    <p class="price">参考价位：约 $650K – $1.4M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>霍博肯 &amp; 泽西市 Hoboken &amp; Jersey City</h3>
+                    <p>PATH 火车直达曼哈顿，河景和高层新公寓。想要同样预算更大空间的金融通勤者很青睐这里。</p>
+                    <p class="price">参考价位：约 $750K – $1.8M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>威彻斯特 Westchester</h3>
+                    <p>斯卡斯代尔（Scarsdale）、白原市（White Plains）和扬克斯（Yonkers）：Metro-North 火车直达大中央车站的郊区生活。经典的家庭搬迁走廊。</p>
+                    <p class="price">参考价位：约 $700K – $1.8M</p>
+                </div>
+                <div class="feature-card hood">
+                    <h3><i class="fas fa-map-marker-alt"></i>长岛纳苏县 Long Island — Nassau</h3>
+                    <p>大颈（Great Neck）、曼哈塞特（Manhasset）和花园城（Garden City）：LIRR 通勤搭配口碑很好的学校，以独栋住宅为主。</p>
+                    <p class="price">参考价位：约 $800K – $2M</p>
+                </div>
+            </div>
+            <div class="band">
+                <h3><i class="fas fa-school" style="color: var(--accent); margin-right: 10px;"></i>学校须知</h3>
+                <p>纽约市公立学校由全市统一的教育局管理；郊区各有自己的学区。请直接查询最新评分和学区边界：</p>
+                <div class="school-list">
+                    <a href="https://www.schools.nyc.gov/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>NYC Dept. of Education（纽约市教育局）</a>
+                    <a href="https://www.greatneck.k12.ny.us/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Great Neck（纳苏县大颈学区）</a>
+                    <a href="https://www.scarsdaleschools.k12.ny.us/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Scarsdale（威彻斯特斯卡斯代尔学区）</a>
+                    <a href="https://www.hoboken.k12.nj.us/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Hoboken Public Schools（霍博肯公立学校）</a>
+                    <a href="https://www.greatschools.org/new-york/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — 纽约州</a>
+                    <a href="https://www.greatschools.org/new-jersey/" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>GreatSchools.org — 新泽西州</a>
+                </div>
+            </div>
+        </div>
+    </section>
+<style>
+.pc-table-wrap { overflow-x: auto; margin: 0 auto 26px; max-width: 900px; }
+.pc-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); font-size: 0.98rem; }
+.pc-table th { background: #0F2027; color: white; padding: 14px 12px; text-align: left; font-family: 'Montserrat', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 0.95rem; }
+.pc-table th:not(:first-child), .pc-table td:not(:first-child) { text-align: right; }
+.pc-table td { padding: 13px 12px; border-bottom: 1px solid #eee; }
+.pc-table tr:last-child td { border-bottom: none; }
+.pc-table tr.takehome td { background: #f4f1e8; font-weight: 700; color: #0F2027; font-size: 1.05rem; }
+.pc-table td.label { font-weight: 700; color: #0F2027; text-align: left; }
+.pc-note { max-width: 900px; margin: 0 auto 10px; color: #666; font-size: 0.98rem; }
+.pc-callout { max-width: 900px; margin: 26px auto 0; background: white; border-left: 4px solid #C5A059; border-radius: 0 8px 8px 0; padding: 20px 24px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); }
+.pc-callout strong { color: #0F2027; }
+</style>
+
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>同一份工资，在三个都会区的实际到手</h2>
+        <div class="underline"></div>
+        <p>同样的 $200,000 年薪，到手金额大不相同。州和市所得税是关键变量——以下是 2026 年单身申报者的大致测算。</p>
+    </div>
+
+    <div class="pc-table-wrap">
+        <table class="pc-table">
+            <thead>
+                <tr>
+                    <th>$200,000 年薪 · 单身申报（2026 年估算）</th>
+                    <th>西雅图–东区（华盛顿州）</th>
+                    <th>凤凰城都会区（亚利桑那州）</th>
+                    <th>纽约市（纽约州）</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">税前年薪</td>
+                    <td>$200,000</td>
+                    <td>$200,000</td>
+                    <td>$200,000</td>
+                </tr>
+                <tr>
+                    <td class="label">联邦所得税（估算）</td>
+                    <td>$36,734</td>
+                    <td>$36,734</td>
+                    <td>$36,734</td>
+                </tr>
+                <tr>
+                    <td class="label">FICA——社保 + 医疗保险（估算）</td>
+                    <td>$14,339</td>
+                    <td>$14,339</td>
+                    <td>$14,339</td>
+                </tr>
+                <tr>
+                    <td class="label">州 + 市所得税（估算）</td>
+                    <td>$0 <span style="color:#2e7d32; font-weight:400;">（无州所得税）</span></td>
+                    <td>$4,791 <span style="color:#666; font-weight:400;">（2.5% 单一税率）</span></td>
+                    <td>$18,077 <span style="color:#666; font-weight:400;">（州税 + 纽约市税）</span></td>
+                </tr>
+                <tr class="takehome">
+                    <td class="label">估算到手收入</td>
+                    <td>$148,927</td>
+                    <td>$144,136</td>
+                    <td>$130,850</td>
+                </tr>
+                <tr>
+                    <td class="label">≈ 每月</td>
+                    <td>$12,411</td>
+                    <td>$12,011</td>
+                    <td>$10,904</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="pc-note">州税行如何计算：<strong>华盛顿州</strong>——无州所得税。<strong>亚利桑那州</strong>——对亚利桑那州应税收入按 2.5% 单一税率征收（$200,000 减去 $8,350 单身标准扣除额 = $191,650 × 2.5%）。<strong>纽约州</strong>——按 2026 年下调后税率（3.90%–5.90%），对纽约州应税收入（$200,000 减去 $8,000 标准扣除额）征收约 $10,760 州税，另加约 $7,317 纽约市税（3.078%–3.876%），计税基数相同。纽约市税仅适用于五个行政区的居民——住在新泽西、威彻斯特或长岛的通勤者不用缴纳。</p>
+
+    <div class="pc-callout">
+        <strong>结论：</strong>年薪 $200K，在西雅图每年比在纽约市多留约 <strong>$18,000</strong>，比在凤凰城多约 <strong>$4,800</strong>——这还没算住房成本的差异。这笔钱直接进入您的购房预算。
+    </div>
+
+    <p class="disclaimer"><strong>仅为示例性估算——不构成税务建议。</strong>针对无受抚养人、采用标准扣除额的单身申报者的简化对比。不含 401(k)、HSA 和医疗保险扣除、奖金、股权报酬、地方差异及税收抵免。实际预扣和应纳税额会有差异。请就您的具体情况咨询合格的税务专业人士。数据来源：IRS 2026 年联邦税率与标准扣除额；社会保障署 2026 年工资基数（$184,500）；Tax Foundation 2026 年各州税率；纽约州税务局 2026 年税率调整；纽约市财政局市税级距。</p>
+</section>
+<style>
+.col-table-wrap { overflow-x: auto; max-width: 900px; margin: 0 auto 26px; }
+.col-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); font-size: 0.98rem; }
+.col-table th { background: #0F2027; color: white; padding: 14px 12px; text-align: center; font-family: 'Montserrat', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 0.95rem; }
+.col-table th:first-child { text-align: left; }
+.col-table td { padding: 13px 12px; border-bottom: 1px solid #eee; text-align: center; }
+.col-table td:first-child { text-align: left; font-weight: 700; color: #0F2027; }
+.col-table tr:last-child td { border-bottom: none; }
+.col-table tr.hl td { background: #f4f1e8; font-weight: 700; color: #0F2027; }
+.col-bars { max-width: 900px; margin: 0 auto 10px; }
+.col-bar-row { margin-bottom: 14px; }
+.col-bar-row .col-bar-label { font-weight: 700; color: #0F2027; margin-bottom: 6px; font-size: 0.98rem; }
+.col-bar-track { background: #eee; border-radius: 6px; height: 26px; position: relative; overflow: hidden; }
+.col-bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #203A43, #C5A059); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-weight: 700; font-size: 0.88rem; min-width: 64px; }
+.col-takeaway { max-width: 900px; margin: 26px auto 0; background: white; border-left: 4px solid #C5A059; border-radius: 0 8px 8px 0; padding: 20px 24px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); }
+.col-takeaway strong { color: #0F2027; }
+</style>
+
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>生活成本并排对比</h2>
+        <div class="underline"></div>
+        <p>搬走的不只是工资——开销也跟着走。以下是三个都会区日常开支的对比，以纽约市 = 100 为基准指数。</p>
+    </div>
+
+    <div class="col-bars">
+        <div class="col-bar-row">
+            <div class="col-bar-label">含租金的整体生活成本——纽约市 = 100</div>
+            <div class="col-bar-track"><div class="col-bar-fill" style="width: 100%;">100 · 纽约</div></div>
+        </div>
+        <div class="col-bar-row">
+            <div class="col-bar-track"><div class="col-bar-fill" style="width: 76.9%;">76.9 · 西雅图</div></div>
+        </div>
+        <div class="col-bar-row">
+            <div class="col-bar-track"><div class="col-bar-fill" style="width: 57.3%;">57.3 · 凤凰城</div></div>
+        </div>
+    </div>
+
+    <div class="col-table-wrap">
+        <table class="col-table">
+            <thead>
+                <tr><th>指数（纽约市 = 100）</th><th>纽约市</th><th>西雅图</th><th>凤凰城</th></tr>
+            </thead>
+            <tbody>
+                <tr class="hl"><td>含租金的整体指数</td><td>100.0</td><td>76.9</td><td>57.3</td></tr>
+                <tr><td>仅租金</td><td>100.0</td><td>60.2</td><td>39.7</td></tr>
+                <tr><td>食品杂货</td><td>100.0</td><td>98.0</td><td>75.0</td></tr>
+                <tr><td>外出就餐</td><td>100.0</td><td>95.8</td><td>77.9</td></tr>
+                <tr><td>本地购买力</td><td>100.0</td><td>165.0</td><td>139.0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-takeaway">
+        <strong>这意味着：</strong>租金是最大的变量——按此指数，西雅图租金比纽约低约 <strong>40%</strong>，凤凰城低约 <strong>60%</strong>。食品和餐饮在纽约与西雅图之间差异小得多。再结合上面的工资测算，在西雅图或凤凰城，每一美元都比在纽约市更经花。
+    </div>
+
+    <p class="disclaimer">生活成本指数为近似值，基于众包数据 Numbeo（"Cost of Living Index by City 2026"，纽约市 = 100 基准，2026 年 9 月获取）。个人开支因社区和生活方式差异很大——请将其作为方向性参考，而非精确数据。</p>
+</section>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>同样的预算，在各都会区能买到什么</h2>
+        <div class="underline"></div>
+        <p>同样的预算，在不同都会区能买到的房子大不相同。以下是典型情景供参考——不是房源，每个社区都有例外。</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-home"></i>
+            <h3>约 $800K 预算</h3>
+            <p><strong>西雅图–东区：</strong>雷德蒙德或柯克兰的联排别墅或公寓；伦顿或博塞尔的入门独栋住宅。</p>
+            <p><strong>凤凰城：</strong>吉尔伯特、钱德勒或坦佩的新建四卧独栋住宅——常带泳池。</p>
+            <p><strong>纽约都会区：</strong>皇后区或霍博肯/泽西市的一到两卧公寓；外围行政区的合作公寓（需通过合作公寓董事会审批）。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-home"></i>
+            <h3>约 $1.2M 预算</h3>
+            <p><strong>西雅图–东区：</strong>贝尔维尤、雷德蒙德、柯克兰或伊瑟阔的独栋住宅——东区市场的核心地带。</p>
+            <p><strong>凤凰城：</strong>斯科茨代尔、Arcadia 或 Desert Ridge 更大或更高端的独栋住宅。</p>
+            <p><strong>纽约都会区：</strong>布鲁克林或皇后区的两卧公寓，或霍博肯/泽西市可看曼哈顿景观的两卧公寓。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-home"></i>
+            <h3>约 $2M 预算</h3>
+            <p><strong>西雅图–东区：</strong>贝尔维尤或柯克兰的高端独栋住宅，可能靠近华盛顿湖畔。</p>
+            <p><strong>凤凰城：</strong>斯科茨代尔、Arcadia 或天堂谷（Paradise Valley）的豪华独栋住宅。</p>
+            <p><strong>纽约都会区：</strong>曼哈顿或布鲁克林核心地段的两到三卧公寓——或威彻斯特、纳苏县的独栋住宅。</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">基于当前市场状况的示例性情景——不是评估报告，也不是房源。实际房源、户型和价格因社区而异且随时变化。告诉我们您的预算，我们带您看真实的市场。</p>
+</section>
+<style>
+.cm-metro { max-width: 980px; margin: 0 auto 40px; }
+.cm-metro:last-of-type { margin-bottom: 10px; }
+.cm-metro h3 { color: #0F2027; font-size: 1.5rem; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.cm-metro h3 i { color: #C5A059; }
+.cm-metro > p { color: #666; margin-bottom: 18px; }
+.cm-table-wrap { overflow-x: auto; }
+.cm-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); font-size: 0.96rem; }
+.cm-table th { background: #0F2027; color: white; padding: 13px 14px; text-align: left; font-family: 'Montserrat', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 0.92rem; }
+.cm-table td { padding: 12px 14px; border-bottom: 1px solid #eee; vertical-align: top; }
+.cm-table tr:last-child td { border-bottom: none; }
+.cm-table td.hood { font-weight: 700; color: #0F2027; white-space: nowrap; }
+.cm-table td.time { font-weight: 700; color: #0F2027; white-space: nowrap; }
+.cm-table td.transit { color: #666; font-size: 0.92rem; }
+</style>
+
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>通勤实测</h2>
+        <div class="underline"></div>
+        <p>从各社区到本地区主要雇主园区的典型高峰时段车程——以及有公共交通时的替代方案。时间为大致范围，不作保证；路况因日期和路线而异。</p>
+    </div>
+
+    <div class="cm-metro">
+        <h3><i class="fas fa-building"></i>西雅图–东区</h3>
+        <p>以微软（雷德蒙德）、亚马逊（西雅图南联合湖）和谷歌（柯克兰）为核心。I-405 和 SR-520 高速决定了这里的通勤节奏。</p>
+        <div class="cm-table-wrap">
+            <table class="cm-table">
+                <thead><tr><th>居住地</th><th>工作地</th><th>典型车程</th><th>公共交通选择</th></tr></thead>
+                <tbody>
+                    <tr><td class="hood">贝尔维尤（市中心）</td><td>微软（雷德蒙德）</td><td class="time">15–30 分钟</td><td class="transit">公交 / 未来轻轨接驳</td></tr>
+                    <tr><td class="hood">贝尔维尤（市中心）</td><td>亚马逊（南联合湖）</td><td class="time">20–40 分钟</td><td class="transit">经 I-90 的 Sound Transit 公交</td></tr>
+                    <tr><td class="hood">雷德蒙德</td><td>微软（雷德蒙德）</td><td class="time">10–20 分钟</td><td class="transit">本地公交；园区周边骑行友好</td></tr>
+                    <tr><td class="hood">柯克兰</td><td>谷歌（柯克兰）</td><td class="time">10–20 分钟</td><td class="transit">沿 Lake St 的本地公交</td></tr>
+                    <tr><td class="hood">柯克兰</td><td>微软（雷德蒙德）</td><td class="time">15–25 分钟</td><td class="transit">经 NE 85th / 520 的公交</td></tr>
+                    <tr><td class="hood">伊瑟阔</td><td>微软（雷德蒙德）</td><td class="time">20–35 分钟</td><td class="transit">经 I-90 的公交</td></tr>
+                    <tr><td class="hood">西雅图北区（绿湖 / 巴拉德）</td><td>亚马逊（南联合湖）</td><td class="time">15–30 分钟</td><td class="transit">Link 轻轨 / RapidRide 快速公交</td></tr>
+                    <tr><td class="hood">西雅图北区（绿湖 / 巴拉德）</td><td>微软（雷德蒙德）</td><td class="time">30–50 分钟</td><td class="transit">公交 + 520 走廊</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="cm-metro">
+        <h3><i class="fas fa-sun"></i>凤凰城都会区</h3>
+        <p>以英特尔（钱德勒）、台积电（北凤凰城）和亚利桑那州立大学（坦佩）为核心。这是开车为主的都会区——101、202 高速和 I-10 承担了主要通勤。</p>
+        <div class="cm-table-wrap">
+            <table class="cm-table">
+                <thead><tr><th>居住地</th><th>工作地</th><th>典型车程</th><th>公共交通选择</th></tr></thead>
+                <tbody>
+                    <tr><td class="hood">钱德勒</td><td>英特尔（钱德勒）</td><td class="time">10–20 分钟</td><td class="transit">公交有限；以开车为主</td></tr>
+                    <tr><td class="hood">吉尔伯特</td><td>英特尔（钱德勒）</td><td class="time">15–25 分钟</td><td class="transit">公交有限；以开车为主</td></tr>
+                    <tr><td class="hood">坦佩</td><td>亚利桑那州立大学（坦佩）</td><td class="time">5–15 分钟</td><td class="transit">Valley Metro 轻轨 + 有轨电车</td></tr>
+                    <tr><td class="hood">坦佩</td><td>英特尔（钱德勒）</td><td class="time">20–35 分钟</td><td class="transit">轻轨 + 公交接驳</td></tr>
+                    <tr><td class="hood">斯科茨代尔</td><td>台积电（北凤凰城）</td><td class="time">25–40 分钟</td><td class="transit">选择有限；以开车为主</td></tr>
+                    <tr><td class="hood">Desert Ridge / 北凤凰城</td><td>台积电（北凤凰城）</td><td class="time">10–20 分钟</td><td class="transit">选择有限；以开车为主</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="cm-metro">
+        <h3><i class="fas fa-subway"></i>纽约都会区</h3>
+        <p>以中城和金融区为核心。在这里，决定通勤的是地铁、PATH 和 Metro-North 火车——不是开车。</p>
+        <div class="cm-table-wrap">
+            <table class="cm-table">
+                <thead><tr><th>居住地</th><th>工作地</th><th>典型通勤时间</th><th>备注</th></tr></thead>
+                <tbody>
+                    <tr><td class="hood">皇后区阿斯托里亚</td><td>中城</td><td class="time">20–35 分钟</td><td class="transit">N/W 地铁线</td></tr>
+                    <tr><td class="hood">皇后区阿斯托里亚</td><td>金融区</td><td class="time">35–55 分钟</td><td class="transit">地铁需换乘</td></tr>
+                    <tr><td class="hood">布鲁克林公园坡</td><td>中城</td><td class="time">30–45 分钟</td><td class="transit">B/Q 或 R 线</td></tr>
+                    <tr><td class="hood">布鲁克林公园坡</td><td>金融区</td><td class="time">25–40 分钟</td><td class="transit">R / 4、5 号线</td></tr>
+                    <tr><td class="hood">新泽西霍博肯</td><td>中城</td><td class="time">25–40 分钟</td><td class="transit">PATH + 地铁换乘</td></tr>
+                    <tr><td class="hood">新泽西霍博肯</td><td>金融区</td><td class="time">20–35 分钟</td><td class="transit">PATH 直达世贸中心</td></tr>
+                    <tr><td class="hood">威彻斯特白原市</td><td>大中央车站 / 中城</td><td class="time">35–50 分钟</td><td class="transit">Metro-North 哈莱姆线</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="disclaimer">通勤时间为典型高峰时段范围，仅供参考——实际时间因路况、公交时刻表、具体地址和混合办公模式而异。做决定前请用地图 App 核实当前路线。</p>
+</section>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>90 天搬迁时间表</h2>
+        <div class="underline"></div>
+        <p>我们陪每一位搬迁买家走过的实操顺序——从上往下，一步步来。</p>
+    </div>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">90</div>
+            <h3>提前 90 天——规划与资金</h3>
+            <p style="text-align: left;">定下总预算（房价 + 搬家费 + 预备金）。拿到贷款预批。向 HR 索要完整的搬迁福利书面说明。预约免费的 VDI 初步沟通，我们开始为您准备区域指南。</p>
+        </div>
+        <div class="step">
+            <div class="step-num">60</div>
+            <h3>提前 60 天——缩小范围、视频看房</h3>
+            <p style="text-align: left;">和我们一起锁定 2–3 个目标社区。开始视频直播看入围房源。约搬家公司询价。如果您在租房，记得提前通知房东退租。</p>
+        </div>
+        <div class="step">
+            <div class="step-num">30</div>
+            <h3>提前 30 天——出价与预订</h3>
+            <p style="text-align: left;">用我们的定价策略和本地市场数据出价。安排验房。预订搬家公司；如果入住和过户之间有空档，安排好临时住宿。</p>
+        </div>
+        <div class="step">
+            <div class="step-num">14</div>
+            <h3>提前 14 天——锁定一切</h3>
+            <p style="text-align: left;">确认过户和搬家日期。开通水电网，办好租房/房屋保险。开始地址变更清单：邮局（USPS）、银行、雇主、选民登记、订阅服务。</p>
+        </div>
+        <div class="step">
+            <div class="step-num"><i class="fas fa-key"></i></div>
+            <h3>落地周——安顿</h3>
+            <p style="text-align: left;">最后验房、拿钥匙。先拆必需品（床、厨房、办公设备）。换领驾照和车辆登记（截止日期见下文）。认识一下邻居——到家了。</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">时间表因您的入职日期、市场情况，以及您是先买房还是先租房而异。初步沟通时，我们会根据您的情况量身调整。</p>
+</section>
+
+    <section class="content-section" style="padding-top: 0;">
+        <div class="section-title">
+            <h2>免费包含的服务</h2>
+            <div class="underline"></div>
+            <p>搬迁咨询和房源筛选都不收费。如果您通过我们购房，买方经纪的佣金通常由卖方承担。</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>定制区域指南</h3>
+                <p>按您的需求匹配的社区、通勤时间和生活配套说明——不是通用 PDF。</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-video"></i>
+                <h3>视频直播看房</h3>
+                <p>我们陪您和家人/伴侣视频直播看入围房源。</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clipboard-check"></i>
+                <h3>精选房源清单</h3>
+                <p>我们按您的必备条件筛选房源，提前排除不合适的，不浪费您一分钟。</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-handshake"></i>
+                <h3>本地资源网络</h3>
+                <p>介绍我们在各都会区合作过的贷款经纪、验房师、搬家公司和装修承包商。</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-file-signature"></i>
+                <h3>远程过户支持</h3>
+                <p>围绕您的入职日期协调文件、验房和过户——在可行时支持远程办理。</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>出价策略</h3>
+                <p>热门市场节奏快。我们用当前市场数据为您建议价格和条款——是估算，不是评估报告。</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>学校与安全</h3>
+                <p>如何用官方渠道调研任何都会区的学校与安全——入学指南、数据链接和调研清单。<a href="schools-safety.html" style="color: var(--accent); font-weight: 600;">阅读指南 &rarr;</a></p>
+            </div>
+        </div>
+
+<div class="section-title" style="margin-top: 60px;">
+    <h2>搬家前，先看懂市场</h2>
+    <div class="underline"></div>
+    <p>搬到一个新地方，意味着要进入一个您从未生活过的市场。我们为您免费提供持牌经纪人手工准备的市场分析——针对您关注的社区，由持牌经纪人逐份手工整理，不是机器自动生成的。几个工作日内发送到您的邮箱。</p>
+</div>
+
+<div class="features-grid">
+    <div class="feature-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>社区价格走势</h3>
+        <p>您目标区域近期的房价中位数走势，帮您在出手前分清哪些社区在涨、哪些在降温。</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-clock"></i>
+        <h3>平均上市天数</h3>
+        <p>您关注区域的房子多快签约——这决定了好房子出现时您需要多快行动。</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-percentage"></i>
+        <h3>成交价/挂牌价比率</h3>
+        <p>成交价接近挂牌价的程度——最直观地告诉您，这是抢房大战的市场，还是有议价空间的市场。</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-layer-group"></i>
+        <h3>在售房源快照</h3>
+        <p>您关注区域当前在售房源数量——让您对选择面、竞争度和议价筹码有真实的判断。</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-home"></i>
+        <h3>您的预算通常能买到什么</h3>
+        <p>基于近期市场数据，诚实地告诉您：在各目标区域，您的预算对应什么样的户型、社区和取舍——不是泛泛的价格区间。</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-user-tie"></i>
+        <h3>经纪人手工准备，非机器生成</h3>
+        <p>持牌经纪人针对您的社区和预算拉取并审核数据。这是用于规划的估算——不是评估报告——无论您是否通过我们购房，都免费。</p>
+    </div>
+</div>
+
+<div class="cta-section" style="margin-top: 40px;">
+    <h2>获取免费市场分析</h2>
+    <p>告诉我们您的目的地和关注的社区。我们会准备好分析报告，几个工作日内发到您的邮箱。</p>
+    <a href="index.html#contact" class="btn">申请免费市场分析</a>
+    <div class="cta-contact">
+        想直接聊？致电或短信 <a href="tel:+12068800637">206-880-0637</a> · <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a>
+    </div>
+</div>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>把搬迁福利用到极致</h2>
+        <div class="underline"></div>
+        <p>大多数雇主提供以下两种结构之一——而且可谈的空间比很多人想象的大。以下为一般性建议，不构成法律或税务建议。</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-briefcase"></i>
+            <h3>一次性补贴 vs. 全程代办</h3>
+            <p><strong>一次性补贴（Lump sum）：</strong>雇主给一笔固定现金，您自己安排搬家——灵活性最高，但要自己留票据、承担超支风险。</p>
+            <p><strong>全程代办（Managed）：</strong>搬迁公司按公司政策负责搬家、临时住宿和物流——省心，但选择少。</p>
+            <p>签 offer 之前先问清楚是哪一种——它会影响您的找房时间表。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-handshake"></i>
+            <h3>通常可以谈的内容</h3>
+            <p style="text-align: left;">• 一到两次<strong>看房之旅</strong>（机票 + 酒店）<br>
+            • <strong>临时住宿</strong>——通常 30–60 天；如果远程买房，争取 60 天<br>
+            • <strong>过户费用</strong>报销或抵扣<br>
+            • 现有租约的<strong>提前解约赔偿</strong><br>
+            • <strong>配偶/伴侣求职支持</strong><br>
+            • 家具<strong>运输与仓储</strong><br>
+            • <strong>入职奖金</strong>（sign-on bonus），用于抵消搬家成本</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-question-circle"></i>
+            <h3>问 HR 的问题</h3>
+            <p style="text-align: left;">• 这部分福利是否<strong>含税</strong>（tax gross-up），还是我要自己交税？<br>
+            • 如果 12–24 个月内离职，有没有<strong>偿还（clawback）条款</strong>？<br>
+            • 每项福利的<strong>使用截止日期</strong>是什么？<br>
+            • 如果我现在有房，政策包不包含<strong>卖房协助</strong>？<br>
+            • 没用完的福利能不能<strong>折现</strong>？<br>
+            • 入职后我的<strong>唯一对接人</strong>是谁？</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">搬迁福利因雇主差异很大，受公司政策和税法约束。请把每一项承诺落实到书面，并就税务处理咨询税务专业人士。以上为一般性信息，不构成法律或税务建议。</p>
+</section>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>前 30 天：落地清单</h2>
+        <div class="underline"></div>
+        <p>成为居民的那一天，各种证件的倒计时就开始了。各州截止日期不同——以下是每个州的要求。</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-id-card"></i>
+            <h3>华盛顿州</h3>
+            <p style="text-align: left;">• <strong>驾照：</strong>成为居民后 <strong>30 天</strong>内换领。<br>
+            • <strong>车辆登记：</strong>成为居民后 <strong>30 天</strong>内登记。<br>
+            • 无需申报州所得税——但记得在雇主处更新地址，以保证预扣税正确。<br>
+            • 登记选民——华盛顿州全邮寄投票，登记后选票自动寄到。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-id-card"></i>
+            <h3>亚利桑那州</h3>
+            <p style="text-align: left;">• <strong>驾照和车辆登记：</strong>亚利桑那州动作很快——一旦符合居民条件（在 AZ 工作、登记投票、孩子入学等），州法要求<strong>立即</strong>换领驾照，并在确立居民身份后 <strong>15 天</strong>内完成车辆登记。<br>
+            • 持有有效的外州驾照无需笔试和路考——只需视力检查。<br>
+            • 凤凰城都会区的车辆登记前需通过<strong>尾气检测</strong>。<br>
+            • 搬家当年需申报部分年度居民税表（part-year resident return）。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-id-card"></i>
+            <h3>纽约州</h3>
+            <p style="text-align: left;">• <strong>驾照：</strong>成为居民后 <strong>30 天</strong>内换领外州驾照——现驾照有效则免路考。<br>
+            • <strong>车辆登记：</strong><strong>30 天</strong>内登记；纽约州要求在纽约登记的车辆必须上<strong>纽约州的保险</strong>——外州保单不算数。<br>
+            • 如果住在五个行政区，州税之外还要交<strong>纽约市税</strong>（见上文工资部分）。<br>
+            • 搬家当年需申报部分年度居民税表。</p>
+        </div>
+    </div>
+
+    <div class="features-grid" style="margin-top: 30px;">
+        <div class="feature-card">
+            <i class="fas fa-plug"></i>
+            <h3>开通水电网</h3>
+            <p style="text-align: left;">电、燃气、水、垃圾和网络——提前一周预约开通，入住第一晚不断水断电。把租房或房屋保险更新到新地址。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-envelope"></i>
+            <h3>变更地址</h3>
+            <p style="text-align: left;">先办 USPS 地址变更，再到银行、信用卡、雇主工资、保险、选民登记、订阅服务，以及所有会给您寄重要信件的地方。一口气办完——只要 30 分钟。</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-heart"></i>
+            <h3>软着陆</h3>
+            <p style="text-align: left;">趁还没急用，先找好家庭医生、牙医和兽医。摸清最近的急诊、药房和超市。然后跟邻居打个招呼——本地人的经验胜过搜索结果。</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">截止日期和要求会变——行动前请到 <strong>dol.wa.gov</strong>（华盛顿州）、<strong>azdot.gov</strong>（亚利桑那州）、<strong>dmv.ny.gov</strong>（纽约州）核实最新规定。亚利桑那州"一旦符合居民条件"的要求依据 ADOT 新居民指引；请直接向 ADOT 确认您的具体时限。以上为一般性信息，不构成法律建议。</p>
+</section>
+        <div class="recruiter-box">
+            <h2>在这些都会区招人？把新员工交给我们。</h2>
+            <p>招聘人员和 HR 团队：把这个页面分享给即将入职的员工。我们会给每位新员工同样的全程贴心服务——区域指南、视频看房、顺利落地——不花您团队一分钱。</p>
+            <a href="index.html#contact" class="btn">与我们合作</a>
+        </div>
+
+        <div class="section-title">
+            <h2>常见问题</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="faq">
+            <div class="faq-item">
+                <strong>如何开始？</strong>
+                通过联系表格或电话联系我们。我们会安排 20 分钟电话，了解您的需求和时间表。
+            </div>
+            <div class="faq-item">
+                <strong>家人可以一起参加视频看房吗？</strong>
+                可以——我们鼓励这样做。所有对搬家有发言权的人都应该亲眼看到房子。
+            </div>
+            <div class="faq-item">
+                <strong>收费吗？</strong>
+                咨询、区域指南和视频看房都免费。买方经纪的佣金通常由卖方支付。
+            </div>
+            <div class="faq-item">
+                <strong>如果我想先租房呢？</strong>
+                我们可以在您买房前，先帮您评估公司附近的租房选择，帮您熟悉环境。
+            </div>
+            <div class="faq-item">
+                <strong>你们能配合公司的搬迁福利吗？</strong>
+                可以——我们会配合企业搬迁的时间表，以及一次性补贴或全程代办的福利结构。
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>找房，从落地前开始</h2>
+            <p>告诉我们您的目的地和时间。我们会在两个工作日内发送定制区域指南和第一批精选房源。</p>
+            <a href="index.html#contact" class="btn">开始我的免费搬迁计划</a>
+            <div class="cta-contact">
+                想直接聊？致电或短信 <a href="tel:+12068800637">206-880-0637</a> · <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a><br>
+                <span style="font-size: 0.95rem;">我们提供中文服务——留言时注明即可。</span>
+            </div>
+        </div>
+
+        <p class="disclaimer">页面中的社区价格区间为大致市场估算，仅供参考，不构成评估报告。平等住房机会（Equal Housing Opportunity）。VDI Realty 不因种族、肤色、宗教、性别、残障、家庭状况或国籍而歧视任何人。</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 VDI Realty。版权所有。</p>
+        <p style="margin-top: 8px; font-size: 0.85rem; color: #888;">Brokered by Realty Connect（经纪公司：Realty Connect）</p>
+        <p style="margin-top: 10px;">
+            <a href="index.html" style="color: #666; text-decoration: none;">首页</a> |
+            <a href="tel:+12068800637" style="color: #666; text-decoration: none;">206-880-0637</a> |
+            <a href="mailto:sales@vdirealty.com" style="color: #666; text-decoration: none;">sales@vdirealty.com</a>
+        </p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.metro-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.metro-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.metro-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('metro-' + tab.dataset.metro).classList.add('active');
+                window.scrollTo({ top: document.querySelector('.metro-tabs').offsetTop - 90, behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>
