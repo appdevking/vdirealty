@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schools &amp; Safety Research Guide | VDI Realty</title>
+    <meta name="description" content="Moving to Seattle, Phoenix, or New York? How school enrollment works in each metro, where to find official school and crime data, and how to research any address like a local.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F2027;
+            --secondary: #203A43;
+            --accent: #C5A059;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --text-main: #333333;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Lato', sans-serif; color: var(--text-main); line-height: 1.7; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
+
+        header {
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 1rem 0;
+        }
+        .nav-container {
+            max-width: 1200px; margin: auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 20px;
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 800; color: var(--primary);
+            letter-spacing: 1px; text-transform: uppercase;
+            border: 2px solid var(--primary); padding: 8px 15px;
+            text-decoration: none; transition: all 0.3s;
+        }
+        .logo:hover { background: var(--primary); color: white; }
+        .back-link {
+            color: var(--primary); text-decoration: none; font-weight: 600;
+            display: flex; align-items: center; gap: 8px; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent); }
+
+        .hero {
+            background: linear-gradient(rgba(15,32,39,0.82), rgba(15,32,39,0.82)),
+                        url('images/relocation-new.svg');
+            background-size: cover; background-position: center;
+            padding: 110px 20px 90px; text-align: center; color: white;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 18px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.25rem; max-width: 720px; margin: 0 auto; opacity: 0.95; }
+        .hero-cta { margin-top: 30px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        .btn {
+            display: inline-block; background: var(--accent); color: white;
+            padding: 15px 38px; text-decoration: none; border-radius: 4px;
+            font-weight: 700; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .btn-outline { background: transparent; border: 2px solid white; color: white; }
+        .btn-outline:hover { background: white; color: var(--primary); }
+
+        .content-section { padding: 80px 20px; max-width: 1200px; margin: auto; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .section-title p { color: #666; max-width: 720px; margin: auto; }
+        .underline { width: 80px; height: 3px; background: var(--accent); margin: 0 auto 15px; }
+
+        .features-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 40px;
+        }
+        .feature-card {
+            background: white; padding: 34px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        .feature-card i { font-size: 2.6rem; color: var(--accent); margin-bottom: 18px; }
+        .feature-card h3 { color: var(--primary); margin-bottom: 12px; }
+        .feature-card p { color: #555; font-size: 0.98rem; }
+        .feature-card p + p { margin-top: 10px; }
+        .feature-card a.link { color: var(--primary); font-weight: 700; }
+
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .step {
+            background: white; padding: 36px 30px; border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); text-align: center;
+        }
+        .step-num {
+            width: 52px; height: 52px; border-radius: 50%; background: var(--accent);
+            color: white; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+        }
+        .step h3 { color: var(--primary); margin-bottom: 12px; }
+        .step p { color: #555; font-size: 0.98rem; }
+
+        .metro-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+        .metro-tab {
+            background: white; border: 2px solid #e0e0e0; color: var(--primary);
+            padding: 12px 26px; border-radius: 30px; font-family: 'Montserrat', sans-serif;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.25s;
+        }
+        .metro-tab:hover { border-color: var(--accent); color: var(--accent); }
+        .metro-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .metro-panel { display: none; }
+        .metro-panel.active { display: block; }
+        .metro-intro { text-align: center; color: #666; max-width: 720px; margin: 0 auto 34px; font-size: 1.08rem; }
+
+        .band {
+            background: var(--light-gray); border-radius: 12px; padding: 36px 34px;
+            max-width: 980px; margin: 0 auto 40px;
+        }
+        .band h3 { color: var(--primary); margin-bottom: 14px; font-size: 1.35rem; }
+        .band p, .band li { color: #555; font-size: 0.99rem; }
+        .band ul { margin: 12px 0 0 20px; }
+        .band li { margin-bottom: 10px; }
+        .band a { color: var(--primary); font-weight: 700; }
+
+        .checklist { max-width: 900px; margin: 0 auto 40px; }
+        .checklist .check-item {
+            background: white; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            padding: 22px 26px; margin-bottom: 16px; display: flex; gap: 18px; align-items: flex-start;
+        }
+        .check-item i { color: var(--accent); font-size: 1.5rem; margin-top: 4px; flex-shrink: 0; }
+        .check-item h3 { color: var(--primary); margin-bottom: 6px; font-size: 1.1rem; }
+        .check-item p { color: #555; font-size: 0.97rem; }
+        .check-item a { color: var(--primary); font-weight: 700; }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px; padding: 60px 34px; text-align: center; color: white;
+            max-width: 1000px; margin: 0 auto;
+        }
+        .cta-section h2 { margin-bottom: 16px; font-size: 2rem; }
+        .cta-section p { max-width: 640px; margin: 0 auto 28px; opacity: 0.92; font-size: 1.08rem; }
+        .cta-contact { margin-top: 22px; opacity: 0.9; }
+        .cta-contact a { color: var(--accent); font-weight: 700; text-decoration: none; }
+
+        .disclaimer {
+            max-width: 900px; margin: 50px auto 0; color: #888; font-size: 0.85rem;
+            text-align: center; line-height: 1.6;
+        }
+
+        footer { text-align: center; padding: 40px 20px; color: #666; font-size: 0.95rem; border-top: 1px solid #eee; margin-top: 40px; }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2.1rem; }
+            .section-title h2 { font-size: 1.9rem; }
+            .content-section { padding: 56px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="logo">VDI Realty</a>
+        <a href="relocation.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Relocation</a>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>Schools &amp; Safety, Without the Guesswork</h1>
+    <p>How enrollment actually works in Seattle, Phoenix, and New York — and how to research any school or address yourself, using official data.</p>
+    <div class="hero-cta">
+        <a href="index.html#contact" class="btn">Request My Free Area Guide</a>
+        <a href="#safety" class="btn btn-outline">How to Research Safety</a>
+    </div>
+</section>
+
+<!-- FRAMING: what we will and won't do -->
+<section class="content-section">
+    <div class="section-title">
+        <h2>Why This Page Exists</h2>
+        <div class="underline"></div>
+        <p>Families relocating for work ask us about schools and safety constantly. Here is our honest position: we will not steer you toward or away from any neighborhood — that is not our call to make, and fair-housing law agrees. What we <em>will</em> do is show you exactly how the systems work and where the official data lives, so you can decide with confidence.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-compass"></i>
+            <h3>What We'll Do</h3>
+            <p>Fold your school priorities into your free area guide, tour neighborhoods with you on live video, and answer factual questions about how enrollment and boundaries work in each metro.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-ban"></i>
+            <h3>What We Won't Do</h3>
+            <p>Rank neighborhoods, characterize any area's safety, or recommend one school over another. Those judgments belong to you — backed by the official sources below.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SCHOOL ENROLLMENT BY METRO -->
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>How School Enrollment Works in Each Metro</h2>
+        <div class="underline"></div>
+        <p>The rules are genuinely different in each market — and in two of them, your address partly determines your options, so it pays to understand this <em>before</em> you pick a neighborhood.</p>
+    </div>
+
+    <div class="metro-tabs">
+        <button class="metro-tab active" data-metro="seattle">Seattle&ndash;Eastside</button>
+        <button class="metro-tab" data-metro="phoenix">Phoenix</button>
+        <button class="metro-tab" data-metro="nyc">New York City</button>
+    </div>
+
+    <div class="metro-panel active" id="metro-seattle">
+        <p class="metro-intro">Seattle Public Schools assigns every student to an <strong>attendance-area school based on home address</strong>. Eastside districts (Bellevue, Lake Washington, Issaquah, and others) work the same way — neighborhood schools by boundary.</p>
+        <div class="band">
+            <h3><i class="fas fa-school"></i> The mechanics</h3>
+            <ul>
+                <li><strong>Default assignment:</strong> your address determines your attendance-area school for elementary, middle, and high school. The district's address lookup tool confirms your assignment.</li>
+                <li><strong>Open Enrollment for School Choice:</strong> each January, families can apply to attend a different school (for the 2026&ndash;27 cycle the window was January 5&ndash;31, with late applications through March 31). Admission is by space availability and tiebreakers — it is not guaranteed.</li>
+                <li><strong>Option schools:</strong> Seattle also runs option schools (STEM, arts, language immersion, K&ndash;8 models) that families can request during choice season, subject to seat availability.</li>
+                <li><strong>Mid-year movers:</strong> new-student enrollment stays open during the school year — you enroll at your attendance-area school when you arrive.</li>
+            </ul>
+            <p style="margin-top: 16px;"><a href="https://www.seattleschools.org/enroll/" target="_blank" rel="noopener">Seattle Public Schools &mdash; Enrollment <i class="fas fa-external-link-alt"></i></a> &nbsp;&middot;&nbsp; <a href="https://www.seattleschools.org/enroll/find-your-school/school-choice/" target="_blank" rel="noopener">School Choice <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+    </div>
+
+    <div class="metro-panel" id="metro-phoenix">
+        <p class="metro-intro">Arizona has the most flexible system of the three: state open-enrollment law plus one of the country's largest charter-school landscapes.</p>
+        <div class="band">
+            <h3><i class="fas fa-school"></i> The mechanics</h3>
+            <ul>
+                <li><strong>Open enrollment is the law</strong> (A.R.S. &sect; 15-816): your child can apply to attend <em>any</em> public school in Arizona — even outside your home district — as long as the school has classroom space.</li>
+                <li><strong>District schools</strong> still assign by boundary by default; open enrollment is how you transfer within or across districts.</li>
+                <li><strong>Charter schools</strong> are tuition-free public schools, open to all students. By law they admit every timely applicant up to capacity, then use a lottery — no admissions tests allowed.</li>
+                <li><strong>Practical note:</strong> with this much choice, most relocating families shortlist 3&ndash;5 schools and apply to several. Popular charters fill their lotteries early in the enrollment season.</li>
+            </ul>
+            <p style="margin-top: 16px;"><a href="https://www.azed.gov/" target="_blank" rel="noopener">Arizona Department of Education <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+    </div>
+
+    <div class="metro-panel" id="metro-nyc">
+        <p class="metro-intro">NYC is a hybrid: zoned for elementary, choice-based for middle and high school — run through one citywide application system.</p>
+        <div class="band">
+            <h3><i class="fas fa-school"></i> The mechanics</h3>
+            <ul>
+                <li><strong>Elementary:</strong> most schools are zoned — zoned students get first priority for seats. You can rank up to 12 programs on the kindergarten application, including un-zoned "schools of choice."</li>
+                <li><strong>Middle and high school:</strong> applied for through <strong>MySchools</strong>, the city's online system. Application windows typically run in the fall (roughly October&ndash;December); specialized high schools admit by the SHSAT exam.</li>
+                <li><strong>New arrivals:</strong> families moving to NYC mid-year enroll year-round through a Family Welcome Center — you do not wait for an application window.</li>
+                <li><strong>What this means for house hunting:</strong> for elementary grades, your address strongly shapes your options, so many families research zones before they commit to a neighborhood.</li>
+            </ul>
+            <p style="margin-top: 16px;"><a href="https://www.myschools.nyc/" target="_blank" rel="noopener">MySchools &mdash; NYC school applications <i class="fas fa-external-link-alt"></i></a> &nbsp;&middot;&nbsp; <a href="https://www.schools.nyc.gov/" target="_blank" rel="noopener">NYC Public Schools <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+    </div>
+</section>
+
+<!-- MID-YEAR MOVER TIPS -->
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Moving Mid-Year? Read This First</h2>
+        <div class="underline"></div>
+        <p>Job relocations rarely line up with the school calendar. Here is how to land smoothly when you arrive between September and June.</p>
+    </div>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <h3>Start With Your Assigned School</h3>
+            <p>Your attendance-area or zoned school enrolls new residents during the school year. It is your guaranteed seat while you explore other options.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <h3>Bring the Paperwork</h3>
+            <p>Birth certificate, immunization records, transcripts or report cards, proof of address — and IEP/504 paperwork if applicable, so services transfer without gaps.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <h3>Ask About Choice Windows</h3>
+            <p>Arriving before a new school year? Ask each district about its school-choice application deadlines — Seattle's runs in January, NYC's in the fall, Arizona charters run lotteries on their own schedules.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <h3>Confirm Transportation</h3>
+            <p>A seat at a choice, charter, or magnet school does not always come with a bus route. Ask about transportation before you commit — it affects where you can realistically live.</p>
+        </div>
+    </div>
+</section>
+
+<!-- OFFICIAL SCHOOL DATA -->
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Official School Data Sources</h2>
+        <div class="underline"></div>
+        <p>Start with the state's own report card for any school, then layer on parent reviews. These are the sources the districts themselves publish to.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-star-half-alt"></i>
+            <h3>GreatSchools.org</h3>
+            <p>Parent reviews plus summaries of state test data for schools nationwide. A useful first pass in any metro — then verify against the state source.</p>
+            <p><a class="link" href="https://www.greatschools.org/" target="_blank" rel="noopener">greatschools.org <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Washington: OSPI Report Card</h3>
+            <p>The state superintendent's official report card for every Washington public school — test scores, graduation rates, demographics.</p>
+            <p><a class="link" href="https://washingtonstatereportcard.ospi.k12.wa.us/" target="_blank" rel="noopener">OSPI State Report Card <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Arizona: ADE Report Cards</h3>
+            <p>The Arizona Department of Education's official school report cards, covering district and charter schools statewide.</p>
+            <p><a class="link" href="https://azreportcards.azed.gov/" target="_blank" rel="noopener">AZ School Report Cards <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-file-alt"></i>
+            <h3>New York: NYSED Data</h3>
+            <p>The State Education Department's data portal for every New York public school — test results, graduation rates, and school quality reports.</p>
+            <p><a class="link" href="https://data.nysed.gov/" target="_blank" rel="noopener">data.nysed.gov <i class="fas fa-external-link-alt"></i></a></p>
+        </div>
+    </div>
+</section>
+
+<!-- SAFETY RESEARCH -->
+<section class="content-section" style="padding-top: 0;" id="safety">
+    <div class="section-title">
+        <h2>How to Research Safety for Any Address</h2>
+        <div class="underline"></div>
+        <p>We will not characterize any neighborhood's safety — but we will hand you the same official data the professionals use, and show you how to read it.</p>
+    </div>
+    <div class="checklist">
+        <div class="check-item">
+            <i class="fas fa-database"></i>
+            <div>
+                <h3>Start national: FBI Crime Data Explorer</h3>
+                <p>The FBI's interactive tool for reported crime data at the national, state, and agency level — the baseline source everything else builds on. <a href="https://crime-data-explorer.fbi.gov/" target="_blank" rel="noopener">crime-data-explorer.fbi.gov <i class="fas fa-external-link-alt"></i></a></p>
+            </div>
+        </div>
+        <div class="check-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <div>
+                <h3>Then go local: your metro's police data</h3>
+                <p>Local dashboards are more current and more granular than national data. Seattle publishes police data through the <a href="https://data.seattle.gov/" target="_blank" rel="noopener">City of Seattle Open Data portal</a>; Phoenix publishes crime statistics through the <a href="https://www.phoenix.gov/police" target="_blank" rel="noopener">Phoenix Police Department</a>; New York publishes precinct-level trends through <a href="https://www.nyc.gov/nypd" target="_blank" rel="noopener">NYPD CompStat</a>.</p>
+            </div>
+        </div>
+        <div class="check-item">
+            <i class="fas fa-chart-line"></i>
+            <div>
+                <h3>Read trends, not snapshots</h3>
+                <p>A single month of data tells you almost nothing. Pull the same precinct or beat over several years and look at the direction — and compare across the metro, not just within one city, so you have context.</p>
+            </div>
+        </div>
+        <div class="check-item">
+            <i class="fas fa-clock"></i>
+            <div>
+                <h3>See it at different times of day</h3>
+                <p>Any area reads differently at 10am and 10pm. If you cannot visit in person, ask us to include an evening pass in your video walkthrough — you will see street lighting, foot traffic, and parking patterns for yourself.</p>
+            </div>
+        </div>
+        <div class="check-item">
+            <i class="fas fa-users"></i>
+            <div>
+                <h3>Talk to the precinct</h3>
+                <p>Local precincts and community-affairs officers answer resident questions routinely. It is the most direct primary source there is — and it costs nothing.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRACTICAL EXTRAS -->
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Things Relocators Ask Us Most</h2>
+        <div class="underline"></div>
+        <p>The practical details that surprise families moving between these three states.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-calendar-alt"></i>
+            <h3>School Calendars Differ</h3>
+            <p>Many Phoenix-area districts run <strong>modified year-round calendars</strong> (shorter summer, longer breaks through the year), while Seattle and NYC run traditional calendars. Confirm the calendar with the specific district — it affects move timing and childcare planning.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-birthday-cake"></i>
+            <h3>Kindergarten Cutoffs Differ</h3>
+            <p>Washington and Arizona typically require a child to be 5 by <strong>August 31</strong>; New York City uses <strong>December 31</strong>. A child who qualifies for kindergarten in one metro may not in another — verify with the district before you assume.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-syringe"></i>
+            <h3>Bring Immunization Records</h3>
+            <p>All three states require immunization records for school enrollment, but the required vaccines and exemption rules vary by state. Bring the full record and check the new state's requirements before your first enrollment visit.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-question-circle"></i>
+            <h3>Do Schools Drive the Home Search?</h3>
+            <p>Often, yes — and the order matters. In Seattle and NYC, your address strongly shapes elementary options, so many families shortlist school zones <em>before</em> neighborhoods. In Phoenix, open enrollment gives you more flexibility to choose the home first. Tell us your priorities and we'll sequence the search accordingly.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="content-section" style="padding-top: 0;">
+    <div class="cta-section">
+        <h2>Tell Us Your School Priorities</h2>
+        <p>Request your free area guide and tell us what matters for your family — commute, school zones, charter options, or all of the above. We'll build your shortlist around it, tour homes on live video, and support your remote close.</p>
+        <a href="index.html#contact" class="btn">Request My Free Area Guide</a>
+        <div class="cta-contact">
+            Prefer to talk? Call or text <a href="tel:+12068800637">206-880-0637</a> &middot; <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a>
+        </div>
+    </div>
+    <p class="disclaimer">School enrollment rules change by district and year — confirm deadlines with the district or school directly before making plans. This page is general information, not legal or educational advice. Equal Housing Opportunity. VDI Realty does not discriminate on the basis of race, color, religion, sex, handicap, familial status, or national origin.</p>
+</section>
+
+<footer>
+    <p>&copy; 2026 VDI Realty. All Rights Reserved.</p>
+    <p style="margin-top: 8px; font-size: 0.85rem; color: #888;">Brokered by Realty Connect</p>
+    <p style="margin-top: 10px;">
+        <a href="index.html" style="color: #666; text-decoration: none;">Home</a> |
+        <a href="relocation.html" style="color: #666; text-decoration: none;">Relocation</a> |
+        <a href="tel:+12068800637" style="color: #666; text-decoration: none;">206-880-0637</a> |
+        <a href="mailto:sales@vdirealty.com" style="color: #666; text-decoration: none;">sales@vdirealty.com</a>
+    </p>
+</footer>
+
+<script>
+    document.querySelectorAll('.metro-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.metro-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.metro-panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('metro-' + tab.dataset.metro).classList.add('active');
+        });
+    });
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const el = document.querySelector(a.getAttribute('href'));
+            if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+        });
+    });
+</script>
+
+</body>
+</html>
