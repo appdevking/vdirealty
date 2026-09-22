@@ -5,9 +5,11 @@ const config = require('../config');
 
 const router = express.Router();
 
-// Admin auth (mirrors fsbo-routes): Authorization header must equal admin password
+// Admin auth (mirrors fsbo-routes): Authorization header carries the admin
+// password, either raw or as a Bearer token (both accepted for compatibility)
 const adminAuth = (req, res, next) => {
-    const password = req.headers.authorization;
+    const header = req.headers.authorization;
+    const password = header && header.startsWith('Bearer ') ? header.slice(7) : header;
     if (password && password === config.adminPassword) {
         next();
     } else {
