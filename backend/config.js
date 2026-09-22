@@ -44,3 +44,5 @@ module.exports = {
 };
 
 // Trigger redeploy to install corrected ADMIN_PASSWORD secret
+
+// Trigger redeploy for rotated ADMIN_PASSWORD secret
