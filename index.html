@@ -322,6 +322,7 @@
                         <div class="field">
                             <select name="interest" id="interest" required>
                                 <option value="" disabled selected>I am interested in... *</option>
+                                <option value="Buyer Representation Request">Buyer Representation Request</option>
                                 <option value="Property Inquiry">Property Inquiry</option>
                                 <option value="Schedule a Showing">Schedule a Showing</option>
                                 <option value="Request More Information">Request More Information</option>
@@ -713,7 +714,7 @@
             };
             
             // Submit to VDI Realty backend
-            fetch('https://vdi-storage-production.up.railway.app/api/contact/submit', {
+            fetch('https://api.vdirealty.com/api/contact/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
