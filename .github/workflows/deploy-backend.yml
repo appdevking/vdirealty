@@ -21,6 +21,7 @@ jobs:
       - name: Deploy to EC2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           EC2_HOST: 52.14.248.239
           EC2_USER: ubuntu
         run: |
@@ -32,10 +33,24 @@ jobs:
           # Add EC2 to known hosts
           ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
           
+          # Base64-encode the admin password for safe transport through ssh
+          # (empty when the ADMIN_PASSWORD secret is not set)
+          ADMIN_B64=$(printf '%s' "$ADMIN_PASSWORD" | base64 -w0)
+          
           # Deploy to EC2
-          ssh -i ~/.ssh/ec2_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+          ssh -i ~/.ssh/ec2_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST "ADMIN_B64=$ADMIN_B64 bash -s" << 'EOF'
             cd ~/vdirealty/backend
             git pull origin main
+            # Install ADMIN_PASSWORD into .env when the GitHub secret is set
+            if [ -n "$ADMIN_B64" ]; then
+              ADMIN_PASSWORD=$(printf '%s' "$ADMIN_B64" | base64 -d)
+              touch .env
+              grep -v '^ADMIN_PASSWORD=' .env > .env.tmp || true
+              mv .env.tmp .env
+              printf 'ADMIN_PASSWORD=%s\n' "$ADMIN_PASSWORD" >> .env
+              chmod 600 .env
+              echo "admin password installed"
+            fi
             npm install --production
             pm2 restart all
             pm2 save
