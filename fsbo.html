@@ -37,20 +37,21 @@
         h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
 
         /* ---------- Nav ---------- */
-        .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 1rem 0; position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 2px 10px rgba(35,45,80,0.10);
-            border-bottom: 1px solid #e5e8ed;
-        }
+        .navbar { background: #faf8f4; border-bottom: 1px solid #c19a3d; padding: 0.85rem 0; position: sticky; top: 0; z-index: 1000; }
         .nav-container {
             max-width: 1400px; margin: 0 auto; display: flex;
             justify-content: space-between; align-items: center; padding: 0 2rem;
         }
-        .logo { font-size: 1.8rem; font-weight: 800; color: var(--white); text-decoration: none; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
-        .logo span { color: var(--accent); }
+                .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
+        
         .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
-        .nav-links a { color: var(--white); text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a { color: #0a1c30; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
         .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
         /* ---------- Hero ---------- */
@@ -270,7 +271,7 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="logo"><img src="images/vdi-mark.webp" alt="VDI Realty logo" style="height:34px;width:34px;border-radius:8px;vertical-align:-9px;margin-right:10px;">VDI <span>REALTY</span></a>
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="fsbo-listings.html">Browse FSBO</a></li>

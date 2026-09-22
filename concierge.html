@@ -22,9 +22,15 @@
         }
         body { font-family: 'Lato', sans-serif; color: var(--text-main); background: var(--light-gray); margin: 0; }
         h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
-        header { background: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; padding: 1rem 0; }
+        header { background: #faf8f4; border-bottom: 1px solid #c19a3d; position: sticky; top: 0; z-index: 1000; padding: 0.85rem 0; }
         .nav-container { max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-        .logo { font-size: 1.3rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+                .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
         .nav-links { display: flex; gap: 16px; }
         .nav-links a { color: var(--primary); text-decoration: none; font-weight: 600; }
         .nav-links a:hover { color: var(--accent); }
@@ -68,7 +74,7 @@
 <body>
     <header>
         <div class="nav-container">
-            <a href="index.html" class="logo"><img src="images/vdi-mark.webp" alt="VDI Realty logo" style="height:34px;width:34px;border-radius:8px;vertical-align:-9px;margin-right:10px;">VDI Realty</a>
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
             <nav class="nav-links">
                 <a href="listings.html">Listings</a>
                 <a href="fsbo-listings.html">FSBO</a>
