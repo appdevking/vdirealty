@@ -47,7 +47,7 @@ jobs:
               touch .env
               grep -v '^ADMIN_PASSWORD=' .env > .env.tmp || true
               mv .env.tmp .env
-              printf 'ADMIN_PASSWORD=%s\n' "$ADMIN_PASSWORD" >> .env
+              printf 'ADMIN_PASSWORD="%s"\n' "$ADMIN_PASSWORD" >> .env
               chmod 600 .env
               echo "admin password installed"
             fi
