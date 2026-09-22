@@ -6,67 +6,352 @@
 <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to Browse Listings | VDI Realty</title>
-    <meta http-equiv="refresh" content="0; url=listings.html">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Commercial Real Estate — Retail &amp; Strip Malls | VDI Realty</title>
+    <meta name="description" content="Own retail or a strip mall? Get a free valuation, off-market deal alerts, and investor guidance for commercial property across Washington, Arizona, and New York.">
+    <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="home-pro.css">
     <style>
         :root {
-            --primary: #0F2027;
-            --secondary: #203A43;
-            --accent: #C5A059;
+            --navy: #0a1c30;
+            --gold: #c19a3d;
+            --gold-soft: #e9c46a;
+            --ivory: #faf8f4;
+            --ink: #1b2430;
+            --ink-dim: #5a6472;
         }
-        body {
-            font-family: 'Lato', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            text-align: center;
+        body { background: var(--ivory); color: var(--ink); }
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* ---------- Hero ---------- */
+        .com-hero { text-align: center; padding: 4.5rem 1.5rem 3.5rem; background: var(--ivory); }
+        .com-hero .kicker { color: var(--gold); text-transform: uppercase; letter-spacing: 2.5px; font-size: 0.8rem; font-weight: 700; margin-bottom: 1rem; }
+        .com-hero h1 { font-family: Georgia, 'Times New Roman', serif; color: var(--navy); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin: 0 0 1.2rem; font-weight: 400; }
+        .com-hero h1 em { color: var(--gold); font-style: italic; }
+        .com-hero .lede { font-size: 1.15rem; color: var(--ink-dim); max-width: 680px; margin: 0 auto 2rem; line-height: 1.7; }
+        .com-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.95rem 2.1rem; border-radius: 50px; font-weight: 700; text-decoration: none; font-size: 0.95rem; letter-spacing: 0.4px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; font-family: inherit; }
+        .btn-gold { background: var(--gold); color: #fff; border: 2px solid var(--gold); }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(193,154,61,0.35); }
+        .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+        .btn-outline:hover { background: var(--navy); color: #fff; }
+        .hairline { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); border: 0; max-width: 720px; margin: 0 auto; }
+
+        /* ---------- Sections ---------- */
+        .com-section { padding: 3.5rem 0; }
+        .com-section h2 { font-family: Georgia, 'Times New Roman', serif; color: var(--navy); font-weight: 400; font-size: clamp(1.6rem, 3.5vw, 2.2rem); text-align: center; margin: 0 0 0.8rem; }
+        .com-section .sub { text-align: center; color: var(--ink-dim); max-width: 640px; margin: 0 auto 2.5rem; line-height: 1.7; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .card { background: #fff; border: 1px solid #ece5d8; border-radius: 14px; padding: 2rem 1.8rem; }
+        .card .icon { width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--gold); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1.1rem; }
+        .card h3 { color: var(--navy); font-family: Georgia, serif; font-weight: 400; font-size: 1.35rem; margin: 0 0 0.7rem; }
+        .card p { color: var(--ink-dim); line-height: 1.7; margin: 0; font-size: 0.98rem; }
+
+        .markets { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+        .market { background: var(--navy); color: #fff; border-radius: 12px; padding: 1.4rem 2rem; text-align: center; min-width: 200px; }
+        .market i { color: var(--gold-soft); font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .market h4 { margin: 0.4rem 0 0.3rem; font-size: 1.1rem; }
+        .market p { margin: 0; font-size: 0.88rem; color: #c8d2de; }
+
+        /* ---------- Lead form ---------- */
+        .lead-box { background: #fff; border: 1px solid #ece5d8; border-radius: 16px; max-width: 720px; margin: 0 auto; padding: 2.5rem; box-shadow: 0 12px 40px rgba(10,28,48,0.06); }
+        .lead-box h3 { font-family: Georgia, serif; color: var(--navy); font-weight: 400; font-size: 1.5rem; margin: 0 0 0.5rem; text-align: center; }
+        .lead-box > p { text-align: center; color: var(--ink-dim); margin: 0 0 1.8rem; }
+        .field { margin-bottom: 1.1rem; }
+        .field label { display: block; font-weight: 700; font-size: 0.85rem; color: var(--navy); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .field input, .field select, .field textarea { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #ddd5c3; border-radius: 10px; font-size: 1rem; font-family: inherit; background: var(--ivory); color: var(--ink); }
+        .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-message { display: none; padding: 0.9rem 1.2rem; border-radius: 10px; margin-bottom: 1.1rem; font-size: 0.95rem; }
+        .form-message.ok { display: block; background: #eef7ee; color: #1e6b2e; border: 1px solid #bfe3c6; }
+        .form-message.err { display: block; background: #fdeeee; color: #a02a2a; border: 1px solid #f3c1c1; }
+        .fine { font-size: 0.82rem; color: var(--ink-dim); text-align: center; margin-top: 1rem; }
+
+        /* ---------- FAQ ---------- */
+        .faq { max-width: 760px; margin: 0 auto; }
+        .faq details { background: #fff; border: 1px solid #ece5d8; border-radius: 12px; margin-bottom: 0.9rem; padding: 1.1rem 1.4rem; }
+        .faq summary { cursor: pointer; font-weight: 700; color: var(--navy); }
+        .faq p { color: var(--ink-dim); line-height: 1.7; margin: 0.7rem 0 0; }
+
+        .disclosure { text-align: center; color: var(--ink-dim); font-size: 0.82rem; padding: 2rem 1.5rem 3rem; max-width: 760px; margin: 0 auto; line-height: 1.7; }
+
+        @media (max-width: 640px) {
+            .field-row { grid-template-columns: 1fr; }
+            .lead-box { padding: 1.6rem 1.2rem; }
+            .com-hero { padding: 3rem 1.2rem 2.5rem; }
         }
-        .redirect-box {
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-        }
-        h1 { font-family: 'Montserrat', sans-serif; margin-bottom: 20px; }
-        .spinner {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid var(--accent);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 30px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        a:hover { text-decoration: underline; }
     </style>
-    <script>
-        // Immediate redirect
-        window.location.replace('listings.html');
-    </script>
 </head>
 <body>
-    <div class="redirect-box">
-        <h1><i class="fas fa-building"></i> Page Moved</h1>
-        <div class="spinner"></div>
-        <p>Commercial Listings have been consolidated into <strong>Browse Listings</strong></p>
-        <p style="margin-top: 20px;">All commercial, residential, and investment properties are now in one place!</p>
-        <p style="margin-top: 15px; font-size: 0.9rem;">If you're not redirected automatically, <a href="listings.html">click here</a>.</p>
+
+    <header class="masthead">
+        <div class="wrap">
+            <a class="wordmark" href="index.html"><span class="wm-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="wm-words"><span class="wm-name">VDI<span class="wm-dot">·</span>REALTY</span><em class="wm-tag">a home uniquely yours</em></span></a>
+            <nav class="main-nav">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="index.html#contact" class="nav-cta">Contact</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="contact-strip">
+            <div class="wrap">
+                <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
+                <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="listings.html">Listings</a>
+        <a href="fsbo-listings.html">FSBO</a>
+        <a href="builder-listings.html">Builders</a>
+        <a href="relocation.html">Relocation</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="com-hero">
+        <div class="kicker">Commercial Real Estate</div>
+        <h1>Own retail? Let's talk about<br><em>what it's really worth.</em></h1>
+        <p class="lede">Strip malls, retail centers, and mixed-use buildings across Washington, Arizona, and New York. Get a free, no-pressure valuation of your property — or get first word on off-market retail deals before they go public.</p>
+        <div class="com-ctas">
+            <a href="#valuation" class="btn btn-gold"><i class="fas fa-chart-line"></i> Free property valuation</a>
+            <a href="#valuation" class="btn btn-outline"><i class="fas fa-bell"></i> Off-market deal alerts</a>
+        </div>
+    </section>
+
+    <hr class="hairline">
+
+    <!-- Investor education -->
+    <section class="com-section">
+        <div class="wrap">
+            <h2>Retail investing, in plain English</h2>
+            <p class="sub">The concepts that drive every strip-mall deal — explained the way we'd explain them over coffee.</p>
+            <div class="cards">
+                <div class="card">
+                    <div class="icon"><i class="fas fa-percentage"></i></div>
+                    <h3>Cap rates</h3>
+                    <p>A cap rate is a property's annual net operating income divided by its price — a quick shorthand for yield. Higher isn't automatically better; it often reflects higher risk, older buildings, or weaker tenant mixes. We walk you through what the number actually means for a specific center.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><i class="fas fa-file-contract"></i></div>
+                    <h3>NNN leases</h3>
+                    <p>In a triple-net (NNN) lease, the tenant pays taxes, insurance, and maintenance on top of rent. That can mean steadier hands-off income for the owner — but the fine print matters enormously. We read leases with you before you sign anything.</p>
+                </div>
+                <div class="card">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <h3>Tenant mix</h3>
+                    <p>A strip mall is only as strong as its tenants. National-credit anchors, staggered lease expirations, and internet-resistant uses (food, services, medical) are what separate durable income from a slow vacancy spiral.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markets -->
+    <section class="com-section" style="background:#fff; border-top:1px solid #ece5d8; border-bottom:1px solid #ece5d8;">
+        <div class="wrap">
+            <h2>Where we work</h2>
+            <p class="sub">Retail corridors we know block by block — from neighborhood strips to grocery-anchored centers.</p>
+            <div class="markets">
+                <div class="market"><i class="fas fa-map-marker-alt"></i><h4>Washington</h4><p>Seattle · Bellevue · Eastside corridors</p></div>
+                <div class="market"><i class="fas fa-map-marker-alt"></i><h4>Arizona</h4><p>Phoenix · Scottsdale · growth corridors</p></div>
+                <div class="market"><i class="fas fa-map-marker-alt"></i><h4>New York</h4><p>NYC boroughs · mixed-use retail</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lead form -->
+    <section class="com-section" id="valuation">
+        <div class="wrap">
+            <h2>Get your free valuation</h2>
+            <p class="sub">Tell us about your property. We'll put together a clear-eyed estimate of what it could sell or lease for — free, no obligation, no spam.</p>
+            <div class="lead-box">
+                <h3>Request a valuation</h3>
+                <p>We typically respond within one business day.</p>
+                <div class="form-message" id="comFormMessage"></div>
+                <form id="comLeadForm">
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="comName">Full name *</label>
+                            <input type="text" id="comName" required autocomplete="name">
+                        </div>
+                        <div class="field">
+                            <label for="comPhone">Phone</label>
+                            <input type="tel" id="comPhone" autocomplete="tel">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="comEmail">Email *</label>
+                        <input type="email" id="comEmail" required autocomplete="email">
+                    </div>
+                    <div class="field">
+                        <label for="comType">Property type</label>
+                        <select id="comType">
+                            <option>Strip mall / retail center</option>
+                            <option>Single-tenant retail</option>
+                            <option>Mixed-use (retail + residential/office)</option>
+                            <option>Office building</option>
+                            <option>Restaurant / food service building</option>
+                            <option>Other commercial</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="comAddress">Property address or area</label>
+                        <input type="text" id="comAddress" placeholder="e.g. 123 Main St, Bellevue, WA">
+                    </div>
+                    <div class="field">
+                        <label for="comGoal">I'm interested in</label>
+                        <select id="comGoal">
+                            <option>Free valuation — what could I sell for?</option>
+                            <option>Free rent analysis — what could I lease for?</option>
+                            <option>Off-market retail deal alerts (buyer)</option>
+                            <option>Just exploring — send me market info</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="comMessage">Anything else</label>
+                        <textarea id="comMessage" rows="3" placeholder="Tenants, square footage, lease details — anything helpful."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-gold" id="comSubmitBtn" style="width:100%; justify-content:center;"><span>Request my free valuation</span></button>
+                    <p class="fine">By submitting, you agree to be contacted about your request. We never sell your information.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="com-section" style="padding-top:0;">
+        <div class="wrap">
+            <h2>Common questions</h2>
+            <p class="sub">Straight answers, no sales pitch.</p>
+            <div class="faq">
+                <details>
+                    <summary>Is the valuation really free?</summary>
+                    <p>Yes. It's a broker price opinion — our professional estimate based on comparable sales, rents, and market conditions — not a formal appraisal. There's no cost and no obligation.</p>
+                </details>
+                <details>
+                    <summary>Do you only work with big shopping centers?</summary>
+                    <p>No. Neighborhood strip malls, single-tenant retail buildings, and small mixed-use properties are our bread and butter. If it's retail and it's in Washington, Arizona, or New York, we can help.</p>
+                </details>
+                <details>
+                    <summary>What are off-market deal alerts?</summary>
+                    <p>Some owners prefer to sell quietly, without a public listing. When we hear about those opportunities, alert subscribers hear about them first — before they ever hit the open market.</p>
+                </details>
+                <details>
+                    <summary>I'm a first-time commercial buyer. Where do I start?</summary>
+                    <p>Start with the valuation form and tell us you're exploring. We'll walk you through how commercial deals differ from residential — financing, due diligence, leases — at whatever pace you need.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <div class="disclosure">
+        Valuations are broker price opinions — professional estimates, not formal appraisals. Market data shown is for general information only. VDI Realty — brokered by Realty Connect. We comply with all fair housing laws and do not discriminate on the basis of race, color, religion, sex, disability, familial status, or national origin.
     </div>
+
+    <footer>
+        <div class="wrap">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a class="wordmark" href="index.html" style="text-decoration:none">VDI<span class="wm-dot">·</span>REALTY</a>
+                    <p class="areas">Serving Washington, Arizona &amp; New York</p>
+                    <p>A brokerage network for buyers, sellers, builders, and investors — listings, FSBO, property management, and relocation.</p>
+                </div>
+                <div>
+                    <h5>Explore</h5>
+                    <ul class="foot-links">
+                        <li><a href="listings.html">All listings</a></li>
+                        <li><a href="fsbo-listings.html">FSBO listings</a></li>
+                        <li><a href="builder-listings.html">New construction</a></li>
+                        <li><a href="commercial-listings.html">Commercial</a></li>
+                        <li><a href="property-management.html">Property management</a></li>
+                        <li><a href="relocation.html">Relocation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <ul class="foot-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+12068800637">(206) 880-0637</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Washington · Arizona · New York</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>&copy; 2026 VDI Realty. All Rights Reserved. <span class="brokered">Brokered by Realty Connect</span></span>
+                <span><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const toggle = document.querySelector('.menu-toggle i');
+            menu.classList.toggle('active');
+            if (menu.classList.contains('active')) {
+                toggle.classList.remove('fa-bars');
+                toggle.classList.add('fa-times');
+            } else {
+                toggle.classList.remove('fa-times');
+                toggle.classList.add('fa-bars');
+            }
+        }
+
+        // Commercial lead form -> stored contact submission (Jae triages)
+        document.getElementById('comLeadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('comSubmitBtn');
+            const msg = document.getElementById('comFormMessage');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            msg.className = 'form-message';
+            msg.style.display = 'none';
+
+            const name = document.getElementById('comName').value.trim();
+            const email = document.getElementById('comEmail').value.trim();
+            const phone = document.getElementById('comPhone').value.trim();
+            const type = document.getElementById('comType').value;
+            const address = document.getElementById('comAddress').value.trim();
+            const goal = document.getElementById('comGoal').value;
+            const extra = document.getElementById('comMessage').value.trim();
+
+            const message = [
+                'Goal: ' + goal,
+                'Property type: ' + type,
+                address ? 'Address/area: ' + address : null,
+                extra ? 'Details: ' + extra : null
+            ].filter(Boolean).join('\n');
+
+            try {
+                const res = await fetch('https://api.vdirealty.com/api/contact/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        interest: 'Commercial Property Inquiry',
+                        property: address || type,
+                        message: message
+                    })
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                msg.textContent = 'Thanks, ' + name.split(' ')[0] + '! Your request is in — we\'ll be in touch within one business day.';
+                msg.className = 'form-message ok';
+                document.getElementById('comLeadForm').reset();
+            } catch (err) {
+                msg.textContent = 'Something went wrong sending your request. Please try again, or email us directly at sales@vdirealty.com.';
+                msg.className = 'form-message err';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Request my free valuation</span>';
+            }
+        });
+    </script>
 </body>
 </html>
