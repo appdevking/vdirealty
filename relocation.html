@@ -359,6 +359,298 @@
         </div>
     </section>
 
+<style>
+.pc-table-wrap { overflow-x: auto; margin: 0 auto 26px; max-width: 900px; }
+.pc-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); font-size: 0.98rem; }
+.pc-table th { background: #0F2027; color: white; padding: 14px 12px; text-align: left; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; }
+.pc-table th:not(:first-child), .pc-table td:not(:first-child) { text-align: right; }
+.pc-table td { padding: 13px 12px; border-bottom: 1px solid #eee; }
+.pc-table tr:last-child td { border-bottom: none; }
+.pc-table tr.takehome td { background: #f4f1e8; font-weight: 700; color: #0F2027; font-size: 1.05rem; }
+.pc-table td.label { font-weight: 700; color: #0F2027; text-align: left; }
+.pc-note { max-width: 900px; margin: 0 auto 10px; color: #666; font-size: 0.98rem; }
+.pc-callout { max-width: 900px; margin: 26px auto 0; background: white; border-left: 4px solid #C5A059; border-radius: 0 8px 8px 0; padding: 20px 24px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); }
+.pc-callout strong { color: #0F2027; }
+</style>
+
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>What Your Paycheck Looks Like in Each Metro</h2>
+        <div class="underline"></div>
+        <p>Same $200,000 salary, three very different take-home numbers. State and city income taxes are the swing factor — here's the rough math for a single filer in 2026.</p>
+    </div>
+
+    <div class="pc-table-wrap">
+        <table class="pc-table">
+            <thead>
+                <tr>
+                    <th>$200,000 salary, single filer (2026 est.)</th>
+                    <th>Seattle–Eastside, WA</th>
+                    <th>Phoenix Metro, AZ</th>
+                    <th>New York City, NY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">Gross salary</td>
+                    <td>$200,000</td>
+                    <td>$200,000</td>
+                    <td>$200,000</td>
+                </tr>
+                <tr>
+                    <td class="label">Federal income tax (est.)</td>
+                    <td>$36,734</td>
+                    <td>$36,734</td>
+                    <td>$36,734</td>
+                </tr>
+                <tr>
+                    <td class="label">FICA — Social Security + Medicare (est.)</td>
+                    <td>$14,339</td>
+                    <td>$14,339</td>
+                    <td>$14,339</td>
+                </tr>
+                <tr>
+                    <td class="label">State + city income tax (est.)</td>
+                    <td>$0 <span style="color:#2e7d32; font-weight:400;">(no state income tax)</span></td>
+                    <td>$4,791 <span style="color:#666; font-weight:400;">(2.5% flat)</span></td>
+                    <td>$18,077 <span style="color:#666; font-weight:400;">(state + NYC)</span></td>
+                </tr>
+                <tr class="takehome">
+                    <td class="label">Estimated take-home</td>
+                    <td>$148,927</td>
+                    <td>$144,136</td>
+                    <td>$130,850</td>
+                </tr>
+                <tr>
+                    <td class="label">≈ per month</td>
+                    <td>$12,411</td>
+                    <td>$12,011</td>
+                    <td>$10,904</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="pc-note">How the state lines are calculated: <strong>WA</strong> — no state income tax. <strong>AZ</strong> — 2.5% flat rate on Arizona taxable income ($200,000 minus the $8,350 single standard deduction = $191,650 × 2.5%). <strong>NY</strong> — state tax ≈ $10,760 on NY taxable income ($200,000 minus the $8,000 standard deduction) using 2026's reduced rates (3.90%–5.90%), plus NYC tax ≈ $7,317 (3.078%–3.876%) on the same base. NYC's city tax applies to residents of the five boroughs — commuters living in New Jersey, Westchester, or Long Island don't pay it.</p>
+
+    <div class="pc-callout">
+        <strong>The bottom line:</strong> at $200K, a Seattle paycheck keeps roughly <strong>$18,000 more per year</strong> than the same salary in New York City, and about <strong>$4,800 more</strong> than in Phoenix — before any difference in housing costs. That's money that goes straight into your home-buying budget.
+    </div>
+
+    <p class="disclaimer"><strong>ILLUSTRATIVE ESTIMATES ONLY — not tax advice.</strong> Simplified comparison for a single filer with no dependents taking the standard deduction. Excludes 401(k), HSA, and health-insurance deductions, bonuses, equity compensation, local variations, and credits. Actual withholding and liability will differ. Consult a qualified tax professional for your situation. Sources: IRS 2026 federal brackets &amp; standard deduction; Social Security Administration 2026 wage base ($184,500); Tax Foundation 2026 state rates; NY Dept. of Taxation and Finance 2026 rate phase-in; NYC Dept. of Finance city brackets.</p>
+</section>
+<style>
+.col-table-wrap { overflow-x: auto; max-width: 900px; margin: 0 auto 26px; }
+.col-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); font-size: 0.98rem; }
+.col-table th { background: #0F2027; color: white; padding: 14px 12px; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; }
+.col-table th:first-child { text-align: left; }
+.col-table td { padding: 13px 12px; border-bottom: 1px solid #eee; text-align: center; }
+.col-table td:first-child { text-align: left; font-weight: 700; color: #0F2027; }
+.col-table tr:last-child td { border-bottom: none; }
+.col-table tr.hl td { background: #f4f1e8; font-weight: 700; color: #0F2027; }
+.col-bars { max-width: 900px; margin: 0 auto 10px; }
+.col-bar-row { margin-bottom: 14px; }
+.col-bar-row .col-bar-label { font-weight: 700; color: #0F2027; margin-bottom: 6px; font-size: 0.98rem; }
+.col-bar-track { background: #eee; border-radius: 6px; height: 26px; position: relative; overflow: hidden; }
+.col-bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #203A43, #C5A059); display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-weight: 700; font-size: 0.88rem; min-width: 64px; }
+.col-takeaway { max-width: 900px; margin: 26px auto 0; background: white; border-left: 4px solid #C5A059; border-radius: 0 8px 8px 0; padding: 20px 24px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); }
+.col-takeaway strong { color: #0F2027; }
+</style>
+
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Cost of Living, Side by Side</h2>
+        <div class="underline"></div>
+        <p>Your salary doesn't move alone — your expenses move with you. Here's how everyday costs compare across the three metros, indexed to New York City = 100.</p>
+    </div>
+
+    <div class="col-bars">
+        <div class="col-bar-row">
+            <div class="col-bar-label">Overall cost of living incl. rent — NYC = 100</div>
+            <div class="col-bar-track"><div class="col-bar-fill" style="width: 100%;">100 · NYC</div></div>
+        </div>
+        <div class="col-bar-row">
+            <div class="col-bar-track"><div class="col-bar-fill" style="width: 76.9%;">76.9 · Seattle</div></div>
+        </div>
+        <div class="col-bar-row">
+            <div class="col-bar-track"><div class="col-bar-fill" style="width: 57.3%;">57.3 · Phoenix</div></div>
+        </div>
+    </div>
+
+    <div class="col-table-wrap">
+        <table class="col-table">
+            <thead>
+                <tr><th>Index (NYC = 100)</th><th>New York City</th><th>Seattle</th><th>Phoenix</th></tr>
+            </thead>
+            <tbody>
+                <tr class="hl"><td>Overall incl. rent</td><td>100.0</td><td>76.9</td><td>57.3</td></tr>
+                <tr><td>Rent alone</td><td>100.0</td><td>60.2</td><td>39.7</td></tr>
+                <tr><td>Groceries</td><td>100.0</td><td>98.0</td><td>75.0</td></tr>
+                <tr><td>Restaurants</td><td>100.0</td><td>95.8</td><td>77.9</td></tr>
+                <tr><td>Local purchasing power</td><td>100.0</td><td>165.0</td><td>139.0</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-takeaway">
+        <strong>What it means:</strong> rent is the big lever — Seattle rents run roughly <strong>40% below</strong> NYC's and Phoenix roughly <strong>60% below</strong> on this index. Groceries and dining differ far less between NYC and Seattle. Combine that with the paycheck math above, and a dollar earned in Seattle or Phoenix stretches noticeably further than one earned in New York City.
+    </div>
+
+    <p class="disclaimer">Cost-of-living indices are approximate, based on crowdsourced Numbeo data ("Cost of Living Index by City 2026," NYC = 100 baseline, accessed September 2026). Individual spending varies widely by neighborhood and lifestyle — treat these as directional, not precise.</p>
+</section>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>What Your Budget Buys in Each Metro</h2>
+        <div class="underline"></div>
+        <p>The same budget buys a very different home depending on the metro. These are typical scenarios for orientation — not listings, and every neighborhood has exceptions.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-home"></i>
+            <h3>Around $800K</h3>
+            <p><strong>Seattle–Eastside:</strong> townhome or condo in Redmond or Kirkland; a starter single-family home in Renton or Bothell.</p>
+            <p><strong>Phoenix:</strong> a newer 4-bedroom single-family home in Gilbert, Chandler, or Tempe — often with a pool.</p>
+            <p><strong>NYC metro:</strong> a 1–2 bedroom condo in Queens or Hoboken/Jersey City; a co-op in the outer boroughs (plus co-op board approval).</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-home"></i>
+            <h3>Around $1.2M</h3>
+            <p><strong>Seattle–Eastside:</strong> a single-family home in Bellevue, Redmond, Kirkland, or Issaquah — the heart of the Eastside market.</p>
+            <p><strong>Phoenix:</strong> a larger or upgraded single-family home in Scottsdale, Arcadia, or Desert Ridge.</p>
+            <p><strong>NYC metro:</strong> a 2-bedroom condo in Brooklyn or Queens, or in Hoboken/Jersey City with Manhattan views.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-home"></i>
+            <h3>Around $2M</h3>
+            <p><strong>Seattle–Eastside:</strong> a premium single-family home in Bellevue or Kirkland, possibly near the Lake Washington waterfront.</p>
+            <p><strong>Phoenix:</strong> a luxury single-family home in Scottsdale, Arcadia, or Paradise Valley.</p>
+            <p><strong>NYC metro:</strong> a 2–3 bedroom condo in Manhattan or prime Brooklyn — or a single-family home in Westchester or Nassau County.</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">Illustrative scenarios based on current market conditions — not appraisals and not listings. Actual availability, home types, and prices vary by neighborhood and change constantly. Tell us your budget and we'll show you what's real right now.</p>
+</section>
+<style>
+.cm-metro { max-width: 980px; margin: 0 auto 40px; }
+.cm-metro:last-of-type { margin-bottom: 10px; }
+.cm-metro h3 { color: #0F2027; font-size: 1.5rem; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.cm-metro h3 i { color: #C5A059; }
+.cm-metro > p { color: #666; margin-bottom: 18px; }
+.cm-table-wrap { overflow-x: auto; }
+.cm-table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); font-size: 0.96rem; }
+.cm-table th { background: #0F2027; color: white; padding: 13px 14px; text-align: left; font-family: 'Montserrat', sans-serif; font-size: 0.92rem; }
+.cm-table td { padding: 12px 14px; border-bottom: 1px solid #eee; vertical-align: top; }
+.cm-table tr:last-child td { border-bottom: none; }
+.cm-table td.hood { font-weight: 700; color: #0F2027; white-space: nowrap; }
+.cm-table td.time { font-weight: 700; color: #0F2027; white-space: nowrap; }
+.cm-table td.transit { color: #666; font-size: 0.92rem; }
+</style>
+
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Commute Reality Check</h2>
+        <div class="underline"></div>
+        <p>Typical peak-hour drive times from each neighborhood to the area's major employer campuses — plus the transit alternative where it exists. Approximate ranges, not guarantees; traffic varies by day and route.</p>
+    </div>
+
+    <div class="cm-metro">
+        <h3><i class="fas fa-building"></i>Seattle–Eastside</h3>
+        <p>Anchored by Microsoft (Redmond), Amazon (South Lake Union, Seattle), and Google (Kirkland). I-405 and SR-520 set the rhythm here.</p>
+        <div class="cm-table-wrap">
+            <table class="cm-table">
+                <thead><tr><th>Live in</th><th>Work at</th><th>Typical drive</th><th>Transit option</th></tr></thead>
+                <tbody>
+                    <tr><td class="hood">Bellevue (Downtown)</td><td>Microsoft, Redmond</td><td class="time">15–30 min</td><td class="transit">Bus / future light rail connections</td></tr>
+                    <tr><td class="hood">Bellevue (Downtown)</td><td>Amazon, South Lake Union</td><td class="time">20–40 min</td><td class="transit">Sound Transit bus via I-90</td></tr>
+                    <tr><td class="hood">Redmond</td><td>Microsoft, Redmond</td><td class="time">10–20 min</td><td class="transit">Local bus; bike-friendly campus area</td></tr>
+                    <tr><td class="hood">Kirkland</td><td>Google, Kirkland</td><td class="time">10–20 min</td><td class="transit">Local bus along Lake St</td></tr>
+                    <tr><td class="hood">Kirkland</td><td>Microsoft, Redmond</td><td class="time">15–25 min</td><td class="transit">Bus via NE 85th / 520</td></tr>
+                    <tr><td class="hood">Issaquah</td><td>Microsoft, Redmond</td><td class="time">20–35 min</td><td class="transit">Bus via I-90</td></tr>
+                    <tr><td class="hood">North Seattle (Green Lake / Ballard)</td><td>Amazon, South Lake Union</td><td class="time">15–30 min</td><td class="transit">Link light rail / RapidRide bus</td></tr>
+                    <tr><td class="hood">North Seattle (Green Lake / Ballard)</td><td>Microsoft, Redmond</td><td class="time">30–50 min</td><td class="transit">Bus + 520 corridor</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="cm-metro">
+        <h3><i class="fas fa-sun"></i>Phoenix Metro</h3>
+        <p>Anchored by Intel (Chandler), TSMC (North Phoenix), and ASU (Tempe). A driving metro — freeways (101, 202, I-10) do the heavy lifting.</p>
+        <div class="cm-table-wrap">
+            <table class="cm-table">
+                <thead><tr><th>Live in</th><th>Work at</th><th>Typical drive</th><th>Transit option</th></tr></thead>
+                <tbody>
+                    <tr><td class="hood">Chandler</td><td>Intel, Chandler</td><td class="time">10–20 min</td><td class="transit">Limited bus; driving metro</td></tr>
+                    <tr><td class="hood">Gilbert</td><td>Intel, Chandler</td><td class="time">15–25 min</td><td class="transit">Limited bus; driving metro</td></tr>
+                    <tr><td class="hood">Tempe</td><td>ASU, Tempe</td><td class="time">5–15 min</td><td class="transit">Valley Metro light rail + streetcar</td></tr>
+                    <tr><td class="hood">Tempe</td><td>Intel, Chandler</td><td class="time">20–35 min</td><td class="transit">Light rail + bus connections</td></tr>
+                    <tr><td class="hood">Scottsdale</td><td>TSMC, North Phoenix</td><td class="time">25–40 min</td><td class="transit">Limited; driving metro</td></tr>
+                    <tr><td class="hood">Desert Ridge / N. Phoenix</td><td>TSMC, North Phoenix</td><td class="time">10–20 min</td><td class="transit">Limited; driving metro</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="cm-metro">
+        <h3><i class="fas fa-subway"></i>NYC Metro</h3>
+        <p>Anchored by Midtown and the Financial District. Here the subway, PATH, and Metro-North — not the car — decide your commute.</p>
+        <div class="cm-table-wrap">
+            <table class="cm-table">
+                <thead><tr><th>Live in</th><th>Work at</th><th>Typical transit</th><th>Notes</th></tr></thead>
+                <tbody>
+                    <tr><td class="hood">Astoria, Queens</td><td>Midtown</td><td class="time">20–35 min</td><td class="transit">N/W subway lines</td></tr>
+                    <tr><td class="hood">Astoria, Queens</td><td>Financial District</td><td class="time">35–55 min</td><td class="transit">Subway with transfer</td></tr>
+                    <tr><td class="hood">Park Slope, Brooklyn</td><td>Midtown</td><td class="time">30–45 min</td><td class="transit">B/Q or R trains</td></tr>
+                    <tr><td class="hood">Park Slope, Brooklyn</td><td>Financial District</td><td class="time">25–40 min</td><td class="transit">R / 4-5 trains</td></tr>
+                    <tr><td class="hood">Hoboken, NJ</td><td>Midtown</td><td class="time">25–40 min</td><td class="transit">PATH + subway transfer</td></tr>
+                    <tr><td class="hood">Hoboken, NJ</td><td>Financial District</td><td class="time">20–35 min</td><td class="transit">PATH direct to World Trade Center</td></tr>
+                    <tr><td class="hood">White Plains, Westchester</td><td>Grand Central / Midtown</td><td class="time">35–50 min</td><td class="transit">Metro-North Harlem Line</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p class="disclaimer">Commute times are typical peak-hour ranges for orientation only — actual times vary with traffic, transit schedules, exact addresses, and hybrid-work patterns. Verify current routes with a mapping app before deciding.</p>
+</section>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Your 90-Day Relocation Timeline</h2>
+        <div class="underline"></div>
+        <p>The practical order of operations we walk every relocating buyer through — start at the top and work down.</p>
+    </div>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">90</div>
+            <h3>Days Out — Plan &amp; Money</h3>
+            <p style="text-align: left;">Set your total budget (home price + moving + reserves). Get pre-approved by a lender. Ask HR for your full relocation benefits in writing. Book your free VDI intro call so we can start your area guide.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">60</div>
+            <h3>Days Out — Narrow &amp; Tour</h3>
+            <p style="text-align: left;">Finalize 2–3 target neighborhoods with us. Start live video tours of shortlisted homes. Interview movers and get quotes. Give notice on your current lease if you're renting.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">30</div>
+            <h3>Days Out — Offer &amp; Book</h3>
+            <p style="text-align: left;">Make offers with our pricing strategy and local market data. Schedule inspections. Book your movers and arrange temporary housing if there's a gap between arrival and closing.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">14</div>
+            <h3>Days Out — Lock It In</h3>
+            <p style="text-align: left;">Confirm closing and moving dates. Set up utilities and renter's/homeowner's insurance. Start your address-change list: USPS, banks, employer, voter registration, subscriptions.</p>
+        </div>
+        <div class="step">
+            <div class="step-num"><i class="fas fa-key"></i></div>
+            <h3>Landing Week — Settle</h3>
+            <p style="text-align: left;">Final walkthrough and keys. Unpack the essentials first (beds, kitchen, work setup). Transfer your driver's license and vehicle registration (see deadlines below). Meet the neighbors — you're home.</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">Timelines vary with your start date, market conditions, and whether you're buying before you arrive or renting first. We'll tailor the sequence to your situation on the intro call.</p>
+</section>
+
     <section class="content-section" style="padding-top: 0;">
         <div class="section-title">
             <h2>What's Included — Free</h2>
@@ -398,6 +690,148 @@
                 <p>Competitive markets move fast. We advise on pricing and terms using current market data — estimates, never appraisals.</p>
             </div>
         </div>
+
+<div class="section-title" style="margin-top: 60px;">
+    <h2>Know the Market Before You Move</h2>
+    <div class="underline"></div>
+    <p>Moving somewhere new means buying into a market you haven't lived in yet. We fix that with a free, broker-prepared market analysis for the neighborhoods you're eyeing — prepared by hand by a licensed broker, not generated by an automated tool. Delivered by email within a few business days.</p>
+</div>
+
+<div class="features-grid">
+    <div class="feature-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Neighborhood Price Trends</h3>
+        <p>How median prices in your target areas have moved recently, so you can tell an appreciating neighborhood from a cooling one before you commit.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-clock"></i>
+        <h3>Median Days on Market</h3>
+        <p>How fast homes are going under contract in the areas you're considering — which tells you how quickly you'll need to act when the right home appears.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-percentage"></i>
+        <h3>Sale-to-List Ratio</h3>
+        <p>How close homes sell to their asking price — the clearest signal of whether you're walking into a bidding-war market or one with negotiating room.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-layer-group"></i>
+        <h3>Active Inventory Snapshot</h3>
+        <p>How many homes are currently on the market in the areas you're eyeing — your realistic sense of choice, competition, and leverage.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-home"></i>
+        <h3>What Your Budget Typically Buys</h3>
+        <p>An honest read on the home styles, neighborhoods, and trade-offs your budget maps to in each target area — based on recent market data, not generic price bands.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-user-tie"></i>
+        <h3>Prepared by a Broker, Not a Bot</h3>
+        <p>A licensed broker pulls and reviews the data for your specific neighborhoods and budget. It's an estimate for planning purposes — not an appraisal — and it's free whether or not you buy through us.</p>
+    </div>
+</div>
+
+<div class="cta-section" style="margin-top: 40px;">
+    <h2>Get Your Free Market Analysis</h2>
+    <p>Tell us where you're headed and which neighborhoods you're eyeing. We'll prepare your analysis and email it to you within a few business days.</p>
+    <a href="index.html#contact" class="btn">Request My Free Market Analysis</a>
+    <div class="cta-contact">
+        Prefer to talk? Call or text <a href="tel:+12068800637">206-880-0637</a> · <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a>
+    </div>
+</div>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>Make the Most of Your Relocation Package</h2>
+        <div class="underline"></div>
+        <p>Most employers offer one of two structures — and more of it is negotiable than people realize. General guidance, not legal or tax advice.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-briefcase"></i>
+            <h3>Lump-Sum vs. Managed Moves</h3>
+            <p><strong>Lump sum:</strong> your employer gives you a fixed cash amount and you manage the move yourself — maximum flexibility, but you keep the receipts and the risk of overruns.</p>
+            <p><strong>Managed:</strong> a relocation company handles movers, temporary housing, and logistics against company policy — less hassle, less choice.</p>
+            <p>Ask which one you're getting <em>before</em> you sign the offer — it changes your home-search timeline.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-handshake"></i>
+            <h3>What's Often Negotiable</h3>
+            <p style="text-align: left;">• One or two <strong>house-hunting trips</strong> (flights + hotel) before you move<br>
+            • <strong>Temporary housing</strong> — typically 30–60 days; ask for 60 if you're buying sight-unseen<br>
+            • <strong>Closing-cost coverage</strong> or a credit toward them<br>
+            • <strong>Lease-break reimbursement</strong> on your current rental<br>
+            • <strong>Spousal/partner job-search support</strong><br>
+            • <strong>Shipment and storage</strong> of household goods<br>
+            • A <strong>sign-on bonus</strong> earmarked to offset moving costs</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-question-circle"></i>
+            <h3>Questions to Ask HR</h3>
+            <p style="text-align: left;">• Is any part of the package <strong>tax-grossed-up</strong>, or do I owe tax on it?<br>
+            • Is there a <strong>repayment (clawback)</strong> clause if I leave within 12–24 months?<br>
+            • What's the <strong>deadline</strong> to use each benefit?<br>
+            • Does the policy cover <strong>home-sale assistance</strong> if I own now?<br>
+            • Can unused benefits convert to <strong>cash</strong>?<br>
+            • Who is my <strong>single point of contact</strong> once I accept?</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">Relocation benefits vary widely by employer and are subject to company policy and tax law. Get every commitment in writing and consult a tax professional about the tax treatment of your package. This is general information, not legal or tax advice.</p>
+</section>
+<section class="content-section" style="padding-top: 0;">
+    <div class="section-title">
+        <h2>First 30 Days: The Landing Checklist</h2>
+        <div class="underline"></div>
+        <p>The paperwork clock starts the day you become a resident. Deadlines differ by state — here's what each one requires.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <i class="fas fa-id-card"></i>
+            <h3>Washington</h3>
+            <p style="text-align: left;">• <strong>Driver's license:</strong> transfer within <strong>30 days</strong> of becoming a resident.<br>
+            • <strong>Vehicle registration:</strong> register within <strong>30 days</strong> of becoming a resident.<br>
+            • No state income tax return to file — but update your address with your employer for correct withholding.<br>
+            • Register to vote — Washington votes entirely by mail; ballots arrive automatically once registered.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-id-card"></i>
+            <h3>Arizona</h3>
+            <p style="text-align: left;">• <strong>Driver's license &amp; registration:</strong> Arizona moves fast — state law requires a driver's license <strong>immediately</strong> once residency criteria are met (working in AZ, registering to vote, enrolling kids in school, etc.), and vehicle registration within <strong>15 days</strong> of establishing residency.<br>
+            • No written or road test if you hold a valid out-of-state license — vision screening only.<br>
+            • Vehicles in the Phoenix metro area need an <strong>emissions test</strong> before registration.<br>
+            • File a part-year resident return for your move year.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-id-card"></i>
+            <h3>New York</h3>
+            <p style="text-align: left;">• <strong>Driver's license:</strong> exchange your out-of-state license within <strong>30 days</strong> of becoming a resident — no road test if your current license is valid.<br>
+            • <strong>Vehicle registration:</strong> register within <strong>30 days</strong>; New York requires <strong>NY-based insurance</strong> on any NY-registered vehicle — out-of-state policies don't count.<br>
+            • If you live in the five boroughs, expect <strong>NYC income tax</strong> on top of state tax (see the paycheck section above).<br>
+            • File a part-year resident return for your move year.</p>
+        </div>
+    </div>
+
+    <div class="features-grid" style="margin-top: 30px;">
+        <div class="feature-card">
+            <i class="fas fa-plug"></i>
+            <h3>Set Up the Household</h3>
+            <p style="text-align: left;">Electric, gas, water, trash, and internet — schedule connections a week before move-in so nothing's dark on night one. Update renter's or homeowner's insurance to the new address.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-envelope"></i>
+            <h3>Move Your Address</h3>
+            <p style="text-align: left;">USPS change of address, then banks, credit cards, employer payroll, insurance, voter registration, subscriptions, and anyone who sends you anything important. Do it in one sitting — it takes 30 minutes.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-heart"></i>
+            <h3>Land Softly</h3>
+            <p style="text-align: left;">Find a primary-care doctor, dentist, and vet before you need one. Locate the nearest urgent care, pharmacy, and grocery run. Then introduce yourself to a neighbor — local knowledge beats search results.</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">Deadlines and requirements change — verify current rules at <strong>dol.wa.gov</strong> (Washington), <strong>azdot.gov</strong> (Arizona), and <strong>dmv.ny.gov</strong> (New York) before you act. The Arizona "as soon as residency criteria are met" requirement reflects ADOT new-resident guidance; confirm timing for your situation directly with ADOT. This is general information, not legal advice.</p>
+</section>
 
         <div class="recruiter-box">
             <h2>Hiring Into These Metros? Send Us Your New Hires.</h2>
