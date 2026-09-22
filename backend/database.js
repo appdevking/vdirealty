@@ -182,6 +182,22 @@ const initDatabase = () => {
         )
     `);
 
+    // Contact-form submissions (homepage form incl. Get Represented) —
+    // stored so Jae can triage them; email notification is best-effort only.
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS contact_submissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            interest TEXT,
+            property TEXT,
+            message TEXT NOT NULL,
+            contacted INTEGER DEFAULT 0,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
     // Create indexes for better performance
     db.exec(`
         CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
@@ -400,6 +416,22 @@ const statements = {
     // Seller lead: mark contacted
     markLeadContacted: db.prepare(`
         UPDATE fsbo_seller_leads SET contacted = 1 WHERE id = ?
+    `),
+
+    // Contact submission: insert
+    insertContactSubmission: db.prepare(`
+        INSERT INTO contact_submissions (name, email, phone, interest, property, message)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `),
+
+    // Contact submission: all, newest first (admin)
+    getAllContactSubmissions: db.prepare(`
+        SELECT * FROM contact_submissions ORDER BY createdAt DESC
+    `),
+
+    // Contact submission: mark contacted
+    markContactSubmissionContacted: db.prepare(`
+        UPDATE contact_submissions SET contacted = 1 WHERE id = ?
     `),
 
     // Technical help request: insert

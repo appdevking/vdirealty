@@ -1,8 +1,19 @@
 const express = require('express');
 const { sendContactEmail } = require('../email-service');
+const { statements } = require('../database');
 const config = require('../config');
 
 const router = express.Router();
+
+// Admin auth (mirrors fsbo-routes): Authorization header must equal admin password
+const adminAuth = (req, res, next) => {
+    const password = req.headers.authorization;
+    if (password && password === config.adminPassword) {
+        next();
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+};
 
 // Submit contact form
 router.post('/submit', async (req, res) => {
@@ -35,6 +46,20 @@ router.post('/submit', async (req, res) => {
             message,
             submittedAt: new Date().toISOString()
         };
+
+        // Store in database so submissions are retrievable even when email is down
+        try {
+            statements.insertContactSubmission.run(
+                name,
+                email,
+                phone || null,
+                interest || 'General Inquiry',
+                req.body.property || null,
+                message
+            );
+        } catch (dbError) {
+            console.error('Failed to store contact submission:', dbError.message);
+        }
         
         // Send email to admin only if email credentials are configured
         const hasEmailConfig = (config.email.user && config.email.password) || config.email.sendgridApiKey;
@@ -62,6 +87,28 @@ router.post('/submit', async (req, res) => {
             success: false,
             error: 'Failed to process contact form. Please try again later.' 
         });
+    }
+});
+
+// Admin: all contact-form submissions, newest first
+router.get('/admin/submissions', adminAuth, (req, res) => {
+    try {
+        const submissions = statements.getAllContactSubmissions.all();
+        res.json({ success: true, count: submissions.length, submissions });
+    } catch (error) {
+        console.error('[API] Error fetching contact submissions:', error);
+        res.status(500).json({ error: 'Failed to fetch submissions' });
+    }
+});
+
+// Admin: mark a contact submission contacted
+router.post('/admin/submissions/:id/contacted', adminAuth, (req, res) => {
+    try {
+        statements.markContactSubmissionContacted.run(parseInt(req.params.id, 10) || 0);
+        res.json({ success: true, message: 'Submission marked as contacted.' });
+    } catch (error) {
+        console.error('[API] Error marking submission contacted:', error);
+        res.status(500).json({ error: 'Failed to update submission' });
     }
 });
 
