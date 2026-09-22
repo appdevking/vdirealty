@@ -255,6 +255,7 @@ a { color: inherit; }
 .stat .lbl { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: #a9b8c9; margin: 10px 0 12px; }
 .trend { display: inline-flex; align-items: center; gap: 7px; font-size: 0.84rem; font-weight: 600; }
 .trend.up { color: #7bd88f; } .trend.flat { color: #a9b8c9; } .trend.info { color: #e8b86d; }
+.trend.down { color: #e88f8f; }
 .rates-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .rate-card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
