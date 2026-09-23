@@ -65,27 +65,238 @@
 
         .container { max-width: 1400px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
-        /* ---------- Filters ---------- */
-        .filters {
-            background: var(--panel); border: 1px solid #e5e8ed; padding: 1.5rem; border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.35); margin-bottom: 0;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem;
+        /* ---------- Compact sticky filter bar + bottom sheet (Zillow-style) ---------- */
+        .filter-bar {
+            position: sticky;
+            top: 64px; /* refined by JS to sit exactly under the sticky navbar */
+            z-index: 900;
+            background: #ffffff;
+            border-bottom: 1px solid #e9edf1;
+            box-shadow: 0 2px 12px rgba(15, 32, 39, 0.07);
+            padding: 10px 16px;
         }
-        .filter-group { display: flex; flex-direction: column; }
-        .filter-group label { font-weight: 600; margin-bottom: 0.45rem; color: var(--primary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.4px; }
-        .filter-group label i { color: var(--accent); margin-right: 0.3rem; }
-        .filter-group select, .filter-group input {
-            padding: 0.65rem; border: 2px solid var(--border); border-radius: 6px; font-size: 0.95rem;
-            font-family: 'Lato', sans-serif; background: #ffffff; color: var(--text-main);
+        .filter-bar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
-        .filter-group select:focus, .filter-group input:focus { outline: none; border-color: var(--accent); }
-        .filters-actions { display: flex; align-items: flex-end; gap: 0.6rem; }
-        .btn-clear {
-            background: transparent; border: 2px solid #c9ced6; color: var(--text-dim); border-radius: 6px;
-            padding: 0.6rem 1.2rem; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600;
-            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.4px; transition: all 0.25s; white-space: nowrap;
+        .filter-search {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: #f3f5f7;
+            border: 1px solid #e2e6ea;
+            border-radius: 999px;
+            padding: 0 16px;
+            height: 44px;
+            cursor: text;
+            transition: border-color 0.2s, background 0.2s;
         }
-        .btn-clear:hover { border-color: var(--danger); color: var(--danger); }
+        .filter-search:focus-within { border-color: var(--accent); background: #ffffff; }
+        .filter-search i { color: #9aa3ab; font-size: 0.9rem; }
+        .filter-search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 0.95rem;
+            font-family: 'Lato', sans-serif;
+            width: 100%;
+            color: var(--text-main);
+        }
+        .filter-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 44px;
+            padding: 0 18px;
+            border-radius: 999px;
+            border: 1.5px solid var(--primary);
+            background: #ffffff;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s, color 0.2s;
+        }
+        .filter-btn.active { background: var(--primary); color: #ffffff; }
+        .filter-badge {
+            display: none;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 5px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .filter-btn.has-filters .filter-badge { display: inline-flex; }
+
+        /* Filter bottom sheet */
+        .filter-sheet-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .filter-sheet-wrap.open { visibility: visible; pointer-events: auto; }
+        .sheet-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 32, 39, 0.45);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .filter-sheet-wrap.open .sheet-backdrop { opacity: 1; }
+        .filter-sheet {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ffffff;
+            border-radius: 20px 20px 0 0;
+            max-height: 88vh;
+            max-height: 88dvh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(103%);
+            transition: transform 0.3s cubic-bezier(0.32, 0.72, 0.35, 1);
+            box-shadow: 0 -10px 44px rgba(15, 32, 39, 0.22);
+        }
+        .filter-sheet-wrap.open .filter-sheet { transform: translateY(0); }
+        .sheet-handle {
+            width: 42px;
+            height: 5px;
+            border-radius: 999px;
+            background: #dfe4e8;
+            margin: 10px auto 2px;
+            flex-shrink: 0;
+        }
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 22px 12px;
+            border-bottom: 1px solid #eef1f4;
+            flex-shrink: 0;
+        }
+        .sheet-header h2 { font-size: 1.15rem; margin: 0; color: var(--primary); }
+        .sheet-close {
+            border: none;
+            background: #f3f5f7;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 0.95rem;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sheet-body {
+            overflow-y: auto;
+            padding: 18px 22px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .sheet-group label {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #8a939b;
+            margin-bottom: 7px;
+        }
+        .sheet-group select,
+        .sheet-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e2e6ea;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            background: #ffffff;
+            appearance: none;
+        }
+        .sheet-group select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a939b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+        }
+        .sheet-group select:focus,
+        .sheet-group input:focus { outline: none; border-color: var(--accent); }
+        .sheet-price-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .sheet-footer {
+            display: flex;
+            gap: 12px;
+            padding: 14px 22px calc(18px + env(safe-area-inset-bottom));
+            border-top: 1px solid #eef1f4;
+            flex-shrink: 0;
+            background: #ffffff;
+        }
+        .sheet-clear {
+            flex: 0 0 auto;
+            border: 1.5px solid #e2e6ea;
+            background: #ffffff;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 999px;
+            padding: 0 20px;
+            height: 48px;
+            cursor: pointer;
+        }
+        .sheet-apply {
+            flex: 1;
+            border: none;
+            background: var(--accent);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            height: 48px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+        }
+        @media (min-width: 769px) {
+            .filter-sheet {
+                left: 50%;
+                right: auto;
+                bottom: auto;
+                top: 50%;
+                width: 560px;
+                max-width: calc(100vw - 40px);
+                border-radius: 16px;
+                transform: translate(-50%, -48%) scale(0.98);
+                opacity: 0;
+            }
+            .filter-sheet-wrap.open .filter-sheet {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            .sheet-handle { display: none; }
+        }
+        @media (max-width: 768px) {
+            .filter-bar { padding: 8px 12px; }
+        }
 
         /* ---------- Reserved ad slots (inactive) ---------- */
         /* Flip to display:block when the ad program launches. Invisible & empty at launch. */
@@ -347,93 +558,115 @@
         <p style="margin-top:1.1rem; font-size:0.98rem; color:#3d4756;">Selling yourself? <a href="fsbo-guide.html" style="color:#a8842f; font-weight:700;">Our free FSBO seller guide walks you through it &rarr;</a></p>
     </section>
 
-    <div class="container">
-        <!-- Filters -->
-        <div class="filters" id="filterBar" aria-label="Listing filters">
-            <div class="filter-group">
-                <label for="f-q"><i class="fas fa-search"></i> Keyword</label>
-                <input type="text" id="f-q" placeholder="Address, city, features...">
+    <!-- Compact sticky filter bar -->
+    <div class="filter-bar" id="filterBar">
+        <div class="filter-bar-inner">
+            <label class="filter-search" for="f-q">
+                <i class="fas fa-search"></i>
+                <input type="text" id="f-q" placeholder="Address, city, features..." aria-label="Search listings" autocomplete="off">
+            </label>
+            <button type="button" class="filter-btn" id="filterBtn" onclick="openFilterSheet()" aria-haspopup="dialog">
+                <i class="fas fa-sliders-h"></i><span>Filters</span>
+                <span class="filter-badge" id="filterBadge">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Filter bottom sheet (all filters live here; same element IDs, same logic) -->
+    <div class="filter-sheet-wrap" id="filterSheetWrap" aria-hidden="true">
+        <div class="sheet-backdrop" onclick="closeFilterSheet()"></div>
+        <div class="filter-sheet" role="dialog" aria-modal="true" aria-label="Listing filters">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <h2>Filters</h2>
+                <button type="button" class="sheet-close" onclick="closeFilterSheet()" aria-label="Close filters">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="filter-group">
-                <label for="f-city"><i class="fas fa-map-marker-alt"></i> City</label>
-                <input type="text" id="f-city" placeholder="e.g. Bellevue">
+            <div class="sheet-body">
+                <div class="sheet-group">
+                    <label for="f-city">City</label>
+                    <input type="text" id="f-city" placeholder="e.g. Bellevue">
+                </div>
+                <div class="sheet-group">
+                    <label for="f-state">State</label>
+                    <select id="f-state">
+                        <option value="">All States</option>
+                        <option value="WA">Washington</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="NY">New York</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label>Price range</label>
+                    <div class="sheet-price-row">
+                        <input type="number" id="f-minPrice" placeholder="Min price" min="0" step="10000" aria-label="Minimum price">
+                        <input type="number" id="f-maxPrice" placeholder="Max price" min="0" step="10000" aria-label="Maximum price">
+                    </div>
+                </div>
+                <div class="sheet-group">
+                    <label for="f-beds">Bedrooms</label>
+                    <select id="f-beds">
+                        <option value="">Any</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                        <option value="5">5+</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label for="f-baths">Bathrooms</label>
+                    <select id="f-baths">
+                        <option value="">Any</option>
+                        <option value="1">1+</option>
+                        <option value="1.5">1.5+</option>
+                        <option value="2">2+</option>
+                        <option value="2.5">2.5+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label for="f-type">Property type</label>
+                    <select id="f-type">
+                        <option value="">All Types</option>
+                        <option value="Single Family">Single Family</option>
+                        <option value="Condo">Condo</option>
+                        <option value="Townhouse">Townhouse</option>
+                        <option value="Multi-Family">Multi-Family</option>
+                        <option value="Land">Land</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label for="f-sellerType">Posted by</label>
+                    <select id="f-sellerType">
+                        <option value="">All Posters</option>
+                        <option value="owner">Homeowner</option>
+                        <option value="builder">Builder / Developer</option>
+                        <option value="broker">Broker / Agent</option>
+                    </select>
+                </div>
+                <div class="sheet-group">
+                    <label for="f-sort">Sort</label>
+                    <select id="f-sort">
+                        <option value="">Newest First</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="sqft-desc">Largest Sq Ft</option>
+                    </select>
+                </div>
             </div>
-            <div class="filter-group">
-                <label for="f-state"><i class="fas fa-flag"></i> State</label>
-                <select id="f-state">
-                    <option value="">All States</option>
-                    <option value="WA">Washington</option>
-                    <option value="AZ">Arizona</option>
-                    <option value="NY">New York</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="f-minPrice"><i class="fas fa-dollar-sign"></i> Min Price</label>
-                <input type="number" id="f-minPrice" placeholder="0" min="0" step="10000">
-            </div>
-            <div class="filter-group">
-                <label for="f-maxPrice"><i class="fas fa-dollar-sign"></i> Max Price</label>
-                <input type="number" id="f-maxPrice" placeholder="No max" min="0" step="10000">
-            </div>
-            <div class="filter-group">
-                <label for="f-beds"><i class="fas fa-bed"></i> Min Beds</label>
-                <select id="f-beds">
-                    <option value="">Any</option>
-                    <option value="1">1+</option>
-                    <option value="2">2+</option>
-                    <option value="3">3+</option>
-                    <option value="4">4+</option>
-                    <option value="5">5+</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="f-baths"><i class="fas fa-bath"></i> Min Baths</label>
-                <select id="f-baths">
-                    <option value="">Any</option>
-                    <option value="1">1+</option>
-                    <option value="1.5">1.5+</option>
-                    <option value="2">2+</option>
-                    <option value="2.5">2.5+</option>
-                    <option value="3">3+</option>
-                    <option value="4">4+</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="f-type"><i class="fas fa-building"></i> Property Type</label>
-                <select id="f-type">
-                    <option value="">All Types</option>
-                    <option value="Single Family">Single Family</option>
-                    <option value="Condo">Condo</option>
-                    <option value="Townhouse">Townhouse</option>
-                    <option value="Multi-Family">Multi-Family</option>
-                    <option value="Land">Land</option>
-                    <option value="Commercial">Commercial</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="f-sellerType"><i class="fas fa-user-tag"></i> Posted By</label>
-                <select id="f-sellerType">
-                    <option value="">All Posters</option>
-                    <option value="owner">Homeowner</option>
-                    <option value="builder">Builder / Developer</option>
-                    <option value="broker">Broker / Agent</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="f-sort"><i class="fas fa-sort"></i> Sort</label>
-                <select id="f-sort">
-                    <option value="">Newest First</option>
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
-                    <option value="sqft-desc">Largest Sq Ft</option>
-                </select>
-            </div>
-            <div class="filters-actions">
-                <button class="btn-clear" id="clearFilters"><i class="fas fa-times"></i> Clear</button>
+            <div class="sheet-footer">
+                <button type="button" class="sheet-clear" id="clearFilters"><i class="fas fa-times"></i> Clear all</button>
+                <button type="button" class="sheet-apply" id="applyFiltersBtn" onclick="closeFilterSheet()">Show homes</button>
             </div>
         </div>
+    </div>
 
+    <div class="container">
         <!-- AD SLOT (reserved, inactive): future monetization — brokers / loan officers / escrow-title. Keep display:none until ad program launches. -->
         <div class="ad-slot" aria-hidden="true" data-ad-slot="listings-leaderboard"></div>
 
@@ -599,6 +832,68 @@
             loadListings();
         });
 
+        /* ============ Compact filter bar + bottom sheet ============ */
+        // Keep the sticky filter bar tucked exactly under the sticky navbar.
+        function positionFilterBar() {
+            var nav = document.querySelector('.navbar');
+            var bar = document.getElementById('filterBar');
+            if (nav && bar) bar.style.top = nav.offsetHeight + 'px';
+        }
+
+        function openFilterSheet() {
+            var wrap = document.getElementById('filterSheetWrap');
+            if (!wrap) return;
+            refreshFilterUI();
+            wrap.classList.add('open');
+            wrap.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFilterSheet() {
+            var wrap = document.getElementById('filterSheetWrap');
+            if (!wrap) return;
+            wrap.classList.remove('open');
+            wrap.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        // Badge count of active filters + "Show N homes" label. Read-only w.r.t. filter logic.
+        function refreshFilterUI() {
+            var count = 0;
+            filterIds.forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el && String(el.value).trim() !== '') count++;
+            });
+            var btn = document.getElementById('filterBtn');
+            var badge = document.getElementById('filterBadge');
+            if (btn && badge) {
+                badge.textContent = count;
+                btn.classList.toggle('has-filters', count > 0);
+                btn.classList.toggle('active', count > 0);
+            }
+            var apply = document.getElementById('applyFiltersBtn');
+            var nEl = document.getElementById('listingCount');
+            if (apply && nEl) {
+                var n = parseInt(nEl.textContent, 10);
+                if (isNaN(n)) n = 0;
+                apply.textContent = 'Show ' + n + (n === 1 ? ' home' : ' homes');
+            }
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeFilterSheet();
+        });
+        window.addEventListener('resize', positionFilterBar);
+        window.addEventListener('load', function () {
+            positionFilterBar();
+            refreshFilterUI();
+        });
+        // In case the script runs after load (cached page), position immediately too.
+        if (document.readyState === 'complete') {
+            positionFilterBar();
+            refreshFilterUI();
+        }
+
         /* ================= Load listings ================= */
         async function loadListings() {
             const grid = $('listingsGrid');
@@ -623,6 +918,7 @@
                         <button class="btn-outline" onclick="loadListings()" style="margin-top:1rem;"><i class="fas fa-redo"></i> Try Again</button>
                     </div>`;
                 $('listingCount').textContent = '0';
+                refreshFilterUI();
             }
         }
 
@@ -637,6 +933,7 @@
         function renderGrid() {
             const grid = $('listingsGrid');
             $('listingCount').textContent = allListings.length;
+            refreshFilterUI();
             if (allListings.length === 0) {
                 grid.innerHTML = `
                     <div class="state-box">
