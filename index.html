@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VDI Realty | Browse Listings & FSBO Properties - List FREE</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
-<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
-<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
 
     <meta name="description" content="Browse residential & commercial property listings plus FSBO properties. List your property FREE - no registration required. Reviewed before publishing, 24/7 access.">
     <meta name="keywords" content="real estate listings, FSBO, for sale by owner, property listings, homes for sale, commercial real estate, free property listing">
@@ -15,10 +13,18 @@
     <link rel="stylesheet" href="home-pro.css">
 </head>
 <body>
+    <!-- Utility bar -->
+    <div class="utility-bar">
+        <div class="wrap">
+            <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
+            <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></span>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="masthead">
         <div class="wrap">
-            <a class="wordmark" href="index.html"><span class="wm-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="wm-words"><span class="wm-name">VDI<span class="wm-dot">·</span>REALTY</span><em class="wm-tag">a home uniquely yours</em></span></a>
+            <a class="wordmark" href="index.html">VDI<span class="wm-dot">·</span>REALTY</a>
             <nav class="main-nav">
                 <a href="listings.html">Listings</a>
                 <a href="fsbo-listings.html">FSBO</a>
@@ -29,12 +35,6 @@
             <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
                 <i class="fas fa-bars"></i>
             </button>
-        </div>
-        <div class="contact-strip">
-            <div class="wrap">
-                <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
-                <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></span>
-            </div>
         </div>
     </header>
 
@@ -161,33 +161,33 @@
             </div>
             <div class="stat-row reveal">
                 <div class="stat">
-                    <div class="num" id="medianPrice">$750<span class="u">k</span></div>
+                    <div class="num" id="medianPrice">$540<span class="u">k</span></div>
                     <div class="lbl">Median home price</div>
-                    <div class="trend down" id="priceChange"><i class="fas fa-arrow-down"></i> -3.2% YoY</div>
+                    <div class="trend up" id="priceChange"><i class="fas fa-arrow-up"></i> 3.2% YoY</div>
                 </div>
                 <div class="stat">
-                    <div class="num" id="daysOnMarket">45</div>
+                    <div class="num" id="daysOnMarket">32</div>
                     <div class="lbl">Days on market</div>
-                    <div class="trend flat" id="domTrend"><i class="fas fa-minus"></i> 2.3% longer YoY</div>
+                    <div class="trend flat" id="domTrend"><i class="fas fa-minus"></i> Stable</div>
                 </div>
                 <div class="stat">
-                    <div class="num" id="saleToList">98.6<span class="u">%</span></div>
+                    <div class="num" id="saleToList">98<span class="u">%</span></div>
                     <div class="lbl">Sale-to-list ratio</div>
-                    <div class="trend flat" id="saleToListTrend"><i class="fas fa-minus"></i> U.S. average</div>
+                    <div class="trend up" id="saleToListTrend"><i class="fas fa-arrow-up"></i> Strong</div>
                 </div>
                 <div class="stat">
-                    <div class="num" id="activeListings">12,712</div>
+                    <div class="num" id="activeListings">150</div>
                     <div class="lbl">Active listings</div>
-                    <div class="trend up" id="inventoryTrend"><i class="fas fa-arrow-up"></i> +27.3% YoY</div>
+                    <div class="trend info" id="inventoryTrend"><i class="fas fa-info-circle"></i> Limited inventory</div>
                 </div>
             </div>
             <div class="rates-row reveal">
                 <div class="rate-card">
                     <h4><i class="fas fa-chart-line"></i> Mortgage rates</h4>
-                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v" id="rate30">6.95%</span></div>
-                    <div class="meter"><i id="meter30" style="width:69.5%"></i></div>
-                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v" id="rate15">6.26%</span></div>
-                    <div class="meter"><i id="meter15" style="width:62.6%"></i></div>
+                    <div class="rate-line"><span class="t">30-year fixed</span><span class="v" id="rate30">6.8%</span></div>
+                    <div class="meter"><i id="meter30" style="width:68%"></i></div>
+                    <div class="rate-line"><span class="t">15-year fixed</span><span class="v" id="rate15">6.1%</span></div>
+                    <div class="meter"><i id="meter15" style="width:61%"></i></div>
                     <div class="rate-updated" id="ratesUpdated" style="font-size:0.8rem; color:#888; margin-top:8px;">Rates update automatically each week.</div>
                 </div>
                 <div class="rate-card">
@@ -322,7 +322,6 @@
                         <div class="field">
                             <select name="interest" id="interest" required>
                                 <option value="" disabled selected>I am interested in... *</option>
-                                <option value="Buyer Representation Request">Buyer Representation Request</option>
                                 <option value="Property Inquiry">Property Inquiry</option>
                                 <option value="Schedule a Showing">Schedule a Showing</option>
                                 <option value="Request More Information">Request More Information</option>
@@ -332,10 +331,8 @@
                                 <option value="Investing / AirBnB Strategy">Investing / AirBnB Strategy</option>
                                 <option value="Builder / Development">Builder / Development</option>
                                 <option value="Relocation Services">Relocation Services</option>
-                                <option value="Free Market Analysis">Free Market Analysis</option>
                             </select>
                         </div>
-                        <div class="field"><input type="text" name="neighborhoods" id="neighborhoods" placeholder="Neighborhoods you're eyeing (for market analysis requests)"></div>
                         <input type="hidden" name="property" id="property" value="">
                         <div class="property-info" id="propertyInfo">
                             <strong><i class="fas fa-home"></i> Property Inquiry:</strong>
@@ -358,6 +355,11 @@
                     <a class="wordmark" href="index.html" style="text-decoration:none">VDI<span class="wm-dot">·</span>REALTY</a>
                     <p class="areas">Serving Washington, Arizona &amp; New York</p>
                     <p>A brokerage network for buyers, sellers, builders, and investors — listings, FSBO, property management, and relocation.</p>
+                    <div class="foot-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
                 <div>
                     <h5>Explore</h5>
@@ -380,7 +382,7 @@
             </div>
             <div class="foot-bottom">
                 <span>&copy; 2026 VDI Realty. All Rights Reserved. <span class="brokered">Brokered by Realty Connect</span></span>
-                <span><a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a></span>
+                <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></span>
             </div>
         </div>
     </footer>
@@ -536,10 +538,10 @@
             // Adapt based on actual Zillow API response structure
             // This is a placeholder - adjust to your API response
             return {
-                medianPrice: data.medianPrice || '$750k',
-                daysOnMarket: data.avgDaysOnMarket || 45,
-                saleToList: data.saleToListRatio || 98.6,
-                activeListings: data.totalListings || 12712,
+                medianPrice: data.medianPrice || '$540k',
+                daysOnMarket: data.avgDaysOnMarket || 32,
+                saleToList: data.saleToListRatio || 98,
+                activeListings: data.totalListings || 150,
                 lastUpdated: new Date().toLocaleString()
             };
         }
@@ -714,7 +716,7 @@
             };
             
             // Submit to VDI Realty backend
-            fetch('https://api.vdirealty.com/api/contact/submit', {
+            fetch('https://vdi-storage-production.up.railway.app/api/contact/submit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
