@@ -176,6 +176,7 @@
         .type-pill { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.3rem 0.8rem; border-radius: 14px; }
         .type-owner { background: #e9eefc; color: #3f5fb5; border: 1px solid #c2cff2; }
         .type-builder { background: #1d2b1d; color: #1e7e34; border: 1px solid #e6f4ea; }
+        .type-broker { background: #fdf3e3; color: #9a6a12; border: 1px solid #f0d9a0; }
 
         /* ---------- States ---------- */
         .state-box { text-align: center; padding: 3.5rem 2rem; color: var(--text-dim); }
@@ -247,6 +248,10 @@
                     <h3><i class="fas fa-user-plus"></i> New Seller Leads</h3>
                     <div class="number" id="statLeads">–</div>
                 </div>
+                <div class="stat-card warn">
+                    <h3><i class="fas fa-bell-concierge"></i> Concierge Requests</h3>
+                    <div class="number" id="statConcierge">–</div>
+                </div>
             </div>
 
             <div class="tabs" role="tablist">
@@ -254,6 +259,7 @@
                 <button class="tab-btn" data-tab="all" role="tab"><i class="fas fa-list"></i> All Listings</button>
                 <button class="tab-btn" data-tab="inquiries" role="tab"><i class="fas fa-envelope"></i> Buyer Inquiries <span class="count-pill" id="tabInqCount" style="display:none;"></span></button>
                 <button class="tab-btn" data-tab="leads" role="tab"><i class="fas fa-user-plus"></i> Seller Leads <span class="count-pill" id="tabLeadCount" style="display:none;"></span></button>
+                <button class="tab-btn" data-tab="concierge" role="tab"><i class="fas fa-bell-concierge"></i> Concierge <span class="count-pill" id="tabConciergeCount" style="display:none;"></span></button>
             </div>
 
             <!-- Pending -->
@@ -306,6 +312,14 @@
                     <button class="btn-refresh" data-refresh="leads"><i class="fas fa-redo"></i> Refresh</button>
                 </div>
                 <div id="leadList"></div>
+            </div>
+
+            <!-- Concierge requests -->
+            <div class="tab-panel" id="panel-concierge">
+                <div class="toolbar">
+                    <button class="btn-refresh" data-refresh="concierge"><i class="fas fa-redo"></i> Refresh</button>
+                </div>
+                <div id="conciergeList"></div>
             </div>
         </div>
     </div>
@@ -399,7 +413,7 @@
 
         /* ================= Loaders ================= */
         async function refreshAll() {
-            await Promise.allSettled([loadTab('pending'), loadTab('all'), loadTab('inquiries'), loadTab('leads')]);
+            await Promise.allSettled([loadTab('pending'), loadTab('all'), loadTab('inquiries'), loadTab('leads'), loadTab('concierge')]);
         }
 
         async function loadTab(tab) {
@@ -408,13 +422,14 @@
                 else if (tab === 'all') await loadAll();
                 else if (tab === 'inquiries') await loadInquiries();
                 else if (tab === 'leads') await loadLeads();
+                else if (tab === 'concierge') await loadConcierge();
             } catch (err) {
                 if (err.message === 'UNAUTHORIZED') {
                     sessionStorage.removeItem(PW_KEY); adminPassword = '';
                     showGate('Session expired or password invalid. Please sign in again.');
                 } else {
                     console.error('loadTab', tab, err);
-                    const target = { pending: 'pendingList', inquiries: 'inquiryList', leads: 'leadList' }[tab];
+                    const target = { pending: 'pendingList', inquiries: 'inquiryList', leads: 'leadList', concierge: 'conciergeList' }[tab];
                     if (target) $(target).innerHTML = `<div class="state-box error"><i class="fas fa-exclamation-triangle"></i><h3>Couldn't load data</h3><p>${esc(err.message)}</p></div>`;
                 }
             }
@@ -698,6 +713,69 @@
                         const d = await r.json().catch(() => ({}));
                         if (!r.ok) throw new Error(d.error || 'Failed');
                         await loadTab('leads');
+                    } catch (err) { alert('Error: ' + err.message); btn.disabled = false; }
+                });
+                box.appendChild(card);
+            });
+        }
+
+        /* ---------- Concierge requests ---------- */
+        const POSTER_LABELS = { owner: ['Owner', 'type-owner'], builder: ['Builder', 'type-builder'], broker: ['Broker', 'type-broker'], agent: ['Agent', 'type-broker'] };
+        function posterPill(t) {
+            const [label, cls] = POSTER_LABELS[String(t || '').toLowerCase()] || ['Owner', 'type-owner'];
+            return `<span class="type-pill ${cls}">${label}</span>`;
+        }
+
+        async function loadConcierge() {
+            const box = $('conciergeList');
+            box.innerHTML = '<div class="state-box"><span class="spinner"></span><p>Loading concierge requests...</p></div>';
+            const res = await api('/api/fsbo/admin/concierge');
+            const data = await res.json();
+            const items = data.requests || [];
+            const open = items.filter(r => (r.status || 'open') === 'open').length;
+            $('statConcierge').textContent = open;
+            setPill('tabConciergeCount', open);
+            if (!items.length) {
+                box.innerHTML = '<div class="state-box"><i class="fas fa-bell-concierge"></i><h3>No concierge requests yet</h3><p>“Paste a link, we do the rest” requests from concierge.html will appear here.</p></div>';
+                return;
+            }
+            box.innerHTML = '';
+            items.forEach(r => {
+                const isOpen = (r.status || 'open') === 'open';
+                const card = document.createElement('div');
+                card.className = 'item-card' + (isOpen ? ' unread' : '');
+                const host = (() => { try { return new URL(r.listingUrl).hostname.replace(/^www\./, ''); } catch (e) { return 'listing link'; } })();
+                card.innerHTML = `
+                    <div class="ic-head">
+                        <div>
+                            <div class="ic-name">${esc(r.name || '—')} ${posterPill(r.posterType)}</div>
+                            <div class="ic-meta">
+                                ${r.email ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : ''}
+                                ${r.email && r.phone ? ' &nbsp;•&nbsp; ' : ''}
+                                ${r.phone ? `<a href="tel:${esc(String(r.phone).replace(/[^+\d]/g, ''))}">${esc(r.phone)}</a>` : ''}
+                            </div>
+                        </div>
+                        <span class="status-badge ${isOpen ? 'status-pending' : 'status-active'}">${isOpen ? 'To build' : 'Done'}</span>
+                    </div>
+                    <div class="ic-ctx">
+                        <i class="fas fa-link"></i>
+                        ${r.company ? `<strong>${esc(r.company)}</strong> &nbsp;•&nbsp; ` : ''}
+                        <a href="${esc(r.listingUrl)}" target="_blank" rel="noopener">Open ${esc(host)} link <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                    ${r.notes ? `<div class="ic-msg">${esc(r.notes)}</div>` : ''}
+                    <div class="ic-foot">
+                        <span class="ic-date"><i class="fas fa-clock"></i> ${esc(fmtDate(r.createdAt))}</span>
+                        ${isOpen ? '<button class="btn-mark"><i class="fas fa-check"></i> Mark done</button>' : ''}
+                    </div>`;
+                const btn = card.querySelector('.btn-mark');
+                if (btn) btn.addEventListener('click', async () => {
+                    if (!confirm(`Mark concierge request from ${r.name || 'this requester'} as done?`)) return;
+                    btn.disabled = true;
+                    try {
+                        const resp = await api(`/api/fsbo/admin/concierge/${r.id}/done`, { method: 'POST' });
+                        const d = await resp.json().catch(() => ({}));
+                        if (!resp.ok) throw new Error(d.error || 'Failed');
+                        await loadTab('concierge');
                     } catch (err) { alert('Error: ' + err.message); btn.disabled = false; }
                 });
                 box.appendChild(card);
