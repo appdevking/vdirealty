@@ -483,11 +483,11 @@
         return bits.join(' ');
     }
 
-    function generate() {
-        var d = collect();
-        var seed = hashStr(JSON.stringify([d.address, d.ptype, d.beds, d.baths, d.sqft, d.features.join('|')]));
-        var full = buildFull(d, seed);
-        var short = buildShort(d, seed);
+    /* AI endpoint (same backend that powers the FSBO tools). Any failure falls
+       back silently to the built-in template engine below — the tool never breaks. */
+    var AI_ENDPOINT = 'https://api.vdirealty.com/api/listing-writer/generate';
+
+    function renderOutputs(full, short) {
         $('fullOutput').textContent = full;
         $('shortOutput').textContent = short;
         $('fullCount').textContent = wordCount(full) + ' words';
@@ -496,6 +496,49 @@
         $('copyShort').style.display = '';
         $('toFlyer').style.display = '';
         $('shuffleBtn').style.display = '';
+    }
+
+    function renderTemplate(d, seed) {
+        renderOutputs(buildFull(d, seed), buildShort(d, seed));
+    }
+
+    /* Try the AI backend; resolve true when the AI text was used. The template
+       is always rendered first, so a failure is invisible to the user. */
+    function tryAI(d, seed) {
+        try {
+            var ctrl = ('AbortController' in window) ? new AbortController() : null;
+            var timer = null;
+            if (ctrl) timer = setTimeout(function () { ctrl.abort(); }, 25000);
+            return fetch(AI_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(d),
+                signal: ctrl ? ctrl.signal : undefined
+            }).then(function (r) {
+                if (timer) clearTimeout(timer);
+                if (!r.ok) throw new Error('ai status ' + r.status);
+                return r.json();
+            }).then(function (j) {
+                if (!j || typeof j.description !== 'string' || !j.description.trim()) throw new Error('ai empty');
+                renderOutputs(j.description.trim(), buildShort(d, seed));
+                return true;
+            });
+        } catch (e) {
+            return Promise.reject(e);
+        }
+    }
+
+    function seedFor(d) {
+        return hashStr(JSON.stringify([d.address, d.ptype, d.beds, d.baths, d.sqft, d.features.join('|')]));
+    }
+
+    function generate() {
+        var d = collect();
+        var seed = seedFor(d);
+        shuffleOffset = 0;
+        /* Render the template immediately, then upgrade to AI when it responds. */
+        renderTemplate(d, seed);
+        tryAI(d, seed).catch(function () { /* silent fallback: template already shown */ });
     }
 
     function copyText(elId, btn) {
@@ -511,8 +554,9 @@
         }
     }
 
-    $('generateBtn').addEventListener('click', function () { shuffleOffset = 0; generate(); });
-    $('shuffleBtn').addEventListener('click', function () { shuffleOffset++; generate(); });
+    $('generateBtn').addEventListener('click', generate);
+    /* Shuffle re-rolls the template wording only (no extra AI call). */
+    $('shuffleBtn').addEventListener('click', function () { shuffleOffset++; renderTemplate(collect(), seedFor(collect())); });
     $('copyFull').addEventListener('click', function () { copyText('fullOutput', this); });
     $('copyShort').addEventListener('click', function () { copyText('shortOutput', this); });
     $('toFlyer').addEventListener('click', function () {

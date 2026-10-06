@@ -12,6 +12,7 @@ const fsboRoutes = require('./routes/fsbo-routes');
 const fsboSmsRoutes = require('./routes/fsbo-sms-routes');
 const contactRoutes = require('./routes/contact-routes');
 const marketRoutes = require('./routes/market-routes');
+const listingWriterRoutes = require('./routes/listing-writer-routes');
 
 // Initialize Express app
 const app = express();
@@ -131,6 +132,7 @@ app.use('/api/fsbo', fsboRoutes);
 app.use('/api/fsbo/sms', fsboSmsRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/market', marketRoutes);
+app.use('/api/listing-writer', listingWriterRoutes);
 
 // Health check endpoint
 
