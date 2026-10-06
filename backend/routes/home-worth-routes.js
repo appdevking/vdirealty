@@ -8,8 +8,7 @@ const express = require('express');
 const { statements } = require('../database');
 const {
     sendHomeWorthNotification,
-    sendHomeWorthConfirmation,
-    isEmailConfigured
+    sendHomeWorthConfirmation
 } = require('../email-service');
 const config = require('../config');
 
@@ -101,7 +100,10 @@ router.post('/request', async (req, res) => {
             createdAt: new Date().toISOString()
         };
 
-        if (isEmailConfigured()) {
+        // Email is best-effort: the request is already stored, so a mail
+        // failure must never fail the submission (same pattern as contact-routes).
+        const hasEmailConfig = (config.email.user && config.email.password) || config.email.sendgridApiKey;
+        if (hasEmailConfig) {
             try {
                 await sendHomeWorthNotification(request);
                 console.log(`[home-worth] notification sent to ${config.adminEmail}`);
@@ -140,40 +142,6 @@ const adminAuth = (req, res, next) => {
         res.status(401).json({ error: 'Unauthorized' });
     }
 };
-
-// TEMPORARY diagnostic endpoint (public, no user data) — remove after debugging the 500.
-router.get('/diag', (req, res) => {
-    try {
-        const { db, statements: stmts } = require('../database');
-        const cfg = require('../config');
-        const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all();
-        let tableCheck = null;
-        try {
-            db.prepare('SELECT COUNT(*) AS n FROM home_worth_requests').get();
-            tableCheck = 'queryable';
-        } catch (e) { tableCheck = 'missing: ' + e.message; }
-        let insertTest = null;
-        try {
-            const info = stmts.insertHomeWorthRequest.run(
-                'DIAGTEST', 'diag@test.local', '', '1 Diag Way', 'Diagville', '98004',
-                3, 2, 1800, 'Good', 'Just curious'
-            );
-            insertTest = 'insert ok, id=' + String(info.lastInsertRowid);
-            stmts.deleteHomeWorthRequest.run(info.lastInsertRowid);
-            insertTest += ' (cleaned up)';
-        } catch (e) { insertTest = 'INSERT FAILED: ' + e.message; }
-        res.json({
-            hasInsert: typeof stmts.insertHomeWorthRequest,
-            hasGetAll: typeof stmts.getAllHomeWorthRequests,
-            tableCheck,
-            insertTest,
-            dbPath: cfg.dbPath,
-            tables: tables.map((t) => t.name)
-        });
-    } catch (e) {
-        res.status(500).json({ diagError: e.message });
-    }
-});
 
 // Admin: all home-worth requests, newest first
 router.get('/admin/requests', adminAuth, (req, res) => {
