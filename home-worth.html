@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's My Home Worth? Free Home Value Report | VDI Realty</title>
+    <meta name="description" content="Get a free, human-prepared home value report from VDI Realty. Tell us about your home and receive a market estimate within one business day. No account needed.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #f5f6fa;
+            --accent: #667eea;
+            --white: #ffffff;
+            --panel: #ffffff;
+            --panel-2: #f8f9fa;
+            --text-main: #2c3e50;
+            --text-dim: #6b7a8d;
+            --border: #e0e0e0;
+            --navy: #0a1c30;
+            --gold: #c19a3d;
+            --gold-soft: #e9c46a;
+        }
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Lato', sans-serif; margin: 0; padding: 0;
+            background: var(--secondary); color: var(--text-main); line-height: 1.7; overflow-x: hidden;
+        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
+
+        /* ---------- Nav (matches listing-writer.html) ---------- */
+        .navbar { background: #faf8f4; border-bottom: 1px solid #c19a3d; padding: 0.85rem 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
+        .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+        .nav-links a { color: #0a1c30; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        /* ---------- Hero ---------- */
+        .hero { background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%); color: #fff; padding: 3.5rem 2rem 3rem; text-align: center; }
+        .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 2.6rem; margin-bottom: 1rem; }
+        .hero h1 i { color: var(--gold); }
+        .hero p { font-size: 1.12rem; max-width: 760px; margin: 0 auto 1.6rem; color: #cdd8e4; }
+        .hero-badge { display: inline-block; background: var(--gold); color: #0a1c30; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 1.4rem; border-radius: 50px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--panel); border-radius: 14px; box-shadow: 0 4px 24px rgba(10,28,48,0.08); padding: 2rem; border-top: 4px solid var(--gold); }
+        .card h2 { font-size: 1.35rem; margin-bottom: 1.2rem; color: var(--navy); }
+        .card h2 i { color: var(--gold); margin-right: 0.5rem; }
+
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.35rem; color: var(--navy); }
+        .form-group label .req { color: #c0392b; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border); border-radius: 8px;
+            font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--text-main); background: #fff;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,0.15); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        .form-help { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+        .hp-field { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+        .btn-gold {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            background: linear-gradient(135deg, #c19a3d, #a8832f); color: #fff; border: none;
+            padding: 1rem 2rem; border-radius: 50px; font-family: 'Montserrat', sans-serif; font-weight: 800;
+            font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; width: 100%;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(193,154,61,0.35); }
+        .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .why-list { list-style: none; margin: 0; padding: 0; }
+        .why-list li { display: flex; gap: 0.9rem; margin-bottom: 1.2rem; align-items: flex-start; }
+        .why-list .ic { flex: 0 0 42px; width: 42px; height: 42px; border-radius: 50%; background: rgba(193,154,61,0.14); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .why-list h3 { font-size: 1.02rem; color: var(--navy); margin-bottom: 0.2rem; }
+        .why-list p { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+
+        .fine-print { font-size: 0.85rem; color: var(--text-dim); margin-top: 1.2rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+
+        .success-box { text-align: center; padding: 2rem 1rem; }
+        .success-box .big-check { font-size: 3.2rem; color: var(--gold); margin-bottom: 1rem; }
+        .success-box h2 { color: var(--navy); margin-bottom: 0.6rem; }
+        .success-box p { color: var(--text-dim); max-width: 480px; margin: 0 auto 1rem; }
+        .error-box { background: #fdecea; color: #a93226; border: 1px solid #f5c6cb; border-radius: 8px; padding: 0.8rem 1rem; margin-bottom: 1.1rem; font-size: 0.95rem; display: none; }
+
+        footer { background: var(--navy); color: #cdd8e4; text-align: center; padding: 2.5rem 1.5rem; margin-top: 3rem; }
+        footer .footer-brand { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: 0.1em; color: #fff; margin-bottom: 0.5rem; }
+        footer .footer-brand span { color: var(--gold); }
+        footer a { color: var(--gold-soft); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        footer .footer-eho { display: flex; align-items: center; justify-content: center; gap: 0.6rem; font-size: 0.85rem; color: #9fb0c3; max-width: 640px; margin: 1rem auto 0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="fsbo-listings.html">Browse FSBO</a></li>
+                <li><a href="fsbo.html">List Property</a></li>
+                <li><a href="free-tools.html">Free Tools</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1><i class="fas fa-house-chimney"></i> What's Your Home Worth?</h1>
+        <p>Tell us about your home and a local expert will prepare a free, human-researched value report — delivered within one business day. No algorithms guessing from the curb.</p>
+        <span class="hero-badge"><i class="fas fa-gift"></i> 100% Free Tool</span>
+    </section>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Form -->
+            <div class="card" id="formCard">
+                <h2><i class="fas fa-clipboard-list"></i> Request your free report</h2>
+                <div class="error-box" id="formError"></div>
+                <form id="worthForm" novalidate>
+                    <div class="form-group">
+                        <label for="address">Street address <span class="req">*</span></label>
+                        <input type="text" id="address" name="address" placeholder="1234 Maple St" required maxlength="150">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City <span class="req">*</span></label>
+                            <input type="text" id="city" name="city" placeholder="Bellevue" required maxlength="80">
+                        </div>
+                        <div class="form-group">
+                            <label for="zip">ZIP <span class="req">*</span></label>
+                            <input type="text" id="zip" name="zip" placeholder="98004" required maxlength="10" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="beds">Beds</label>
+                            <input type="number" id="beds" name="beds" min="0" max="20" step="1" placeholder="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="baths">Baths</label>
+                            <input type="number" id="baths" name="baths" min="0" max="20" step="0.5" placeholder="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="sqft">Sq ft</label>
+                            <input type="number" id="sqft" name="sqft" min="0" max="50000" step="1" placeholder="1800">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="condition">Condition</label>
+                            <select id="condition" name="condition">
+                                <option value="">Select…</option>
+                                <option>Excellent</option>
+                                <option>Good</option>
+                                <option>Fair</option>
+                                <option>Needs work</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeline">Selling timeline</label>
+                            <select id="timeline" name="timeline">
+                                <option value="">Select…</option>
+                                <option>ASAP</option>
+                                <option>3-6 months</option>
+                                <option>Just curious</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Your name <span class="req">*</span></label>
+                        <input type="text" id="name" name="name" placeholder="Jane Smith" required maxlength="100">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email <span class="req">*</span></label>
+                            <input type="email" id="email" name="email" placeholder="jane@example.com" required maxlength="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone <span style="font-weight:400;color:#6b7a8d;">(optional)</span></label>
+                            <input type="tel" id="phone" name="phone" placeholder="(206) 555-0100" maxlength="30">
+                        </div>
+                    </div>
+                    <!-- Honeypot: invisible to humans, bots fill it -->
+                    <div class="hp-field" aria-hidden="true">
+                        <label>Website <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></label>
+                    </div>
+                    <button type="submit" class="btn-gold" id="submitBtn"><i class="fas fa-paper-plane"></i> Get my free report</button>
+                    <p class="fine-print">This report is a market estimate for informational purposes, not an appraisal. Your details are only used to prepare your report — we never sell your information.</p>
+                </form>
+            </div>
+
+            <!-- Why -->
+            <div>
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h2><i class="fas fa-star"></i> Why a human, not an algorithm?</h2>
+                    <ul class="why-list">
+                        <li><span class="ic"><i class="fas fa-magnifying-glass-chart"></i></span><div><h3>Real comparable sales</h3><p>We pull recent sales of homes like yours nearby — not a national formula guessing from your ZIP code.</p></div></li>
+                        <li><span class="ic"><i class="fas fa-house-circle-check"></i></span><div><h3>Condition actually counts</h3><p>That renovated kitchen and the 1998 roof matter. Algorithms can't see them; we ask.</p></div></li>
+                        <li><span class="ic"><i class="fas fa-handshake"></i></span><div><h3>A plan, not just a number</h3><p>Your report includes what the number means for your timeline — sell now, wait, or improve first.</p></div></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h2><i class="fas fa-clock"></i> How it works</h2>
+                    <ul class="why-list">
+                        <li><span class="ic"><i class="fas fa-1"></i></span><div><h3>You tell us about your home</h3><p>Two minutes on the form — address, basics, and your timeline.</p></div></li>
+                        <li><span class="ic"><i class="fas fa-2"></i></span><div><h3>We research the market</h3><p>A local expert reviews comparable sales and current demand.</p></div></li>
+                        <li><span class="ic"><i class="fas fa-3"></i></span><div><h3>Your report arrives</h3><p>Within one business day, by email — free, no obligation.</p></div></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="footer-brand">VDI <span>REALTY</span></p>
+        <p>Brokered by Realty Connect &nbsp;|&nbsp; <a href="tel:+12068800637">(206) 880-0637</a> &nbsp;|&nbsp; <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a> &nbsp;|&nbsp; <a href="https://www.vdirealty.com">www.vdirealty.com</a></p>
+        <p style="font-size:0.85rem;">Residential, Commercial &amp; Investment Property Solutions</p>
+        <div class="footer-eho">
+            <i class="fas fa-house-chimney"></i>
+            <span>Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</span>
+        </div>
+        <p style="font-size:0.8rem; margin-top:0.6rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
+    </footer>
+
+<script>
+(function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+
+    var API_BASE_URL = (location.hostname === 'www.vdirealty.com' || location.hostname === 'vdirealty.com')
+        ? 'https://api.vdirealty.com' : 'http://localhost:3000';
+
+    function showError(msg) {
+        var box = $('formError');
+        box.textContent = msg;
+        box.style.display = 'block';
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideError() { $('formError').style.display = 'none'; }
+
+    $('worthForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        hideError();
+
+        var data = {
+            address: $('address').value.trim(),
+            city: $('city').value.trim(),
+            zip: $('zip').value.trim(),
+            beds: $('beds').value === '' ? null : Number($('beds').value),
+            baths: $('baths').value === '' ? null : Number($('baths').value),
+            sqft: $('sqft').value === '' ? null : Number($('sqft').value),
+            condition: $('condition').value,
+            timeline: $('timeline').value,
+            name: $('name').value.trim(),
+            email: $('email').value.trim(),
+            phone: $('phone').value.trim(),
+            website: $('website').value
+        };
+
+        if (!data.address || !data.city || !data.zip || !data.name || !data.email) {
+            showError('Please fill in your name, email, street address, city, and ZIP.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) {
+            showError('Please enter a valid email address.');
+            return;
+        }
+
+        var btn = $('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+        fetch(API_BASE_URL + '/api/home-worth/request', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(function (res) {
+            return res.json().then(function (body) { return { ok: res.ok, body: body }; });
+        }).then(function (result) {
+            if (!result.ok) throw new Error((result.body && result.body.error) || 'Submission failed.');
+            $('formCard').innerHTML =
+                '<div class="success-box">' +
+                '<div class="big-check"><i class="fas fa-check-circle"></i></div>' +
+                '<h2>Request received!</h2>' +
+                '<p>Your report is being prepared — expect it within one business day at <strong>' +
+                data.email.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</strong>.</p>' +
+                '<p style="font-size:0.85rem;">This report is a market estimate for informational purposes, not an appraisal.</p>' +
+                '</div>';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }).catch(function (err) {
+            showError(err.message || 'Something went wrong. Please try again.');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Get my free report';
+        });
+    });
+})();
+</script>
+</body>
+</html>

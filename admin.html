@@ -252,6 +252,10 @@
                     <h3><i class="fas fa-bell-concierge"></i> Concierge Requests</h3>
                     <div class="number" id="statConcierge">–</div>
                 </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-house-chimney"></i> New Home Worth Requests</h3>
+                    <div class="number" id="statHomeWorth">–</div>
+                </div>
             </div>
 
             <div class="tabs" role="tablist">
@@ -260,6 +264,7 @@
                 <button class="tab-btn" data-tab="inquiries" role="tab"><i class="fas fa-envelope"></i> Buyer Inquiries <span class="count-pill" id="tabInqCount" style="display:none;"></span></button>
                 <button class="tab-btn" data-tab="leads" role="tab"><i class="fas fa-user-plus"></i> Seller Leads <span class="count-pill" id="tabLeadCount" style="display:none;"></span></button>
                 <button class="tab-btn" data-tab="concierge" role="tab"><i class="fas fa-bell-concierge"></i> Concierge <span class="count-pill" id="tabConciergeCount" style="display:none;"></span></button>
+                <button class="tab-btn" data-tab="homeworth" role="tab"><i class="fas fa-house-chimney"></i> Home Worth <span class="count-pill" id="tabHomeWorthCount" style="display:none;"></span></button>
             </div>
 
             <!-- Pending -->
@@ -320,6 +325,14 @@
                     <button class="btn-refresh" data-refresh="concierge"><i class="fas fa-redo"></i> Refresh</button>
                 </div>
                 <div id="conciergeList"></div>
+            </div>
+
+            <!-- Home worth requests -->
+            <div class="tab-panel" id="panel-homeworth">
+                <div class="toolbar">
+                    <button class="btn-refresh" data-refresh="homeworth"><i class="fas fa-redo"></i> Refresh</button>
+                </div>
+                <div id="homeWorthList"></div>
             </div>
         </div>
     </div>
@@ -413,7 +426,7 @@
 
         /* ================= Loaders ================= */
         async function refreshAll() {
-            await Promise.allSettled([loadTab('pending'), loadTab('all'), loadTab('inquiries'), loadTab('leads'), loadTab('concierge')]);
+            await Promise.allSettled([loadTab('pending'), loadTab('all'), loadTab('inquiries'), loadTab('leads'), loadTab('concierge'), loadTab('homeworth')]);
         }
 
         async function loadTab(tab) {
@@ -423,13 +436,14 @@
                 else if (tab === 'inquiries') await loadInquiries();
                 else if (tab === 'leads') await loadLeads();
                 else if (tab === 'concierge') await loadConcierge();
+                else if (tab === 'homeworth') await loadHomeWorth();
             } catch (err) {
                 if (err.message === 'UNAUTHORIZED') {
                     sessionStorage.removeItem(PW_KEY); adminPassword = '';
                     showGate('Session expired or password invalid. Please sign in again.');
                 } else {
                     console.error('loadTab', tab, err);
-                    const target = { pending: 'pendingList', inquiries: 'inquiryList', leads: 'leadList', concierge: 'conciergeList' }[tab];
+                    const target = { pending: 'pendingList', inquiries: 'inquiryList', leads: 'leadList', concierge: 'conciergeList', homeworth: 'homeWorthList' }[tab];
                     if (target) $(target).innerHTML = `<div class="state-box error"><i class="fas fa-exclamation-triangle"></i><h3>Couldn't load data</h3><p>${esc(err.message)}</p></div>`;
                 }
             }
@@ -776,6 +790,66 @@
                         const d = await resp.json().catch(() => ({}));
                         if (!resp.ok) throw new Error(d.error || 'Failed');
                         await loadTab('concierge');
+                    } catch (err) { alert('Error: ' + err.message); btn.disabled = false; }
+                });
+                box.appendChild(card);
+            });
+        }
+
+        /* ---------- Home worth requests ---------- */
+        async function loadHomeWorth() {
+            const box = $('homeWorthList');
+            box.innerHTML = '<div class="state-box"><span class="spinner"></span><p>Loading home worth requests...</p></div>';
+            const res = await api('/api/home-worth/admin/requests');
+            const data = await res.json();
+            const items = data.requests || [];
+            const open = items.filter(r => (r.status || 'new') === 'new').length;
+            $('statHomeWorth').textContent = open;
+            setPill('tabHomeWorthCount', open);
+            if (!items.length) {
+                box.innerHTML = '<div class="state-box"><i class="fas fa-house-chimney"></i><h3>No home worth requests yet</h3><p>“What\'s my home worth?” requests from home-worth.html will appear here.</p></div>';
+                return;
+            }
+            box.innerHTML = '';
+            items.forEach(r => {
+                const isOpen = (r.status || 'new') === 'new';
+                const card = document.createElement('div');
+                card.className = 'item-card' + (isOpen ? ' unread' : '');
+                const specs = [r.beds != null ? r.beds + ' bd' : '', r.baths != null ? r.baths + ' ba' : '', r.sqft != null ? Number(r.sqft).toLocaleString('en-US') + ' sqft' : ''].filter(Boolean).join(' · ');
+                card.innerHTML = `
+                    <div class="ic-head">
+                        <div>
+                            <div class="ic-name">${esc(r.name || '—')}</div>
+                            <div class="ic-meta">
+                                ${r.email ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : ''}
+                                ${r.email && r.phone ? ' &nbsp;•&nbsp; ' : ''}
+                                ${r.phone ? `<a href="tel:${esc(String(r.phone).replace(/[^+\d]/g, ''))}">${esc(r.phone)}</a>` : ''}
+                            </div>
+                        </div>
+                        <span class="status-badge ${isOpen ? 'status-pending' : 'status-active'}">${isOpen ? 'New' : 'Closed'}</span>
+                    </div>
+                    <div class="ic-ctx">
+                        <i class="fas fa-location-dot"></i>
+                        <strong>${esc([r.address, r.city, r.zip].filter(Boolean).join(', ') || '—')}</strong>
+                    </div>
+                    <div class="ic-ctx" style="margin-top:0.3rem;">
+                        <i class="fas fa-bed"></i> ${esc(specs || '—')}
+                        ${r.condition ? ` &nbsp;•&nbsp; <i class="fas fa-house-circle-check"></i> ${esc(r.condition)}` : ''}
+                        ${r.timeline ? ` &nbsp;•&nbsp; <i class="fas fa-clock"></i> ${esc(r.timeline)}` : ''}
+                    </div>
+                    <div class="ic-foot">
+                        <span class="ic-date"><i class="fas fa-clock"></i> ${esc(fmtDate(r.createdAt))}</span>
+                        ${isOpen ? '<button class="btn-mark"><i class="fas fa-check"></i> Mark closed</button>' : ''}
+                    </div>`;
+                const btn = card.querySelector('.btn-mark');
+                if (btn) btn.addEventListener('click', async () => {
+                    if (!confirm(`Mark home worth request from ${r.name || 'this requester'} as closed (report delivered)?`)) return;
+                    btn.disabled = true;
+                    try {
+                        const resp = await api(`/api/home-worth/admin/requests/${r.id}/closed`, { method: 'POST' });
+                        const d = await resp.json().catch(() => ({}));
+                        if (!resp.ok) throw new Error(d.error || 'Failed');
+                        await loadTab('homeworth');
                     } catch (err) { alert('Error: ' + err.message); btn.disabled = false; }
                 });
                 box.appendChild(card);

@@ -726,6 +726,78 @@ const sendConciergeRequestConfirmation = async (req_) => {
     }
 };
 
+// Notify Veng about a new "What's my home worth?" value-report request
+const sendHomeWorthNotification = async (req_) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: config.adminEmail,
+        subject: `[Home Worth] New request — ${req_.city || 'unknown city'}`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">🏠 New Home Worth Request</h2>
+                    <p><strong>Someone wants a free home value report!</strong></p>
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.name)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.email)}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.phone || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Property</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml([req_.address, req_.city, req_.zip].filter(Boolean).join(', '))}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Details</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml([req_.beds != null ? req_.beds + ' bd' : '', req_.baths != null ? req_.baths + ' ba' : '', req_.sqft != null ? Number(req_.sqft).toLocaleString('en-US') + ' sqft' : ''].filter(Boolean).join(' · ') || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Condition</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.condition || 'Not provided')}</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Timeline</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.timeline || 'Not provided')}</td></tr>
+                    </table>
+                    <p style="color: #666; font-size: 0.9em;">Submitted ${new Date(req_.createdAt || Date.now()).toLocaleString()}. Reply to ${escapeHtml(req_.email)} with their value report.</p>
+                </div>
+            </body>
+            </html>
+        `,
+        replyTo: req_.email
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Home worth notification sent to ${config.adminEmail}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending home worth notification:', error);
+        return false;
+    }
+};
+
+// Confirm to the requester that their value report is being prepared
+const sendHomeWorthConfirmation = async (req_) => {
+    const mailOptions = {
+        from: `VDI Realty <${config.email.user}>`,
+        to: req_.email,
+        subject: 'Your home value report is on its way - VDI Realty',
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #0F2027;">Thanks, ${escapeHtml(req_.name)}!</h2>
+                    <p>We've received your request for a <strong>free home value report</strong> for ${escapeHtml([req_.address, req_.city].filter(Boolean).join(', ') || 'your home')}. A member of our team is preparing it now — <strong>expect it within one business day</strong>.</p>
+                    <p style="color: #666; font-size: 0.9em;">Please note: this report is a market estimate for informational purposes, not an appraisal.</p>
+                    <p>In the meantime, if you have questions, call us at <strong>(206) 880-0637</strong> or reply to this email.</p>
+                    <p>Best regards,<br><strong>VDI Realty Team</strong><br><span style="color:#666; font-size: 0.9em;">Brokered by Realty Connect</span></p>
+                </div>
+            </body>
+            </html>
+        `
+    };
+
+    try {
+        await sendEmail(mailOptions);
+        console.log(`✅ Home worth confirmation sent to ${req_.email}`);
+        return true;
+    } catch (error) {
+        console.error('❌ Error sending home worth confirmation:', error);
+        return false;
+    }
+};
+
 module.exports = {
     initializeTransporter,
     sendConfirmationEmail,
@@ -740,5 +812,7 @@ module.exports = {
     sendHelpRequestNotification,
     sendHelpRequestConfirmation,
     sendConciergeRequestNotification,
-    sendConciergeRequestConfirmation
+    sendConciergeRequestConfirmation,
+    sendHomeWorthNotification,
+    sendHomeWorthConfirmation
 };

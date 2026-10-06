@@ -198,6 +198,27 @@ const initDatabase = () => {
         )
     `);
 
+    // Home-worth requests ("What's my home worth?" free value-report tool).
+    // status: 'new' (report not yet delivered) -> 'closed' (report delivered).
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS home_worth_requests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            phone TEXT,
+            address TEXT NOT NULL,
+            city TEXT NOT NULL,
+            zip TEXT NOT NULL,
+            beds INTEGER,
+            baths REAL,
+            sqft INTEGER,
+            condition TEXT,
+            timeline TEXT,
+            status TEXT DEFAULT 'new',
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
     // Create indexes for better performance
     db.exec(`
         CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
@@ -432,6 +453,28 @@ const statements = {
     // Contact submission: mark contacted
     markContactSubmissionContacted: db.prepare(`
         UPDATE contact_submissions SET contacted = 1 WHERE id = ?
+    `),
+
+    // Home-worth request: insert
+    insertHomeWorthRequest: db.prepare(`
+        INSERT INTO home_worth_requests
+            (name, email, phone, address, city, zip, beds, baths, sqft, condition, timeline)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `),
+
+    // Home-worth request: all, newest first (admin)
+    getAllHomeWorthRequests: db.prepare(`
+        SELECT * FROM home_worth_requests ORDER BY createdAt DESC
+    `),
+
+    // Home-worth request: mark closed (report delivered)
+    markHomeWorthRequestClosed: db.prepare(`
+        UPDATE home_worth_requests SET status = 'closed' WHERE id = ?
+    `),
+
+    // Home-worth request: delete (test-row cleanup)
+    deleteHomeWorthRequest: db.prepare(`
+        DELETE FROM home_worth_requests WHERE id = ?
     `),
 
     // Technical help request: insert
