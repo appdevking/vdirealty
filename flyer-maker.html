@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free FSBO Flyer Maker | VDI Realty</title>
+    <meta name="description" content="Create a beautiful, printable For Sale flyer for your property in seconds with VDI Realty's free FSBO flyer maker. No account needed.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #f5f6fa;
+            --accent: #667eea;
+            --white: #ffffff;
+            --panel: #ffffff;
+            --panel-2: #f8f9fa;
+            --text-main: #2c3e50;
+            --text-dim: #6b7a8d;
+            --border: #e0e0e0;
+            --navy: #0a1c30;
+            --navy-2: #1b3a5c;
+            --gold: #c19a3d;
+            --gold-soft: #e9c46a;
+        }
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Lato', sans-serif; margin: 0; padding: 0;
+            background: var(--secondary); color: var(--text-main); line-height: 1.7; overflow-x: hidden;
+        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
+
+        /* ---------- Nav (heritage) ---------- */
+        .navbar { background: #faf8f4; border-bottom: 1px solid #c19a3d; padding: 0.85rem 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
+        .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+        .nav-links a { color: #0a1c30; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        /* ---------- Hero ---------- */
+        .hero { background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%); color: #fff; padding: 3.5rem 2rem 3rem; text-align: center; }
+        .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 2.6rem; margin-bottom: 1rem; }
+        .hero h1 i { color: var(--gold); }
+        .hero p { font-size: 1.12rem; max-width: 760px; margin: 0 auto 1.6rem; color: #cdd8e4; }
+        .hero-badge { display: inline-block; background: var(--gold); color: #0a1c30; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 1.4rem; border-radius: 50px; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+        .grid { display: grid; grid-template-columns: 420px 1fr; gap: 2rem; align-items: start; }
+        @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--panel); border-radius: 14px; box-shadow: 0 4px 24px rgba(10,28,48,0.08); padding: 2rem; border-top: 4px solid var(--gold); }
+        .card h2 { font-size: 1.35rem; margin-bottom: 1.2rem; color: var(--navy); }
+        .card h2 i { color: var(--gold); margin-right: 0.5rem; }
+
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.35rem; color: var(--navy); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border); border-radius: 8px;
+            font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--text-main); background: #fff;
+        }
+        .form-group textarea { min-height: 88px; resize: vertical; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,0.15); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        .form-help { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+        .photo-preview { margin-top: 0.6rem; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); display: none; }
+        .photo-preview img { width: 100%; display: block; max-height: 180px; object-fit: cover; }
+
+        .btn-gold {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            background: linear-gradient(135deg, #c19a3d, #a8832f); color: #fff; border: none;
+            padding: 1rem 2rem; border-radius: 50px; font-family: 'Montserrat', sans-serif; font-weight: 800;
+            font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;
+            width: 100%; margin-top: 0.5rem; text-decoration: none;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(193,154,61,0.4); }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 0.5rem; background: #fff; color: var(--navy);
+            border: 2px solid var(--gold); padding: 0.55rem 1.2rem; border-radius: 50px;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-outline:hover { background: var(--gold); color: #fff; }
+
+        .preview-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.6rem; }
+
+        /* ---------- Flyer sheet (screen preview, 8.5:11) ---------- */
+        .flyer-wrap { display: flex; justify-content: center; }
+        #flyerSheet {
+            width: 100%; max-width: 640px; aspect-ratio: 8.5 / 11; background: #fff;
+            box-shadow: 0 10px 40px rgba(10,28,48,0.18); border-radius: 6px; overflow: hidden;
+            display: flex; flex-direction: column; font-family: 'Lato', sans-serif; position: relative;
+        }
+        .fl-top { background: linear-gradient(135deg, #0a1c30, #1b3a5c); color: #fff; padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; }
+        .fl-brand { display: flex; align-items: center; gap: 10px; }
+        .fl-mark { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .fl-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .fl-brandname { font-family: Georgia, serif; font-weight: 700; letter-spacing: 0.08em; font-size: 1.05rem; }
+        .fl-brandname span { color: #c19a3d; }
+        .fl-forsale { background: #c19a3d; color: #0a1c30; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.8rem; letter-spacing: 2px; padding: 6px 16px; border-radius: 4px; }
+        .fl-photo { height: 30%; min-height: 170px; background: linear-gradient(135deg, #dfe7ef, #b9c7d6); position: relative; overflow: hidden; }
+        .fl-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .fl-photo-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #7a8ca3; gap: 6px; }
+        .fl-photo-empty i { font-size: 2.4rem; }
+        .fl-price { background: #c19a3d; color: #0a1c30; text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.9rem; padding: 8px; letter-spacing: 0.5px; }
+        .fl-body { padding: 18px 26px; flex: 1; display: flex; flex-direction: column; }
+        .fl-address { font-family: Georgia, serif; font-size: 1.35rem; color: #0a1c30; margin-bottom: 6px; }
+        .fl-stats { display: flex; gap: 0; margin: 8px 0 12px; border-top: 1px solid #ece5d8; border-bottom: 1px solid #ece5d8; }
+        .fl-stat { flex: 1; text-align: center; padding: 8px 4px; }
+        .fl-stat + .fl-stat { border-left: 1px solid #ece5d8; }
+        .fl-stat b { display: block; font-family: 'Montserrat', sans-serif; font-size: 1.05rem; color: #0a1c30; }
+        .fl-stat span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #7a8ca3; }
+        .fl-desc { font-size: 0.86rem; color: #3d4756; line-height: 1.65; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+        .fl-features { font-size: 0.84rem; color: #3d4756; columns: 2; column-gap: 18px; margin: 0 0 10px; padding: 0; list-style: none; }
+        .fl-features li { margin-bottom: 4px; padding-left: 18px; position: relative; break-inside: avoid; }
+        .fl-features li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: #c19a3d; position: absolute; left: 0; font-size: 0.75rem; top: 3px; }
+        .fl-contact { margin-top: auto; background: #0a1c30; color: #fff; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .fl-contact .who b { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.95rem; }
+        .fl-contact .who span { font-size: 0.8rem; color: #cdd8e4; }
+        .fl-contact .how { text-align: right; font-size: 0.85rem; color: #e9c46a; }
+        .fl-foot { padding: 10px 26px 14px; text-align: center; }
+        .fl-foot p { margin: 2px 0; font-size: 0.68rem; color: #7a8ca3; }
+        .fl-foot .brokered { font-weight: 700; color: #0a1c30; font-size: 0.74rem; }
+
+        .fair-note {
+            margin-top: 1.5rem; padding: 1rem 1.2rem; background: #fef9ef; border: 1px solid #f0dfb8;
+            border-radius: 10px; font-size: 0.88rem; color: #7a5c1e;
+        }
+        .fair-note i { color: var(--gold); margin-right: 0.4rem; }
+
+        footer { background: var(--navy); color: #cdd8e4; text-align: center; padding: 2.5rem 1.5rem; margin-top: 3rem; }
+        footer .footer-brand { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: 0.1em; color: #fff; margin-bottom: 0.5rem; }
+        footer .footer-brand span { color: var(--gold); }
+        footer a { color: var(--gold-soft); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .footer-eho { margin-top: 1rem; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .footer-eho i { color: var(--gold); }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.9rem; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .card { padding: 1.3rem; }
+            .nav-links { display: none; }
+            .fl-price { font-size: 1.5rem; }
+        }
+
+        /* ---------- Print: flyer only, one page ---------- */
+        @media print {
+            @page { size: letter; margin: 0; }
+            body { background: #fff; }
+            body * { visibility: hidden; }
+            #flyerSheet, #flyerSheet * { visibility: visible; }
+            #flyerSheet {
+                position: absolute; top: 0; left: 0; width: 8.5in; height: 11in; max-width: none;
+                aspect-ratio: auto; box-shadow: none; border-radius: 0; margin: 0;
+            }
+            .fl-photo { height: 3.1in; min-height: 0; }
+            .fl-desc { -webkit-line-clamp: 8; font-size: 10pt; }
+            .fl-features { font-size: 9.5pt; }
+            .fl-price { font-size: 26pt; }
+            .fl-address { font-size: 17pt; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="fsbo-listings.html">Browse FSBO</a></li>
+                <li><a href="fsbo.html">List Property</a></li>
+                <li><a href="free-tools.html">Free Tools</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1><i class="fas fa-file-image"></i> Free FSBO Flyer Maker</h1>
+        <p>Design a beautiful, print-ready For Sale flyer for your property in under two minutes. Add your photo and details, preview it live, then print or save as PDF.</p>
+        <span class="hero-badge"><i class="fas fa-gift"></i> 100% Free Tool</span>
+    </section>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Form -->
+            <div class="card">
+                <h2><i class="fas fa-sliders"></i> Flyer details</h2>
+                <div class="form-group">
+                    <label for="photo">Home photo <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+                    <input type="file" id="photo" accept="image/*">
+                    <div class="form-help">A bright exterior or living-room shot works best. The photo never leaves your browser.</div>
+                    <div class="photo-preview" id="photoPreview"><img id="photoPreviewImg" alt="Uploaded home photo preview"></div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Property address</label>
+                    <input type="text" id="address" placeholder="e.g. 123 Maple Street, Bellevue, WA">
+                </div>
+                <div class="form-group">
+                    <label for="price">Asking price</label>
+                    <input type="text" id="price" placeholder="e.g. $749,000">
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label for="beds">Beds</label>
+                        <input type="number" id="beds" min="0" max="20" step="1" placeholder="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="baths">Baths</label>
+                        <input type="number" id="baths" min="0" max="20" step="0.5" placeholder="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="sqft">Sq ft</label>
+                        <input type="number" id="sqft" min="0" step="1" placeholder="1800">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="features">Key features <span style="font-weight:400;color:var(--text-dim)">(one per line)</span></label>
+                    <textarea id="features" placeholder="Chef's kitchen with quartz counters&#10;Primary suite with spa bath&#10;New roof (2023)&#10;Covered deck with mountain views"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="desc">Description <span style="font-weight:400;color:var(--text-dim)">(optional — or generate one)</span></label>
+                    <textarea id="desc" style="min-height:64px" placeholder="A sentence or two about the home…"></textarea>
+                    <div class="form-help"><a href="listing-writer.html" style="color:var(--gold);font-weight:700;">Use the free Listing Writer to generate polished copy &rarr;</a></div>
+                </div>
+                <div class="form-group">
+                    <label for="cname">Contact name</label>
+                    <input type="text" id="cname" placeholder="e.g. Jane Seller">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cphone">Contact phone</label>
+                        <input type="tel" id="cphone" placeholder="(206) 555-0100">
+                    </div>
+                    <div class="form-group">
+                        <label for="cemail">Contact email</label>
+                        <input type="email" id="cemail" placeholder="you@example.com">
+                    </div>
+                </div>
+                <button class="btn-gold" id="printBtn"><i class="fas fa-print"></i> Print / Save as PDF</button>
+            </div>
+
+            <!-- Live preview -->
+            <div class="card">
+                <div class="preview-head">
+                    <h2 style="margin:0;"><i class="fas fa-eye"></i> Live preview</h2>
+                    <button class="btn-outline" id="printBtn2"><i class="fas fa-print"></i> Print / Save as PDF</button>
+                </div>
+                <div class="flyer-wrap">
+                    <div id="flyerSheet" role="img" aria-label="For sale flyer preview">
+                        <div class="fl-top">
+                            <div class="fl-brand">
+                                <span class="fl-mark"><img src="images/vdi-mark.webp" alt="VDI Realty"></span>
+                                <span class="fl-brandname">VDI <span>REALTY</span></span>
+                            </div>
+                            <span class="fl-forsale">FOR SALE</span>
+                        </div>
+                        <div class="fl-photo" id="flPhoto">
+                            <div class="fl-photo-empty" id="flPhotoEmpty">
+                                <i class="fas fa-house-chimney"></i>
+                                <span>Your home photo appears here</span>
+                            </div>
+                        </div>
+                        <div class="fl-price" id="flPrice">$ —</div>
+                        <div class="fl-body">
+                            <div class="fl-address" id="flAddress">Your Property Address</div>
+                            <div class="fl-stats">
+                                <div class="fl-stat"><b id="flBeds">–</b><span>Beds</span></div>
+                                <div class="fl-stat"><b id="flBaths">–</b><span>Baths</span></div>
+                                <div class="fl-stat"><b id="flSqft">–</b><span>Sq Ft</span></div>
+                            </div>
+                            <div class="fl-desc" id="flDesc">Your property description will appear here. Add a sentence or two — or generate polished copy with our free Listing Writer.</div>
+                            <ul class="fl-features" id="flFeatures"></ul>
+                            <div class="fl-contact">
+                                <div class="who">
+                                    <b id="flCname">Your Name</b>
+                                    <span>Contact for showings</span>
+                                </div>
+                                <div class="how" id="flChow">—</div>
+                            </div>
+                        </div>
+                        <div class="fl-foot">
+                            <p class="brokered">Brokered by Realty Connect</p>
+                            <p><i class="fas fa-house-chimney"></i> Equal Housing Opportunity</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="fair-note">
+                    <i class="fas fa-scale-balanced"></i>
+                    <strong>Fair housing note:</strong> Describe the property only — never the people who should buy it. All listings are subject to the Federal Fair Housing Act.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-brand">VDI <span>REALTY</span></p>
+        <p>Brokered by Realty Connect &nbsp;|&nbsp; <a href="tel:+12068800637">(206) 880-0637</a> &nbsp;|&nbsp; <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a> &nbsp;|&nbsp; <a href="https://www.vdirealty.com">www.vdirealty.com</a></p>
+        <p style="font-size:0.85rem;">Residential, Commercial &amp; Investment Property Solutions</p>
+        <div class="footer-eho">
+            <i class="fas fa-house-chimney"></i>
+            <span>Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</span>
+        </div>
+        <p style="font-size:0.8rem; margin-top:0.6rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
+    </footer>
+
+<script>
+(function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+    var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]); }); };
+
+    /* Accept a description carried over from the Listing Writer (?desc=...) */
+    try {
+        var q = new URLSearchParams(window.location.search);
+        var carried = q.get('desc');
+        if (carried) { $('desc').value = carried; }
+    } catch (e) {}
+
+    function fmtNum(n) { return Number(n).toLocaleString('en-US'); }
+
+    function render() {
+        var address = $('address').value.trim();
+        var price = $('price').value.trim();
+        var beds = $('beds').value.trim();
+        var baths = $('baths').value.trim();
+        var sqft = $('sqft').value.trim();
+        var desc = $('desc').value.trim();
+        var features = $('features').value.split(/[\n,;]+/).map(function (s) { return s.trim().replace(/\.$/, ''); }).filter(Boolean);
+        var cname = $('cname').value.trim();
+        var cphone = $('cphone').value.trim();
+        var cemail = $('cemail').value.trim();
+
+        $('flAddress').textContent = address || 'Your Property Address';
+        $('flPrice').textContent = price ? (price.charAt(0) === '$' ? price : '$' + price) : '$ —';
+        $('flBeds').textContent = beds || '–';
+        $('flBaths').textContent = baths || '–';
+        $('flSqft').textContent = sqft ? fmtNum(sqft) : '–';
+        $('flDesc').textContent = desc || 'Your property description will appear here. Add a sentence or two — or generate polished copy with our free Listing Writer.';
+
+        var ul = $('flFeatures');
+        ul.innerHTML = '';
+        features.slice(0, 10).forEach(function (f) {
+            var li = document.createElement('li');
+            li.textContent = f;
+            ul.appendChild(li);
+        });
+
+        $('flCname').textContent = cname || 'Your Name';
+        var how = [];
+        if (cphone) how.push(cphone);
+        if (cemail) how.push(cemail);
+        $('flChow').innerHTML = how.length ? how.map(esc).join('<br>') : '—';
+    }
+
+    ['address','price','beds','baths','sqft','desc','features','cname','cphone','cemail'].forEach(function (id) {
+        $(id).addEventListener('input', render);
+    });
+
+    $('photo').addEventListener('change', function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (!f) return;
+        var r = new FileReader();
+        r.onload = function () {
+            var url = r.result;
+            var box = $('flPhoto');
+            box.querySelectorAll('img.fl-photo-img').forEach(function (n) { n.remove(); });
+            var img = document.createElement('img');
+            img.className = 'fl-photo-img';
+            img.src = url;
+            img.alt = 'Home photo';
+            box.appendChild(img);
+            $('flPhotoEmpty').style.display = 'none';
+            var pv = $('photoPreview');
+            pv.style.display = 'block';
+            $('photoPreviewImg').src = url;
+        };
+        r.readAsDataURL(f);
+    });
+
+    function doPrint() { render(); window.print(); }
+    $('printBtn').addEventListener('click', doPrint);
+    $('printBtn2').addEventListener('click', doPrint);
+
+    render();
+})();
+</script>
+</body>
+</html>

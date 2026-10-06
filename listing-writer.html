@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Listing Description Generator | VDI Listing Writer | VDI Realty</title>
+    <meta name="description" content="Write a polished, buyer-ready property description in seconds with VDI Realty's free listing description generator. No account needed.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #f5f6fa;
+            --accent: #667eea;
+            --white: #ffffff;
+            --panel: #ffffff;
+            --panel-2: #f8f9fa;
+            --text-main: #2c3e50;
+            --text-dim: #6b7a8d;
+            --border: #e0e0e0;
+            --navy: #0a1c30;
+            --gold: #c19a3d;
+            --gold-soft: #e9c46a;
+        }
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Lato', sans-serif; margin: 0; padding: 0;
+            background: var(--secondary); color: var(--text-main); line-height: 1.7; overflow-x: hidden;
+        }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
+
+        /* ---------- Nav (heritage, matches fsbo-listings.html) ---------- */
+        .navbar { background: #faf8f4; border-bottom: 1px solid #c19a3d; padding: 0.85rem 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
+        .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+        .nav-links a { color: #0a1c30; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+        /* ---------- Hero ---------- */
+        .hero { background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%); color: #fff; padding: 3.5rem 2rem 3rem; text-align: center; }
+        .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 2.6rem; margin-bottom: 1rem; }
+        .hero h1 i { color: var(--gold); }
+        .hero p { font-size: 1.12rem; max-width: 760px; margin: 0 auto 1.6rem; color: #cdd8e4; }
+        .hero-badge { display: inline-block; background: var(--gold); color: #0a1c30; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 1.4rem; border-radius: 50px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--panel); border-radius: 14px; box-shadow: 0 4px 24px rgba(10,28,48,0.08); padding: 2rem; border-top: 4px solid var(--gold); }
+        .card h2 { font-size: 1.35rem; margin-bottom: 1.2rem; color: var(--navy); }
+        .card h2 i { color: var(--gold); margin-right: 0.5rem; }
+
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.35rem; color: var(--navy); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border); border-radius: 8px;
+            font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--text-main); background: #fff;
+        }
+        .form-group textarea { min-height: 96px; resize: vertical; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,0.15); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        .form-help { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+
+        .btn-gold {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            background: linear-gradient(135deg, #c19a3d, #a8832f); color: #fff; border: none;
+            padding: 1rem 2rem; border-radius: 50px; font-family: 'Montserrat', sans-serif; font-weight: 800;
+            font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;
+            width: 100%; margin-top: 0.5rem;
+        }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(193,154,61,0.4); }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 0.5rem; background: #fff; color: var(--navy);
+            border: 2px solid var(--gold); padding: 0.55rem 1.2rem; border-radius: 50px;
+            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-outline:hover { background: var(--gold); color: #fff; }
+
+        .output-block { margin-bottom: 1.8rem; }
+        .output-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
+        .output-head h3 { font-size: 1.05rem; color: var(--navy); }
+        .word-count { font-size: 0.8rem; color: var(--text-dim); background: var(--panel-2); padding: 0.2rem 0.7rem; border-radius: 20px; }
+        .output-text {
+            background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+            padding: 1.2rem 1.3rem; font-size: 1.02rem; line-height: 1.85; white-space: pre-wrap; min-height: 120px;
+        }
+        .output-actions { display: flex; gap: 0.7rem; margin-top: 0.8rem; flex-wrap: wrap; }
+        .empty-note { color: var(--text-dim); font-style: italic; }
+
+        .fair-note {
+            margin-top: 1.5rem; padding: 1rem 1.2rem; background: #fef9ef; border: 1px solid #f0dfb8;
+            border-radius: 10px; font-size: 0.88rem; color: #7a5c1e;
+        }
+        .fair-note i { color: var(--gold); margin-right: 0.4rem; }
+
+        .cta-strip {
+            margin-top: 2.5rem; background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%);
+            border-radius: 14px; padding: 2.2rem; text-align: center; color: #fff;
+        }
+        .cta-strip h2 { font-family: Georgia, serif; font-weight: 400; margin-bottom: 0.8rem; }
+        .cta-strip p { color: #cdd8e4; max-width: 640px; margin: 0 auto 1.4rem; }
+        .cta-strip a.btn-gold { width: auto; text-decoration: none; }
+
+        footer { background: var(--navy); color: #cdd8e4; text-align: center; padding: 2.5rem 1.5rem; margin-top: 3rem; }
+        footer .footer-brand { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: 0.1em; color: #fff; margin-bottom: 0.5rem; }
+        footer .footer-brand span { color: var(--gold); }
+        footer a { color: var(--gold-soft); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .footer-eho { margin-top: 1rem; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .footer-eho i { color: var(--gold); }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.9rem; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .card { padding: 1.3rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="fsbo-listings.html">Browse FSBO</a></li>
+                <li><a href="fsbo.html">List Property</a></li>
+                <li><a href="free-tools.html">Free Tools</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1><i class="fas fa-pen-fancy"></i> Free Listing Description Generator</h1>
+        <p>Turn your property's facts into a polished, buyer-ready listing description in seconds. Built on proven listing-copy frameworks — no account, no cost, no catch.</p>
+        <span class="hero-badge"><i class="fas fa-gift"></i> 100% Free Tool</span>
+    </section>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Form -->
+            <div class="card">
+                <h2><i class="fas fa-home"></i> Property details</h2>
+                <div class="form-group">
+                    <label for="address">Property address <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+                    <input type="text" id="address" placeholder="e.g. 123 Maple Street, Bellevue, WA">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ptype">Property type</label>
+                        <select id="ptype">
+                            <option value="single-family home">Single-family home</option>
+                            <option value="condo">Condo</option>
+                            <option value="townhouse">Townhouse</option>
+                            <option value="multi-family home">Multi-family home</option>
+                            <option value="land">Land / lot</option>
+                            <option value="commercial property">Commercial property</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tone">Writing tone</label>
+                        <select id="tone">
+                            <option value="warm">Warm &amp; inviting</option>
+                            <option value="upscale">Upscale &amp; luxurious</option>
+                            <option value="concise">Concise &amp; factual</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label for="beds">Bedrooms</label>
+                        <input type="number" id="beds" min="0" max="20" step="1" placeholder="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="baths">Bathrooms</label>
+                        <input type="number" id="baths" min="0" max="20" step="0.5" placeholder="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="sqft">Living area (sq ft)</label>
+                        <input type="number" id="sqft" min="0" step="1" placeholder="1800">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="lot">Lot size <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+                        <input type="text" id="lot" placeholder="e.g. 0.25 acres">
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year built <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+                        <input type="number" id="year" min="1700" max="2026" step="1" placeholder="1998">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="features">Key features &amp; upgrades</label>
+                    <textarea id="features" placeholder="One per line or comma-separated — e.g.&#10;Chef's kitchen with quartz counters&#10;Primary suite with spa bath&#10;New roof (2023)&#10;Covered deck with mountain views"></textarea>
+                    <div class="form-help">List what makes this property stand out. These become the heart of your description.</div>
+                </div>
+                <div class="form-group">
+                    <label for="neighborhood">Neighborhood highlights <span style="font-weight:400;color:var(--text-dim)">(optional)</span></label>
+                    <textarea id="neighborhood" style="min-height:64px" placeholder="e.g. Walk to top-rated schools, minutes to downtown, near Lake Sammamish trails"></textarea>
+                </div>
+                <button class="btn-gold" id="generateBtn"><i class="fas fa-wand-magic-sparkles"></i> Generate description</button>
+                <button class="btn-outline" id="shuffleBtn" style="width:100%;justify-content:center;margin-top:0.7rem;display:none;"><i class="fas fa-shuffle"></i> Try a different style</button>
+            </div>
+
+            <!-- Output -->
+            <div class="card">
+                <h2><i class="fas fa-file-lines"></i> Your listing copy</h2>
+                <div class="output-block">
+                    <div class="output-head">
+                        <h3>Full description</h3>
+                        <span class="word-count" id="fullCount"></span>
+                    </div>
+                    <div class="output-text" id="fullOutput"><span class="empty-note">Fill in the property details and click "Generate description" — your polished copy will appear here.</span></div>
+                    <div class="output-actions">
+                        <button class="btn-outline" id="copyFull" style="display:none;"><i class="fas fa-copy"></i> Copy full description</button>
+                        <button class="btn-outline" id="toFlyer" style="display:none;"><i class="fas fa-file-image"></i> Next: make your flyer &rarr;</button>
+                    </div>
+                </div>
+                <div class="output-block">
+                    <div class="output-head">
+                        <h3>Short version <span style="font-weight:400;font-size:0.85rem;color:var(--text-dim)">(~50 words)</span></h3>
+                        <span class="word-count" id="shortCount"></span>
+                    </div>
+                    <div class="output-text" id="shortOutput" style="min-height:80px;"><span class="empty-note">A condensed version for portals and social posts will appear here.</span></div>
+                    <div class="output-actions">
+                        <button class="btn-outline" id="copyShort" style="display:none;"><i class="fas fa-copy"></i> Copy short version</button>
+                    </div>
+                </div>
+                <div class="fair-note">
+                    <i class="fas fa-scale-balanced"></i>
+                    <strong>Fair housing note:</strong> This tool describes the property only — never the people who should buy it. Always review your copy to ensure it complies with the Federal Fair Housing Act.
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-strip">
+            <h2>Like your description? Post the listing free.</h2>
+            <p>Copy your new description straight into VDI Realty's free FSBO listing board — live for 14 days, no account needed, no commissions, no catch.</p>
+            <a href="fsbo.html" class="btn-gold"><i class="fas fa-tag"></i> List your property free</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-brand">VDI <span>REALTY</span></p>
+        <p>Brokered by Realty Connect &nbsp;|&nbsp; <a href="tel:+12068800637">(206) 880-0637</a> &nbsp;|&nbsp; <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a> &nbsp;|&nbsp; <a href="https://www.vdirealty.com">www.vdirealty.com</a></p>
+        <p style="font-size:0.85rem;">Residential, Commercial &amp; Investment Property Solutions</p>
+        <div class="footer-eho">
+            <i class="fas fa-house-chimney"></i>
+            <span>Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</span>
+        </div>
+        <p style="font-size:0.8rem; margin-top:0.6rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
+    </footer>
+
+<script>
+(function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+
+    /* ============ helpers ============ */
+    function hashStr(s) { var h = 0, i; for (i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; } return Math.abs(h); }
+    function pick(arr, seed) { return arr[seed % arr.length]; }
+    function num(n) { if (n === null || n === undefined || n === '') return null; var v = Number(n); return isFinite(v) ? v : null; }
+    function fmtNum(n) { return n.toLocaleString('en-US'); }
+    function wordCount(s) { return s.trim().split(/\s+/).filter(Boolean).length; }
+    function oxford(list) {
+        if (list.length === 0) return '';
+        if (list.length === 1) return list[0];
+        if (list.length === 2) return list[0] + ' and ' + list[1];
+        return list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
+    }
+    function parseList(text) {
+        return text.split(/[\n,;]+/).map(function (s) { return s.trim().replace(/\.$/, ''); }).filter(Boolean);
+    }
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    /* ============ copy pools (fair-housing safe: property only, never people) ============ */
+    var OPENERS = {
+        warm: [
+            'Some homes simply feel right the moment you step inside — welcome to {home}.',
+            'Welcome home to {home}, where comfort and character come together beautifully.',
+            'Tucked in a sought-after setting, {home} is ready to welcome its next chapter.',
+            'Come see why {home} stands out — a warm, inviting residence with room to live, gather, and unwind.'
+        ],
+        upscale: [
+            'Presenting {home} — a refined residence defined by quality finishes and thoughtful design.',
+            'An exceptional offering: {home} pairs elegant appointments with effortless everyday living.',
+            'Discover {home}, where meticulous craftsmanship meets modern luxury.',
+            'Rarely does a residence of this caliber become available — welcome to {home}.'
+        ],
+        concise: [
+            '{HomeCap} — {beds}-bed, {baths}-bath {ptype} with {sqft} sq ft of living space.',
+            'Well-kept {ptype} offering {beds} bedrooms, {baths} bathrooms, and {sqft} sq ft.',
+            'For sale: {beds}-bedroom, {baths}-bathroom {ptype} ({sqft} sq ft) in a convenient location.'
+        ]
+    };
+    var TRANSITIONS = [
+        'Inside, you will find',
+        'The interior offers',
+        'Step inside to discover',
+        'Throughout the home,'
+    ];
+    var FEATURE_LEADS = [
+        'Standout features include {list}.',
+        'Notable highlights include {list}.',
+        'You will appreciate details such as {list}.',
+        'The home shines with {list}.'
+    ];
+    var LIFESTYLE = {
+        warm: [
+            'Mornings start easy here, and evenings wind down even easier — this is a home built for real life.',
+            'Whether you are hosting friends or enjoying a quiet night in, the layout makes every day comfortable.',
+            'There is space for everything that matters: family dinners, home offices, hobbies, and lazy weekends.'
+        ],
+        upscale: [
+            'Every detail has been considered, from the proportions of the rooms to the quality of the finishes.',
+            'This is entertaining made effortless — and everyday living made exceptional.',
+            'A residence of quiet distinction, designed for those who recognize quality.'
+        ],
+        concise: [
+            'Functional layout with good natural light throughout.',
+            'Clean, move-in-ready condition.',
+            'Efficient floor plan that lives larger than its square footage.'
+        ]
+    };
+    var OUTDOOR = [
+        'Outdoor living is part of the package — {outdoor}.',
+        'The setting extends outdoors, with {outdoor}.',
+        'Outside, you will find {outdoor}.'
+    ];
+    var HOOD = {
+        warm: [
+            'Beyond the front door, the neighborhood adds to the appeal — {hood}.',
+            'The surrounding neighborhood is part of the story here — {hood}.',
+            'Location matters, and this one delivers — {hood}.'
+        ],
+        upscale: [
+            'The location completes the picture — {hood}.',
+            'Set in a distinguished neighborhood — {hood}.',
+            'An address that speaks for itself — {hood}.'
+        ],
+        concise: [
+            'Location notes: {hood}.',
+            'Nearby: {hood}.',
+            'Area highlights: {hood}.'
+        ]
+    };
+    var STAR = {
+        warm: [
+            'The {F} is sure to win you over.',
+            '{Fcap} — a detail you will appreciate every single day.',
+            'Be sure to note the {f} — it is a genuine highlight of the home.'
+        ],
+        upscale: [
+            'The {F} exemplifies the home\u2019s refined character.',
+            '{Fcap} — an appointment of true distinction.',
+            'Particularly noteworthy is the {f}.'
+        ],
+        concise: []
+    };
+    var CLOSERS = {
+        warm: [
+            'Homes like this do not wait around — schedule your private tour today and picture your life here.',
+            'Come experience it in person — this one is ready to welcome you home. Schedule a showing today.',
+            'Do not miss your chance to make this house your home — call today for a private tour.'
+        ],
+        upscale: [
+            'Private showings are available by appointment — discerning buyers are encouraged to inquire promptly.',
+            'To arrange your private viewing of this exceptional residence, contact us today.',
+            'Opportunities of this distinction are rare — schedule your appointment without delay.'
+        ],
+        concise: [
+            'Contact us today to schedule a showing.',
+            'Call or message now to arrange a tour.',
+            'Showings available — contact for details.'
+        ]
+    };
+
+    var shuffleOffset = 0;
+
+    function collect() {
+        return {
+            address: $('address').value.trim(),
+            ptype: $('ptype').value,
+            tone: $('tone').value,
+            beds: num($('beds').value),
+            baths: num($('baths').value),
+            sqft: num($('sqft').value),
+            lot: $('lot').value.trim(),
+            year: num($('year').value),
+            features: parseList($('features').value),
+            hood: $('neighborhood').value.trim().replace(/\.$/, '')
+        };
+    }
+
+    function homeName(d) {
+        if (d.address) return d.address;
+        return 'this ' + (d.beds ? d.beds + '-bedroom ' : '') + d.ptype;
+    }
+
+    function statsPhrase(d) {
+        var parts = [];
+        if (d.beds !== null) parts.push(d.beds + ' bedroom' + (d.beds === 1 ? '' : 's'));
+        if (d.baths !== null) parts.push(d.baths + ' bathroom' + (d.baths === 1 ? '' : 's'));
+        if (d.sqft !== null) parts.push(fmtNum(d.sqft) + ' sq ft of living space');
+        return parts.length ? oxford(parts) : 'generous living space';
+    }
+
+    function buildFull(d, seed) {
+        var tone = d.tone, out = [];
+        var home = homeName(d);
+        var homeCap = cap(home);
+        var stats = statsPhrase(d);
+
+        /* P1 — opener */
+        var opener = pick(OPENERS[tone], seed + shuffleOffset);
+        opener = opener
+            .replace('{home}', home)
+            .replace('{HomeCap}', homeCap)
+            .replace('{beds}', d.beds !== null ? d.beds : 'Spacious')
+            .replace('{baths}', d.baths !== null ? d.baths : '')
+            .replace('{ptype}', d.ptype)
+            .replace('{sqft}', d.sqft !== null ? fmtNum(d.sqft) : '');
+        out.push(opener.replace(/\s+/g, ' ').replace(' -bath', '-bath').trim());
+
+        /* P2 — interior & features */
+        var p2 = pick(TRANSITIONS, seed + 1 + shuffleOffset) + ' ' + stats + '.';
+        if (d.features.length) {
+            var lead = pick(FEATURE_LEADS, seed + 2 + shuffleOffset).replace('{list}', oxford(d.features.map(function (f) { return f.charAt(0).toLowerCase() + f.slice(1); })));
+            p2 += ' ' + lead;
+            if (STAR[tone].length) {
+                var f0 = d.features[0];
+                p2 += ' ' + pick(STAR[tone], seed + 8 + shuffleOffset)
+                    .replace('{F}', f0.charAt(0).toLowerCase() + f0.slice(1))
+                    .replace('{Fcap}', cap(f0))
+                    .replace('{f}', f0.charAt(0).toLowerCase() + f0.slice(1));
+            }
+        }
+        if (d.year) p2 += (tone === 'concise' ? ' Built in ' + d.year + '.' : ' Originally built in ' + d.year + ', the home carries a sense of established quality.');
+        out.push(p2);
+
+        /* P3 — lifestyle + outdoor */
+        out.push(pick(LIFESTYLE[tone], seed + 3 + shuffleOffset));
+        var outdoorBits = [];
+        if (d.lot) outdoorBits.push(d.lot);
+        if (d.features.length > 3) outdoorBits.push('beautifully kept grounds');
+        if (outdoorBits.length) out.push(pick(OUTDOOR, seed + 4 + shuffleOffset).replace('{outdoor}', oxford(outdoorBits)));
+
+        /* P4 — neighborhood */
+        if (d.hood) out.push(pick(HOOD[tone], seed + 5 + shuffleOffset).replace('{hood}', d.hood));
+
+        /* P5 — closer */
+        out.push(pick(CLOSERS[tone], seed + 6 + shuffleOffset));
+        return out.join('\n\n');
+    }
+
+    function buildShort(d, seed) {
+        var stats = statsPhrase(d);
+        var bits = [];
+        if (d.address) bits.push(d.address + ' —');
+        bits.push(cap(d.ptype) + ' with ' + stats + '.');
+        if (d.features.length) bits.push(cap(oxford(d.features.slice(0, 3).map(function (f) { return f.charAt(0).toLowerCase() + f.slice(1); }))) + '.');
+        if (d.hood) bits.push(d.hood + '.');
+        var closers = ['Schedule your tour today.', 'Contact us for a private showing.', 'Do not miss this one — call today.'];
+        bits.push(pick(closers, seed + 7 + shuffleOffset));
+        return bits.join(' ');
+    }
+
+    function generate() {
+        var d = collect();
+        var seed = hashStr(JSON.stringify([d.address, d.ptype, d.beds, d.baths, d.sqft, d.features.join('|')]));
+        var full = buildFull(d, seed);
+        var short = buildShort(d, seed);
+        $('fullOutput').textContent = full;
+        $('shortOutput').textContent = short;
+        $('fullCount').textContent = wordCount(full) + ' words';
+        $('shortCount').textContent = wordCount(short) + ' words';
+        $('copyFull').style.display = '';
+        $('copyShort').style.display = '';
+        $('toFlyer').style.display = '';
+        $('shuffleBtn').style.display = '';
+    }
+
+    function copyText(elId, btn) {
+        var t = $(elId).textContent;
+        function done() { var o = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Copied!'; setTimeout(function () { btn.innerHTML = o; }, 1600); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(t).then(done, done);
+        } else {
+            var ta = document.createElement('textarea');
+            ta.value = t; document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta); done();
+        }
+    }
+
+    $('generateBtn').addEventListener('click', function () { shuffleOffset = 0; generate(); });
+    $('shuffleBtn').addEventListener('click', function () { shuffleOffset++; generate(); });
+    $('copyFull').addEventListener('click', function () { copyText('fullOutput', this); });
+    $('copyShort').addEventListener('click', function () { copyText('shortOutput', this); });
+    $('toFlyer').addEventListener('click', function () {
+        var desc = $('fullOutput').textContent;
+        window.location.href = 'flyer-maker.html?desc=' + encodeURIComponent(desc);
+    });
+})();
+</script>
+</body>
+</html>

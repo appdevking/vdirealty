@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commission Savings Calculator | Free Tools | VDI Realty</title>
+    <meta name="description" content="See exactly how much commission you'd pay with a traditional agent vs selling FSBO free with VDI Realty's tools.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50; --secondary: #f5f6fa; --accent: #667eea; --white: #ffffff;
+            --panel: #ffffff; --panel-2: #f8f9fa; --text-main: #2c3e50; --text-dim: #6b7a8d;
+            --border: #e0e0e0; --navy: #0a1c30; --navy-2: #1b3a5c; --gold: #c19a3d; --gold-soft: #e9c46a;
+            --success: #1e8e5a;
+        }
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Lato', sans-serif; margin: 0; padding: 0; background: var(--secondary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
+        .navbar { background: #faf8f4; border-bottom: 1px solid #c19a3d; padding: 0.85rem 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
+        .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+        .nav-links a { color: #0a1c30; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        .hero { background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%); color: #fff; padding: 3.5rem 2rem 3rem; text-align: center; }
+        .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 2.6rem; margin-bottom: 1rem; }
+        .hero h1 i { color: var(--gold); }
+        .hero p { font-size: 1.12rem; max-width: 760px; margin: 0 auto 1.6rem; color: #cdd8e4; }
+        .hero-badge { display: inline-block; background: var(--gold); color: #0a1c30; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 1.4rem; border-radius: 50px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        .card { background: var(--panel); border-radius: 14px; box-shadow: 0 4px 24px rgba(10,28,48,0.08); padding: 2rem; border-top: 4px solid var(--gold); }
+        .card h2 { font-size: 1.35rem; margin-bottom: 1.2rem; color: var(--navy); }
+        .card h2 i { color: var(--gold); margin-right: 0.5rem; }
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.35rem; color: var(--navy); }
+        .form-group input, .form-group select { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--text-main); background: #fff; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,0.15); }
+        .form-help { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+        .btn-gold { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; background: linear-gradient(135deg, #c19a3d, #a8832f); color: #fff; border: none; padding: 1rem 2rem; border-radius: 50px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s; width: 100%; margin-top: 0.5rem; text-decoration: none; }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(193,154,61,0.4); }
+        .result-row { display: flex; justify-content: space-between; align-items: baseline; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+        .result-row .lbl { font-weight: 700; color: var(--navy); }
+        .result-row .lbl small { display: block; font-weight: 400; color: var(--text-dim); font-size: 0.82rem; }
+        .result-row .val { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.25rem; }
+        .val.cost { color: #c0392b; }
+        .val.free { color: var(--success); }
+        .savings-hero { text-align: center; background: linear-gradient(135deg, #0a1c30, #1b3a5c); border-radius: 12px; padding: 2rem 1.5rem; margin-top: 1.4rem; color: #fff; }
+        .savings-hero .kicker { text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--gold-soft); font-family: 'Montserrat', sans-serif; font-weight: 700; }
+        .savings-hero .amount { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 3.2rem; color: var(--gold-soft); line-height: 1.15; margin: 0.4rem 0; }
+        .savings-hero p { color: #cdd8e4; margin: 0.4rem 0 0; font-size: 0.95rem; }
+        .cta-strip { margin-top: 2.5rem; background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%); border-radius: 14px; padding: 2.2rem; text-align: center; color: #fff; }
+        .cta-strip h2 { font-family: Georgia, serif; font-weight: 400; margin-bottom: 0.8rem; }
+        .cta-strip p { color: #cdd8e4; max-width: 640px; margin: 0 auto 1.4rem; }
+        .cta-strip a.btn-gold { width: auto; }
+        .tool-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+        .tool-links a { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 0.95rem; }
+        .tool-links a:hover { text-decoration: underline; }
+        .fair-note { margin-top: 1.5rem; padding: 1rem 1.2rem; background: #fef9ef; border: 1px solid #f0dfb8; border-radius: 10px; font-size: 0.88rem; color: #7a5c1e; }
+        .fair-note i { color: var(--gold); margin-right: 0.4rem; }
+        footer { background: var(--navy); color: #cdd8e4; text-align: center; padding: 2.5rem 1.5rem; margin-top: 3rem; }
+        footer .footer-brand { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: 0.1em; color: #fff; margin-bottom: 0.5rem; }
+        footer .footer-brand span { color: var(--gold); }
+        footer a { color: var(--gold-soft); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .footer-eho { margin-top: 1rem; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .footer-eho i { color: var(--gold); }
+        @media (max-width: 640px) { .hero h1 { font-size: 1.9rem; } .card { padding: 1.3rem; } .nav-links { display: none; } .savings-hero .amount { font-size: 2.4rem; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="free-tools.html" class="active">Free Tools</a></li>
+                <li><a href="fsbo-listings.html">Browse FSBO</a></li>
+                <li><a href="fsbo.html">List Property</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1><i class="fas fa-piggy-bank"></i> Commission Savings Calculator</h1>
+        <p>See exactly what a traditional agent commission costs on your home — and how much you keep by selling FSBO free with VDI Realty's tools.</p>
+        <span class="hero-badge"><i class="fas fa-gift"></i> 100% Free Tool</span>
+    </section>
+
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <h2><i class="fas fa-sliders"></i> Your sale</h2>
+                <div class="form-group">
+                    <label for="price">Expected sale price</label>
+                    <input type="number" id="price" min="0" step="1000" placeholder="e.g. 650000" value="650000">
+                </div>
+                <div class="form-group">
+                    <label for="rate">Traditional commission rate</label>
+                    <select id="rate">
+                        <option value="5">5.0%</option>
+                        <option value="5.5" selected>5.5%</option>
+                        <option value="6">6.0%</option>
+                        <option value="4">4.0%</option>
+                        <option value="3">3.0%</option>
+                    </select>
+                    <div class="form-help">Total commission is typically split between the listing agent and the buyer's agent.</div>
+                </div>
+                <div class="form-group">
+                    <label for="buyerAgent">Offer to buyer's agent (FSBO)</label>
+                    <select id="buyerAgent">
+                        <option value="0" selected>$0 — no buyer-agent commission</option>
+                        <option value="2">2.0% — attract represented buyers</option>
+                        <option value="2.5">2.5% — common offer</option>
+                        <option value="3">3.0% — full buyer-agent commission</option>
+                    </select>
+                    <div class="form-help">FSBO sellers often offer a commission to the buyer's agent to widen the buyer pool. VDI Realty's tools themselves are always free.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-chart-column"></i> The comparison</h2>
+                <div class="result-row">
+                    <div class="lbl">Traditional agent cost<small id="tradSub">5.5% of sale price</small></div>
+                    <div class="val cost" id="tradCost">$35,750</div>
+                </div>
+                <div class="result-row">
+                    <div class="lbl">VDI Realty FSBO cost<small>Free listing tools, 14 days</small></div>
+                    <div class="val free" id="fsboCost">$0</div>
+                </div>
+                <div class="savings-hero">
+                    <div class="kicker">You keep</div>
+                    <div class="amount" id="savings">$35,750</div>
+                    <p id="savingsNote">That's money that stays in your pocket — not paid in commission.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-strip">
+            <h2>Keep the commission. Sell it yourself.</h2>
+            <p>Post your property on VDI Realty's free FSBO board — reviewed before it goes live, free for 14 days, no account needed. Use the Listing Writer and Flyer Maker to look like a pro.</p>
+            <a href="fsbo.html" class="btn-gold"><i class="fas fa-tag"></i> List your property free</a>
+        </div>
+
+        <div class="tool-links">
+            <a href="listing-writer.html"><i class="fas fa-pen-fancy"></i> Listing Writer</a>
+            <a href="flyer-maker.html"><i class="fas fa-file-image"></i> Flyer Maker</a>
+            <a href="closing-costs.html"><i class="fas fa-receipt"></i> Closing Cost Estimator</a>
+            <a href="free-tools.html"><i class="fas fa-toolbox"></i> All free tools</a>
+        </div>
+
+        <div class="fair-note">
+            <i class="fas fa-circle-info"></i>
+            <strong>Estimates only:</strong> Commission rates are negotiable and vary by market and agreement. This calculator shows a simplified comparison for illustration — not a quote or a promise of savings.
+        </div>
+    </div>
+
+    <footer>
+        <p class="footer-brand">VDI <span>REALTY</span></p>
+        <p>Brokered by Realty Connect &nbsp;|&nbsp; <a href="tel:+12068800637">(206) 880-0637</a> &nbsp;|&nbsp; <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a> &nbsp;|&nbsp; <a href="https://www.vdirealty.com">www.vdirealty.com</a></p>
+        <p style="font-size:0.85rem;">Residential, Commercial &amp; Investment Property Solutions</p>
+        <div class="footer-eho">
+            <i class="fas fa-house-chimney"></i>
+            <span>Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</span>
+        </div>
+        <p style="font-size:0.8rem; margin-top:0.6rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
+    </footer>
+
+<script>
+(function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+    function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+    function calc() {
+        var price = Math.max(0, Number($('price').value) || 0);
+        var rate = Number($('rate').value) || 0;
+        var buyerPct = Number($('buyerAgent').value) || 0;
+        var trad = price * rate / 100;
+        var fsbo = price * buyerPct / 100;
+        var savings = trad - fsbo;
+        $('tradCost').textContent = fmt(trad);
+        $('tradSub').textContent = rate.toFixed(1) + '% of ' + fmt(price);
+        $('fsboCost').textContent = buyerPct > 0 ? fmt(fsbo) : '$0';
+        $('fsboCost').previousElementSibling.querySelector('small').textContent =
+            buyerPct > 0 ? 'Free tools + ' + buyerPct.toFixed(1) + '% buyer-agent offer' : 'Free listing tools, 14 days';
+        var amt = $('savings');
+        amt.textContent = fmt(savings);
+        $('savingsNote').textContent = buyerPct > 0
+            ? 'After offering ' + buyerPct.toFixed(1) + '% to the buyer\u2019s agent — still far less than full commission.'
+            : 'That\u2019s money that stays in your pocket — not paid in commission.';
+    }
+    ['price', 'rate', 'buyerAgent'].forEach(function (id) { $(id).addEventListener('input', calc); });
+    calc();
+})();
+</script>
+</body>
+</html>

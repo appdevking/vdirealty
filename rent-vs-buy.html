@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="images/favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent vs Buy Calculator | Free Tools | VDI Realty</title>
+    <meta name="description" content="Compare the true 5-year cost of renting vs buying a home with VDI Realty's free rent vs buy calculator.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50; --secondary: #f5f6fa; --accent: #667eea; --white: #ffffff;
+            --panel: #ffffff; --panel-2: #f8f9fa; --text-main: #2c3e50; --text-dim: #6b7a8d;
+            --border: #e0e0e0; --navy: #0a1c30; --navy-2: #1b3a5c; --gold: #c19a3d; --gold-soft: #e9c46a;
+            --success: #1e8e5a;
+        }
+        html { scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Lato', sans-serif; margin: 0; padding: 0; background: var(--secondary); color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; margin: 0; font-weight: 700; }
+        .navbar { background: #faf8f4; border-bottom: 1px solid #c19a3d; padding: 0.85rem 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { display: inline-flex; align-items: center; gap: 12px; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 1.3rem; letter-spacing: 0.1em; color: #0a1c30; text-decoration: none; }
+        .logo-mark { display: inline-flex; width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c19a3d; overflow: hidden; background: #0a1c30; flex: 0 0 auto; }
+        .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .logo-words { display: inline-flex; flex-direction: column; line-height: 1.2; }
+        .logo-name { white-space: nowrap; }
+        .logo-dot { color: #c19a3d; }
+        .logo-tag { font-style: italic; font-weight: 400; font-size: 0.72rem; letter-spacing: 0.05em; color: #a8832f; }
+        .nav-links { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+        .nav-links a { color: #0a1c30; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+        .hero { background: linear-gradient(135deg, #0a1c30 0%, #1b3a5c 100%); color: #fff; padding: 3.5rem 2rem 3rem; text-align: center; }
+        .hero h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 2.6rem; margin-bottom: 1rem; }
+        .hero h1 i { color: var(--gold); }
+        .hero p { font-size: 1.12rem; max-width: 760px; margin: 0 auto 1.6rem; color: #cdd8e4; }
+        .hero-badge { display: inline-block; background: var(--gold); color: #0a1c30; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 0.5rem 1.4rem; border-radius: 50px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 2rem; align-items: start; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        .card { background: var(--panel); border-radius: 14px; box-shadow: 0 4px 24px rgba(10,28,48,0.08); padding: 2rem; border-top: 4px solid var(--gold); }
+        .card h2 { font-size: 1.35rem; margin-bottom: 1.2rem; color: var(--navy); }
+        .card h2 i { color: var(--gold); margin-right: 0.5rem; }
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.35rem; color: var(--navy); }
+        .form-group input, .form-group select { width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 1rem; color: var(--text-main); background: #fff; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,0.15); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-help { font-size: 0.85rem; color: var(--text-dim); margin-top: 0.3rem; }
+        .bar-block { margin-bottom: 1.4rem; }
+        .bar-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; }
+        .bar-head .t { font-weight: 700; color: var(--navy); }
+        .bar-head .v { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.2rem; }
+        .bar-track { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; height: 34px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: #fff; font-size: 0.8rem; font-weight: 700; min-width: 0; }
+        .bar-fill.rent { background: linear-gradient(90deg, #7a8ca3, #5b6b82); }
+        .bar-fill.buy { background: linear-gradient(90deg, #c19a3d, #a8832f); }
+        .verdict { text-align: center; border-radius: 12px; padding: 1.6rem 1.2rem; margin-top: 1.2rem; font-size: 1.05rem; }
+        .verdict.buy-wins { background: #eef7f1; border: 1px solid #bfe3cf; color: #14532d; }
+        .verdict.rent-wins { background: #f4f6fa; border: 1px solid #d5dbe5; color: #334155; }
+        .verdict strong { font-family: 'Montserrat', sans-serif; }
+        .verdict .big { display: block; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2rem; margin: 0.3rem 0; }
+        .assumptions { margin-top: 1.2rem; font-size: 0.82rem; color: var(--text-dim); }
+        .assumptions li { margin-bottom: 0.25rem; }
+        .tool-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+        .tool-links a { color: var(--gold); font-weight: 700; text-decoration: none; font-size: 0.95rem; }
+        .tool-links a:hover { text-decoration: underline; }
+        .fair-note { margin-top: 1.5rem; padding: 1rem 1.2rem; background: #fef9ef; border: 1px solid #f0dfb8; border-radius: 10px; font-size: 0.88rem; color: #7a5c1e; }
+        .fair-note i { color: var(--gold); margin-right: 0.4rem; }
+        footer { background: var(--navy); color: #cdd8e4; text-align: center; padding: 2.5rem 1.5rem; margin-top: 3rem; }
+        footer .footer-brand { font-family: Georgia, serif; font-size: 1.4rem; letter-spacing: 0.1em; color: #fff; margin-bottom: 0.5rem; }
+        footer .footer-brand span { color: var(--gold); }
+        footer a { color: var(--gold-soft); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        .footer-eho { margin-top: 1rem; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .footer-eho i { color: var(--gold); }
+        @media (max-width: 640px) { .hero h1 { font-size: 1.9rem; } .card { padding: 1.3rem; } .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo"><span class="logo-mark"><img src="images/vdi-mark.webp" alt="VDI Realty logo"></span><span class="logo-words"><span class="logo-name">VDI<span class="logo-dot">·</span>REALTY</span><em class="logo-tag">a home uniquely yours</em></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="free-tools.html" class="active">Free Tools</a></li>
+                <li><a href="fsbo-listings.html">Browse FSBO</a></li>
+                <li><a href="fsbo.html">List Property</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1><i class="fas fa-scale-balanced"></i> Rent vs Buy Calculator</h1>
+        <p>Rent keeps going up. So do home prices. See which path costs less over the years you plan to stay.</p>
+        <span class="hero-badge"><i class="fas fa-gift"></i> 100% Free Tool</span>
+    </section>
+
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <h2><i class="fas fa-sliders"></i> Your numbers</h2>
+                <div class="form-group">
+                    <label for="rent">Current monthly rent</label>
+                    <input type="number" id="rent" min="0" step="50" value="2200" placeholder="e.g. 2200">
+                </div>
+                <div class="form-group">
+                    <label for="price">Home price you're considering</label>
+                    <input type="number" id="price" min="0" step="1000" value="650000" placeholder="e.g. 650000">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="downpct">Down payment</label>
+                        <select id="downpct">
+                            <option value="20" selected>20%</option>
+                            <option value="10">10%</option>
+                            <option value="5">5%</option>
+                            <option value="3">3%</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="rate">Interest rate %</label>
+                        <input type="number" id="rate" min="0" max="20" step="0.125" value="6.5">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="years">Years staying</label>
+                        <select id="years">
+                            <option value="3">3 years</option>
+                            <option value="5" selected>5 years</option>
+                            <option value="7">7 years</option>
+                            <option value="10">10 years</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="apprec">Home appreciation %/yr</label>
+                        <input type="number" id="apprec" min="0" max="15" step="0.5" value="3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rentinc">Annual rent increase %</label>
+                    <input type="number" id="rentinc" min="0" max="15" step="0.5" value="3">
+                    <div class="form-help">Adjust the assumptions to match your market.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-chart-column"></i> <span id="yearsLabel">5</span>-year cost comparison</h2>
+                <div class="bar-block">
+                    <div class="bar-head"><span class="t"><i class="fas fa-key"></i> Total cost of renting</span><span class="v" id="rentVal">$0</span></div>
+                    <div class="bar-track"><div class="bar-fill rent" id="rentBar"></div></div>
+                </div>
+                <div class="bar-block">
+                    <div class="bar-head"><span class="t"><i class="fas fa-house-chimney"></i> Net cost of buying</span><span class="v" id="buyVal">$0</span></div>
+                    <div class="bar-track"><div class="bar-fill buy" id="buyBar"></div></div>
+                    <div class="form-help">Mortgage payments + ~2% closing costs, minus principal repaid and appreciation gained. Down payment counts as equity, not cost.</div>
+                </div>
+                <div class="verdict buy-wins" id="verdict"></div>
+                <ul class="assumptions">
+                    <li>30-year fixed mortgage; taxes, insurance, and maintenance are excluded from both sides for a clean comparison.</li>
+                    <li>Buying assumes ~2% buyer closing costs and selling costs are excluded.</li>
+                    <li>Rent is assumed to rise each year; the home is assumed to appreciate steadily.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tool-links">
+            <a href="closing-costs.html"><i class="fas fa-receipt"></i> Closing Cost Estimator</a>
+            <a href="commission-savings.html"><i class="fas fa-piggy-bank"></i> Commission Savings Calculator</a>
+            <a href="free-tools.html"><i class="fas fa-toolbox"></i> All free tools</a>
+        </div>
+
+        <div class="fair-note">
+            <i class="fas fa-circle-info"></i>
+            <strong>Estimates, not advice:</strong> This is a simplified illustration, not financial advice. Real outcomes depend on taxes, insurance, maintenance, market swings, and your personal situation. Talk to a qualified professional before deciding.
+        </div>
+    </div>
+
+    <footer>
+        <p class="footer-brand">VDI <span>REALTY</span></p>
+        <p>Brokered by Realty Connect &nbsp;|&nbsp; <a href="tel:+12068800637">(206) 880-0637</a> &nbsp;|&nbsp; <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a> &nbsp;|&nbsp; <a href="https://www.vdirealty.com">www.vdirealty.com</a></p>
+        <p style="font-size:0.85rem;">Residential, Commercial &amp; Investment Property Solutions</p>
+        <div class="footer-eho">
+            <i class="fas fa-house-chimney"></i>
+            <span>Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</span>
+        </div>
+        <p style="font-size:0.8rem; margin-top:0.6rem;">&copy; 2026 VDI Realty. All Rights Reserved.</p>
+    </footer>
+
+<script>
+(function () {
+    'use strict';
+    var $ = function (id) { return document.getElementById(id); };
+    function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+
+    function calc() {
+        var rent0 = Math.max(0, Number($('rent').value) || 0);
+        var price = Math.max(0, Number($('price').value) || 0);
+        var downPct = Number($('downpct').value) || 0;
+        var annualRate = Math.max(0, Number($('rate').value) || 0);
+        var years = Number($('years').value) || 5;
+        var apprec = (Number($('apprec').value) || 0) / 100;
+        var rentInc = (Number($('rentinc').value) || 0) / 100;
+        $('yearsLabel').textContent = years;
+
+        /* Renting: rent growing annually */
+        var rentTotal = 0;
+        for (var y = 0; y < years; y++) rentTotal += rent0 * 12 * Math.pow(1 + rentInc, y);
+
+        /* Buying */
+        var down = price * downPct / 100;
+        var loan = price - down;
+        var r = annualRate / 100 / 12, n = 360, k = years * 12;
+        var m = r > 0 ? loan * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1) : loan / n;
+        var payments = m * k;
+        var balance = r > 0 ? loan * Math.pow(1 + r, k) - m * (Math.pow(1 + r, k) - 1) / r : loan - m * k;
+        var principalRepaid = loan - balance;
+        var closing = price * 0.02;
+        var appreciation = price * (Math.pow(1 + apprec, years) - 1);
+        var buyNet = payments + closing - principalRepaid - appreciation;
+
+        $('rentVal').textContent = fmt(rentTotal);
+        $('buyVal').textContent = fmt(Math.max(0, buyNet));
+        var max = Math.max(rentTotal, buyNet, 1);
+        $('rentBar').style.width = (rentTotal / max * 100) + '%';
+        $('buyBar').style.width = (Math.max(0, buyNet) / max * 100) + '%';
+
+        var v = $('verdict');
+        var diff = rentTotal - buyNet;
+        if (diff > 0) {
+            v.className = 'verdict buy-wins';
+            v.innerHTML = '<strong>Verdict: buying wins</strong><span class="big">' + fmt(diff) + '</span>Buying costs about ' + fmt(diff) + ' less than renting over ' + years + ' years — and you build equity along the way.';
+        } else if (diff < 0) {
+            v.className = 'verdict rent-wins';
+            v.innerHTML = '<strong>Verdict: renting wins</strong><span class="big">' + fmt(-diff) + '</span>Renting costs about ' + fmt(-diff) + ' less over ' + years + ' years at these assumptions. Try a longer stay or lower price.';
+        } else {
+            v.className = 'verdict rent-wins';
+            v.innerHTML = '<strong>Verdict: about even</strong><span class="big">$0</span>Renting and buying cost roughly the same over ' + years + ' years — the tiebreaker is lifestyle.';
+        }
+    }
+    ['rent', 'price', 'downpct', 'rate', 'years', 'apprec', 'rentinc'].forEach(function (id) { $(id).addEventListener('input', calc); });
+    calc();
+})();
+</script>
+</body>
+</html>
