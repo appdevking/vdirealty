@@ -141,6 +141,29 @@ const adminAuth = (req, res, next) => {
     }
 };
 
+// TEMPORARY diagnostic endpoint (public, no user data) — remove after debugging the 500.
+router.get('/diag', (req, res) => {
+    try {
+        const { db, statements: stmts } = require('../database');
+        const cfg = require('../config');
+        const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all();
+        let tableCheck = null;
+        try {
+            db.prepare('SELECT COUNT(*) AS n FROM home_worth_requests').get();
+            tableCheck = 'queryable';
+        } catch (e) { tableCheck = 'missing: ' + e.message; }
+        res.json({
+            hasInsert: typeof stmts.insertHomeWorthRequest,
+            hasGetAll: typeof stmts.getAllHomeWorthRequests,
+            tableCheck,
+            dbPath: cfg.dbPath,
+            tables: tables.map((t) => t.name)
+        });
+    } catch (e) {
+        res.status(500).json({ diagError: e.message });
+    }
+});
+
 // Admin: all home-worth requests, newest first
 router.get('/admin/requests', adminAuth, (req, res) => {
     try {
