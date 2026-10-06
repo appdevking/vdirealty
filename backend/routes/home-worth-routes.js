@@ -152,10 +152,21 @@ router.get('/diag', (req, res) => {
             db.prepare('SELECT COUNT(*) AS n FROM home_worth_requests').get();
             tableCheck = 'queryable';
         } catch (e) { tableCheck = 'missing: ' + e.message; }
+        let insertTest = null;
+        try {
+            const info = stmts.insertHomeWorthRequest.run(
+                'DIAGTEST', 'diag@test.local', '', '1 Diag Way', 'Diagville', '98004',
+                3, 2, 1800, 'Good', 'Just curious'
+            );
+            insertTest = 'insert ok, id=' + String(info.lastInsertRowid);
+            stmts.deleteHomeWorthRequest.run(info.lastInsertRowid);
+            insertTest += ' (cleaned up)';
+        } catch (e) { insertTest = 'INSERT FAILED: ' + e.message; }
         res.json({
             hasInsert: typeof stmts.insertHomeWorthRequest,
             hasGetAll: typeof stmts.getAllHomeWorthRequests,
             tableCheck,
+            insertTest,
             dbPath: cfg.dbPath,
             tables: tables.map((t) => t.name)
         });
