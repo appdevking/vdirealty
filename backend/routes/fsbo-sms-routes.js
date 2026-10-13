@@ -13,6 +13,8 @@
 
 const express = require('express');
 const crypto = require('crypto');
+const https = require('https');
+const config = require('../config');
 const { statements } = require('../database');
 
 const router = express.Router();
@@ -115,6 +117,7 @@ function classify(raw) {
     if (upper === 'HELP') return { type: 'help' };
     if (START_WORDS.has(upper)) return { type: 'start' };
     if (YES_WORDS.has(upper)) return { type: 'yes' };
+    if (upper === 'MARKET') return { type: 'market' };
     const zip = extractZip(body);
     if (zip) return { type: 'zip', zip };
     return { type: 'unknown' };
@@ -142,7 +145,8 @@ router.post('/webhook', smsRateLimit, (req, res) => {
         switch (msg.type) {
             case 'stop': {
                 statements.unsubscribeSmsSubscriber.run(from);
-                console.log(`[SMS] ${from} unsubscribed`);
+                statements.clearMarketAlerts.run(from);
+                console.log(`[SMS] ${from} unsubscribed (all)`);
                 return send(
                     "You've been removed — no more texts from VDI Realty. Text START to rejoin anytime."
                 )(res);
@@ -150,7 +154,7 @@ router.post('/webhook', smsRateLimit, (req, res) => {
 
             case 'help': {
                 return send(
-                    `Text a 5-digit ZIP for homes for sale in that area. Reply YES for new-listing alerts, STOP to quit. ${BROKERAGE_DISCLOSURE}.`
+                    `Text a 5-digit ZIP for homes for sale in that area, or MARKET for a weekly market snapshot. Reply YES for new-listing alerts, STOP to quit. ${BROKERAGE_DISCLOSURE}.`
                 )(res);
             }
 
@@ -175,6 +179,14 @@ router.post('/webhook', smsRateLimit, (req, res) => {
                 console.log(`[SMS] ${from} opted in to alerts for ZIP ${sub.lastZip}`);
                 return send(
                     `You're in! We'll text you when new homes list in ${sub.lastZip}. ${BROKERAGE_DISCLOSURE}. STOP to quit.`
+                )(res);
+            }
+
+            case 'market': {
+                statements.setMarketAlerts.run(from);
+                console.log(`[SMS] ${from} opted in to weekly market texts`);
+                return send(
+                    `You're in! We'll text you 3 key market numbers every week. ${BROKERAGE_DISCLOSURE}. STOP to quit.`
                 )(res);
             }
 
@@ -204,6 +216,89 @@ router.post('/webhook', smsRateLimit, (req, res) => {
     } catch (error) {
         console.error('[SMS] Webhook error:', error);
         return res.status(500).type('text/xml').send('<Response/>');
+    }
+});
+
+// ---------------------------------------------------------------------
+// Admin broadcast: weekly market text (Twilio REST, no SDK needed)
+// ---------------------------------------------------------------------
+
+/** Send one SMS via Twilio's REST API using plain https. */
+const twilioSend = (to, body) =>
+    new Promise((resolve) => {
+        const sid = process.env.TWILIO_ACCOUNT_SID;
+        const token = process.env.TWILIO_AUTH_TOKEN;
+        const fromNum = process.env.TWILIO_PHONE_NUMBER;
+        if (!sid || !token || !fromNum) {
+            return resolve({ ok: false, error: 'Twilio not configured' });
+        }
+        const postData = new URLSearchParams({ To: to, From: fromNum, Body: body }).toString();
+        const req = https.request(
+            {
+                hostname: 'api.twilio.com',
+                path: `/2010-04-01/Accounts/${sid}/Messages.json`,
+                method: 'POST',
+                headers: {
+                    Authorization:
+                        'Basic ' + Buffer.from(`${sid}:${token}`).toString('base64'),
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(postData)
+                },
+                timeout: 15000
+            },
+            (res) => {
+                let data = '';
+                res.on('data', (c) => (data += c));
+                res.on('end', () =>
+                    resolve({
+                        ok: res.statusCode >= 200 && res.statusCode < 300,
+                        status: res.statusCode
+                    })
+                );
+            }
+        );
+        req.on('error', (e) => resolve({ ok: false, error: e.message }));
+        req.on('timeout', () => {
+            req.destroy();
+            resolve({ ok: false, error: 'timeout' });
+        });
+        req.write(postData);
+        req.end();
+    });
+
+// Same shared-password-header admin scheme as the other admin routes.
+const adminAuth = (req, res, next) => {
+    const password = req.headers.authorization;
+    if (password && password === config.adminPassword) {
+        next();
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+};
+
+// POST /api/fsbo/sms/admin/market-broadcast — body: { message }
+// Sends to every MARKET opt-in subscriber. Admin-authenticated.
+router.post('/admin/market-broadcast', adminAuth, async (req, res) => {
+    try {
+        const message = String((req.body && req.body.message) || '').trim();
+        if (!message || message.length > 918) {
+            return res
+                .status(400)
+                .json({ success: false, error: 'message required (max 918 chars)' });
+        }
+        const subs = statements.getMarketSubscribers.all();
+        let sent = 0;
+        for (const s of subs) {
+            const r = await twilioSend(s.phone, message);
+            if (r.ok) sent += 1;
+            else console.warn(`[SMS] market broadcast to ${s.phone} failed:`, r.error || r.status);
+            await new Promise((r2) => setTimeout(r2, 300));
+        }
+        console.log(`[SMS] market broadcast: ${sent}/${subs.length} sent`);
+        res.json({ success: true, sent, total: subs.length });
+    } catch (e) {
+        console.error('[SMS] broadcast error:', e.message);
+        res.status(500).json({ success: false, error: 'broadcast failed' });
     }
 });
 

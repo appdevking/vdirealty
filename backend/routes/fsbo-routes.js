@@ -889,11 +889,9 @@ router.post(
 /* Admin                                                               */
 /* ------------------------------------------------------------------ */
 
-// Admin authentication middleware (pre-existing scheme: shared password header,
-// now also accepting the password as a Bearer token for compatibility)
+// Admin authentication middleware (pre-existing scheme: shared password header)
 const adminAuth = (req, res, next) => {
-    const header = req.headers.authorization;
-    const password = header && header.startsWith('Bearer ') ? header.slice(7) : header;
+    const password = req.headers.authorization;
     if (password && password === config.adminPassword) {
         next();
     } else {

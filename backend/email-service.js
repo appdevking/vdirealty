@@ -1,16 +1,31 @@
 const nodemailer = require('nodemailer');
 const config = require('./config');
+const { statements } = require('./database');
 
 // Create transporter based on configuration
 let transporter;
 let sendgridClient;
 
+// Resolve the SendGrid API key: explicit env var wins, then the value stored
+// via POST /api/admin/email-config (app_settings table). This lets the key be
+// configured through the admin API when SSH access to the server is unavailable.
+const getSendgridKey = () => {
+    if (config.email.sendgridApiKey) return config.email.sendgridApiKey;
+    try {
+        const row = statements.getSetting.get('sendgrid_api_key');
+        return row ? row.value : null;
+    } catch (error) {
+        return null;
+    }
+};
+
 const initializeTransporter = () => {
-    if (config.email.service === 'sendgrid' && config.email.sendgridApiKey) {
+    const sendgridKey = getSendgridKey();
+    if (sendgridKey) {
         // Use SendGrid Web API for reliable email delivery
         try {
             const sgMail = require('@sendgrid/mail');
-            sgMail.setApiKey(config.email.sendgridApiKey);
+            sgMail.setApiKey(sendgridKey);
             sendgridClient = sgMail;
             console.log('✅ SendGrid Web API initialized');
         } catch (error) {
@@ -726,80 +741,26 @@ const sendConciergeRequestConfirmation = async (req_) => {
     }
 };
 
-// Notify Veng about a new "What's my home worth?" value-report request
-const sendHomeWorthNotification = async (req_) => {
-    const mailOptions = {
-        from: `VDI Realty <${config.email.user}>`,
-        to: config.adminEmail,
-        subject: `[Home Worth] New request — ${req_.city || 'unknown city'}`,
-        html: `
-            <!DOCTYPE html>
-            <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                    <h2 style="color: #0F2027;">🏠 New Home Worth Request</h2>
-                    <p><strong>Someone wants a free home value report!</strong></p>
-                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.name)}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.email)}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.phone || 'Not provided')}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Property</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml([req_.address, req_.city, req_.zip].filter(Boolean).join(', '))}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Details</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml([req_.beds != null ? req_.beds + ' bd' : '', req_.baths != null ? req_.baths + ' ba' : '', req_.sqft != null ? Number(req_.sqft).toLocaleString('en-US') + ' sqft' : ''].filter(Boolean).join(' · ') || 'Not provided')}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Condition</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.condition || 'Not provided')}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Timeline</td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(req_.timeline || 'Not provided')}</td></tr>
-                    </table>
-                    <p style="color: #666; font-size: 0.9em;">Submitted ${new Date(req_.createdAt || Date.now()).toLocaleString()}. Reply to ${escapeHtml(req_.email)} with their value report.</p>
-                </div>
-            </body>
-            </html>
-        `,
-        replyTo: req_.email
-    };
-
-    try {
-        await sendEmail(mailOptions);
-        console.log(`✅ Home worth notification sent to ${config.adminEmail}`);
-        return true;
-    } catch (error) {
-        console.error('❌ Error sending home worth notification:', error);
-        return false;
-    }
+// True when any outbound email path is available (SendGrid key via env or
+// admin API, or SMTP credentials). Contact routes use this to decide whether
+// a submission can actually be emailed or is only logged.
+const isEmailConfigured = () => {
+    if (getSendgridKey()) return true;
+    return Boolean((config.email.user && config.email.password) || config.email.host);
 };
 
-// Confirm to the requester that their value report is being prepared
-const sendHomeWorthConfirmation = async (req_) => {
-    const mailOptions = {
-        from: `VDI Realty <${config.email.user}>`,
-        to: req_.email,
-        subject: 'Your home value report is on its way - VDI Realty',
-        html: `
-            <!DOCTYPE html>
-            <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                    <h2 style="color: #0F2027;">Thanks, ${escapeHtml(req_.name)}!</h2>
-                    <p>We've received your request for a <strong>free home value report</strong> for ${escapeHtml([req_.address, req_.city].filter(Boolean).join(', ') || 'your home')}. A member of our team is preparing it now — <strong>expect it within one business day</strong>.</p>
-                    <p style="color: #666; font-size: 0.9em;">Please note: this report is a market estimate for informational purposes, not an appraisal.</p>
-                    <p>In the meantime, if you have questions, call us at <strong>(206) 880-0637</strong> or reply to this email.</p>
-                    <p>Best regards,<br><strong>VDI Realty Team</strong><br><span style="color:#666; font-size: 0.9em;">Brokered by Realty Connect</span></p>
-                </div>
-            </body>
-            </html>
-        `
-    };
-
-    try {
-        await sendEmail(mailOptions);
-        console.log(`✅ Home worth confirmation sent to ${req_.email}`);
-        return true;
-    } catch (error) {
-        console.error('❌ Error sending home worth confirmation:', error);
-        return false;
-    }
-};
+// Status snapshot for the admin API. Never includes the key itself.
+const getEmailStatus = () => ({
+    configured: isEmailConfigured(),
+    provider: getSendgridKey() ? 'sendgrid' : (config.email.service || 'none'),
+    adminEmail: config.adminEmail
+});
 
 module.exports = {
     initializeTransporter,
+    getSendgridKey,
+    isEmailConfigured,
+    getEmailStatus,
     sendConfirmationEmail,
     sendReminderEmail,
     sendAdminNotification,
@@ -812,7 +773,5 @@ module.exports = {
     sendHelpRequestNotification,
     sendHelpRequestConfirmation,
     sendConciergeRequestNotification,
-    sendConciergeRequestConfirmation,
-    sendHomeWorthNotification,
-    sendHomeWorthConfirmation
+    sendConciergeRequestConfirmation
 };

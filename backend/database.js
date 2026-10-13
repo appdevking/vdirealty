@@ -168,6 +168,8 @@ const initDatabase = () => {
     // SMS subscribers for the text-a-ZIP lead flow.
     // status: 'inquiry' (texted a ZIP, no marketing consent), 'alerts' (opted in
     // via YES), 'unsubscribed' (STOP).
+    // marketAlerts: 1 = opted in to the weekly market-text via the MARKET keyword
+    // (independent of ZIP alert status; STOP clears both).
     db.exec(`
         CREATE TABLE IF NOT EXISTS fsbo_sms_subscribers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -177,45 +179,27 @@ const initDatabase = () => {
             zipQueryCount INTEGER DEFAULT 0,
             alertConsentAt DATETIME,
             unsubscribedAt DATETIME,
+            marketAlerts INTEGER DEFAULT 0,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
 
-    // Contact-form submissions (homepage form incl. Get Represented) —
-    // stored so Jae can triage them; email notification is best-effort only.
-    db.exec(`
-        CREATE TABLE IF NOT EXISTS contact_submissions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            phone TEXT,
-            interest TEXT,
-            property TEXT,
-            message TEXT NOT NULL,
-            contacted INTEGER DEFAULT 0,
-            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
+    // Migration (Oct 2026): marketAlerts column for DBs created before it existed.
+    try {
+        db.exec(`ALTER TABLE fsbo_sms_subscribers ADD COLUMN marketAlerts INTEGER DEFAULT 0`);
+    } catch (e) {
+        if (!/duplicate column name/i.test(e.message)) throw e;
+    }
 
-    // Home-worth requests ("What's my home worth?" free value-report tool).
-    // status: 'new' (report not yet delivered) -> 'closed' (report delivered).
+    // App settings: small key/value store for admin-configurable values
+    // (e.g. the SendGrid API key set via POST /api/admin/email-config).
+    // Lets the admin API configure the server without SSH access.
     db.exec(`
-        CREATE TABLE IF NOT EXISTS home_worth_requests (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            phone TEXT,
-            address TEXT NOT NULL,
-            city TEXT NOT NULL,
-            zip TEXT NOT NULL,
-            beds INTEGER,
-            baths REAL,
-            sqft INTEGER,
-            condition TEXT,
-            timeline TEXT,
-            status TEXT DEFAULT 'new',
-            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        CREATE TABLE IF NOT EXISTS app_settings (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL,
+            updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
 
@@ -439,44 +423,6 @@ const statements = {
         UPDATE fsbo_seller_leads SET contacted = 1 WHERE id = ?
     `),
 
-    // Contact submission: insert
-    insertContactSubmission: db.prepare(`
-        INSERT INTO contact_submissions (name, email, phone, interest, property, message)
-        VALUES (?, ?, ?, ?, ?, ?)
-    `),
-
-    // Contact submission: all, newest first (admin)
-    getAllContactSubmissions: db.prepare(`
-        SELECT * FROM contact_submissions ORDER BY createdAt DESC
-    `),
-
-    // Contact submission: mark contacted
-    markContactSubmissionContacted: db.prepare(`
-        UPDATE contact_submissions SET contacted = 1 WHERE id = ?
-    `),
-
-    // Home-worth request: insert
-    insertHomeWorthRequest: db.prepare(`
-        INSERT INTO home_worth_requests
-            (name, email, phone, address, city, zip, beds, baths, sqft, condition, timeline)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `),
-
-    // Home-worth request: all, newest first (admin)
-    getAllHomeWorthRequests: db.prepare(`
-        SELECT * FROM home_worth_requests ORDER BY createdAt DESC
-    `),
-
-    // Home-worth request: mark closed (report delivered)
-    markHomeWorthRequestClosed: db.prepare(`
-        UPDATE home_worth_requests SET status = 'closed' WHERE id = ?
-    `),
-
-    // Home-worth request: delete (test-row cleanup)
-    deleteHomeWorthRequest: db.prepare(`
-        DELETE FROM home_worth_requests WHERE id = ?
-    `),
-
     // Technical help request: insert
     insertHelpRequest: db.prepare(`
         INSERT INTO fsbo_help_requests (
@@ -550,6 +496,39 @@ const statements = {
         SET status = 'alerts', alertConsentAt = CURRENT_TIMESTAMP,
             unsubscribedAt = NULL, updatedAt = CURRENT_TIMESTAMP
         WHERE phone = ? AND lastZip IS NOT NULL
+    `),
+
+    // Market-text subscription (keyword MARKET): separate opt-in for the weekly
+    // 3-number market snapshot. Independent of ZIP alert status; STOP clears both.
+    setMarketAlerts: db.prepare(`
+        INSERT INTO fsbo_sms_subscribers (phone, status, marketAlerts, updatedAt)
+        VALUES (?, 'inquiry', 1, CURRENT_TIMESTAMP)
+        ON CONFLICT(phone) DO UPDATE SET
+            marketAlerts = 1,
+            updatedAt = CURRENT_TIMESTAMP
+    `),
+    clearMarketAlerts: db.prepare(`
+        UPDATE fsbo_sms_subscribers
+        SET marketAlerts = 0, updatedAt = CURRENT_TIMESTAMP
+        WHERE phone = ?
+    `),
+    getMarketSubscribers: db.prepare(`
+        SELECT phone FROM fsbo_sms_subscribers
+        WHERE marketAlerts = 1 AND status != 'unsubscribed'
+    `),
+
+    // App settings: fetch by key
+    getSetting: db.prepare(`
+        SELECT value FROM app_settings WHERE key = ?
+    `),
+
+    // App settings: upsert by key
+    setSetting: db.prepare(`
+        INSERT INTO app_settings (key, value, updatedAt)
+        VALUES (?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(key) DO UPDATE SET
+            value = excluded.value,
+            updatedAt = CURRENT_TIMESTAMP
     `)
 };
 

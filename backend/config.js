@@ -42,7 +42,3 @@ module.exports = {
     // Database
     dbPath: path.join(dataDir, 'fsbo.db')
 };
-
-// Trigger redeploy to install corrected ADMIN_PASSWORD secret
-
-// Trigger redeploy for rotated ADMIN_PASSWORD secret
