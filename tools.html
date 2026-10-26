@@ -3,1150 +3,792 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Calculators & Tools | VDI Realty</title>
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Free Real Estate Tools — Rent vs Buy Calculator & Seller Net Sheet | VDI Realty</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
 
+    <meta name="description" content="Free VDI Realty calculators: compare the true cost of renting vs buying over the years you plan to stay, and estimate what you'd actually net from selling your home. Instant results, no sign-up.">
+    <meta name="keywords" content="rent vs buy calculator, seller net sheet, net proceeds calculator, real estate calculators, VDI Realty">
+
+    <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="home-pro.css">
     <style>
-        :root {
-            --primary: #0F2027;
-            --secondary: #203A43;
-            --accent: #C5A059;
-            --white: #ffffff;
-            --light-gray: #f8f9fa;
-            --text-main: #333333;
+        /* ---- Tools page components (site vars from home-pro.css) ---- */
+        .page-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+            color: #fff; padding: 72px 0 60px;
         }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Lato', sans-serif;
-            color: var(--text-main);
-            line-height: 1.7;
+        .page-hero h1 {
+            font-family: var(--serif); font-weight: 600; font-size: 2.7rem;
+            line-height: 1.12; margin: 14px 0 16px; max-width: 720px;
         }
-        
-        h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
-        
-        /* Header */
-        header {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 1rem 0;
+        .page-hero h1 em { font-style: italic; color: var(--gold); }
+        .page-hero .lede { color: #dbe4ee; font-size: 1.08rem; max-width: 640px; margin: 0 0 30px; }
+        .hero-jump { display: flex; gap: 14px; flex-wrap: wrap; }
+        .btn-outline-light { background: transparent; color: #fff; border-color: rgba(255,255,255,.55); }
+        .btn-outline-light:hover { border-color: var(--gold); color: var(--gold-soft); }
+
+        .tool-card {
+            background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+            box-shadow: var(--shadow); padding: 34px; margin-bottom: 30px;
         }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
+        .tool-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 38px; align-items: start; }
+        @media (max-width: 920px) { .tool-grid { grid-template-columns: 1fr; } .tool-card { padding: 24px; } }
+        .tool-card h3 {
+            font-family: var(--serif); font-size: 1.45rem; color: var(--navy);
+            margin: 0 0 6px; display: flex; align-items: center; gap: 11px;
         }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border: 2px solid var(--primary);
-            padding: 8px 15px;
-            text-decoration: none;
-            transition: all 0.3s;
+        .tool-card h3 i { color: var(--gold-deep); }
+        .tool-sub { color: var(--muted); font-size: 0.95rem; margin: 0 0 22px; }
+
+        .fld { margin-bottom: 15px; }
+        .fld label { display: block; font-weight: 600; font-size: 0.9rem; color: var(--navy); margin-bottom: 6px; }
+        .fld .hint { font-weight: 400; color: var(--muted); font-size: 0.8rem; }
+        .fld input[type="number"], .fld input[type="text"], .fld input[type="email"], .fld select {
+            width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px;
+            font-family: var(--sans); font-size: 1rem; color: var(--ink); background: #fff;
         }
-        
-        .logo:hover {
-            background: var(--primary);
-            color: white;
+        .fld input:focus, .fld select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,.16); }
+        .fld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 520px) { .fld-row { grid-template-columns: 1fr; } }
+        .affix { position: relative; }
+        .affix .pre, .affix .suf {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            color: var(--muted); font-weight: 600; pointer-events: none;
         }
-        
-        .back-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.3s;
+        .affix .pre { left: 13px; } .affix .suf { right: 13px; }
+        .affix input { padding-left: 28px !important; }
+        .affix input.has-suf { padding-left: 13px !important; padding-right: 30px !important; }
+
+        .slider-row { display: flex; align-items: center; gap: 14px; }
+        .slider-row input[type="range"] { flex: 1; accent-color: var(--gold-deep); height: 28px; }
+        .slider-val {
+            font-family: var(--serif); font-weight: 700; color: var(--navy); font-size: 1.15rem;
+            min-width: 86px; text-align: right;
         }
-        
-        .back-link:hover { color: var(--accent); }
-        
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 80px 20px 60px;
-            text-align: center;
-            color: white;
+
+        details.advanced { border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 12px; }
+        details.advanced summary {
+            cursor: pointer; font-weight: 700; font-size: 0.88rem; letter-spacing: 0.06em;
+            text-transform: uppercase; color: var(--gold-deep); margin-bottom: 14px;
         }
-        
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+
+        .toggle-row { display: flex; align-items: center; gap: 12px; margin: 4px 0 15px; }
+        .toggle-row .t-label { font-weight: 600; font-size: 0.92rem; color: var(--navy); }
+        .toggle-row .t-note { color: var(--muted); font-size: 0.82rem; }
+        .switch { position: relative; width: 50px; height: 27px; flex: 0 0 auto; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch .track {
+            position: absolute; inset: 0; background: #cfd8e3; border-radius: 99px; cursor: pointer; transition: background .25s;
         }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-            opacity: 0.95;
+        .switch .track::after {
+            content: ''; position: absolute; top: 3px; left: 3px; width: 21px; height: 21px;
+            background: #fff; border-radius: 50%; transition: left .25s; box-shadow: 0 1px 4px rgba(0,0,0,.25);
         }
-        
-        /* Content */
-        .content-section {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: auto;
+        .switch input:checked + .track { background: var(--gold-deep); }
+        .switch input:checked + .track::after { left: 26px; }
+
+        .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+        .seg label { margin: 0; }
+        .seg input { position: absolute; opacity: 0; }
+        .seg span {
+            display: inline-block; padding: 9px 16px; font-size: 0.9rem; font-weight: 600;
+            color: var(--muted); cursor: pointer; background: #fff;
         }
-        
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+        .seg input:checked + span { background: var(--navy); color: #fff; }
+
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-bottom: 18px; }
+        @media (max-width: 520px) { .stat-grid { grid-template-columns: 1fr; } }
+        .stat-box { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px; }
+        .stat-box .k { font-size: 0.78rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+        .stat-box .v { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-top: 3px; }
+        .stat-box .v.gold { color: var(--gold-deep); }
+
+        .verdict {
+            border-radius: 12px; padding: 18px 20px; font-size: 1.02rem; margin-bottom: 18px;
         }
-        
-        .calculator-card {
-            background: white;
-            padding: 35px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        .verdict.buy { background: #eef7f1; border: 1px solid #bfe3cf; color: #14532d; }
+        .verdict.rent { background: #f4f6fa; border: 1px solid #d5dbe5; color: #334155; }
+        .verdict strong { font-family: var(--serif); }
+
+        .yy { margin-top: 6px; }
+        .yy-row { display: grid; grid-template-columns: 58px 1fr; gap: 11px; align-items: center; margin-bottom: 7px; }
+        .yy-row .yr { font-size: 0.8rem; font-weight: 700; color: var(--muted); text-align: right; }
+        .yy-bars { display: grid; gap: 3px; }
+        .yy-bar { height: 13px; border-radius: 6px; min-width: 2px; position: relative; transition: width .45s ease; }
+        .yy-bar.rent { background: #8496ad; }
+        .yy-bar.buy { background: linear-gradient(90deg, var(--gold), var(--gold-deep)); }
+        .yy-row .vals { font-size: 0.76rem; color: var(--muted); }
+        .yy-row.be .yr { color: var(--gold-deep); }
+        .be-tag {
+            display: inline-block; background: var(--gold); color: #fff; font-size: 0.68rem; font-weight: 800;
+            letter-spacing: 0.05em; text-transform: uppercase; border-radius: 99px; padding: 1px 8px; margin-left: 7px;
+            vertical-align: middle;
         }
-        
-        .calculator-card h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .yy-legend { display: flex; gap: 20px; font-size: 0.8rem; color: var(--muted); margin: 4px 0 12px; }
+        .yy-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; }
+        .yy-legend .sw-rent { background: #8496ad; } .yy-legend .sw-buy { background: var(--gold-deep); }
+
+        .net-lines { border-top: 1px solid var(--line); }
+        .net-line { display: flex; justify-content: space-between; gap: 14px; padding: 10px 2px; border-bottom: 1px solid var(--line); font-size: 0.97rem; }
+        .net-line .amt { font-weight: 700; color: var(--navy); white-space: nowrap; }
+        .net-line.deduct .amt { color: #9c3d2e; }
+        .net-big {
+            text-align: center; background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+            border-radius: 14px; padding: 26px 18px; margin: 20px 0 6px; color: #fff;
         }
-        
-        .calculator-card h3 i {
-            color: var(--accent);
-            font-size: 1.5rem;
+        .net-big .k { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: #b9c6d6; font-weight: 700; }
+        .net-big .v { font-family: var(--serif); font-size: 2.9rem; font-weight: 700; color: var(--gold-soft); line-height: 1.1; margin-top: 5px; }
+        .net-big .s { color: #b9c6d6; font-size: 0.88rem; margin-top: 5px; }
+        .cta-center { text-align: center; margin-top: 16px; }
+
+        .email-box {
+            margin-top: 26px; border: 1px solid var(--line); border-radius: 12px;
+            background: var(--paper); padding: 20px 22px;
         }
-        
-        .calculator-card p {
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
-        
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        
-        .input-prefix {
-            position: relative;
-        }
-        
-        .input-prefix span {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
-            font-weight: 600;
-        }
-        
-        .input-prefix input {
-            padding-left: 30px;
-        }
-        
-        .btn-calculate {
-            width: 100%;
-            padding: 15px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .btn-calculate:hover {
-            background: var(--primary);
-            transform: translateY(-2px);
-        }
-        
-        .result-box {
-            margin-top: 25px;
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(197,160,89,0.1), rgba(197,160,89,0.05));
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-            display: none;
-        }
-        
-        .result-box.show {
-            display: block;
-        }
-        
-        .result-box h4 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-label {
-            color: #666;
-            font-weight: 600;
-        }
-        
-        .result-value {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .result-value.highlight {
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
-        
-        /* Footer */
-        footer {
-            background: #111;
-            color: #888;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
-        footer a {
-            color: #888;
-            text-decoration: none;
-        }
-        
-        footer a:hover {
-            color: var(--accent);
-        }
-        
-        @media (max-width: 768px) {
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-            .hero h1 { font-size: 2rem; }
-        }
+        .email-box h4 { font-family: var(--serif); color: var(--navy); font-size: 1.12rem; margin: 0 0 4px; }
+        .email-box p { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
+        .email-box .fld { margin-bottom: 11px; }
+        .form-message { display: none; border-radius: 9px; padding: 11px 14px; font-size: 0.9rem; margin-top: 12px; }
+        .fine-print { color: var(--muted); font-size: 0.82rem; margin-top: 16px; }
+        .assump { color: var(--muted); font-size: 0.83rem; margin-top: 14px; }
+        .assump li { margin-bottom: 3px; }
     </style>
 </head>
 <body>
+    <!-- Utility bar -->
+    <div class="utility-bar">
+        <div class="wrap">
+            <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
+            <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></span>
+        </div>
+    </div>
 
-    <header>
-        <div class="nav-container">
-            <a href="index.html" class="logo">VDI Realty</a>
-            <div style="display: flex; gap: 2rem; align-items: center;">
-                <a href="listing-writer.html" class="back-link"><i class="fas fa-pen-fancy"></i> Listing Description Writer</a>
-                <a href="flyer-maker.html" class="back-link"><i class="fas fa-file-image"></i> FSBO Flyer Maker</a>
-                <a href="fsbo.html" class="back-link"><i class="fas fa-home"></i> List Your Property (FSBO)</a>
-                <a href="index.html" class="back-link">
-                    <i class="fas fa-arrow-left"></i> Back to Home
-                </a>
-            </div>
+    <!-- Header -->
+    <header class="masthead">
+        <div class="wrap">
+            <a class="wordmark" href="index.html">VDI<span class="wm-dot">·</span>REALTY</a>
+            <nav class="main-nav">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="free-tools.html">Free Tools</a>
+                <a href="tools.html" style="color: var(--gold-deep);">Tools</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="index.html#contact" class="nav-cta">Contact</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
-    <section class="hero">
-        <h1><i class="fas fa-calculator"></i> Real Estate Tools & Calculators</h1>
-        <p>Free financial calculators to help you make informed real estate decisions</p>
-    </section>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="listings.html">Listings</a>
+        <a href="fsbo-listings.html">FSBO</a>
+        <a href="builder-listings.html">Builders</a>
+        <a href="free-tools.html">Free Tools</a>
+        <a href="tools.html">Tools</a>
+        <a href="relocation.html">Relocation</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
 
-    <section class="content-section">
-        <div class="tools-grid">
-            
-            <!-- Mortgage Calculator -->
-            <div class="calculator-card">
-                <h3><i class="fas fa-home"></i> Mortgage Calculator</h3>
-                <p>Calculate your monthly mortgage payment including principal, interest, taxes, and insurance.</p>
-                
-                <form id="mortgageForm" onsubmit="calculateMortgage(event)">
-                    <div class="form-group">
-                        <label for="homePrice">Home Price</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="homePrice" value="500000" required min="0" step="1000">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="downPayment">Down Payment</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="downPayment" value="100000" required min="0" step="1000">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="interestRate">Interest Rate (%)</label>
-                        <input type="number" id="interestRate" value="6.5" required min="0" max="20" step="0.01">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loanTerm">Loan Term (Years)</label>
-                        <select id="loanTerm">
-                            <option value="15">15 Years</option>
-                            <option value="30" selected>30 Years</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="propertyTax">Annual Property Tax</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="propertyTax" value="6000" min="0" step="100">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="insurance">Annual Home Insurance</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="insurance" value="1200" min="0" step="100">
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-calculate">Calculate Payment</button>
-                </form>
-                
-                <div id="mortgageResult" class="result-box">
-                    <h4>Your Monthly Payment</h4>
-                    <div class="result-item">
-                        <span class="result-label">Principal & Interest</span>
-                        <span class="result-value" id="piPayment">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Property Tax</span>
-                        <span class="result-value" id="taxPayment">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Home Insurance</span>
-                        <span class="result-value" id="insPayment">$0</span>
-                    </div>
-                    <div class="result-item" style="border-top: 2px solid var(--accent); margin-top: 10px; padding-top: 15px;">
-                        <span class="result-label" style="font-size: 1.1rem;">Total Monthly Payment</span>
-                        <span class="result-value highlight" id="totalPayment">$0</span>
-                    </div>
-                </div>
+    <!-- Hero -->
+    <section class="page-hero">
+        <div class="wrap">
+            <span class="eyebrow eyebrow-light">Free tools</span>
+            <h1>Run the numbers <em>before</em> you move</h1>
+            <p class="lede">Two free calculators, built for the two biggest questions in real estate: should you rent or buy — and if you sell, what do you actually walk away with? Instant results, no sign-up.</p>
+            <div class="hero-jump">
+                <a href="#rent-vs-buy" class="btn btn-gold">Rent vs Buy <i class="fas fa-arrow-down"></i></a>
+                <a href="#seller-net-sheet" class="btn btn-outline-light">Seller Net Sheet</a>
             </div>
-
-            <!-- Affordability Calculator -->
-            <div class="calculator-card">
-                <h3><i class="fas fa-dollar-sign"></i> Home Affordability Calculator</h3>
-                <p>Find out how much home you can afford based on your income and expenses.</p>
-                
-                <form id="affordabilityForm" onsubmit="calculateAffordability(event)">
-                    <div class="form-group">
-                        <label for="annualIncome">Annual Gross Income</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="annualIncome" value="100000" required min="0" step="1000">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="monthlyDebts">Monthly Debt Payments</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="monthlyDebts" value="500" required min="0" step="50">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="downPaymentAfford">Down Payment Available</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="downPaymentAfford" value="50000" required min="0" step="1000">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="interestRateAfford">Interest Rate (%)</label>
-                        <input type="number" id="interestRateAfford" value="6.5" required min="0" max="20" step="0.01">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loanTermAfford">Loan Term (Years)</label>
-                        <select id="loanTermAfford">
-                            <option value="15">15 Years</option>
-                            <option value="30" selected>30 Years</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="btn-calculate">Calculate Affordability</button>
-                </form>
-                
-                <div id="affordabilityResult" class="result-box">
-                    <h4>You Can Afford</h4>
-                    <div class="result-item">
-                        <span class="result-label">Maximum Home Price</span>
-                        <span class="result-value highlight" id="maxHomePrice">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Estimated Monthly Payment</span>
-                        <span class="result-value" id="estMonthlyPayment">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Loan Amount</span>
-                        <span class="result-value" id="loanAmount">$0</span>
-                    </div>
-                    <p style="margin-top: 15px; font-size: 0.85rem; color: #666; font-style: italic;">
-                        Based on 28% front-end ratio (housing costs should not exceed 28% of gross income)
-                    </p>
-                </div>
-            </div>
-
-            <!-- Rent vs Buy Calculator -->
-            <div class="calculator-card">
-                <h3><i class="fas fa-balance-scale"></i> Rent vs. Buy Calculator</h3>
-                <p>Compare the financial impact of renting versus buying over time.</p>
-                
-                <form id="rentBuyForm" onsubmit="calculateRentBuy(event)">
-                    <div class="form-group">
-                        <label for="monthlyRent">Monthly Rent</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="monthlyRent" value="2500" required min="0" step="50">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="homePriceRB">Home Purchase Price</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="homePriceRB" value="500000" required min="0" step="1000">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="downPaymentRB">Down Payment</label>
-                        <div class="input-prefix">
-                            <span>$</span>
-                            <input type="number" id="downPaymentRB" value="100000" required min="0" step="1000">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="interestRateRB">Mortgage Rate (%)</label>
-                        <input type="number" id="interestRateRB" value="6.5" required min="0" max="20" step="0.01">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="yearsToStay">Years Planning to Stay</label>
-                        <select id="yearsToStay">
-                            <option value="3">3 Years</option>
-                            <option value="5" selected>5 Years</option>
-                            <option value="7">7 Years</option>
-                            <option value="10">10 Years</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="appreciation">Annual Home Appreciation (%)</label>
-                        <input type="number" id="appreciation" value="3" min="0" max="15" step="0.1">
-                    </div>
-                    
-                    <button type="submit" class="btn-calculate">Compare</button>
-                </form>
-                
-                <div id="rentBuyResult" class="result-box">
-                    <h4>5-Year Comparison</h4>
-                    <div class="result-item">
-                        <span class="result-label">Total Cost of Renting</span>
-                        <span class="result-value" id="totalRentCost">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Total Cost of Buying</span>
-                        <span class="result-value" id="totalBuyCost">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Home Equity Built</span>
-                        <span class="result-value" id="equityBuilt">$0</span>
-                    </div>
-                    <div class="result-item" style="border-top: 2px solid var(--accent); margin-top: 10px; padding-top: 15px;">
-                        <span class="result-label" style="font-size: 1.1rem;">Net Difference</span>
-                        <span class="result-value highlight" id="netDifference">$0</span>
-                    </div>
-                    <p id="recommendation" style="margin-top: 15px; padding: 15px; background: rgba(197,160,89,0.1); border-radius: 5px; font-weight: 600;"></p>
-                </div>
-            </div>
-
-            <!-- Moving Cost Calculator -->
-            <div class="calculator-card">
-                <h3><i class="fas fa-truck-moving"></i> Moving Cost Estimator</h3>
-                <p>Estimate your total moving costs for relocation planning.</p>
-                
-                <form id="movingForm" onsubmit="calculateMoving(event)">
-                    <div class="form-group">
-                        <label for="distance">Moving Distance</label>
-                        <select id="distance">
-                            <option value="local">Local (under 100 miles)</option>
-                            <option value="medium">Medium (100-500 miles)</option>
-                            <option value="long" selected>Long Distance (500+ miles)</option>
-                            <option value="crosscountry">Cross Country (2000+ miles)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="homeSize">Home Size</label>
-                        <select id="homeSize">
-                            <option value="studio">Studio/1BR</option>
-                            <option value="2br">2 Bedroom</option>
-                            <option value="3br" selected>3 Bedroom</option>
-                            <option value="4br">4 Bedroom</option>
-                            <option value="5br">5+ Bedroom</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="packingService">Packing Service</label>
-                        <select id="packingService">
-                            <option value="none">Self-Pack</option>
-                            <option value="partial">Partial Packing</option>
-                            <option value="full" selected>Full-Service Packing</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Additional Services</label>
-                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
-                                <input type="checkbox" id="storage" style="width: auto;">
-                                <span>Temporary Storage (1 month)</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
-                                <input type="checkbox" id="insurance" style="width: auto;">
-                                <span>Additional Insurance</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer;">
-                                <input type="checkbox" id="specialty" style="width: auto;">
-                                <span>Specialty Items (Piano, Art, etc.)</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-calculate">Estimate Costs</button>
-                </form>
-                
-                <div id="movingResult" class="result-box">
-                    <h4>Estimated Moving Costs</h4>
-                    <div class="result-item">
-                        <span class="result-label">Moving Company</span>
-                        <span class="result-value" id="movingCompany">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Packing Services</span>
-                        <span class="result-value" id="packingCost">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Additional Services</span>
-                        <span class="result-value" id="additionalCost">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Estimated Range</span>
-                        <span class="result-value" id="costRange">$0 - $0</span>
-                    </div>
-                    <div class="result-item" style="border-top: 2px solid var(--accent); margin-top: 10px; padding-top: 15px;">
-                        <span class="result-label" style="font-size: 1.1rem;">Total Estimated Cost</span>
-                        <span class="result-value highlight" id="totalMovingCost">$0</span>
-                    </div>
-                    <p style="margin-top: 15px; font-size: 0.85rem; color: #666; font-style: italic;">
-                        These are rough estimates. Contact professional movers for accurate quotes.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Home Valuation Tool -->
-            <div class="calculator-card">
-                <h3><i class="fas fa-home"></i> Home Valuation Estimator</h3>
-                <p>Get an instant estimate of your home's market value</p>
-                
-                <form id="valuationForm" onsubmit="calculateValuation(event)">
-                    <div class="form-group">
-                        <label for="propertyAddress">Property Address</label>
-                        <input type="text" id="propertyAddress" placeholder="123 Main St, Seattle, WA" required>
-                    </div>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="sqft">Square Footage</label>
-                            <input type="number" id="sqft" placeholder="2000" required min="100">
-                        </div>
-                        <div class="form-group">
-                            <label for="yearBuilt">Year Built</label>
-                            <input type="number" id="yearBuilt" placeholder="2010" required min="1800" max="2025">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="bedrooms">Bedrooms</label>
-                            <input type="number" id="bedrooms" min="1" placeholder="3" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="bathrooms">Bathrooms</label>
-                            <input type="number" id="bathrooms" min="1" step="0.5" placeholder="2.5" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="lotSize">Lot Size (sq ft)</label>
-                            <input type="number" id="lotSize" placeholder="5000" required min="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="condition">Property Condition</label>
-                            <select id="condition">
-                                <option value="excellent">Excellent - Updated/Remodeled</option>
-                                <option value="good" selected>Good - Well Maintained</option>
-                                <option value="fair">Fair - Some Updates Needed</option>
-                                <option value="poor">Poor - Needs Major Work</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ownerEmail">Email (for detailed CMA report)</label>
-                        <input type="email" id="ownerEmail" placeholder="your@email.com" required>
-                    </div>
-                    
-                    <button type="submit" class="btn-calculate">Get Instant Valuation</button>
-                </form>
-                
-                <div id="valuationResult" class="result-box">
-                    <h4>Estimated Home Value</h4>
-                    <div class="result-item">
-                        <span class="result-label">Estimated Value Range</span>
-                        <span class="result-value" id="valueRange">$0 - $0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Best Estimate</span>
-                        <span class="result-value highlight" id="bestEstimate">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Price Per Square Foot</span>
-                        <span class="result-value" id="pricePerSqft">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Market Trend</span>
-                        <span class="result-value" id="marketTrend"></span>
-                    </div>
-                    <div style="background: var(--light-gray); padding: 20px; margin-top: 20px; border-radius: 5px; border-left: 4px solid var(--accent);">
-                        <p style="margin: 0; color: #666; line-height: 1.6;">
-                            <strong style="color: var(--accent);">✓ Success!</strong> We've sent a detailed Comparative Market Analysis to <span id="emailSent"></span>. 
-                            A VDI Realty agent will contact you within 24 hours with a personalized consultation and accurate pricing strategy.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Investment Property Analyzer -->
-            <div class="calculator-card">
-                <h3><i class="fas fa-chart-line"></i> Investment Property Analyzer</h3>
-                <p>Calculate cash flow, cap rate, and ROI for rental properties</p>
-                
-                <form id="investmentForm" onsubmit="calculateInvestment(event)">
-                    <h4 style="color: var(--primary); margin-bottom: 15px; font-size: 1.1rem;">Purchase Information</h4>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="purchasePrice">Purchase Price</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="purchasePrice" placeholder="500000" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="downPaymentPct">Down Payment (%)</label>
-                            <input type="number" id="downPaymentPct" placeholder="20" min="0" max="100" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="closingCosts">Closing Costs</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="closingCosts" placeholder="10000" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="renovationCosts">Renovation Costs</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="renovationCosts" placeholder="0" min="0">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <h4 style="color: var(--primary); margin: 25px 0 15px; font-size: 1.1rem;">Financing</h4>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="investInterestRate">Interest Rate (%)</label>
-                            <input type="number" id="investInterestRate" placeholder="7.5" step="0.01" required min="0" max="20">
-                        </div>
-                        <div class="form-group">
-                            <label for="investLoanTerm">Loan Term (years)</label>
-                            <select id="investLoanTerm">
-                                <option value="15">15 Years</option>
-                                <option value="30" selected>30 Years</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <h4 style="color: var(--primary); margin: 25px 0 15px; font-size: 1.1rem;">Income & Expenses</h4>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="monthlyRent">Monthly Rental Income</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="monthlyRentInvest" placeholder="3000" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="vacancyRate">Vacancy Rate (%)</label>
-                            <input type="number" id="vacancyRate" placeholder="5" min="0" max="100" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="propertyTax">Monthly Property Tax</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="propertyTax" placeholder="500" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="investInsurance">Monthly Insurance</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="investInsurance" placeholder="150" required min="0">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div class="form-group">
-                            <label for="hoaMaintenance">Monthly HOA/Maintenance</label>
-                            <div class="input-prefix">
-                                <span>$</span>
-                                <input type="number" id="hoaMaintenance" placeholder="200" required min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="managementFee">Property Management (%)</label>
-                            <input type="number" id="managementFee" placeholder="8" min="0" max="20" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-calculate">Analyze Investment</button>
-                </form>
-                
-                <div id="investmentResult" class="result-box">
-                    <h4>Investment Analysis</h4>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                        <div style="background: var(--light-gray); padding: 20px; border-radius: 5px; text-align: center;">
-                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Monthly Cash Flow</div>
-                            <div id="monthlyCashFlow" style="font-size: 1.8rem; font-weight: 800; color: var(--accent);"></div>
-                        </div>
-                        <div style="background: var(--light-gray); padding: 20px; border-radius: 5px; text-align: center;">
-                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Cap Rate</div>
-                            <div id="capRate" style="font-size: 1.8rem; font-weight: 800; color: var(--accent);"></div>
-                        </div>
-                        <div style="background: var(--light-gray); padding: 20px; border-radius: 5px; text-align: center;">
-                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">Cash on Cash ROI</div>
-                            <div id="cashROI" style="font-size: 1.8rem; font-weight: 800; color: var(--accent);"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="result-item">
-                        <span class="result-label">Total Cash Invested</span>
-                        <span class="result-value" id="totalInvested">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Loan Amount</span>
-                        <span class="result-value" id="loanAmountInvest">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Monthly Mortgage Payment</span>
-                        <span class="result-value" id="monthlyMortgageInvest">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Gross Monthly Income</span>
-                        <span class="result-value" id="grossIncome">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Total Monthly Expenses</span>
-                        <span class="result-value" id="totalExpenses">$0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Annual Cash Flow</span>
-                        <span class="result-value" id="annualCashFlow">$0</span>
-                    </div>
-                    
-                    <div id="investmentRecommendation" style="background: var(--light-gray); padding: 20px; margin-top: 20px; border-radius: 5px; border-left: 4px solid var(--accent);"></div>
-                </div>
-            </div>
-
         </div>
     </section>
 
+    <!-- ============================================================
+         TOOL 1: RENT VS BUY
+         Model (kept consistent for every horizon year y = 1..15):
+           Loan L = price − down payment; monthly P&I from the standard
+           amortization formula M = L·r(1+r)^n / ((1+r)^n − 1), r = rate/12.
+           Balance after k payments uses the closed-form amortization balance.
+           NET COST OF BUYING at year y =
+             down payment + buying closing costs
+             + all P&I payments made + property tax + insurance + HOA + maintenance
+             + opportunity cost on the upfront cash (down payment + closing),
+               charged ONCE to the buy side at the assumed investment return —
+               equivalently, the renter is assumed to invest that same cash
+             − net sale proceeds (appreciated sale price − remaining balance
+               − selling costs).
+           TOTAL COST OF RENTING at year y = rent summed with annual increases.
+           Property tax and maintenance are charged as % of the home's value
+           each year (value appreciates annually); insurance is flat $/yr.
+           Equity at year y = appreciated value − remaining balance (before
+           selling costs). Break-even = first year buying's net cost is at or
+           below renting's total cost.
+         ============================================================ -->
+    <section class="section" id="rent-vs-buy" style="padding-bottom: 30px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">For buyers</span>
+                <h2>Rent vs buy, <em>honestly</em></h2>
+                <p class="lede">Enter your numbers — the comparison updates as you type. Buying costs include taxes, insurance, maintenance, and what your down payment could have earned invested.</p>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-sliders"></i> Your numbers</h3>
+                        <p class="tool-sub">Start with the basics; fine-tune the assumptions below.</p>
+                        <div class="fld">
+                            <label for="rvbRent">Monthly rent</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="rvbRent" value="2400" min="0" step="50"></div>
+                        </div>
+                        <div class="fld">
+                            <label for="rvbPrice">Home price</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="rvbPrice" value="650000" min="0" step="5000"></div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="rvbDown">Down payment</label>
+                                <div class="affix"><input type="number" id="rvbDown" class="has-suf" value="20" min="0" max="100" step="1"><span class="suf">%</span></div>
+                            </div>
+                            <div class="fld">
+                                <label for="rvbRate">Mortgage rate</label>
+                                <div class="affix"><input type="number" id="rvbRate" class="has-suf" value="7.3" min="0" max="20" step="0.05"><span class="suf">%</span></div>
+                            </div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="rvbTerm">Loan term</label>
+                                <select id="rvbTerm">
+                                    <option value="30" selected>30 years</option>
+                                    <option value="20">20 years</option>
+                                    <option value="15">15 years</option>
+                                </select>
+                            </div>
+                            <div class="fld">
+                                <label for="rvbTax">Property tax <span class="hint">(% of value / yr)</span></label>
+                                <div class="affix"><input type="number" id="rvbTax" class="has-suf" value="1.1" min="0" max="5" step="0.05"><span class="suf">%</span></div>
+                            </div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="rvbIns">Homeowner's insurance <span class="hint">($ / yr)</span></label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="rvbIns" value="2400" min="0" step="100"></div>
+                            </div>
+                            <div class="fld">
+                                <label for="rvbHoa">HOA dues <span class="hint">($ / mo)</span></label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="rvbHoa" value="0" min="0" step="25"></div>
+                            </div>
+                        </div>
+                        <div class="fld">
+                            <label for="rvbYears">Years you'll stay</label>
+                            <div class="slider-row">
+                                <input type="range" id="rvbYears" min="1" max="15" step="1" value="7">
+                                <span class="slider-val" id="rvbYearsVal">7 years</span>
+                            </div>
+                        </div>
+                        <details class="advanced">
+                            <summary>Advanced assumptions</summary>
+                            <div class="fld-row">
+                                <div class="fld">
+                                    <label for="rvbRentInc">Rent increase <span class="hint">(% / yr)</span></label>
+                                    <div class="affix"><input type="number" id="rvbRentInc" class="has-suf" value="3" min="0" max="15" step="0.25"><span class="suf">%</span></div>
+                                </div>
+                                <div class="fld">
+                                    <label for="rvbApprec">Home appreciation <span class="hint">(% / yr)</span></label>
+                                    <div class="affix"><input type="number" id="rvbApprec" class="has-suf" value="3" min="0" max="15" step="0.25"><span class="suf">%</span></div>
+                                </div>
+                            </div>
+                            <div class="fld-row">
+                                <div class="fld">
+                                    <label for="rvbMaint">Maintenance <span class="hint">(% of value / yr)</span></label>
+                                    <div class="affix"><input type="number" id="rvbMaint" class="has-suf" value="1" min="0" max="5" step="0.25"><span class="suf">%</span></div>
+                                </div>
+                                <div class="fld">
+                                    <label for="rvbOpp">Investment return <span class="hint">(opportunity cost)</span></label>
+                                    <div class="affix"><input type="number" id="rvbOpp" class="has-suf" value="5" min="0" max="15" step="0.25"><span class="suf">%</span></div>
+                                </div>
+                            </div>
+                            <div class="fld-row">
+                                <div class="fld">
+                                    <label for="rvbBuyClose">Buying closing costs <span class="hint">(% of price)</span></label>
+                                    <div class="affix"><input type="number" id="rvbBuyClose" class="has-suf" value="2" min="0" max="10" step="0.25"><span class="suf">%</span></div>
+                                </div>
+                                <div class="fld">
+                                    <label for="rvbSell">Selling costs <span class="hint">(% of sale price)</span></label>
+                                    <div class="affix"><input type="number" id="rvbSell" class="has-suf" value="6" min="0" max="15" step="0.25"><span class="suf">%</span></div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div>
+                        <h3><i class="fas fa-chart-column"></i> The comparison</h3>
+                        <p class="tool-sub">Net cost of each path over <strong id="rvbHorizonLbl">7 years</strong> — lower wins.</p>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Total cost of renting</div><div class="v" id="rvbRentTotal">$0</div></div>
+                            <div class="stat-box"><div class="k">Net cost of buying</div><div class="v gold" id="rvbBuyTotal">$0</div></div>
+                            <div class="stat-box"><div class="k">Break-even year</div><div class="v" id="rvbBreakeven">—</div></div>
+                            <div class="stat-box"><div class="k">Equity built by year <span id="rvbEqYr">7</span></div><div class="v" id="rvbEquity">$0</div></div>
+                        </div>
+                        <div class="verdict buy" id="rvbVerdict"></div>
+                        <div class="yy-legend"><span><i class="sw-rent"></i>Renting (cumulative)</span><span><i class="sw-buy"></i>Buying (net, cumulative)</span></div>
+                        <div class="yy" id="rvbYears2"></div>
+                        <ul class="assump">
+                            <li>Monthly mortgage payment (principal &amp; interest): <strong id="rvbMonthly">$0</strong> on a loan of <strong id="rvbLoan">$0</strong>.</li>
+                            <li>Buying's net cost credits you the sale proceeds at the horizon year — appreciated value minus the remaining loan balance and selling costs.</li>
+                            <li>Estimates only — see the note below the tools.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="email-box">
+                    <h4><i class="fas fa-envelope"></i> Email me the full breakdown</h4>
+                    <p>Optional — we'll send this rent vs buy estimate with the year-by-year detail and talk through your situation. No spam, no obligation.</p>
+                    <form onsubmit="return sendBreakdown(event, 'rvb')">
+                        <div class="fld-row">
+                            <div class="fld"><input type="text" id="rvbLeadName" placeholder="Your name *" required></div>
+                            <div class="fld"><input type="email" id="rvbLeadEmail" placeholder="Email address *" required></div>
+                        </div>
+                        <button type="submit" class="btn btn-gold" id="rvbLeadBtn"><span>Send my breakdown</span></button>
+                        <div class="form-message" id="rvbLeadMsg"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         TOOL 2: SELLER NET SHEET
+         Net proceeds = sale price − mortgage payoff − other liens
+           − agent commission − excise/transfer tax − title/escrow/other
+           closing costs − seller concessions & repairs.
+         The FSBO toggle removes the LISTING-side half of the commission
+         (assumes an even listing/buyer split; a buyer-agent commission
+         may still be offered). Excise default 1.6% ≈ WA REET.
+         ============================================================ -->
+    <section class="section section-alt" id="seller-net-sheet" style="padding-top: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">For sellers</span>
+                <h2>Seller net sheet: <em>what you keep</em></h2>
+                <p class="lede">The sale price isn't what lands in your account. Run the deductions and see your estimated net — then, if you're selling it yourself, see what the FSBO route saves.</p>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-file-invoice-dollar"></i> Your sale</h3>
+                        <p class="tool-sub">Use your expected sale price and what you still owe.</p>
+                        <div class="fld">
+                            <label for="nsPrice">Estimated sale price</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="nsPrice" value="850000" min="0" step="5000"></div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="nsMortgage">Mortgage balance</label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="nsMortgage" value="420000" min="0" step="1000"></div>
+                            </div>
+                            <div class="fld">
+                                <label for="nsLiens">Other liens / HELOC</label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="nsLiens" value="0" min="0" step="1000"></div>
+                            </div>
+                        </div>
+                        <div class="fld">
+                            <label for="nsComm">Total agent commission</label>
+                            <div class="affix"><input type="number" id="nsComm" class="has-suf" value="6" min="0" max="12" step="0.25"><span class="suf">%</span></div>
+                        </div>
+                        <div class="toggle-row">
+                            <label class="switch">
+                                <input type="checkbox" id="nsFsbo">
+                                <span class="track"></span>
+                            </label>
+                            <div>
+                                <div class="t-label">I'm selling FSBO (no listing agent)</div>
+                                <div class="t-note">Removes the listing-side half of the commission. Assumes an even split — you may still offer a buyer-agent commission.</div>
+                            </div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="nsExcise">Excise / transfer tax <span class="hint">(WA REET ≈ 1.6%)</span></label>
+                                <div class="affix"><input type="number" id="nsExcise" class="has-suf" value="1.6" min="0" max="6" step="0.1"><span class="suf">%</span></div>
+                            </div>
+                            <div class="fld">
+                                <label for="nsConc">Concessions &amp; repairs</label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="nsConc" value="0" min="0" step="500"></div>
+                            </div>
+                        </div>
+                        <div class="fld">
+                            <label>Title, escrow &amp; other closing costs</label>
+                            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                                <span class="seg" role="radiogroup" aria-label="Closing cost type">
+                                    <label><input type="radio" name="nsCloseMode" value="pct" checked><span>% of price</span></label>
+                                    <label><input type="radio" name="nsCloseMode" value="flat"><span>Flat $</span></label>
+                                </span>
+                                <div class="affix" style="flex:1; min-width:130px;">
+                                    <input type="number" id="nsCloseVal" class="has-suf" value="1" min="0" step="0.25"><span class="suf" id="nsCloseSuf">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3><i class="fas fa-receipt"></i> Estimated deductions</h3>
+                        <p class="tool-sub">Every line between the sale price and your pocket.</p>
+                        <div class="net-lines" id="nsLines"></div>
+                        <div class="net-big">
+                            <div class="k">Estimated net proceeds</div>
+                            <div class="v" id="nsNet">$0</div>
+                            <div class="s" id="nsKeep"></div>
+                        </div>
+                        <div class="cta-center">
+                            <a class="btn btn-gold" href="fsbo.html">List your home free for 14 days <i class="fas fa-arrow-right"></i></a>
+                            <p class="fine-print">Post your FSBO listing on VDI Realty — free, no registration, reviewed before it goes live.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-box">
+                    <h4><i class="fas fa-envelope"></i> Email me the full breakdown</h4>
+                    <p>Optional — we'll send this net sheet with the itemized deductions and, if you'd like, a local pricing read on your home. No spam, no obligation.</p>
+                    <form onsubmit="return sendBreakdown(event, 'ns')">
+                        <div class="fld-row">
+                            <div class="fld"><input type="text" id="nsLeadName" placeholder="Your name *" required></div>
+                            <div class="fld"><input type="email" id="nsLeadEmail" placeholder="Email address *" required></div>
+                        </div>
+                        <button type="submit" class="btn btn-gold" id="nsLeadBtn"><span>Send my breakdown</span></button>
+                        <div class="form-message" id="nsLeadMsg"></div>
+                    </form>
+                </div>
+            </div>
+
+            <p class="disclaimer" style="text-align:left;">Estimates only. Not an appraisal, loan offer, or financial advice. Commission rates are negotiable and vary by agreement; excise/transfer taxes vary by state, county, and price tier (Washington's REET is graduated). Your actual net depends on your payoff amounts, prorations, and negotiated terms — confirm with your escrow officer and tax advisor.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 VDI Realty. All Rights Reserved.</p>
-        <p style="margin-top: 8px; font-size: 0.85rem; color: #888;">Brokered by Realty Connect</p>
-        <p style="margin-top: 10px;">
-            <a href="index.html">Home</a> | 
-            <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a>
-        </p>
+        <div class="wrap">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a class="wordmark" href="index.html" style="text-decoration:none">VDI<span class="wm-dot">·</span>REALTY</a>
+                    <p class="areas">Serving Washington, Arizona &amp; New York</p>
+                    <p>A brokerage network for buyers, sellers, builders, and investors — listings, FSBO, property management, and relocation.</p>
+                    <div class="foot-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5>Explore</h5>
+                    <ul class="foot-links">
+                        <li><a href="listings.html">All listings</a></li>
+                        <li><a href="fsbo-listings.html">FSBO listings</a></li>
+                        <li><a href="builder-listings.html">New construction</a></li>
+                        <li><a href="property-management.html">Property management</a></li>
+                        <li><a href="relocation.html">Relocation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <ul class="foot-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+12068800637">(206) 880-0637</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Washington · Arizona · New York</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>&copy; 2026 VDI Realty. All Rights Reserved. <span class="brokered">Brokered by Realty Connect</span></span>
+                <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></span>
+            </div>
+            <p style="font-size:0.8rem; color:#8fa3ba; margin:14px 0 0; text-align:center;"><i class="fas fa-house-chimney" style="color:var(--gold);"></i> Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</p>
+        </div>
     </footer>
 
     <script>
-        // Mortgage Calculator
-        function calculateMortgage(event) {
-            event.preventDefault();
-            
-            const homePrice = parseFloat(document.getElementById('homePrice').value);
-            const downPayment = parseFloat(document.getElementById('downPayment').value);
-            const interestRate = parseFloat(document.getElementById('interestRate').value) / 100 / 12;
-            const loanTerm = parseInt(document.getElementById('loanTerm').value) * 12;
-            const propertyTax = parseFloat(document.getElementById('propertyTax').value) / 12;
-            const insurance = parseFloat(document.getElementById('insurance').value) / 12;
-            
-            const loanAmount = homePrice - downPayment;
-            
-            // Calculate monthly P&I using mortgage formula
-            const monthlyPI = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
-            
-            const totalMonthly = monthlyPI + propertyTax + insurance;
-            
-            document.getElementById('piPayment').textContent = '$' + monthlyPI.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('taxPayment').textContent = '$' + propertyTax.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('insPayment').textContent = '$' + insurance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('totalPayment').textContent = '$' + totalMonthly.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            
-            document.getElementById('mortgageResult').classList.add('show');
+    // Mobile Menu Toggle (same pattern as index.html)
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.menu-toggle i');
+        menu.classList.toggle('active');
+        if (menu.classList.contains('active')) {
+            toggle.classList.remove('fa-bars');
+            toggle.classList.add('fa-times');
+        } else {
+            toggle.classList.remove('fa-times');
+            toggle.classList.add('fa-bars');
         }
-        
-        // Affordability Calculator
-        function calculateAffordability(event) {
-            event.preventDefault();
-            
-            const annualIncome = parseFloat(document.getElementById('annualIncome').value);
-            const monthlyDebts = parseFloat(document.getElementById('monthlyDebts').value);
-            const downPayment = parseFloat(document.getElementById('downPaymentAfford').value);
-            const interestRate = parseFloat(document.getElementById('interestRateAfford').value) / 100 / 12;
-            const loanTerm = parseInt(document.getElementById('loanTermAfford').value) * 12;
-            
-            // Use 28% front-end ratio
-            const maxMonthlyPayment = (annualIncome / 12) * 0.28;
-            
-            // Estimate taxes and insurance as 1.2% of home price annually
-            const piRatio = 0.988; // Approximately 98.8% of payment is P&I
-            const maxPI = maxMonthlyPayment * piRatio;
-            
-            // Calculate max loan amount
-            const maxLoan = maxPI * (Math.pow(1 + interestRate, loanTerm) - 1) / (interestRate * Math.pow(1 + interestRate, loanTerm));
-            
-            const maxHomePrice = maxLoan + downPayment;
-            
-            document.getElementById('maxHomePrice').textContent = '$' + maxHomePrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('estMonthlyPayment').textContent = '$' + maxMonthlyPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('loanAmount').textContent = '$' + maxLoan.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            
-            document.getElementById('affordabilityResult').classList.add('show');
-        }
-        
-        // Rent vs Buy Calculator
-        function calculateRentBuy(event) {
-            event.preventDefault();
-            
-            const monthlyRent = parseFloat(document.getElementById('monthlyRent').value);
-            const homePrice = parseFloat(document.getElementById('homePriceRB').value);
-            const downPayment = parseFloat(document.getElementById('downPaymentRB').value);
-            const interestRate = parseFloat(document.getElementById('interestRateRB').value) / 100 / 12;
-            const years = parseInt(document.getElementById('yearsToStay').value);
-            const appreciation = parseFloat(document.getElementById('appreciation').value) / 100;
-            
-            const loanAmount = homePrice - downPayment;
-            const loanTerm = 30 * 12;
-            
-            // Calculate monthly mortgage payment
-            const monthlyMortgage = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
-            
-            // Total rent cost (assume 3% annual increase)
-            let totalRent = 0;
-            for (let i = 0; i < years; i++) {
-                totalRent += monthlyRent * 12 * Math.pow(1.03, i);
+    }
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.menu-toggle');
+        if (menu && menu.classList.contains('active')) {
+            if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+                toggleMobileMenu();
             }
-            
-            // Total buy cost (mortgage payments + taxes + insurance)
-            const annualTaxIns = homePrice * 0.015; // 1.5% of home price
-            const totalBuy = (monthlyMortgage * 12 + annualTaxIns) * years;
-            
-            // Calculate equity
-            let principalPaid = 0;
-            let balance = loanAmount;
-            for (let i = 0; i < years * 12; i++) {
-                const interestPayment = balance * interestRate;
-                const principalPayment = monthlyMortgage - interestPayment;
-                principalPaid += principalPayment;
-                balance -= principalPayment;
-            }
-            
-            const futureHomeValue = homePrice * Math.pow(1 + appreciation, years);
-            const equity = futureHomeValue - balance;
-            
-            const netDifference = totalRent - (totalBuy - equity);
-            
-            document.getElementById('totalRentCost').textContent = '$' + totalRent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('totalBuyCost').textContent = '$' + totalBuy.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('equityBuilt').textContent = '$' + equity.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('netDifference').textContent = '$' + Math.abs(netDifference).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            
-            const recommendEl = document.getElementById('recommendation');
-            if (netDifference > 0) {
-                recommendEl.textContent = '💡 Buying appears to be more cost-effective over ' + years + ' years, saving you approximately $' + netDifference.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                recommendEl.style.color = 'green';
-            } else {
-                recommendEl.textContent = '💡 Renting may be more cost-effective over ' + years + ' years, considering your situation and assumptions.';
-                recommendEl.style.color = '#C5A059';
-            }
-            
-            document.getElementById('rentBuyResult').classList.add('show');
         }
-        
-        // Moving Cost Calculator
-        function calculateMoving(event) {
-            event.preventDefault();
-            
-            const distance = document.getElementById('distance').value;
-            const homeSize = document.getElementById('homeSize').value;
-            const packingService = document.getElementById('packingService').value;
-            const storage = document.getElementById('storage').checked;
-            const insurance = document.getElementById('insurance').checked;
-            const specialty = document.getElementById('specialty').checked;
-            
-            // Base moving costs
-            const distanceCosts = {
-                'local': { 'studio': 500, '2br': 800, '3br': 1200, '4br': 1800, '5br': 2500 },
-                'medium': { 'studio': 1500, '2br': 2500, '3br': 3500, '4br': 4500, '5br': 6000 },
-                'long': { 'studio': 3000, '2br': 4500, '3br': 6000, '4br': 8000, '5br': 10000 },
-                'crosscountry': { 'studio': 5000, '2br': 7000, '3br': 9000, '4br': 12000, '5br': 15000 }
-            };
-            
-            const packingCosts = {
-                'none': 0,
-                'partial': { 'studio': 200, '2br': 400, '3br': 600, '4br': 800, '5br': 1000 },
-                'full': { 'studio': 500, '2br': 800, '3br': 1200, '4br': 1600, '5br': 2000 }
-            };
-            
-            let movingCost = distanceCosts[distance][homeSize];
-            let packingCost = packingService === 'none' ? 0 : packingCosts[packingService][homeSize];
-            let additionalCost = 0;
-            
-            if (storage) additionalCost += 200;
-            if (insurance) additionalCost += 300;
-            if (specialty) additionalCost += 500;
-            
-            const total = movingCost + packingCost + additionalCost;
-            const low = total * 0.85;
-            const high = total * 1.15;
-            
-            document.getElementById('movingCompany').textContent = '$' + movingCost.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('packingCost').textContent = '$' + packingCost.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('additionalCost').textContent = '$' + additionalCost.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('costRange').textContent = '$' + low.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' - $' + high.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('totalMovingCost').textContent = '$' + total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            
-            document.getElementById('movingResult').classList.add('show');
-        }
-        
-        // Home Valuation Calculator
-        function calculateValuation(event) {
-            event.preventDefault();
-            
-            const address = document.getElementById('propertyAddress').value;
-            const sqft = parseFloat(document.getElementById('sqft').value);
-            const yearBuilt = parseInt(document.getElementById('yearBuilt').value);
-            const bedrooms = parseInt(document.getElementById('bedrooms').value);
-            const bathrooms = parseFloat(document.getElementById('bathrooms').value);
-            const lotSize = parseFloat(document.getElementById('lotSize').value);
-            const condition = document.getElementById('condition').value;
-            const email = document.getElementById('ownerEmail').value;
-            
-            // Base price per sqft for Seattle area (simplified algorithm)
-            let basePricePer Sqft = 400;
-            
-            // Adjust for condition
-            const conditionMultiplier = {
-                'excellent': 1.15,
-                'good': 1.0,
-                'fair': 0.90,
-                'poor': 0.75
-            };
-            
-            // Adjust for age
-            const age = 2025 - yearBuilt;
-            const ageAdjustment = age < 5 ? 1.1 : age < 15 ? 1.0 : age < 30 ? 0.95 : 0.85;
-            
-            // Adjust for bedrooms/bathrooms
-            const sizeAdjustment = (bedrooms >= 4 || bathrooms >= 3) ? 1.05 : 1.0;
-            
-            // Calculate adjusted price per sqft
-            const adjustedPricePerSqft = basePricePerSqft * conditionMultiplier[condition] * ageAdjustment * sizeAdjustment;
-            
-            // Calculate estimate
-            const bestEstimate = sqft * adjustedPricePerSqft;
-            const lowEstimate = bestEstimate * 0.92;
-            const highEstimate = bestEstimate * 1.08;
-            
-            // Market trend (simplified)
-            const marketTrend = "📈 Appreciating (+3.2% YoY)";
-            
-            document.getElementById('valueRange').textContent = '$' + Math.round(lowEstimate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' - $' + Math.round(highEstimate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('bestEstimate').textContent = '$' + Math.round(bestEstimate).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('pricePerSqft').textContent = '$' + Math.round(adjustedPricePerSqft).toFixed(0);
-            document.getElementById('marketTrend').textContent = marketTrend;
-            document.getElementById('emailSent').textContent = email;
-            
-            document.getElementById('valuationResult').classList.add('show');
-            
-            // In a real app, this would send the lead to your CRM
-            console.log('Valuation lead captured:', email, address);
-        }
-        
-        // Investment Property Calculator
-        function calculateInvestment(event) {
-            event.preventDefault();
-            
-            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value);
-            const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) / 100;
-            const closingCosts = parseFloat(document.getElementById('closingCosts').value);
-            const renovationCosts = parseFloat(document.getElementById('renovationCosts').value) || 0;
-            const interestRate = parseFloat(document.getElementById('investInterestRate').value) / 100 / 12;
-            const loanTerm = parseInt(document.getElementById('investLoanTerm').value) * 12;
-            const monthlyRent = parseFloat(document.getElementById('monthlyRentInvest').value);
-            const vacancyRate = parseFloat(document.getElementById('vacancyRate').value) / 100;
-            const propertyTax = parseFloat(document.getElementById('propertyTax').value);
-            const insurance = parseFloat(document.getElementById('investInsurance').value);
-            const hoaMaintenance = parseFloat(document.getElementById('hoaMaintenance').value);
-            const managementFee = parseFloat(document.getElementById('managementFee').value) / 100;
-            
-            // Calculate loan and cash invested
-            const downPayment = purchasePrice * downPaymentPct;
-            const loanAmount = purchasePrice - downPayment;
-            const totalCashInvested = downPayment + closingCosts + renovationCosts;
-            
-            // Calculate monthly mortgage payment
-            const monthlyMortgage = loanAmount * (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
-            
-            // Calculate income and expenses
-            const effectiveMonthlyRent = monthlyRent * (1 - vacancyRate);
-            const managementCost = monthlyRent * managementFee;
-            const totalMonthlyExpenses = monthlyMortgage + propertyTax + insurance + hoaMaintenance + managementCost;
-            
-            // Calculate cash flow
-            const monthlyCashFlow = effectiveMonthlyRent - totalMonthlyExpenses;
-            const annualCashFlow = monthlyCashFlow * 12;
-            
-            // Calculate cap rate (NOI / Purchase Price)
-            const annualNOI = (effectiveMonthlyRent * 12) - ((propertyTax + insurance + hoaMaintenance + managementCost) * 12);
-            const capRate = (annualNOI / purchasePrice) * 100;
-            
-            // Calculate cash-on-cash ROI
-            const cashOnCashROI = (annualCashFlow / totalCashInvested) * 100;
-            
-            // Display results
-            const cashFlowColor = monthlyCashFlow > 0 ? 'green' : 'red';
-            document.getElementById('monthlyCashFlow').textContent = (monthlyCashFlow >= 0 ? '+$' : '-$') + Math.abs(monthlyCashFlow).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('monthlyCashFlow').style.color = cashFlowColor;
-            
-            document.getElementById('capRate').textContent = capRate.toFixed(2) + '%';
-            document.getElementById('cashROI').textContent = cashOnCashROI.toFixed(2) + '%';
-            
-            document.getElementById('totalInvested').textContent = '$' + totalCashInvested.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('loanAmountInvest').textContent = '$' + loanAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('monthlyMortgageInvest').textContent = '$' + monthlyMortgage.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('grossIncome').textContent = '$' + effectiveMonthlyRent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('totalExpenses').textContent = '$' + totalMonthlyExpenses.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            document.getElementById('annualCashFlow').textContent = (annualCashFlow >= 0 ? '+$' : '-$') + Math.abs(annualCashFlow).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            
-            // Recommendation
-            const recommendEl = document.getElementById('investmentRecommendation');
-            let recommendation = '';
-            
-            if (monthlyCashFlow > 200 && capRate > 6 && cashOnCashROI > 8) {
-                recommendation = '✅ <strong style="color: green;">Strong Investment</strong><br>This property shows excellent cash flow and returns. Cap rate and cash-on-cash ROI are both above market averages for Seattle.';
-            } else if (monthlyCashFlow > 0 && capRate > 4) {
-                recommendation = '⚠️ <strong style="color: var(--accent);">Moderate Investment</strong><br>Positive cash flow but returns are moderate. Consider if appreciation potential or market positioning justify the investment.';
-            } else if (monthlyCashFlow < 0) {
-                recommendation = '❌ <strong style="color: red;">Negative Cash Flow</strong><br>This property will cost you money each month. Only consider if you expect significant appreciation or plan to add value through renovations.';
-            } else {
-                recommendation = '⚠️ <strong style="color: var(--accent);">Marginal Investment</strong><br>Returns are below typical investment thresholds. Review your numbers or negotiate a better purchase price.';
-            }
-            
-            recommendEl.innerHTML = '<p style="margin: 0; color: #666; line-height: 1.6;">' + recommendation + '</p>';
-            
-            document.getElementById('investmentResult').classList.add('show');
-        }
-
-        // Prefill the mortgage calculator with the live 30-year rate (falls back to 6.5).
-        (function () {
-            fetch('https://api.vdirealty.com/api/market/rates').then(function (r) { return r.json(); }).then(function (d) {
-                if (d && d.success && d.rates && typeof d.rates.thirtyYear.value === 'number') {
-                    var input = document.getElementById('interestRate');
-                    if (input && !input.dataset.userEdited) input.value = d.rates.thirtyYear.value.toFixed(2);
-                }
-            }).catch(function () {});
-            var input = document.getElementById('interestRate');
-            if (input) input.addEventListener('input', function () { input.dataset.userEdited = '1'; });
-        })();
+    });
     </script>
 
+    <script>
+    (function () {
+        'use strict';
+        var $ = function (id) { return document.getElementById(id); };
+        function num(id) { var v = parseFloat($(id).value); return isNaN(v) ? 0 : v; }
+        function fmt(n) {
+            var neg = n < 0; n = Math.abs(Math.round(n));
+            return (neg ? '-$' : '$') + n.toLocaleString('en-US');
+        }
+
+        /* ---------- shared amortization ---------- */
+        function monthlyPI(L, ratePct, termYears) {
+            var r = ratePct / 100 / 12, n = termYears * 12;
+            if (L <= 0) return 0;
+            if (r <= 0) return L / n;
+            var f = Math.pow(1 + r, n);
+            return L * r * f / (f - 1);
+        }
+        function balanceAfter(L, ratePct, termYears, months) {
+            var r = ratePct / 100 / 12, n = termYears * 12;
+            var k = Math.min(months, n);
+            if (L <= 0) return 0;
+            if (r <= 0) return Math.max(0, L - (L / n) * k);
+            var f = Math.pow(1 + r, k);
+            var M = monthlyPI(L, ratePct, termYears);
+            return Math.max(0, L * f - M * (f - 1) / r);
+        }
+
+        /* ---------- Tool 1: Rent vs Buy ---------- */
+        var lastRvb = null;
+        function rvbInputs() {
+            return {
+                rent: Math.max(0, num('rvbRent')), price: Math.max(0, num('rvbPrice')),
+                downPct: Math.min(100, Math.max(0, num('rvbDown'))), rate: Math.max(0, num('rvbRate')),
+                term: parseInt($('rvbTerm').value, 10) || 30,
+                taxPct: Math.max(0, num('rvbTax')), ins: Math.max(0, num('rvbIns')), hoa: Math.max(0, num('rvbHoa')),
+                years: parseInt($('rvbYears').value, 10) || 7,
+                rentInc: Math.max(0, num('rvbRentInc')), apprec: Math.max(0, num('rvbApprec')),
+                maintPct: Math.max(0, num('rvbMaint')), opp: Math.max(0, num('rvbOpp')),
+                buyClose: Math.max(0, num('rvbBuyClose')), sellPct: Math.max(0, num('rvbSell'))
+            };
+        }
+        function rvbYear(y, v) {
+            var down = v.price * v.downPct / 100;
+            var L = v.price - down;
+            var upfront = down + v.price * v.buyClose / 100;
+            var M = monthlyPI(L, v.rate, v.term);
+            var months = Math.min(y * 12, v.term * 12);
+            var bal = balanceAfter(L, v.rate, v.term, y * 12);
+            var tax = 0, maint = 0, rent = 0, t, val;
+            for (t = 0; t < y; t++) {
+                val = v.price * Math.pow(1 + v.apprec / 100, t);
+                tax += val * v.taxPct / 100;
+                maint += val * v.maintPct / 100;
+                rent += v.rent * 12 * Math.pow(1 + v.rentInc / 100, t);
+            }
+            var opp = upfront * (Math.pow(1 + v.opp / 100, y) - 1);
+            var sale = v.price * Math.pow(1 + v.apprec / 100, y);
+            var netSale = sale - bal - sale * v.sellPct / 100;
+            var buy = upfront + M * months + tax + v.ins * y + v.hoa * 12 * y + maint + opp - netSale;
+            return { rent: rent, buy: buy, equity: sale - bal, sale: sale, balance: bal, monthly: M, loan: L };
+        }
+        function calcRvb() {
+            var v = rvbInputs(), H = v.years, y, row;
+            var at = rvbYear(H, v);
+            var breakeven = null;
+            var series = [];
+            for (y = 1; y <= 15; y++) {
+                row = rvbYear(y, v);
+                series.push(row);
+                if (breakeven === null && row.buy <= row.rent) breakeven = y;
+            }
+            $('rvbYearsVal').textContent = H + (H === 1 ? ' year' : ' years');
+            $('rvbHorizonLbl').textContent = H + (H === 1 ? ' year' : ' years');
+            $('rvbEqYr').textContent = H;
+            $('rvbRentTotal').textContent = fmt(at.rent);
+            $('rvbBuyTotal').textContent = fmt(at.buy);
+            $('rvbBreakeven').textContent = breakeven === null ? 'Not in 15 yrs' : 'Year ' + breakeven;
+            $('rvbEquity').textContent = fmt(at.equity);
+            $('rvbMonthly').textContent = fmt(at.monthly) + '/mo';
+            $('rvbLoan').textContent = fmt(at.loan);
+
+            var diff = at.rent - at.buy, vd = $('rvbVerdict');
+            if (Math.abs(diff) < 500) {
+                vd.className = 'verdict rent';
+                vd.innerHTML = '<strong>Verdict: about even.</strong> Over ' + H + ' years the two paths cost roughly the same at these assumptions — the tiebreaker is lifestyle, not money.';
+            } else if (diff > 0) {
+                vd.className = 'verdict buy';
+                vd.innerHTML = '<strong>Verdict: buying comes out ahead by about ' + fmt(diff) + ' over ' + H + ' years.</strong> And you\'d hold about ' + fmt(at.equity) + ' in equity at the end of it.';
+            } else {
+                vd.className = 'verdict rent';
+                vd.innerHTML = '<strong>Verdict: renting comes out ahead by about ' + fmt(-diff) + ' over ' + H + ' years.</strong> Buying pulls ahead ' + (breakeven ? 'around year ' + breakeven : 'beyond 15 years') + ' at these assumptions — try a longer stay or a lower price.';
+            }
+
+            var max = 1;
+            for (y = 0; y < H; y++) max = Math.max(max, series[y].rent, Math.max(0, series[y].buy));
+            var html = '';
+            for (y = 1; y <= H; y++) {
+                row = series[y - 1];
+                var be = (breakeven === y) ? ' be' : '';
+                var tag = (breakeven === y) ? '<span class="be-tag">Break-even</span>' : '';
+                html += '<div class="yy-row' + be + '"><div class="yr">Year ' + y + tag + '</div><div>' +
+                    '<div class="yy-bars">' +
+                    '<div class="yy-bar rent" style="width:' + (row.rent / max * 100) + '%"></div>' +
+                    '<div class="yy-bar buy" style="width:' + (Math.max(0, row.buy) / max * 100) + '%"></div>' +
+                    '</div><div class="vals">Rent ' + fmt(row.rent) + ' · Buy ' + fmt(row.buy) + '</div></div></div>';
+            }
+            $('rvbYears2').innerHTML = html;
+            lastRvb = { v: v, at: at, breakeven: breakeven };
+        }
+        ['rvbRent','rvbPrice','rvbDown','rvbRate','rvbTerm','rvbTax','rvbIns','rvbHoa','rvbYears',
+         'rvbRentInc','rvbApprec','rvbMaint','rvbOpp','rvbBuyClose','rvbSell'].forEach(function (id) {
+            $(id).addEventListener('input', calcRvb);
+            $(id).addEventListener('change', calcRvb);
+        });
+
+        /* ---------- Tool 2: Seller Net Sheet ---------- */
+        var lastNs = null;
+        function calcNs() {
+            var price = Math.max(0, num('nsPrice'));
+            var mortgage = Math.max(0, num('nsMortgage'));
+            var liens = Math.max(0, num('nsLiens'));
+            var commPctTotal = Math.max(0, num('nsComm'));
+            var fsbo = $('nsFsbo').checked;
+            var commPct = fsbo ? commPctTotal / 2 : commPctTotal;
+            var comm = price * commPct / 100;
+            var excise = price * Math.max(0, num('nsExcise')) / 100;
+            var mode = document.querySelector('input[name="nsCloseMode"]:checked').value;
+            var closeVal = Math.max(0, num('nsCloseVal'));
+            var closing = mode === 'pct' ? price * closeVal / 100 : closeVal;
+            $('nsCloseSuf').textContent = mode === 'pct' ? '%' : '$';
+            var conc = Math.max(0, num('nsConc'));
+            var net = price - mortgage - liens - comm - excise - closing - conc;
+
+            var rows = [
+                ['Sale price', price, ''],
+                ['Mortgage payoff', -mortgage, 'deduct'],
+                ['Other liens / HELOC', -liens, 'deduct'],
+                ['Agent commission (' + commPct + '%' + (fsbo ? ' — FSBO, listing side removed' : '') + ')', -comm, 'deduct'],
+                ['Excise / transfer tax (' + num('nsExcise') + '%)', -excise, 'deduct'],
+                ['Title, escrow & other closing costs', -closing, 'deduct'],
+                ['Seller concessions & repairs', -conc, 'deduct']
+            ];
+            $('nsLines').innerHTML = rows.map(function (r) {
+                return '<div class="net-line ' + r[2] + '"><span>' + r[0] + '</span><span class="amt">' +
+                    (r[1] < 0 ? '−' + fmt(-r[1]) : fmt(r[1])) + '</span></div>';
+            }).join('');
+            $('nsNet').textContent = fmt(net);
+            $('nsKeep').textContent = price > 0
+                ? 'That\'s about ' + (net / price * 100).toFixed(1) + '% of the sale price in your pocket.'
+                : '';
+            lastNs = { price: price, mortgage: mortgage, liens: liens, commPctTotal: commPctTotal,
+                       commPct: commPct, fsbo: fsbo, comm: comm, excisePct: num('nsExcise'), excise: excise,
+                       closing: closing, conc: conc, net: net };
+        }
+        ['nsPrice','nsMortgage','nsLiens','nsComm','nsExcise','nsConc','nsCloseVal'].forEach(function (id) {
+            $(id).addEventListener('input', calcNs);
+            $(id).addEventListener('change', calcNs);
+        });
+        $('nsFsbo').addEventListener('change', calcNs);
+        document.querySelectorAll('input[name="nsCloseMode"]').forEach(function (el) {
+            el.addEventListener('change', calcNs);
+        });
+
+        /* ---------- Lead capture: same contact API + payload as the site contact form ---------- */
+        function leadMsg(tool, ok, text) {
+            var el = $(tool + 'LeadMsg');
+            el.textContent = text;
+            el.style.display = 'block';
+            el.style.backgroundColor = ok ? '#d4edda' : '#f8d7da';
+            el.style.color = ok ? '#155724' : '#721c24';
+            el.style.border = '1px solid ' + (ok ? '#c3e6cb' : '#f5c6cb');
+        }
+        window.sendBreakdown = function (event, tool) {
+            event.preventDefault();
+            var name = $(tool + 'LeadName').value.trim();
+            var email = $(tool + 'LeadEmail').value.trim();
+            if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                leadMsg(tool, false, 'Please add your name and a valid email address.');
+                return false;
+            }
+            var summary, interest;
+            if (tool === 'rvb' && lastRvb) {
+                var v = lastRvb.v, a = lastRvb.at;
+                interest = 'Tools Page — Rent vs Buy Calculator';
+                summary = 'Please email me the full breakdown of my Rent vs Buy estimate (vdirealty.com/tools.html).\n' +
+                    'Inputs: rent ' + fmt(v.rent) + '/mo; home price ' + fmt(v.price) + '; down payment ' + v.downPct +
+                    '%; rate ' + v.rate + '%; term ' + v.term + ' yrs; staying ' + v.years +
+                    ' yrs; tax ' + v.taxPct + '%/yr; insurance ' + fmt(v.ins) + '/yr; HOA ' + fmt(v.hoa) + '/mo.\n' +
+                    'Result over ' + v.years + ' years: renting ' + fmt(a.rent) + ' vs buying (net) ' + fmt(a.buy) +
+                    '; break-even: ' + (lastRvb.breakeven ? 'year ' + lastRvb.breakeven : 'not within 15 years') +
+                    '; equity at horizon: ' + fmt(a.equity) + '. (Estimate only.)';
+            } else if (tool === 'ns' && lastNs) {
+                var s = lastNs;
+                interest = 'Tools Page — Seller Net Sheet';
+                summary = 'Please email me the full breakdown of my Seller Net Sheet estimate (vdirealty.com/tools.html).\n' +
+                    'Inputs: sale price ' + fmt(s.price) + '; mortgage ' + fmt(s.mortgage) + '; liens ' + fmt(s.liens) +
+                    '; commission ' + s.commPctTotal + '%' + (s.fsbo ? ' (FSBO — listing side removed, effective ' + s.commPct + '%)' : '') +
+                    '; excise ' + s.excisePct + '%; closing costs ' + fmt(s.closing) + '; concessions/repairs ' + fmt(s.conc) + '.\n' +
+                    'Estimated net proceeds: ' + fmt(s.net) + '. (Estimate only.)';
+            } else {
+                return false;
+            }
+            var btn = $(tool + 'LeadBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            fetch('https://api.vdirealty.com/api/contact/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ name: name, email: email, phone: '', interest: interest, message: summary })
+            }).then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.status === 204 ? { success: true } : r.json();
+            }).then(function (d) {
+                if (d && d.success) {
+                    leadMsg(tool, true, '✓ Thank you! Your breakdown is on its way — we\'ll reply to ' + email + ' shortly.');
+                    event.target.reset();
+                } else {
+                    leadMsg(tool, false, 'Sorry, something went wrong. Please email us directly at sales@vdirealty.com');
+                }
+            }).catch(function () {
+                leadMsg(tool, false, 'Sorry, something went wrong. Please email us directly at sales@vdirealty.com');
+            }).finally(function () {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Send my breakdown</span>';
+            });
+            return false;
+        };
+
+        calcRvb();
+        calcNs();
+    })();
+    </script>
+
+    <script>
+/* Deal Drop attribution: beacon UTM-tagged visits (video description links) to the API. */
+(function () {
+  try {
+    var q = new URLSearchParams(location.search);
+    if (!(q.get('utm_source') || q.get('utm_medium') || q.get('utm_campaign'))) return;
+    var payload = JSON.stringify({
+      page: location.pathname,
+      utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'),
+      utm_campaign: q.get('utm_campaign'), utm_content: q.get('utm_content'),
+      referrer: document.referrer || ''
+    });
+    var url = 'https://api.vdirealty.com/api/stats/attribution/pixel';
+    if (navigator.sendBeacon) {
+      var blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+    } else {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: payload, keepalive: true }).catch(function () {});
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
