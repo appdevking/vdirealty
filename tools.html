@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Real Estate Tools — Rent vs Buy Calculator & Seller Net Sheet | VDI Realty</title>
+    <title>Free Real Estate Calculators — Rent vs Buy, Seller Net, Taxes, 1031, ADU & More | VDI Realty</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
 
-    <meta name="description" content="Free VDI Realty calculators: compare the true cost of renting vs buying over the years you plan to stay, and estimate what you'd actually net from selling your home. Instant results, no sign-up.">
-    <meta name="keywords" content="rent vs buy calculator, seller net sheet, net proceeds calculator, real estate calculators, VDI Realty">
+    <meta name="description" content="Free VDI Realty calculators for renting vs buying, seller proceeds, life after a mortgage payoff, home-sale taxes, renting vs selling, 1031 exchange deadlines and ADU payback. Instant educational estimates, no sign-up.">
+    <meta name="keywords" content="rent vs buy calculator, seller net sheet, free and clear planner, home sale tax estimator, sell or rent calculator, 1031 deadline calculator, ADU payback calculator, VDI Realty">
 
     <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="home-pro.css">
@@ -152,6 +152,38 @@
         .fine-print { color: var(--muted); font-size: 0.82rem; margin-top: 16px; }
         .assump { color: var(--muted); font-size: 0.83rem; margin-top: 14px; }
         .assump li { margin-bottom: 3px; }
+        .fld input[type="date"] {
+            width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px;
+            font-family: var(--sans); font-size: 1rem; color: var(--ink); background: #fff;
+        }
+        .library-grid, .guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        @media (max-width: 920px) { .library-grid, .guide-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 600px) { .library-grid, .guide-grid { grid-template-columns: 1fr; } }
+        .library-card, .guide-card {
+            display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+            padding: 22px; text-decoration: none; box-shadow: 0 6px 22px rgba(10,28,48,.05);
+        }
+        .library-card:hover, .guide-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+        .library-card i, .guide-card i { color: var(--gold-deep); font-size: 1.35rem; margin-bottom: 10px; }
+        .library-card strong, .guide-card strong { display: block; color: var(--navy); font-family: var(--serif); font-size: 1.12rem; margin-bottom: 5px; }
+        .library-card span, .guide-card span { color: var(--muted); font-size: 0.9rem; }
+        .breakdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 600px) { .breakdown-grid { grid-template-columns: 1fr; } }
+        .breakdown-box { border: 1px solid var(--line); border-radius: 12px; padding: 17px; background: #fff; }
+        .breakdown-box.ends { background: #eef7f1; }
+        .breakdown-box.survives { background: #fff8e8; }
+        .breakdown-box h4 { color: var(--navy); margin: 0 0 9px; font-family: var(--serif); }
+        .breakdown-box ul { margin: 0; padding-left: 19px; color: var(--muted); font-size: 0.9rem; }
+        .note-box {
+            border: 1px solid #ead9a8; background: #fff8e8; color: #5f4b12;
+            border-radius: 12px; padding: 15px 17px; font-size: 0.92rem; margin-top: 16px;
+        }
+        .date-result {
+            background: var(--navy); color: #fff; border-radius: 14px; padding: 20px; margin-bottom: 14px;
+        }
+        .date-result .k { color: #b9c6d6; text-transform: uppercase; letter-spacing: .1em; font-size: .76rem; font-weight: 700; }
+        .date-result .v { color: var(--gold-soft); font-family: var(--serif); font-size: 1.55rem; font-weight: 700; line-height: 1.25; margin-top: 4px; }
+        .related-links { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
     </style>
 </head>
 <body>
@@ -173,6 +205,7 @@
                 <a href="builder-listings.html">Builders</a>
                 <a href="free-tools.html">Free Tools</a>
                 <a href="tools.html" style="color: var(--gold-deep);">Tools</a>
+                <a href="index.html#guides">Guides</a>
                 <a href="relocation.html">Relocation</a>
                 <a href="index.html#contact" class="nav-cta">Contact</a>
             </nav>
@@ -188,6 +221,7 @@
         <a href="builder-listings.html">Builders</a>
         <a href="free-tools.html">Free Tools</a>
         <a href="tools.html">Tools</a>
+        <a href="index.html#guides">Guides</a>
         <a href="relocation.html">Relocation</a>
         <a href="index.html#contact">Contact</a>
     </nav>
@@ -197,10 +231,34 @@
         <div class="wrap">
             <span class="eyebrow eyebrow-light">Free tools</span>
             <h1>Run the numbers <em>before</em> you move</h1>
-            <p class="lede">Two free calculators, built for the two biggest questions in real estate: should you rent or buy — and if you sell, what do you actually walk away with? Instant results, no sign-up.</p>
+            <p class="lede">Seven free calculators for the decisions around a move — rent or buy, sell or hold, rent it out, exchange it, build an ADU, or plan life after the mortgage. Instant results, no sign-up.</p>
             <div class="hero-jump">
                 <a href="#rent-vs-buy" class="btn btn-gold">Rent vs Buy <i class="fas fa-arrow-down"></i></a>
                 <a href="#seller-net-sheet" class="btn btn-outline-light">Seller Net Sheet</a>
+                <a href="#calculator-library" class="btn btn-outline-light">All calculators &amp; guides</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Calculator and guide library -->
+    <section class="section section-alt" id="calculator-library" style="padding: 64px 0;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Calculator library</span>
+                <h2>Pick the decision <em>you're facing</em></h2>
+                <p class="lede">Every calculator is free and runs instantly in your browser. Educational estimates only — not an appraisal, loan offer, tax return, or financial advice.</p>
+            </div>
+            <div class="library-grid">
+                <a class="library-card" href="#rent-vs-buy"><i class="fas fa-scale-balanced"></i><strong>Rent vs Buy Calculator</strong><span>Compare the full cost of renting with buying over your planned stay.</span></a>
+                <a class="library-card" href="#seller-net-sheet"><i class="fas fa-file-invoice-dollar"></i><strong>Seller Net Sheet</strong><span>Estimate what remains after the mortgage, taxes, closing costs and commissions.</span></a>
+                <a class="library-card" href="#free-and-clear"><i class="fas fa-key"></i><strong>Free-and-Clear Planner</strong><span>Find the bills that continue after payoff and the monthly amount to self-escrow.</span></a>
+                <a class="library-card" href="#sell-or-hold-tax"><i class="fas fa-landmark"></i><strong>Sell-or-Hold Tax Estimator</strong><span>Estimate federal tax on a main-home sale after the §121 exclusion.</span></a>
+                <a class="library-card" href="#sell-or-rent"><i class="fas fa-scale-balanced"></i><strong>Sell It or Rent It?</strong><span>Compare selling now with five years of renting, then selling.</span></a>
+                <a class="library-card" href="#exchange-1031"><i class="fas fa-calendar-days"></i><strong>1031 Exchange Deadline Calculator</strong><span>Count the 45-day and 180-day deadlines and the full-deferral target.</span></a>
+                <a class="library-card" href="#adu-payback"><i class="fas fa-house-user"></i><strong>ADU Payback Calculator</strong><span>See monthly net, simple payback and the 10-year cumulative result.</span></a>
+                <a class="library-card" href="bills-that-survive-your-payoff.html"><i class="fas fa-list-check"></i><strong>Guide: Bills That Survive Your Payoff</strong><span>A printable checklist and a three-step self-escrow routine.</span></a>
+                <a class="library-card" href="closing-costs-by-state.html"><i class="fas fa-map-location-dot"></i><strong>Guide: Closing Costs by State</strong><span>Typical WA, AZ and NY buyer and seller costs, with and without agent compensation.</span></a>
             </div>
         </div>
     </section>
@@ -467,6 +525,227 @@
         </div>
     </section>
 
+    <!-- TOOL 3: FREE-AND-CLEAR PLANNER -->
+    <section class="section" id="free-and-clear" style="padding-bottom: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">After payoff</span>
+                <h2>Free-and-clear <em>planner</em></h2>
+                <p class="lede">Paying off the loan ends the debt — not the cost of owning the home. Add the bills your lender's escrow account used to handle and get the monthly amount to set aside yourself.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-key"></i> Bills that continue</h3>
+                        <p class="tool-sub">Use the annual amounts from your latest tax bill, insurance declaration page and HOA statement.</p>
+                        <div class="fld"><label for="fcpTax">Property tax <span class="hint">($ / year)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="fcpTax" value="6300" min="0" step="50"></div></div>
+                        <div class="fld"><label for="fcpInsurance">Homeowner's insurance <span class="hint">($ / year)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="fcpInsurance" value="2400" min="0" step="50"></div></div>
+                        <div class="fld-row">
+                            <div class="fld"><label for="fcpHoaAmount">HOA / condo dues</label><div class="affix"><span class="pre">$</span><input type="number" id="fcpHoaAmount" value="0" min="0" step="10"></div></div>
+                            <div class="fld"><label for="fcpHoaFreq">HOA billing period</label><select id="fcpHoaFreq"><option value="monthly" selected>Monthly</option><option value="annual">Annual</option></select></div>
+                        </div>
+                        <div class="fld"><label for="fcpOther">Other annual ownership bills <span class="hint">(optional)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="fcpOther" value="0" min="0" step="50"></div><p class="tool-sub" style="margin-top:7px;">Examples: flood insurance, parcel or special-district assessments, and utility charges that can become liens where you live.</p></div>
+                        <div class="fld"><label for="fcpPI">Current principal &amp; interest <span class="hint">($ / month, optional — for the payoff comparison)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="fcpPI" value="0" min="0" step="25"></div></div>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-piggy-bank"></i> Your self-escrow plan</h3>
+                        <p class="tool-sub">The lender's escrow account goes away. Its job still has to be done — now by you.</p>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Annual carrying cost</div><div class="v" id="fcpAnnual">$0</div></div>
+                            <div class="stat-box"><div class="k">Set aside monthly</div><div class="v gold" id="fcpMonthly">$0</div></div>
+                            <div class="stat-box"><div class="k">Bills surviving payoff</div><div class="v" id="fcpSurvives">$0 / yr</div></div>
+                            <div class="stat-box"><div class="k">P&amp;I that ends</div><div class="v" id="fcpEnds">$0 / yr</div></div>
+                        </div>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-box ends"><h4>Ends with the loan</h4><ul><li>Mortgage principal &amp; interest: <strong id="fcpEndsLine">$0 per year</strong></li><li>The lender-managed escrow account and its required monthly deposit</li><li>Private mortgage insurance, if your loan had it — confirm on your statement</li></ul></div>
+                            <div class="breakdown-box survives"><h4>Keeps coming</h4><ul><li>Property tax: <strong id="fcpTaxOut">$0</strong></li><li>Homeowner's insurance: <strong id="fcpInsOut">$0</strong></li><li>HOA / condo dues: <strong id="fcpHoaOut">$0</strong></li><li>Other entered bills: <strong id="fcpOtherOut">$0</strong></li></ul></div>
+                        </div>
+                        <div class="note-box"><strong>Important distinction:</strong> escrow was a payment method, not the bill itself. When the account closes, the taxing authority, insurer and HOA still expect payment — and missed property taxes or HOA dues can become liens.</div>
+                        <p class="fine-print">Educational estimate — not tax or financial advice. Due dates, lien rules, insurance requirements and HOA terms vary by property and jurisdiction.</p>
+                        <div class="related-links"><a class="card-link" href="bills-that-survive-your-payoff.html">Read the payoff checklist <i class="fas fa-arrow-right"></i></a><a class="card-link" href="#seller-net-sheet">Seller Net Sheet <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOL 4: SELL-OR-HOLD TAX ESTIMATOR -->
+    <section class="section section-alt" id="sell-or-hold-tax" style="padding-top: 70px; padding-bottom: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Home-sale taxes</span>
+                <h2>Sell-or-hold <em>tax estimator</em></h2>
+                <p class="lede">Estimate the federal tax if you sold your main home today, using the §121 exclusion rules summarized in IRS Publication 523. This is a planning estimate — not a tax return.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-landmark"></i> Your home &amp; history</h3>
+                        <p class="tool-sub">Basis is generally what you paid plus qualifying improvement costs. Keep records for both.</p>
+                        <div class="fld"><label for="stxPurchase">Original purchase price</label><div class="affix"><span class="pre">$</span><input type="number" id="stxPurchase" value="400000" min="0" step="5000"></div></div>
+                        <div class="fld"><label for="stxImprovements">Improvement costs <span class="hint">(basis additions)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="stxImprovements" value="50000" min="0" step="1000"></div></div>
+                        <div class="fld"><label for="stxValue">Expected sale price / current value</label><div class="affix"><span class="pre">$</span><input type="number" id="stxValue" value="850000" min="0" step="5000"></div></div>
+                        <div class="fld-row">
+                            <div class="fld"><label for="stxOwned">Years owned <span class="hint">(continuous)</span></label><input type="number" id="stxOwned" value="10" min="0" step="0.25"></div>
+                            <div class="fld"><label for="stxLived">Years lived there <span class="hint">(in last 5 years)</span></label><input type="number" id="stxLived" value="5" min="0" max="5" step="0.25"></div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld"><label for="stxStatus">Filing status</label><select id="stxStatus"><option value="single">Single / other — $250,000 max</option><option value="married" selected>Married filing jointly — $500,000 max</option></select></div>
+                            <div class="fld"><label for="stxRate">Federal capital-gains rate <span class="hint">(estimate)</span></label><select id="stxRate"><option value="0">0%</option><option value="0.15" selected>15%</option><option value="0.20">20%</option><option value="0.238">23.8% incl. NIIT</option></select></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-calculator"></i> Estimated federal result</h3>
+                        <p class="tool-sub" id="stxEligibility">Checking the 2-of-5-year ownership and use tests…</p>
+                        <div class="net-lines">
+                            <div class="net-line"><span>Adjusted basis</span><span class="amt" id="stxBasis">$0</span></div>
+                            <div class="net-line"><span>Gain before exclusion</span><span class="amt" id="stxGain">$0</span></div>
+                            <div class="net-line"><span>§121 exclusion applied</span><span class="amt" id="stxExclusion">$0</span></div>
+                            <div class="net-line"><span>Taxable gain</span><span class="amt" id="stxTaxable">$0</span></div>
+                        </div>
+                        <div class="net-big"><div class="k">Estimated federal tax</div><div class="v" id="stxTax">$0</div><div class="s">At the federal rate you selected. State tax is not included.</div></div>
+                        <div class="note-box"><strong>Inherited the home?</strong> Basis is often “stepped up” to fair market value at the prior owner's death (or an alternate valuation date), which can greatly reduce gain. Exceptions and community-property rules matter — confirm before relying on this estimate.</div>
+                        <ul class="assump"><li>The model applies the full exclusion only when both the ownership and use tests are met. Partial exclusions for work, health or unforeseen circumstances are not modeled.</li><li>It does not model depreciation recapture, business/rental use, prior §121 sales, selling expenses, state taxes or special filing situations.</li></ul>
+                        <p class="fine-print">Educational estimate — not tax or financial advice. Verify your facts against IRS Publication 523 and a qualified tax professional.</p>
+                        <div class="related-links"><a class="card-link" href="#seller-net-sheet">Estimate net proceeds <i class="fas fa-arrow-right"></i></a><a class="card-link" href="closing-costs-by-state.html">Closing costs by state <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOL 5: SELL IT OR RENT IT? -->
+    <section class="section" id="sell-or-rent" style="padding-top: 70px; padding-bottom: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Two exits, one home</span>
+                <h2>Sell it or <em>rent it?</em></h2>
+                <p class="lede">Compare cash from selling now with a simple five-year path: collect rent, pay the listed expenses and mortgage, build principal, then sell at the same value.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-house-chimney-window"></i> Home, rent &amp; expenses</h3>
+                        <p class="tool-sub">Leave the mortgage fields at zero for a paid-off home.</p>
+                        <div class="fld-row"><div class="fld"><label for="sorValue">Home value</label><div class="affix"><span class="pre">$</span><input type="number" id="sorValue" value="650000" min="0" step="5000"></div></div><div class="fld"><label for="sorSellPct">Selling costs</label><div class="affix"><input type="number" id="sorSellPct" class="has-suf" value="6" min="0" max="20" step="0.25"><span class="suf">%</span></div></div></div>
+                        <div class="fld"><label for="sorRent">Expected monthly rent</label><div class="affix"><span class="pre">$</span><input type="number" id="sorRent" value="3200" min="0" step="50"></div></div>
+                        <div class="fld-row"><div class="fld"><label for="sorTax">Property tax <span class="hint">($ / mo)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="sorTax" value="550" min="0" step="25"></div></div><div class="fld"><label for="sorInsurance">Insurance <span class="hint">($ / mo)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="sorInsurance" value="200" min="0" step="25"></div></div></div>
+                        <div class="fld-row"><div class="fld"><label for="sorMaintenance">Maintenance <span class="hint">($ / mo)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="sorMaintenance" value="250" min="0" step="25"></div></div><div class="fld"><label for="sorOther">HOA / other <span class="hint">($ / mo)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="sorOther" value="0" min="0" step="25"></div></div></div>
+                        <div class="fld"><label for="sorVacancy">Vacancy allowance</label><div class="affix"><input type="number" id="sorVacancy" class="has-suf" value="5" min="0" max="50" step="0.5"><span class="suf">%</span></div></div>
+                        <details class="advanced"><summary>Optional mortgage</summary><div class="fld"><label for="sorMortgage">Mortgage balance <span class="hint">(optional)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="sorMortgage" value="300000" min="0" step="5000"></div></div><div class="fld-row"><div class="fld"><label for="sorRate">Mortgage rate</label><div class="affix"><input type="number" id="sorRate" class="has-suf" value="6.5" min="0" max="20" step="0.05"><span class="suf">%</span></div></div><div class="fld"><label for="sorTerm">Remaining term <span class="hint">(years)</span></label><input type="number" id="sorTerm" value="25" min="1" max="40" step="1"></div></div></details>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-scale-balanced"></i> Five-year comparison</h3>
+                        <p class="tool-sub">Starting monthly rental cash flow after vacancy, listed expenses and mortgage P&amp;I: <strong id="sorMonthlyCash">$0</strong>.</p>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Net if sold now</div><div class="v" id="sorSellNow">$0</div></div>
+                            <div class="stat-box"><div class="k">5-year rental cash flow</div><div class="v gold" id="sorCashFlow">$0</div></div>
+                            <div class="stat-box"><div class="k">Principal paid in 5 years</div><div class="v" id="sorPrincipal">$0</div></div>
+                            <div class="stat-box"><div class="k">Rent, then sell at year 5</div><div class="v" id="sorRentThenSell">$0</div></div>
+                        </div>
+                        <div class="verdict rent" id="sorVerdict"></div>
+                        <ul class="assump"><li><strong>Equity note:</strong> principal paid is not spendable cash while you hold the home; it appears in this comparison when the model sells at year 5 and pays off the lower balance.</li><li>Rent, expenses and home value stay flat; the same selling-cost percentage is used now and at year 5.</li><li>Not modeled: appreciation, rent growth, income taxes, depreciation, major repairs, management fees you did not enter, financing changes, or the return you could earn by investing sale proceeds.</li></ul>
+                        <p class="fine-print">Educational estimate — not tax or financial advice.</p>
+                        <div class="related-links"><a class="card-link" href="#sell-or-hold-tax">Check the sale-tax estimate <i class="fas fa-arrow-right"></i></a><a class="card-link" href="#free-and-clear">Plan a paid-off home <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOL 6: 1031 EXCHANGE DEADLINE CALCULATOR -->
+    <section class="section section-alt" id="exchange-1031" style="padding-top: 70px; padding-bottom: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Investor deadlines</span>
+                <h2>1031 exchange <em>deadline calculator</em></h2>
+                <p class="lede">For a deferred exchange, the clock starts when the relinquished property transfers. Count 45 calendar days to identify replacement property and 180 calendar days to receive it — subject to the earlier tax-return deadline described below.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-calendar-days"></i> Relinquished property</h3>
+                        <p class="tool-sub">Use the actual transfer/closing date, not the listing or contract date.</p>
+                        <div class="fld"><label for="exDate">Transfer / closing date</label><input type="date" id="exDate" value="2026-10-29"></div>
+                        <div class="fld"><label for="exPrice">Sale price</label><div class="affix"><span class="pre">$</span><input type="number" id="exPrice" value="850000" min="0" step="5000"></div></div>
+                        <div class="fld"><label for="exCosts">Selling costs</label><div class="affix"><span class="pre">$</span><input type="number" id="exCosts" value="50000" min="0" step="1000"></div></div>
+                        <div class="fld"><label for="exDebt">Mortgage debt paid off</label><div class="affix"><span class="pre">$</span><input type="number" id="exDebt" value="420000" min="0" step="5000"></div></div>
+                        <div class="note-box"><strong>Use a qualified intermediary and tax counsel.</strong> Do not take constructive receipt of exchange funds, and get identification rules and property eligibility confirmed before the first deadline.</div>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-hourglass-half"></i> Your two deadlines</h3>
+                        <p class="tool-sub">Day 1 is the day after transfer. Both periods run at the same time; the 180 days are not added after the 45 days.</p>
+                        <div class="date-result"><div class="k">45-day identification deadline</div><div class="v" id="exIdDate">—</div></div>
+                        <div class="date-result"><div class="k">180-day exchange deadline</div><div class="v" id="exCloseDate">—</div></div>
+                        <div class="net-lines">
+                            <div class="net-line"><span>Full-deferral replacement target</span><span class="amt" id="exTarget">$0</span></div>
+                            <div class="net-line"><span>Net sale proceeds to reinvest</span><span class="amt" id="exCash">$0</span></div>
+                            <div class="net-line"><span>Old debt to replace or offset with cash</span><span class="amt" id="exDebtTarget">$0</span></div>
+                        </div>
+                        <ul class="assump"><li>The full-deferral target shown is sale price minus selling costs. In general, buy replacement property at or above that net price and reinvest all net proceeds.</li><li>Debt relief can be taxable “mortgage boot”: replace the old debt with at least as much new debt, or add enough cash to offset the difference.</li><li>IRS Form 8824 instructions also cap receipt at the earlier of 180 days or the tax-return due date for the transfer year, including extensions. This calculator displays the 180-day date; your return deadline can make the real deadline earlier.</li></ul>
+                        <p class="fine-print">Educational estimate — not tax or financial advice. Confirm all dates, identification rules and boot calculations with your qualified intermediary and tax professional.</p>
+                        <div class="related-links"><a class="card-link" href="#sell-or-hold-tax">Compare the §121 home-sale rules <i class="fas fa-arrow-right"></i></a><a class="card-link" href="closing-costs-by-state.html">Closing costs by state <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOOL 7: ADU PAYBACK CALCULATOR -->
+    <section class="section" id="adu-payback" style="padding-top: 70px; padding-bottom: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Backyard income</span>
+                <h2>ADU <em>payback calculator</em></h2>
+                <p class="lede">A simple first pass for an accessory dwelling unit: what it may net each month, how long until the project cost is recovered, and where the first ten years land.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-house-user"></i> Project &amp; rent</h3>
+                        <p class="tool-sub">Include design, permits, utility connections and construction in the build cost.</p>
+                        <div class="fld"><label for="aduBuild">Total build cost</label><div class="affix"><span class="pre">$</span><input type="number" id="aduBuild" value="150000" min="0" step="5000"></div></div>
+                        <div class="fld"><label for="aduFees">One-time financing fees <span class="hint">(optional)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="aduFees" value="0" min="0" step="250"></div></div>
+                        <div class="fld"><label for="aduRent">Expected monthly rent</label><div class="affix"><span class="pre">$</span><input type="number" id="aduRent" value="1800" min="0" step="50"></div></div>
+                        <div class="fld"><label for="aduExpenses">Monthly expenses</label><div class="affix"><span class="pre">$</span><input type="number" id="aduExpenses" value="350" min="0" step="25"></div><p class="tool-sub" style="margin-top:7px;">Taxes, insurance, utilities, maintenance, vacancy reserve and management — whatever applies to your plan.</p></div>
+                        <div class="fld"><label for="aduFinanceMonthly">Monthly financing payment <span class="hint">(optional)</span></label><div class="affix"><span class="pre">$</span><input type="number" id="aduFinanceMonthly" value="0" min="0" step="25"></div></div>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-chart-line"></i> Simple payback result</h3>
+                        <p class="tool-sub">Total project investment used below: <strong id="aduTotalProject">$0</strong>.</p>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Monthly net after financing</div><div class="v gold" id="aduMonthly">$0</div></div>
+                            <div class="stat-box"><div class="k">Simple payback</div><div class="v" id="aduPayback">—</div></div>
+                            <div class="stat-box"><div class="k">Cash generated in 10 years</div><div class="v" id="aduTenYearCash">$0</div></div>
+                            <div class="stat-box"><div class="k">10-year cumulative after project cost</div><div class="v" id="aduTenYear">$0</div></div>
+                        </div>
+                        <div class="verdict rent" id="aduVerdict"></div>
+                        <ul class="assump"><li>Payback = total project investment ÷ (monthly net × 12). It is intentionally simple and is not an internal-rate-of-return calculation.</li><li>Rent and expenses stay flat. Not modeled: vacancy beyond your expense reserve, rent growth, tax effects, depreciation, appreciation, major repairs, or loan principal building equity.</li><li>Zoning, lot, utility, parking and owner-occupancy rules vary sharply across WA, AZ and NY — verify feasibility before designing around a rent estimate.</li></ul>
+                        <p class="fine-print">Educational estimate — not tax or financial advice.</p>
+                        <div class="related-links"><a class="card-link" href="#sell-or-rent">Compare renting the whole home <i class="fas fa-arrow-right"></i></a><a class="card-link" href="#rent-vs-buy">Rent vs Buy Calculator <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related guides -->
+    <section class="section section-alt" id="tools-guides" style="padding-top: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Guides</span>
+                <h2>Read the story behind <em>the numbers</em></h2>
+                <p class="lede">Plain-English guides for Washington, Arizona and New York homeowners — written to pair with the calculators above.</p>
+            </div>
+            <div class="guide-grid">
+                <a class="guide-card" href="bills-that-survive-your-payoff.html"><i class="fas fa-list-check"></i><strong>Bills That Survive Your Payoff</strong><span>The post-mortgage checklist, how escrow worked, and how to self-escrow in three steps.</span></a>
+                <a class="guide-card" href="selling-your-first-home-timeline.html"><i class="fas fa-timeline"></i><strong>Selling Your First Home: A Timeline</strong><span>A week-by-week path from preparation to closing, with genuine WA, AZ and NY differences.</span></a>
+                <a class="guide-card" href="closing-costs-by-state.html"><i class="fas fa-receipt"></i><strong>Closing Costs by State: WA, AZ, NY</strong><span>Typical buyer and seller line items and ranges — clearly separated from agent compensation.</span></a>
+            </div>
+            <p class="disclaimer" style="text-align:left;">All VDI Realty calculators provide educational estimates only. They are not appraisals, loan offers, tax returns, or tax or financial advice. Confirm property-specific figures with your lender, escrow or title company, attorney, and tax professional.</p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="wrap">
@@ -489,6 +768,9 @@
                         <li><a href="builder-listings.html">New construction</a></li>
                         <li><a href="property-management.html">Property management</a></li>
                         <li><a href="relocation.html">Relocation</a></li>
+                        <li><a href="bills-that-survive-your-payoff.html">Bills after payoff</a></li>
+                        <li><a href="selling-your-first-home-timeline.html">First-home selling timeline</a></li>
+                        <li><a href="closing-costs-by-state.html">Closing costs by state</a></li>
                     </ul>
                 </div>
                 <div>
@@ -764,6 +1046,162 @@
 
         calcRvb();
         calcNs();
+    })();
+    </script>
+
+    <script>
+    (function () {
+        'use strict';
+        function el(id) { return document.getElementById(id); }
+        function val(id) { var v = parseFloat(el(id).value); return isNaN(v) ? 0 : v; }
+        function nonneg(id) { return Math.max(0, val(id)); }
+        function money(n) {
+            var neg = n < 0; n = Math.abs(Math.round(n));
+            return (neg ? '-$' : '$') + n.toLocaleString('en-US');
+        }
+        function bind(ids, fn) {
+            ids.forEach(function (id) {
+                el(id).addEventListener('input', fn);
+                el(id).addEventListener('change', fn);
+            });
+        }
+        function monthlyPayment(balance, ratePct, termYears) {
+            if (balance <= 0) return 0;
+            var years = Math.max(1, termYears || 1), r = ratePct / 100 / 12, n = years * 12;
+            if (r <= 0) return balance / n;
+            var f = Math.pow(1 + r, n);
+            return balance * r * f / (f - 1);
+        }
+        function balanceAfter(balance, ratePct, termYears, months) {
+            if (balance <= 0) return 0;
+            var years = Math.max(1, termYears || 1), r = ratePct / 100 / 12, n = years * 12;
+            var k = Math.min(months, n), pmt = monthlyPayment(balance, ratePct, years);
+            if (r <= 0) return Math.max(0, balance - pmt * k);
+            var f = Math.pow(1 + r, k);
+            return Math.max(0, balance * f - pmt * (f - 1) / r);
+        }
+
+        /* Free-and-Clear Planner */
+        function calcFcp() {
+            var tax = nonneg('fcpTax'), ins = nonneg('fcpInsurance');
+            var hoaInput = nonneg('fcpHoaAmount');
+            var hoa = el('fcpHoaFreq').value === 'annual' ? hoaInput : hoaInput * 12;
+            var other = nonneg('fcpOther'), piAnnual = nonneg('fcpPI') * 12;
+            var total = tax + ins + hoa + other;
+            el('fcpAnnual').textContent = money(total);
+            el('fcpMonthly').textContent = money(total / 12);
+            el('fcpSurvives').textContent = money(total) + ' / yr';
+            el('fcpEnds').textContent = money(piAnnual) + ' / yr';
+            el('fcpEndsLine').textContent = money(piAnnual) + ' per year';
+            el('fcpTaxOut').textContent = money(tax);
+            el('fcpInsOut').textContent = money(ins);
+            el('fcpHoaOut').textContent = money(hoa);
+            el('fcpOtherOut').textContent = money(other);
+        }
+        bind(['fcpTax','fcpInsurance','fcpHoaAmount','fcpHoaFreq','fcpOther','fcpPI'], calcFcp);
+
+        /* Sell-or-Hold Tax Estimator */
+        function calcStx() {
+            var basis = nonneg('stxPurchase') + nonneg('stxImprovements');
+            var value = nonneg('stxValue');
+            var rawGain = value - basis, gain = Math.max(0, rawGain);
+            var owned = Math.max(0, val('stxOwned'));
+            var lived = Math.min(5, Math.max(0, val('stxLived')));
+            var cap = el('stxStatus').value === 'married' ? 500000 : 250000;
+            var eligible = owned >= 2 && lived >= 2;
+            var exclusion = eligible ? Math.min(gain, cap) : 0;
+            var taxable = Math.max(0, gain - exclusion);
+            var tax = taxable * parseFloat(el('stxRate').value || '0');
+            el('stxBasis').textContent = money(basis);
+            el('stxGain').textContent = money(rawGain);
+            el('stxExclusion').textContent = money(exclusion);
+            el('stxTaxable').textContent = money(taxable);
+            el('stxTax').textContent = money(tax);
+            el('stxEligibility').textContent = rawGain < 0
+                ? 'These inputs show a loss rather than a gain. A loss on a main home is generally not deductible; this model applies no exclusion or tax.'
+                : (eligible
+                    ? 'At the years entered, the basic 2-of-5-year ownership and use tests are met. The exclusion is capped at both the statutory maximum and the actual gain.'
+                    : 'At the years entered, the basic 2-of-5-year ownership and use tests are not both met, so this model applies no §121 exclusion. A partial exclusion may still exist in specific circumstances.');
+        }
+        bind(['stxPurchase','stxImprovements','stxValue','stxOwned','stxLived','stxStatus','stxRate'], calcStx);
+
+        /* Sell It or Rent It? */
+        function calcSor() {
+            var value = nonneg('sorValue'), sellPct = Math.max(0, val('sorSellPct'));
+            var balance = nonneg('sorMortgage'), rate = Math.max(0, val('sorRate')), term = Math.max(1, val('sorTerm') || 25);
+            var collected = nonneg('sorRent') * (1 - Math.min(50, Math.max(0, val('sorVacancy'))) / 100);
+            var expenses = nonneg('sorTax') + nonneg('sorInsurance') + nonneg('sorMaintenance') + nonneg('sorOther');
+            var pmt = monthlyPayment(balance, rate, term);
+            var monthsPaid = Math.min(60, term * 12);
+            var monthlyCash = collected - expenses - pmt;
+            var cashFlow = collected * 60 - expenses * 60 - pmt * monthsPaid;
+            var endBalance = balanceAfter(balance, rate, term, 60);
+            var principal = Math.max(0, balance - endBalance);
+            var sellNow = value - value * sellPct / 100 - balance;
+            var rentThenSell = cashFlow + value - value * sellPct / 100 - endBalance;
+            var diff = rentThenSell - sellNow;
+            el('sorMonthlyCash').textContent = money(monthlyCash);
+            el('sorSellNow').textContent = money(sellNow);
+            el('sorCashFlow').textContent = money(cashFlow);
+            el('sorPrincipal').textContent = money(principal);
+            el('sorRentThenSell').textContent = money(rentThenSell);
+            var verdict = el('sorVerdict');
+            if (Math.abs(diff) < 500) {
+                verdict.className = 'verdict rent';
+                verdict.innerHTML = '<strong>Verdict: about even at year 5.</strong> Under these flat assumptions, the decision turns on risk, effort and flexibility more than the modeled dollars.';
+            } else if (diff > 0) {
+                verdict.className = 'verdict buy';
+                verdict.innerHTML = '<strong>Verdict: renting first is ahead by about ' + money(diff) + ' at year 5.</strong> That combines five years of rental cash flow with the principal paid down before the modeled sale.';
+            } else {
+                verdict.className = 'verdict rent';
+                verdict.innerHTML = '<strong>Verdict: selling now is ahead by about ' + money(-diff) + ' at year 5.</strong> The modeled rent does not overcome the starting sale proceeds under these assumptions.';
+            }
+        }
+        bind(['sorValue','sorSellPct','sorRent','sorTax','sorInsurance','sorMaintenance','sorOther','sorVacancy','sorMortgage','sorRate','sorTerm'], calcSor);
+
+        /* 1031 deadlines */
+        function calcEx() {
+            var price = nonneg('exPrice'), costs = nonneg('exCosts'), debt = nonneg('exDebt');
+            var target = Math.max(0, price - costs), cash = Math.max(0, target - debt);
+            el('exTarget').textContent = money(target);
+            el('exCash').textContent = money(cash);
+            el('exDebtTarget').textContent = money(debt);
+            var raw = el('exDate').value;
+            if (!raw) { el('exIdDate').textContent = '—'; el('exCloseDate').textContent = '—'; return; }
+            var parts = raw.split('-').map(Number);
+            var base = Date.UTC(parts[0], parts[1] - 1, parts[2], 12, 0, 0);
+            var fmtDate = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+            el('exIdDate').textContent = fmtDate.format(new Date(base + 45 * 86400000));
+            el('exCloseDate').textContent = fmtDate.format(new Date(base + 180 * 86400000));
+        }
+        bind(['exDate','exPrice','exCosts','exDebt'], calcEx);
+
+        /* ADU Payback */
+        function calcAdu() {
+            var total = nonneg('aduBuild') + nonneg('aduFees');
+            var monthly = nonneg('aduRent') - nonneg('aduExpenses') - nonneg('aduFinanceMonthly');
+            var tenCash = monthly * 120, cumulative = tenCash - total;
+            el('aduTotalProject').textContent = money(total);
+            el('aduMonthly').textContent = money(monthly);
+            el('aduTenYearCash').textContent = money(tenCash);
+            el('aduTenYear').textContent = money(cumulative);
+            var payback = el('aduPayback'), verdict = el('aduVerdict');
+            if (monthly <= 0) {
+                payback.textContent = 'No payback';
+                verdict.className = 'verdict rent';
+                verdict.innerHTML = '<strong>Verdict: the rent does not cover the entered monthly costs.</strong> At these numbers, the project does not begin recovering its upfront cost.';
+            } else {
+                var years = total / (monthly * 12);
+                payback.textContent = years.toFixed(1) + ' years';
+                verdict.className = cumulative >= 0 ? 'verdict buy' : 'verdict rent';
+                verdict.innerHTML = cumulative >= 0
+                    ? '<strong>Verdict: the simple model recovers the project cost inside ten years.</strong> Estimated cumulative after project cost: ' + money(cumulative) + '.'
+                    : '<strong>Verdict: ten years is not enough to recover the project cost in this simple model.</strong> Estimated shortfall after ten years: ' + money(-cumulative) + '.';
+            }
+        }
+        bind(['aduBuild','aduFees','aduRent','aduExpenses','aduFinanceMonthly'], calcAdu);
+
+        calcFcp(); calcStx(); calcSor(); calcEx(); calcAdu();
     })();
     </script>
 

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closing Costs by State: WA, AZ & NY Buyer and Seller Ranges | VDI Realty</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
+    <meta name="description" content="Typical buyer and seller closing costs in Washington, Arizona and New York, with agent compensation shown separately and state taxes, title, escrow, lender and attorney items explained.">
+    <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="home-pro.css">
+    <style>
+        .page-hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%); color:#fff; padding:72px 0 60px; }
+        .page-hero h1 { font-family:var(--serif); font-weight:600; font-size:2.7rem; line-height:1.12; margin:14px 0 16px; max-width:760px; }
+        .page-hero h1 em { font-style:italic; color:var(--gold); }
+        .page-hero .lede { color:#dbe4ee; font-size:1.08rem; max-width:680px; margin:0; }
+        .article { max-width:940px; }
+        .content-card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:34px; margin-bottom:30px; }
+        .content-card h2 { font-family:var(--serif); color:var(--navy); font-size:2rem; line-height:1.2; margin:0 0 14px; }
+        .content-card h3 { font-family:var(--serif); color:var(--navy); margin:0 0 8px; }
+        .content-card p, .content-card li { color:var(--muted); }
+        .two-grid, .three-grid { display:grid; gap:18px; }
+        .two-grid { grid-template-columns:1fr 1fr; }
+        .three-grid { grid-template-columns:repeat(3,1fr); }
+        @media(max-width:820px){ .two-grid,.three-grid{grid-template-columns:1fr;} .content-card{padding:24px;} .page-hero h1{font-size:2.15rem;} }
+        .mini-card { border:1px solid var(--line); border-radius:12px; padding:20px; background:var(--paper); }
+        .mini-card i { color:var(--gold-deep); font-size:1.35rem; margin-bottom:10px; }
+        .mini-card p { margin:0; font-size:.93rem; }
+        .callout { border:1px solid #ead9a8; background:#fff8e8; color:#5f4b12; border-radius:12px; padding:18px 20px; margin:20px 0; }
+        .callout strong { color:var(--navy); }
+        .check-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        @media(max-width:760px){.check-grid{grid-template-columns:1fr;}}
+        .check-item { display:flex; gap:14px; border:1px solid var(--line); background:#fff; border-radius:12px; padding:19px; }
+        .check-box { flex:0 0 24px; width:24px; height:24px; border:2px solid var(--gold-deep); border-radius:5px; margin-top:3px; background:#fff; }
+        .check-item h3 { font-size:1.08rem; }
+        .check-item p { margin:0; font-size:.92rem; }
+        .check-item .action { display:block; color:var(--navy); font-weight:700; margin-top:8px; }
+        .timeline-list { display:grid; gap:14px; }
+        .timeline-row { display:grid; grid-template-columns:170px 1fr; gap:20px; border:1px solid var(--line); border-radius:12px; padding:20px; background:#fff; }
+        @media(max-width:700px){.timeline-row{grid-template-columns:1fr; gap:6px;}}
+        .timeline-when { font-family:var(--serif); font-weight:700; color:var(--gold-deep); font-size:1.05rem; }
+        .timeline-row h3 { margin-top:0; }
+        .timeline-row p { margin:0; }
+        .table-wrap { overflow-x:auto; margin:18px 0; }
+        table { width:100%; border-collapse:collapse; min-width:700px; font-size:.93rem; }
+        th { background:var(--navy); color:#fff; text-align:left; padding:12px; }
+        td { border-bottom:1px solid var(--line); padding:12px; vertical-align:top; color:var(--muted); }
+        td strong, th strong { color:inherit; }
+        td:first-child { color:var(--navy); font-weight:700; white-space:nowrap; }
+        .cta-band { background:var(--navy); color:#fff; border-radius:var(--radius); padding:32px; margin:30px 0; }
+        .cta-band h2 { color:#fff; margin-top:0; }
+        .cta-band p { color:#cdd8e4; }
+        .cta-actions { display:flex; gap:13px; flex-wrap:wrap; margin-top:20px; }
+        .btn-outline-light { background:transparent; color:#fff; border-color:rgba(255,255,255,.55); }
+        .btn-outline-light:hover { border-color:var(--gold); color:var(--gold-soft); }
+        .email-box { margin-top:26px; border:1px solid var(--line); border-radius:12px; background:var(--paper); padding:20px 22px; }
+        .email-box h3 { font-family:var(--serif); color:var(--navy); font-size:1.25rem; margin:0 0 5px; }
+        .email-box p { color:var(--muted); font-size:.92rem; }
+        .fld { margin-bottom:12px; }
+        .fld input { width:100%; padding:11px 13px; border:1px solid var(--line); border-radius:10px; font-family:var(--sans); font-size:1rem; color:var(--ink); background:#fff; }
+        .fld-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        @media(max-width:560px){.fld-row{grid-template-columns:1fr;}}
+        .form-message { display:none; border-radius:9px; padding:11px 14px; font-size:.9rem; margin-top:12px; }
+        .related-links { display:flex; gap:20px; flex-wrap:wrap; margin-top:20px; }
+        .source-note { font-size:.84rem; color:var(--muted); }
+        @media print {
+            .utility-bar,.masthead,.mobile-menu,footer,.no-print { display:none !important; }
+            body { background:#fff; }
+            .section { padding:16px 0; }
+            .page-hero { background:#fff; color:#000; padding:10px 0 24px; }
+            .page-hero h1,.page-hero .lede { color:#000; max-width:none; }
+            .content-card,.check-item,.timeline-row { box-shadow:none; break-inside:avoid; }
+            a { color:#000; text-decoration:none; }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="utility-bar">
+        <div class="wrap">
+            <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
+            <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></span>
+        </div>
+    </div>
+    <header class="masthead">
+        <div class="wrap">
+            <a class="wordmark" href="index.html">VDI<span class="wm-dot">·</span>REALTY</a>
+            <nav class="main-nav">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="free-tools.html">Free Tools</a>
+                <a href="tools.html">Tools</a>
+                <a href="index.html#guides" style="color: var(--gold-deep);">Guides</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="index.html#contact" class="nav-cta">Contact</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="listings.html">Listings</a>
+        <a href="fsbo-listings.html">FSBO</a>
+        <a href="builder-listings.html">Builders</a>
+        <a href="free-tools.html">Free Tools</a>
+        <a href="tools.html">Tools</a>
+        <a href="index.html#guides">Guides</a>
+        <a href="relocation.html">Relocation</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+
+
+    <section class="page-hero">
+        <div class="wrap">
+            <span class="eyebrow eyebrow-light">State guide</span>
+            <h1>Closing costs by state: <em>WA, AZ, NY</em></h1>
+            <p class="lede">Typical buyer and seller costs in VDI Realty's three farm states — with agent compensation separated from taxes, title, escrow, lender and attorney charges so the ranges do not hide the biggest variable.</p>
+        </div>
+    </section>
+
+    <section class="section" style="padding-top:56px;">
+        <div class="wrap article">
+            <div class="content-card">
+                <span class="eyebrow">Read this first</span>
+                <h2>Agent compensation is <em>not</em> baked into the first table</h2>
+                <p>Compensation is negotiable and depends on the listing agreement, buyer agreement and final contract. The planning ranges below first exclude all agent compensation. A second table then shows what seller totals look like if the seller's agreement makes the seller responsible for total compensation modeled at 5%–6% of price.</p>
+                <div class="callout"><strong>Cash-to-close is not the same as closing costs.</strong> Down payment, prepaid property taxes and insurance, initial escrow deposits and prepaid interest affect the cash a buyer needs, but they are not all fees. The ranges here focus on transaction charges and taxes; ask the lender for a Loan Estimate that separates them.</div>
+                <h3>Planning ranges excluding agent compensation</h3>
+                <div class="table-wrap"><table>
+                    <thead><tr><th>State</th><th>Buyer — financed purchase</th><th>Seller — before agent compensation</th><th>Main reason for the range</th></tr></thead>
+                    <tbody>
+                        <tr><td>Washington</td><td><strong>About 1%–3%</strong> of price</td><td><strong>About 1.5%–3%</strong> of price</td><td>Graduated state REET plus possible local REET is usually the seller's largest non-compensation cost; buyer cost depends mainly on the loan.</td></tr>
+                        <tr><td>Arizona</td><td><strong>About 1%–3%</strong> of price</td><td><strong>About 0.5%–1.5%</strong> of price</td><td>No Arizona real-estate transfer tax. Title, escrow, recording and HOA-related charges dominate the seller side.</td></tr>
+                        <tr><td>New York</td><td><strong>About 2%–5%</strong> of price</td><td><strong>About 1%–3%</strong> outside NYC; <strong>about 2%–4%</strong> in NYC</td><td>Attorneys, title charges, mortgage recording tax on many financed purchases, the buyer-paid mansion tax at $1M+, and NYC transfer taxes push costs higher.</td></tr>
+                    </tbody>
+                </table></div>
+                <p class="source-note">Cash buyers usually land lower because loan origination, lender title and mortgage-tax items may disappear. Co-ops follow a different cost pattern from houses and condos.</p>
+                <h3>If the seller pays total agent compensation modeled at 5%–6%</h3>
+                <div class="table-wrap"><table>
+                    <thead><tr><th>Seller scenario</th><th>Add to the range above</th><th>Illustrative all-in seller total</th></tr></thead>
+                    <tbody>
+                        <tr><td>Washington</td><td>5%–6%</td><td><strong>About 6.5%–9%</strong></td></tr>
+                        <tr><td>Arizona</td><td>5%–6%</td><td><strong>About 5.5%–7.5%</strong></td></tr>
+                        <tr><td>New York — outside NYC</td><td>5%–6%</td><td><strong>About 6%–9%</strong></td></tr>
+                        <tr><td>New York City</td><td>5%–6%</td><td><strong>About 7%–10%</strong></td></tr>
+                    </tbody>
+                </table></div>
+                <p>If the buyer owes compensation to the buyer's own broker under a buyer agreement, add that exact agreed amount to the buyer's budget. Do not assume the seller is paying it.</p>
+            </div>
+
+            <div class="content-card">
+                <span class="eyebrow">Washington</span>
+                <h2>Washington: REET drives the seller side</h2>
+                <div class="two-grid">
+                    <div class="mini-card"><h3>Typical buyer items</h3><p>Loan origination and underwriting, appraisal, credit report, lender's title policy, escrow share, recording, flood certification, and prepaid taxes/insurance shown separately by the lender.</p></div>
+                    <div class="mini-card"><h3>Typical seller items</h3><p>Real estate excise tax (REET), owner's title policy where customary or negotiated, escrow share, deed recording/release charges, payoff-related fees and prorations.</p></div>
+                </div>
+                <p style="margin-top:18px;">For 2026, Washington's state REET is graduated: 1.10% on the portion up to $525,000; 1.28% on the portion to $1,525,000; 2.75% on the portion to $3,025,000; and 3.00% above that. Counties and cities can add local REET, and thresholds are periodically adjusted — confirm the current Washington Department of Revenue schedule for your closing date.</p>
+            </div>
+
+            <div class="content-card">
+                <span class="eyebrow">Arizona</span>
+                <h2>Arizona: no state transfer tax</h2>
+                <div class="two-grid">
+                    <div class="mini-card"><h3>Typical buyer items</h3><p>Loan charges, appraisal, credit report, lender's title policy, escrow share, recording, inspections, and prepaid taxes/insurance shown separately by the lender.</p></div>
+                    <div class="mini-card"><h3>Typical seller items</h3><p>Owner's title policy where required by the contract or local custom, escrow share, recording/release charges, HOA disclosure and transfer charges, payoff fees and prorations.</p></div>
+                </div>
+                <p style="margin-top:18px;">Arizona's lack of a transfer tax is the main reason its non-compensation seller range is lower than Washington's or New York's. HOA communities can narrow that advantage when disclosure, transfer and prepaid association charges stack up.</p>
+            </div>
+
+            <div class="content-card">
+                <span class="eyebrow">New York</span>
+                <h2>New York: attorneys and layered taxes</h2>
+                <div class="two-grid">
+                    <div class="mini-card"><h3>Typical buyer items</h3><p>Buyer's attorney, lender and bank-attorney charges, appraisal, title insurance for houses/condos, recording, mortgage recording tax where applicable, and the mansion tax on residential purchases of $1 million or more.</p></div>
+                    <div class="mini-card"><h3>Typical seller items</h3><p>Seller's attorney, New York State transfer tax, title/closing adjustments, recording and payoff items, and any building flip tax or association charge imposed by the property's documents.</p></div>
+                </div>
+                <ul>
+                    <li><strong>State transfer tax:</strong> generally $2 per $500 of consideration — 0.4% — and normally paid by the seller unless the contract shifts it.</li>
+                    <li><strong>Mansion tax:</strong> an additional buyer tax beginning at 1% for residential consideration of $1 million or more; higher NYC supplemental rates apply at higher price tiers.</li>
+                    <li><strong>NYC transfer tax:</strong> for common residential resales, the city tax is generally 1% at $500,000 or less and 1.425% above $500,000, normally seller-paid by custom or contract.</li>
+                    <li><strong>Mortgage recording tax:</strong> many NYC residential mortgages fall around 1.8%–1.925% of the loan before property-specific rules and credits; this is a major reason financed NYC purchases cost more to close.</li>
+                    <li><strong>Co-ops are different:</strong> a share loan is not a mortgage on real property, so mortgage recording tax and standard title treatment differ; board, bank and building fees take their place.</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <span class="eyebrow">Cross-check</span>
+                <h2>Averages are a sanity check, not a quote</h2>
+                <p>Bankrate's state closing-cost study, using LodeStar data, reported average purchase closing costs including taxes of about $3,574 in Arizona, $5,995 in Washington and $13,738 in New York. Those are averages at each state's own average sale price and mix of transactions — useful for spotting an estimate that is wildly off, not for applying one percentage to every home.</p>
+                <div class="cta-band">
+                    <h2>Estimate your own transaction</h2>
+                    <p>Use the closing-cost estimator for an itemized starting point, then use the Seller Net Sheet to see what remains after the mortgage and negotiated costs.</p>
+                    <div class="cta-actions">
+                        <a class="btn btn-gold" href="closing-costs.html">Open the Closing Cost Estimator <i class="fas fa-arrow-right"></i></a>
+                        <a class="btn btn-outline-light" href="tools.html#seller-net-sheet">Open the Seller Net Sheet</a>
+                    </div>
+                </div>
+                <div class="related-links">
+                    <a class="card-link" href="selling-your-first-home-timeline.html">Selling Your First Home: A Timeline <i class="fas fa-arrow-right"></i></a>
+                    <a class="card-link" href="tools.html#sell-or-hold-tax">Sell-or-Hold Tax Estimator <i class="fas fa-arrow-right"></i></a>
+                    <a class="card-link" href="tools.html#exchange-1031">1031 Deadline Calculator <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <p class="source-note">Sources consulted during preparation: Washington Department of Revenue REET guidance; New York State Department of Taxation and Finance real-estate transfer-tax guidance; Bankrate/LodeStar average purchase closing costs. Typical ranges are educational estimates — not tax, legal or financial advice. Confirm every figure with your lender, escrow or title company, and attorney before signing.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a class="wordmark" href="index.html" style="text-decoration:none">VDI<span class="wm-dot">·</span>REALTY</a>
+                    <p class="areas">Serving Washington, Arizona &amp; New York</p>
+                    <p>A brokerage network for buyers, sellers, builders, and investors — listings, FSBO, property management, and relocation.</p>
+                    <div class="foot-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5>Explore</h5>
+                    <ul class="foot-links">
+                        <li><a href="listings.html">All listings</a></li>
+                        <li><a href="fsbo-listings.html">FSBO listings</a></li>
+                        <li><a href="builder-listings.html">New construction</a></li>
+                        <li><a href="property-management.html">Property management</a></li>
+                        <li><a href="relocation.html">Relocation</a></li>
+                        <li><a href="bills-that-survive-your-payoff.html">Bills after payoff</a></li>
+                        <li><a href="selling-your-first-home-timeline.html">First-home selling timeline</a></li>
+                        <li><a href="closing-costs-by-state.html">Closing costs by state</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <ul class="foot-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+12068800637">(206) 880-0637</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Washington · Arizona · New York</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>&copy; 2026 VDI Realty. All Rights Reserved. <span class="brokered">Brokered by Realty Connect</span></span>
+                <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></span>
+            </div>
+            <p style="font-size:0.8rem; color:#8fa3ba; margin:14px 0 0; text-align:center;"><i class="fas fa-house-chimney" style="color:var(--gold);"></i> Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</p>
+        </div>
+    </footer>
+    <script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.menu-toggle i');
+        menu.classList.toggle('active');
+        if (menu.classList.contains('active')) { toggle.classList.remove('fa-bars'); toggle.classList.add('fa-times'); }
+        else { toggle.classList.remove('fa-times'); toggle.classList.add('fa-bars'); }
+    }
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.menu-toggle');
+        if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !toggle.contains(event.target)) toggleMobileMenu();
+    });
+    </script>
+
+</body>
+</html>
