@@ -816,6 +816,26 @@
     </script>
 
     <script>
+    /* Tool-use beacon: counts the first result each calculator produces per page view, on our own API. Fire-and-forget; wrapped so it can never break or delay a calculator. */
+    window.vdiToolUse = (function () {
+        var fired = {};
+        var url = 'https://api.vdirealty.com/api/stats/tool-use';
+        return function (tool) {
+            try {
+                if (fired[tool]) return;
+                fired[tool] = true;
+                var payload = JSON.stringify({ tool: tool });
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+                } else if (window.fetch) {
+                    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(function () {});
+                }
+            } catch (e) {}
+        };
+    })();
+    </script>
+
+    <script>
     (function () {
         'use strict';
         var $ = function (id) { return document.getElementById(id); };
@@ -924,6 +944,7 @@
             }
             $('rvbYears2').innerHTML = html;
             lastRvb = { v: v, at: at, breakeven: breakeven };
+            if (window.vdiToolUse) vdiToolUse('rent-vs-buy');
         }
         ['rvbRent','rvbPrice','rvbDown','rvbRate','rvbTerm','rvbTax','rvbIns','rvbHoa','rvbYears',
          'rvbRentInc','rvbApprec','rvbMaint','rvbOpp','rvbBuyClose','rvbSell'].forEach(function (id) {
@@ -969,6 +990,7 @@
             lastNs = { price: price, mortgage: mortgage, liens: liens, commPctTotal: commPctTotal,
                        commPct: commPct, fsbo: fsbo, comm: comm, excisePct: num('nsExcise'), excise: excise,
                        closing: closing, conc: conc, net: net };
+            if (window.vdiToolUse) vdiToolUse('seller-net-sheet');
         }
         ['nsPrice','nsMortgage','nsLiens','nsComm','nsExcise','nsConc','nsCloseVal'].forEach(function (id) {
             $(id).addEventListener('input', calcNs);
@@ -1097,6 +1119,7 @@
             el('fcpInsOut').textContent = money(ins);
             el('fcpHoaOut').textContent = money(hoa);
             el('fcpOtherOut').textContent = money(other);
+            if (window.vdiToolUse) vdiToolUse('free-and-clear');
         }
         bind(['fcpTax','fcpInsurance','fcpHoaAmount','fcpHoaFreq','fcpOther','fcpPI'], calcFcp);
 
@@ -1122,6 +1145,7 @@
                 : (eligible
                     ? 'At the years entered, the basic 2-of-5-year ownership and use tests are met. The exclusion is capped at both the statutory maximum and the actual gain.'
                     : 'At the years entered, the basic 2-of-5-year ownership and use tests are not both met, so this model applies no §121 exclusion. A partial exclusion may still exist in specific circumstances.');
+            if (window.vdiToolUse) vdiToolUse('sell-or-hold-tax');
         }
         bind(['stxPurchase','stxImprovements','stxValue','stxOwned','stxLived','stxStatus','stxRate'], calcStx);
 
@@ -1156,6 +1180,7 @@
                 verdict.className = 'verdict rent';
                 verdict.innerHTML = '<strong>Verdict: selling now is ahead by about ' + money(-diff) + ' at year 5.</strong> The modeled rent does not overcome the starting sale proceeds under these assumptions.';
             }
+            if (window.vdiToolUse) vdiToolUse('sell-or-rent');
         }
         bind(['sorValue','sorSellPct','sorRent','sorTax','sorInsurance','sorMaintenance','sorOther','sorVacancy','sorMortgage','sorRate','sorTerm'], calcSor);
 
@@ -1166,6 +1191,7 @@
             el('exTarget').textContent = money(target);
             el('exCash').textContent = money(cash);
             el('exDebtTarget').textContent = money(debt);
+            if (window.vdiToolUse) vdiToolUse('exchange-1031');
             var raw = el('exDate').value;
             if (!raw) { el('exIdDate').textContent = '—'; el('exCloseDate').textContent = '—'; return; }
             var parts = raw.split('-').map(Number);
@@ -1198,6 +1224,7 @@
                     ? '<strong>Verdict: the simple model recovers the project cost inside ten years.</strong> Estimated cumulative after project cost: ' + money(cumulative) + '.'
                     : '<strong>Verdict: ten years is not enough to recover the project cost in this simple model.</strong> Estimated shortfall after ten years: ' + money(-cumulative) + '.';
             }
+            if (window.vdiToolUse) vdiToolUse('adu-payback');
         }
         bind(['aduBuild','aduFees','aduRent','aduExpenses','aduFinanceMonthly'], calcAdu);
 
