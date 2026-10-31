@@ -468,5 +468,20 @@ details.faq .faq-body a { color: var(--gold-deep); font-weight: 700; }
             }
         });
     </script>
+
+<script>
+/* Site traffic beacon: counts this page view (page + referrer source only) on our own API. Fire-and-forget; can never affect the page. */
+(function () {
+  try {
+    var payload = JSON.stringify({ page: location.pathname, ref: document.referrer || '' });
+    var url = 'https://api.vdirealty.com/api/stats/pageview';
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+    } else if (window.fetch) {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(function () {});
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>

@@ -68,5 +68,20 @@
         <p style="margin-top: 20px;">Redirecting you now...</p>
         <p style="margin-top: 15px; font-size: 0.9rem;">If you're not redirected automatically, <a href="listings.html">click here</a>.</p>
     </div>
+
+<script>
+/* Site traffic beacon: counts this page view (page + referrer source only) on our own API. Fire-and-forget; can never affect the page. */
+(function () {
+  try {
+    var payload = JSON.stringify({ page: location.pathname, ref: document.referrer || '' });
+    var url = 'https://api.vdirealty.com/api/stats/pageview';
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+    } else if (window.fetch) {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(function () {});
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
