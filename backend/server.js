@@ -168,6 +168,67 @@ app.get('/api/stats/tool-use', (req, res) => {
     res.json({ total: log.length, total30d, byTool, byTool30d });
 });
 
+// --- Site traffic stats: every page beacons its view (page + referrer source only) ---
+const pageViewsPath = path.join(__dirname, 'page-views.json');
+function readPageViewsLog() {
+    let log = [];
+    try {
+        log = JSON.parse(fs.readFileSync(pageViewsPath, 'utf8'));
+        if (!Array.isArray(log)) log = [];
+    } catch (e) { log = []; }
+    return log;
+}
+function sourceFromRef(ref) {
+    if (!ref || typeof ref !== 'string') return 'direct';
+    let host = '';
+    try { host = new URL(ref).hostname.toLowerCase(); } catch (e) { return 'direct'; }
+    if (!host || host === 'vdirealty.com' || host === 'www.vdirealty.com') return 'direct';
+    if (host === 'youtu.be' || host === 'youtube.com' || host.endsWith('.youtube.com')) return 'youtube';
+    if (host === 'fb.com' || host === 'facebook.com' || host.endsWith('.facebook.com')) return 'facebook';
+    if (host === 'instagram.com' || host.endsWith('.instagram.com')) return 'instagram';
+    if (host.includes('google.')) return 'google';
+    if (host === 'chatgpt.com' || host.endsWith('.chatgpt.com')) return 'chatgpt';
+    if (host === 'bing.com' || host.endsWith('.bing.com')) return 'bing';
+    return ('other:' + host).slice(0, 60);
+}
+
+// Pageview beacon: page path + derived source + time only. No IP, no user agent, no cookies.
+app.post('/api/stats/pageview', (req, res) => {
+    const b = req.body || {};
+    const page = b.page;
+    const valid = typeof page === 'string' && page.length > 0 && page.length <= 200 &&
+        (page.startsWith('/') || !page.includes('/')) && !page.includes('..');
+    if (!valid) {
+        return res.status(400).json({ error: 'invalid page' });
+    }
+    const log = readPageViewsLog();
+    log.push({ ts: new Date().toISOString(), page, source: sourceFromRef(b.ref) });
+    const trimmed = log.length > 10000 ? log.slice(log.length - 10000) : log;
+    try { fs.writeFileSync(pageViewsPath, JSON.stringify(trimmed)); } catch (e) {}
+    res.json({ ok: true });
+});
+
+// Public aggregate traffic stats (counts only, no personal data)
+app.get('/api/stats/traffic', (req, res) => {
+    const log = readPageViewsLog();
+    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const byPage = {};
+    const bySource = {};
+    const byPage30d = {};
+    const bySource30d = {};
+    let total30d = 0;
+    for (const e of log) {
+        byPage[e.page] = (byPage[e.page] || 0) + 1;
+        bySource[e.source] = (bySource[e.source] || 0) + 1;
+        if (new Date(e.ts).getTime() >= cutoff) {
+            byPage30d[e.page] = (byPage30d[e.page] || 0) + 1;
+            bySource30d[e.source] = (bySource30d[e.source] || 0) + 1;
+            total30d++;
+        }
+    }
+    res.json({ total: log.length, total30d, byPage, bySource, byPage30d, bySource30d });
+});
+
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
