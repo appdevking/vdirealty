@@ -124,6 +124,50 @@ app.get('/api/stats/attribution', (req, res) => {
     res.json({ total30d: total, bySource, byContent });
 });
 
+// --- Tool-use stats: calculators on tools.html beacon first result per page view ---
+const toolUsePath = path.join(__dirname, 'tool-use.json');
+const TOOL_SLUGS = ['rent-vs-buy', 'seller-net-sheet', 'free-and-clear', 'sell-or-hold-tax', 'sell-or-rent', 'exchange-1031', 'adu-payback'];
+function readToolUseLog() {
+    let log = [];
+    try {
+        log = JSON.parse(fs.readFileSync(toolUsePath, 'utf8'));
+        if (!Array.isArray(log)) log = [];
+    } catch (e) { log = []; }
+    return log;
+}
+
+// Tool-use beacon: counts only, no personal data. Unknown tool -> 400.
+app.post('/api/stats/tool-use', (req, res) => {
+    const tool = (req.body || {}).tool;
+    if (!TOOL_SLUGS.includes(tool)) {
+        return res.status(400).json({ error: 'unknown tool' });
+    }
+    const log = readToolUseLog();
+    log.push({ ts: new Date().toISOString(), tool });
+    const trimmed = log.length > 10000 ? log.slice(log.length - 10000) : log;
+    try { fs.writeFileSync(toolUsePath, JSON.stringify(trimmed)); } catch (e) {}
+    res.json({ ok: true });
+});
+
+// Public aggregate tool-use stats (counts only, no personal data)
+app.get('/api/stats/tool-use', (req, res) => {
+    const log = readToolUseLog();
+    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const byTool = {};
+    const byTool30d = {};
+    for (const s of TOOL_SLUGS) { byTool[s] = 0; byTool30d[s] = 0; }
+    let total30d = 0;
+    for (const e of log) {
+        if (!TOOL_SLUGS.includes(e.tool)) continue;
+        byTool[e.tool] += 1;
+        if (new Date(e.ts).getTime() >= cutoff) {
+            byTool30d[e.tool] += 1;
+            total30d++;
+        }
+    }
+    res.json({ total: log.length, total30d, byTool, byTool30d });
+});
+
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
