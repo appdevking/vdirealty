@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Real Estate Calculators — Rent vs Buy, Seller Net, Taxes, 1031, ADU & More | VDI Realty</title>
+    <title>Free Real Estate Calculators — Mortgage Payment, Affordability, Rent vs Buy, Seller Net, Closing Costs & More | VDI Realty</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
 
-    <meta name="description" content="Free VDI Realty calculators for renting vs buying, seller proceeds, life after a mortgage payoff, home-sale taxes, renting vs selling, 1031 exchange deadlines and ADU payback. Instant educational estimates, no sign-up.">
-    <meta name="keywords" content="rent vs buy calculator, seller net sheet, free and clear planner, home sale tax estimator, sell or rent calculator, 1031 deadline calculator, ADU payback calculator, VDI Realty">
+    <meta name="description" content="Free VDI Realty calculators for mortgage payments, affordability, renting vs buying, seller proceeds, closing costs, life after a mortgage payoff, home-sale taxes, renting vs selling, 1031 exchange deadlines and ADU payback. Instant educational estimates, no sign-up.">
+    <meta name="keywords" content="mortgage payment calculator, affordability calculator, closing cost estimator, rent vs buy calculator, seller net sheet, free and clear planner, home sale tax estimator, sell or rent calculator, 1031 deadline calculator, ADU payback calculator, VDI Realty">
 
     <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="home-pro.css">
@@ -231,7 +231,7 @@
         <div class="wrap">
             <span class="eyebrow eyebrow-light">Free tools</span>
             <h1>Run the numbers <em>before</em> you move</h1>
-            <p class="lede">Seven free calculators for the decisions around a move — rent or buy, sell or hold, rent it out, exchange it, build an ADU, or plan life after the mortgage. Instant results, no sign-up.</p>
+            <p class="lede">Ten free calculators for the decisions around a move — your monthly payment, what you can afford, rent or buy, sell or hold, closing costs, rent it out, exchange it, build an ADU, or plan life after the mortgage. Instant results, no sign-up.</p>
             <div class="hero-jump">
                 <a href="#rent-vs-buy" class="btn btn-gold">Rent vs Buy <i class="fas fa-arrow-down"></i></a>
                 <a href="#seller-net-sheet" class="btn btn-outline-light">Seller Net Sheet</a>
@@ -250,6 +250,8 @@
                 <p class="lede">Every calculator is free and runs instantly in your browser. Educational estimates only — not an appraisal, loan offer, tax return, or financial advice.</p>
             </div>
             <div class="library-grid">
+                <a class="library-card" href="#mortgage-payment"><i class="fas fa-calculator"></i><strong>Mortgage Payment Calculator</strong><span>The full monthly payment — principal, interest, tax, insurance, PMI and HOA.</span></a>
+                <a class="library-card" href="#affordability"><i class="fas fa-bullseye"></i><strong>How Much House Can I Afford?</strong><span>A 28/36 guideline price range from your income, debts and down payment.</span></a>
                 <a class="library-card" href="#rent-vs-buy"><i class="fas fa-scale-balanced"></i><strong>Rent vs Buy Calculator</strong><span>Compare the full cost of renting with buying over your planned stay.</span></a>
                 <a class="library-card" href="#seller-net-sheet"><i class="fas fa-file-invoice-dollar"></i><strong>Seller Net Sheet</strong><span>Estimate what remains after the mortgage, taxes, closing costs and commissions.</span></a>
                 <a class="library-card" href="#free-and-clear"><i class="fas fa-key"></i><strong>Free-and-Clear Planner</strong><span>Find the bills that continue after payoff and the monthly amount to self-escrow.</span></a>
@@ -257,9 +259,211 @@
                 <a class="library-card" href="#sell-or-rent"><i class="fas fa-scale-balanced"></i><strong>Sell It or Rent It?</strong><span>Compare selling now with five years of renting, then selling.</span></a>
                 <a class="library-card" href="#exchange-1031"><i class="fas fa-calendar-days"></i><strong>1031 Exchange Deadline Calculator</strong><span>Count the 45-day and 180-day deadlines and the full-deferral target.</span></a>
                 <a class="library-card" href="#adu-payback"><i class="fas fa-house-user"></i><strong>ADU Payback Calculator</strong><span>See monthly net, simple payback and the 10-year cumulative result.</span></a>
+                <a class="library-card" href="#closing-costs"><i class="fas fa-receipt"></i><strong>Closing Cost Estimator</strong><span>Itemized buyer and seller closing costs for WA, AZ, NY and other states.</span></a>
                 <a class="library-card" href="bills-that-survive-your-payoff.html"><i class="fas fa-list-check"></i><strong>Guide: Bills That Survive Your Payoff</strong><span>A printable checklist and a three-step self-escrow routine.</span></a>
                 <a class="library-card" href="closing-costs-by-state.html"><i class="fas fa-map-location-dot"></i><strong>Guide: Closing Costs by State</strong><span>Typical WA, AZ and NY buyer and seller costs, with and without agent compensation.</span></a>
             </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         TOOL: MORTGAGE PAYMENT CALCULATOR
+         P&I from the standard amortization formula. Monthly property
+         tax = price × entered tax rate ÷ 12, held flat on today's
+         price. PMI applies only while the entered down payment is
+         under 20% of price, charged at the entered % of the original
+         loan amount per year ÷ 12. Total interest over the term =
+         P&I × number of payments − loan amount.
+         ============================================================ -->
+    <section class="section" id="mortgage-payment" style="padding-bottom: 30px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">For buyers</span>
+                <h2>Mortgage payment, <em>line by line</em></h2>
+                <p class="lede">The advertised loan payment is only part of the check you write. Add taxes, insurance, PMI and HOA dues and see the full monthly number before you tour.</p>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-sliders"></i> Your home &amp; loan</h3>
+                        <p class="tool-sub">The payment updates as you type — principal, interest and the escrow-style extras.</p>
+                        <div class="fld">
+                            <label for="mpPrice">Home price</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="mpPrice" value="650000" min="0" step="5000"></div>
+                        </div>
+                        <div class="fld">
+                            <label for="mpDown">Down payment</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="mpDown" value="130000" min="0" step="1000"></div>
+                            <p class="tool-sub" id="mpDownNote" style="margin-top:7px;">20% down — no PMI at this level.</p>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="mpRate">Mortgage rate</label>
+                                <div class="affix"><input type="number" id="mpRate" class="has-suf" value="7.3" min="0" max="20" step="0.05"><span class="suf">%</span></div>
+                            </div>
+                            <div class="fld">
+                                <label for="mpTerm">Loan term</label>
+                                <select id="mpTerm">
+                                    <option value="30" selected>30 years</option>
+                                    <option value="20">20 years</option>
+                                    <option value="15">15 years</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="mpTaxPct">Property tax <span class="hint">(% of price / yr)</span></label>
+                                <div class="affix"><input type="number" id="mpTaxPct" class="has-suf" value="1" min="0" max="5" step="0.05"><span class="suf">%</span></div>
+                            </div>
+                            <div class="fld">
+                                <label for="mpIns">Homeowner's insurance <span class="hint">($ / mo)</span></label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="mpIns" value="200" min="0" step="10"></div>
+                            </div>
+                        </div>
+                        <div class="fld-row">
+                            <div class="fld">
+                                <label for="mpPmiPct">PMI <span class="hint">(% of loan / yr, if down &lt; 20%)</span></label>
+                                <div class="affix"><input type="number" id="mpPmiPct" class="has-suf" value="0.5" min="0" max="3" step="0.05"><span class="suf">%</span></div>
+                            </div>
+                            <div class="fld">
+                                <label for="mpHoa">HOA dues <span class="hint">($ / mo)</span></label>
+                                <div class="affix"><span class="pre">$</span><input type="number" id="mpHoa" value="0" min="0" step="25"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3><i class="fas fa-receipt"></i> The full monthly payment</h3>
+                        <p class="tool-sub">Every line in the monthly check — not just principal &amp; interest.</p>
+                        <div class="net-lines">
+                            <div class="net-line"><span>Principal &amp; interest</span><span class="amt" id="mpPI">$0</span></div>
+                            <div class="net-line"><span>Property tax</span><span class="amt" id="mpTaxOut">$0</span></div>
+                            <div class="net-line"><span>Homeowner's insurance</span><span class="amt" id="mpInsOut">$0</span></div>
+                            <div class="net-line" id="mpPmiRow" style="display:none;"><span>PMI (down under 20%)</span><span class="amt" id="mpPmiOut">$0</span></div>
+                            <div class="net-line"><span>HOA dues</span><span class="amt" id="mpHoaOut">$0</span></div>
+                        </div>
+                        <div class="net-big">
+                            <div class="k">Estimated monthly payment</div>
+                            <div class="v" id="mpTotal">$0</div>
+                            <div class="s" id="mpLoanNote"></div>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Loan amount</div><div class="v" id="mpLoan">$0</div></div>
+                            <div class="stat-box"><div class="k">Total interest over the term</div><div class="v gold" id="mpInterest">$0</div></div>
+                        </div>
+                        <ul class="assump">
+                            <li>Property tax is modeled flat on today's price; real bills follow the assessed value and your local rates, and usually rise over time.</li>
+                            <li>PMI is charged at the entered rate on the original loan amount, and drops out of this estimate the moment the entered down payment reaches 20%. On a real loan it can typically be removed once you reach 20% equity.</li>
+                            <li>Estimates only — see the note below this tool.</li>
+                        </ul>
+                        <div class="related-links"><a class="card-link" href="#affordability">What can you afford? <i class="fas fa-arrow-right"></i></a><a class="card-link" href="#rent-vs-buy">Rent vs Buy Calculator <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+
+                <div class="email-box">
+                    <h4><i class="fas fa-envelope"></i> Email me the full breakdown</h4>
+                    <p>Optional — we'll send this payment estimate with the line-by-line detail and talk through your situation. No spam, no obligation.</p>
+                    <form onsubmit="return sendBreakdown(event, 'mp')">
+                        <div class="fld-row">
+                            <div class="fld"><input type="text" id="mpLeadName" placeholder="Your name *" required></div>
+                            <div class="fld"><input type="email" id="mpLeadEmail" placeholder="Email address *" required></div>
+                        </div>
+                        <button type="submit" class="btn btn-gold" id="mpLeadBtn"><span>Send my breakdown</span></button>
+                        <div class="form-message" id="mpLeadMsg"></div>
+                    </form>
+                </div>
+            </div>
+
+            <p class="disclaimer" style="text-align:left;">Estimates only. Not an appraisal, loan offer, or financial advice. Your lender's Loan Estimate and Closing Disclosure govern the real figures — rates, taxes, insurance and PMI vary by borrower, property and servicer.</p>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         TOOL: AFFORDABILITY CALCULATOR (28/36 GUIDELINE)
+         Housing budget = min(28% of gross monthly income,
+         36% of gross monthly income − monthly debts); a tighter
+         25/33 variant is shown alongside. Max price solves the
+         payment identity with a 30-year loan:
+           budget = (price − down) × k + price × (1.0%/12) + $200,
+         where k is the per-dollar monthly P&I factor at the entered
+         rate, tax is estimated at 1.0% of price per year and
+         insurance at $200/mo. Guideline estimate only — not a
+         lender pre-approval.
+         ============================================================ -->
+    <section class="section section-alt" id="affordability" style="padding-top: 70px; padding-bottom: 30px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">For buyers</span>
+                <h2>How much house <em>can you afford?</em></h2>
+                <p class="lede">Lenders start with two ratios — housing near 28% of gross income, and housing plus other debts near 36%. Run the standard guideline and a tighter one, then shop the range — not the ceiling.</p>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-wallet"></i> Your income &amp; debts</h3>
+                        <p class="tool-sub">Gross (before-tax) monthly figures — the same starting point a lender uses.</p>
+                        <div class="fld">
+                            <label for="affIncome">Gross monthly income</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="affIncome" value="12000" min="0" step="250"></div>
+                        </div>
+                        <div class="fld">
+                            <label for="affDebts">Monthly debts <span class="hint">(car, student loans, card minimums)</span></label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="affDebts" value="600" min="0" step="50"></div>
+                        </div>
+                        <div class="fld">
+                            <label for="affDown">Down payment saved</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="affDown" value="65000" min="0" step="1000"></div>
+                        </div>
+                        <div class="fld">
+                            <label for="affRate">Mortgage rate <span class="hint">(30-year term)</span></label>
+                            <div class="affix"><input type="number" id="affRate" class="has-suf" value="7.3" min="0" max="20" step="0.05"><span class="suf">%</span></div>
+                        </div>
+                        <ul class="assump">
+                            <li>The payment behind the price range assumes a 30-year loan, property tax at 1.0% of price per year and homeowner's insurance at $200/mo.</li>
+                            <li>HOA dues, PMI (if you put under 20% down) and maintenance are not in the guideline payment — the tighter range leaves room for them.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3><i class="fas fa-bullseye"></i> Your guideline range</h3>
+                        <p class="tool-sub">Standard 28/36 guideline on top; the tighter 25/33 read below it.</p>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Housing budget — 28/36</div><div class="v gold" id="affBudget">$0</div></div>
+                            <div class="stat-box"><div class="k">Tighter budget — 25/33</div><div class="v" id="affBudgetCons">$0</div></div>
+                        </div>
+                        <div class="net-big">
+                            <div class="k">Estimated price range</div>
+                            <div class="v" id="affRange">$0 – $0</div>
+                            <div class="s" id="affRangeNote"></div>
+                        </div>
+                        <div class="net-lines">
+                            <div class="net-line"><span>Loan at the top of the range</span><span class="amt" id="affLoan">$0</span></div>
+                            <div class="net-line"><span>Principal &amp; interest at that loan</span><span class="amt" id="affPI">$0</span></div>
+                            <div class="net-line"><span>Tax (1.0%/yr) + insurance ($200/mo)</span><span class="amt" id="affTI">$0</span></div>
+                        </div>
+                        <div class="verdict rent" id="affVerdict" style="margin-top:18px;"></div>
+                        <p class="fine-print">Guideline estimate only — not a lender pre-approval, loan offer, or financial advice. Lenders also weigh credit history, reserves, employment, the property and program rules; a lower price than the ceiling is often the comfortable one.</p>
+                        <div class="related-links"><a class="card-link" href="#mortgage-payment">Break down a payment <i class="fas fa-arrow-right"></i></a><a class="card-link" href="#rent-vs-buy">Rent vs Buy Calculator <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+
+                <div class="email-box">
+                    <h4><i class="fas fa-envelope"></i> Email me the full breakdown</h4>
+                    <p>Optional — we'll send this affordability estimate with the guideline math and talk through your situation. No spam, no obligation.</p>
+                    <form onsubmit="return sendBreakdown(event, 'aff')">
+                        <div class="fld-row">
+                            <div class="fld"><input type="text" id="affLeadName" placeholder="Your name *" required></div>
+                            <div class="fld"><input type="email" id="affLeadEmail" placeholder="Email address *" required></div>
+                        </div>
+                        <button type="submit" class="btn btn-gold" id="affLeadBtn"><span>Send my breakdown</span></button>
+                        <div class="form-message" id="affLeadMsg"></div>
+                    </form>
+                </div>
+            </div>
+
+            <p class="disclaimer" style="text-align:left;">Estimates only. Not an appraisal, loan offer, pre-approval, or financial advice. The 28/36 and 25/33 ratios are long-standing lender guidelines, not guarantees — your lender's underwriting decides what you qualify for.</p>
         </div>
     </section>
 
@@ -729,6 +933,109 @@
         </div>
     </section>
 
+    <!-- ============================================================
+         TOOL: CLOSING COST ESTIMATOR
+         Line items and ranges mirror closing-costs-by-state.html so
+         the guide and this calculator agree: lender fees 0.5%–1% of
+         the loan (loan assumed at 80% of price), WA seller REET on
+         the guide's graduated 2026 schedule plus 0.5% local
+         (simplified, as in the site's closing-costs.html), NY state
+         transfer tax 0.4% seller-paid, NYC transfer tax 1% / 1.425%,
+         NY mortgage recording tax ~1.8%–1.925% of loan (NYC), NY
+         mansion tax 1% at $1M+. Agent compensation is EXCLUDED,
+         exactly as in the guide's first table; prepaid tax and
+         insurance escrows are shown separately — they are cash to
+         close, not fees.
+         ============================================================ -->
+    <section class="section section-alt" id="closing-costs" style="padding-top: 70px; padding-bottom: 70px;">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Buyer &amp; seller costs</span>
+                <h2>Closing cost <em>estimator</em></h2>
+                <p class="lede">An itemized starting point built from the same figures as our closing-costs guide — state taxes, title, escrow, lender and attorney items, with agent compensation kept out, just like the guide's first table.</p>
+            </div>
+            <div class="tool-card">
+                <div class="tool-grid">
+                    <div>
+                        <h3><i class="fas fa-map-location-dot"></i> Your transaction</h3>
+                        <p class="tool-sub">Pick your side and state — the line items rebuild for each combination.</p>
+                        <div class="fld">
+                            <label for="ccPrice">Home price</label>
+                            <div class="affix"><span class="pre">$</span><input type="number" id="ccPrice" value="650000" min="0" step="5000"></div>
+                        </div>
+                        <div class="fld">
+                            <label for="ccState">State</label>
+                            <select id="ccState">
+                                <option value="wa" selected>Washington</option>
+                                <option value="az">Arizona</option>
+                                <option value="ny">New York</option>
+                                <option value="other">Other state</option>
+                            </select>
+                        </div>
+                        <div class="fld">
+                            <label>You are the</label>
+                            <div>
+                                <span class="seg" role="radiogroup" aria-label="Buyer or seller">
+                                    <label><input type="radio" name="ccRole" value="buyer" checked><span>Buyer</span></label>
+                                    <label><input type="radio" name="ccRole" value="seller"><span>Seller</span></label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="toggle-row" id="ccNycRow" style="display:none;">
+                            <label class="switch">
+                                <input type="checkbox" id="ccNyc">
+                                <span class="track"></span>
+                            </label>
+                            <div>
+                                <div class="t-label">The property is in New York City</div>
+                                <div class="t-note">Adds the NYC transfer tax (seller) and mortgage recording tax (buyer) from the guide.</div>
+                            </div>
+                        </div>
+                        <ul class="assump">
+                            <li>Loan-based fees assume a financed purchase with a loan at 80% of the price. Cash purchases drop the lender lines and usually land lower.</li>
+                            <li>Agent compensation is not included. If a seller's agreement makes the seller responsible for total compensation modeled at 5%–6% of price, add that on top — see the Seller Net Sheet for the full seller picture.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3><i class="fas fa-file-invoice-dollar"></i> Itemized estimate</h3>
+                        <p class="tool-sub">Typical ranges per line — your lender's Loan Estimate or your escrow officer's figures govern the real ones.</p>
+                        <div class="net-lines" id="ccLines"></div>
+                        <div class="net-big">
+                            <div class="k">Estimated closing costs</div>
+                            <div class="v" id="ccTotal">$0 – $0</div>
+                            <div class="s" id="ccTotalNote"></div>
+                        </div>
+                        <div class="stat-grid">
+                            <div class="stat-box"><div class="k">Prepaids &amp; escrow deposits</div><div class="v" id="ccPrepaid">—</div></div>
+                            <div class="stat-box"><div class="k">Cash to close beyond down payment</div><div class="v gold" id="ccCash">$0</div></div>
+                        </div>
+                        <div class="note-box" id="ccGuide"></div>
+                        <ul class="assump">
+                            <li>Washington REET uses the guide's graduated 2026 state schedule plus a simplified 0.5% local REET; your county and city set the actual local add-on.</li>
+                            <li>New York's mansion tax is modeled at the guide's 1% starting rate for purchases of $1M or more; higher NYC supplemental tiers are not modeled. Co-ops follow a different cost pattern and are not modeled.</li>
+                            <li>Prepaids and escrow deposits (property tax and insurance) are cash to close, not fees — the guide separates them for the same reason.</li>
+                        </ul>
+                        <p class="fine-print">Educational estimate — not a quote, tax, legal or financial advice. Confirm every figure with your lender, escrow or title company, and attorney before signing.</p>
+                        <div class="related-links"><a class="card-link" href="closing-costs-by-state.html">Read the state-by-state guide <i class="fas fa-arrow-right"></i></a><a class="card-link" href="#seller-net-sheet">Seller Net Sheet <i class="fas fa-arrow-right"></i></a></div>
+                    </div>
+                </div>
+
+                <div class="email-box">
+                    <h4><i class="fas fa-envelope"></i> Email me the full breakdown</h4>
+                    <p>Optional — we'll send this closing-cost estimate with the itemized lines and talk through your situation. No spam, no obligation.</p>
+                    <form onsubmit="return sendBreakdown(event, 'cc')">
+                        <div class="fld-row">
+                            <div class="fld"><input type="text" id="ccLeadName" placeholder="Your name *" required></div>
+                            <div class="fld"><input type="email" id="ccLeadEmail" placeholder="Email address *" required></div>
+                        </div>
+                        <button type="submit" class="btn btn-gold" id="ccLeadBtn"><span>Send my breakdown</span></button>
+                        <div class="form-message" id="ccLeadMsg"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Related guides -->
     <section class="section section-alt" id="tools-guides" style="padding-top: 70px;">
         <div class="wrap">
@@ -1037,6 +1344,34 @@
                     '; commission ' + s.commPctTotal + '%' + (s.fsbo ? ' (FSBO — listing side removed, effective ' + s.commPct + '%)' : '') +
                     '; excise ' + s.excisePct + '%; closing costs ' + fmt(s.closing) + '; concessions/repairs ' + fmt(s.conc) + '.\n' +
                     'Estimated net proceeds: ' + fmt(s.net) + '. (Estimate only.)';
+            } else if (tool === 'mp' && window.__lastMp) {
+                var m = window.__lastMp;
+                interest = 'Tools Page — Mortgage Payment Calculator';
+                summary = 'Please email me the full breakdown of my Mortgage Payment estimate (vdirealty.com/tools.html).\n' +
+                    'Inputs: home price ' + fmt(m.price) + '; down payment ' + fmt(m.down) + '; rate ' + m.rate +
+                    '%; term ' + m.term + ' yrs; tax ' + m.taxPct + '%/yr; insurance ' + fmt(m.ins) + '/mo; PMI ' +
+                    m.pmiPct + '%/yr; HOA ' + fmt(m.hoa) + '/mo.\n' +
+                    'Result: estimated monthly payment ' + fmt(m.total) + ' (principal & interest ' + fmt(m.pi) +
+                    ', tax ' + fmt(m.tax) + ', insurance ' + fmt(m.ins) + ', PMI ' + fmt(m.pmi) + ', HOA ' + fmt(m.hoa) +
+                    '); loan ' + fmt(m.loan) + '; total interest over the term ' + fmt(m.interest) + '. (Estimate only.)';
+            } else if (tool === 'aff' && window.__lastAff) {
+                var f = window.__lastAff;
+                interest = 'Tools Page — Affordability Calculator';
+                summary = 'Please email me the full breakdown of my Affordability estimate (vdirealty.com/tools.html).\n' +
+                    'Inputs: gross income ' + fmt(f.income) + '/mo; monthly debts ' + fmt(f.debts) +
+                    '; down payment saved ' + fmt(f.down) + '; rate ' + f.rate + '%; term 30 yrs.\n' +
+                    'Result: guideline housing budget ' + fmt(f.budget) + '/mo (28/36) and ' + fmt(f.budgetCons) +
+                    '/mo on the tighter 25/33; estimated price range ' + fmt(f.pLow) + ' – ' + fmt(f.pHigh) +
+                    '. Guideline estimate only — not a pre-approval.';
+            } else if (tool === 'cc' && window.__lastCc) {
+                var c = window.__lastCc;
+                interest = 'Tools Page — Closing Cost Estimator';
+                summary = 'Please email me the full breakdown of my Closing Cost estimate (vdirealty.com/tools.html).\n' +
+                    'Inputs: home price ' + fmt(c.price) + '; state ' + c.stateLabel + '; I am the ' + c.role +
+                    (c.nyc ? ' (New York City)' : '') + '; loan assumed at 80% of price.\n' +
+                    'Result: estimated closing costs ' + fmt(c.tLo) + ' – ' + fmt(c.tHi) +
+                    (c.prepaid ? '; prepaids & escrow deposits ' + fmt(c.prepaid[0]) + ' – ' + fmt(c.prepaid[1]) : '') +
+                    '. Excludes agent compensation. (Estimate only.)';
             } else {
                 return false;
             }
@@ -1229,6 +1564,218 @@
         bind(['aduBuild','aduFees','aduRent','aduExpenses','aduFinanceMonthly'], calcAdu);
 
         calcFcp(); calcStx(); calcSor(); calcEx(); calcAdu();
+    })();
+    </script>
+
+    <script>
+    (function () {
+        'use strict';
+        function el(id) { return document.getElementById(id); }
+        function val(id) { var v = parseFloat(el(id).value); return isNaN(v) ? 0 : v; }
+        function nonneg(id) { return Math.max(0, val(id)); }
+        function money(n) {
+            var neg = n < 0; n = Math.abs(Math.round(n));
+            return (neg ? '-$' : '$') + n.toLocaleString('en-US');
+        }
+        function moneyRange(lo, hi) {
+            return Math.abs(hi - lo) < 0.5 ? money(lo) : money(lo) + ' – ' + money(hi);
+        }
+        function bind(ids, fn) {
+            ids.forEach(function (id) {
+                el(id).addEventListener('input', fn);
+                el(id).addEventListener('change', fn);
+            });
+        }
+        function monthlyPayment(balance, ratePct, termYears) {
+            if (balance <= 0) return 0;
+            var years = Math.max(1, termYears || 1), r = ratePct / 100 / 12, n = years * 12;
+            if (r <= 0) return balance / n;
+            var f = Math.pow(1 + r, n);
+            return balance * r * f / (f - 1);
+        }
+
+        /* Mortgage Payment Calculator */
+        function calcMp() {
+            var price = nonneg('mpPrice');
+            var down = Math.min(price, nonneg('mpDown'));
+            var loan = price - down;
+            var rate = Math.max(0, val('mpRate'));
+            var term = parseInt(el('mpTerm').value, 10) || 30;
+            var taxPct = Math.max(0, val('mpTaxPct')), pmiPct = Math.max(0, val('mpPmiPct'));
+            var pi = monthlyPayment(loan, rate, term);
+            var tax = price * taxPct / 100 / 12;
+            var ins = nonneg('mpIns');
+            var downPct = price > 0 ? down / price * 100 : 0;
+            var pmi = downPct < 20 ? loan * pmiPct / 100 / 12 : 0;
+            var hoa = nonneg('mpHoa');
+            var total = pi + tax + ins + pmi + hoa;
+            var interest = Math.max(0, pi * term * 12 - loan);
+            el('mpPI').textContent = money(pi);
+            el('mpTaxOut').textContent = money(tax);
+            el('mpInsOut').textContent = money(ins);
+            el('mpPmiRow').style.display = pmi > 0 ? '' : 'none';
+            el('mpPmiOut').textContent = money(pmi);
+            el('mpHoaOut').textContent = money(hoa);
+            el('mpTotal').textContent = money(total);
+            el('mpLoanNote').textContent = 'Loan of ' + money(loan) + ' at ' + rate + '% for ' + term + ' years';
+            el('mpLoan').textContent = money(loan);
+            el('mpInterest').textContent = money(interest);
+            var pctTxt = price > 0 ? (Math.round(downPct * 10) / 10) + '% down' : 'No price entered';
+            el('mpDownNote').textContent = price > 0
+                ? pctTxt + (pmi > 0 ? ' — PMI applies below 20% down.' : ' — no PMI at 20% down or more.')
+                : pctTxt + '.';
+            window.__lastMp = { price: price, down: down, loan: loan, rate: rate, term: term,
+                taxPct: taxPct, pmiPct: pmiPct, pi: pi, tax: tax, ins: ins, pmi: pmi, hoa: hoa,
+                total: total, interest: interest };
+            if (window.vdiToolUse) vdiToolUse('mortgage-payment');
+        }
+        bind(['mpPrice','mpDown','mpRate','mpTerm','mpTaxPct','mpIns','mpPmiPct','mpHoa'], calcMp);
+
+        /* Affordability Calculator — 28/36 guideline with a tighter 25/33 read */
+        function affPriceFor(budget, down, k, t) {
+            if (budget <= 0) return 0;
+            return Math.max(0, (budget - 200 + down * k) / (k + t));
+        }
+        function calcAff() {
+            var income = nonneg('affIncome'), debts = nonneg('affDebts'), down = nonneg('affDown');
+            var rate = Math.max(0, val('affRate'));
+            var k = monthlyPayment(1, rate, 30), t = 0.01 / 12;
+            var budget = Math.max(0, Math.min(0.28 * income, 0.36 * income - debts));
+            var budgetCons = Math.max(0, Math.min(0.25 * income, 0.33 * income - debts));
+            var pHigh = affPriceFor(budget, down, k, t);
+            var pLow = affPriceFor(budgetCons, down, k, t);
+            var loan = Math.max(0, pHigh - down);
+            var pi = monthlyPayment(loan, rate, 30);
+            el('affBudget').textContent = money(budget) + ' /mo';
+            el('affBudgetCons').textContent = money(budgetCons) + ' /mo';
+            el('affRange').textContent = moneyRange(pLow, pHigh);
+            el('affRangeNote').textContent = 'With ' + money(down) + ' down at ' + rate + '% for 30 years — payment includes estimated tax (1.0% of price/yr) and insurance ($200/mo)';
+            el('affLoan').textContent = money(loan);
+            el('affPI').textContent = money(pi) + ' /mo';
+            el('affTI').textContent = money(pHigh * 0.01 / 12 + 200) + ' /mo';
+            var vd = el('affVerdict');
+            if (income <= 0) {
+                vd.className = 'verdict rent';
+                vd.innerHTML = '<strong>Add your gross monthly income</strong> to see the guideline range.';
+            } else if (budget <= 0) {
+                vd.className = 'verdict rent';
+                vd.innerHTML = '<strong>Your entered debts use up the whole 36% guideline.</strong> Paying debts down — or choosing a lower price — is what moves this number; the tighter budget shows the same squeeze.';
+            } else {
+                vd.className = 'verdict buy';
+                vd.innerHTML = '<strong>Shop the range, not the ceiling.</strong> The top of the range spends the full 28/36 housing budget of ' + money(budget) + '/mo. The tighter 25/33 budget (' + money(budgetCons) + '/mo) leaves room for maintenance, utilities and life — many buyers are happiest shopping there.';
+            }
+            window.__lastAff = { income: income, debts: debts, down: down, rate: rate,
+                budget: budget, budgetCons: budgetCons, pLow: pLow, pHigh: pHigh };
+            if (window.vdiToolUse) vdiToolUse('affordability');
+        }
+        bind(['affIncome','affDebts','affDown','affRate'], calcAff);
+
+        /* Closing Cost Estimator — items mirror closing-costs-by-state.html */
+        function waReet(price) {
+            var tiers = [[525000, 0.011], [1525000, 0.0128], [3025000, 0.0275], [Infinity, 0.03]];
+            var tax = 0, prev = 0, i, cap;
+            for (i = 0; i < tiers.length; i++) {
+                cap = tiers[i][0];
+                if (price <= prev) break;
+                tax += (Math.min(price, cap) - prev) * tiers[i][1];
+                prev = cap;
+            }
+            return tax;
+        }
+        function calcCc() {
+            var price = nonneg('ccPrice');
+            var state = el('ccState').value;
+            var role = document.querySelector('input[name="ccRole"]:checked').value;
+            el('ccNycRow').style.display = state === 'ny' ? '' : 'none';
+            var nyc = state === 'ny' && el('ccNyc').checked;
+            var loan = price * 0.8;
+            var stateLabel = { wa: 'Washington', az: 'Arizona', ny: 'New York', other: 'Other state' }[state];
+            var items = [], prepaid = null, guide = null;
+            if (role === 'buyer') {
+                items.push(['Loan origination & lender fees (0.5%–1% of loan)', loan * 0.005, loan * 0.01]);
+                items.push(['Appraisal', 300, 600]);
+                items.push(['Credit report', 50, 100]);
+                items.push(['Courier & lender processing', 100, 250]);
+                if (state === 'ny') {
+                    items.push(['Title insurance (lender + owner)', price * 0.004, price * 0.006]);
+                    items.push(["Buyer's attorney", 1500, 3000]);
+                    items.push(['Bank attorney', 750, 1500]);
+                    items.push(['Recording', 250, 500]);
+                    if (price >= 1000000) items.push(['Mansion tax (1% at $1M+)', price * 0.01, price * 0.01]);
+                    if (nyc) items.push(['Mortgage recording tax (~1.8%–1.925% of loan)', loan * 0.018, loan * 0.01925]);
+                } else {
+                    items.push(['Title insurance (lender + owner)', price * 0.0025, price * 0.0045]);
+                    items.push(['Escrow / settlement fee', 1000, 2500]);
+                    items.push(['Recording', 100, 250]);
+                }
+                var taxMo = price * 0.01 / 12;
+                prepaid = [taxMo * 2 + 400, taxMo * 6 + 400];
+                if (state === 'wa' || state === 'az') guide = [1, 3];
+                else if (state === 'ny') guide = [2, 5];
+            } else {
+                if (state === 'wa') {
+                    var rt = waReet(price) + price * 0.005;
+                    items.push(['WA excise tax (graduated REET + 0.5% local, simplified)', rt, rt]);
+                    items.push(["Owner's title policy", price * 0.003, price * 0.0045]);
+                    items.push(['Escrow share', 800, 1800]);
+                    items.push(['Recording & release', 100, 250]);
+                    items.push(['Payoff, prorations & misc.', 250, 750]);
+                    guide = [1.5, 3];
+                } else if (state === 'az') {
+                    items.push(["Owner's title policy", price * 0.003, price * 0.0045]);
+                    items.push(['Escrow share', 1000, 2200]);
+                    items.push(['HOA disclosure & transfer', 300, 800]);
+                    items.push(['Recording & release', 100, 250]);
+                    items.push(['Payoff, prorations & misc.', 250, 750]);
+                    guide = [0.5, 1.5];
+                } else if (state === 'ny') {
+                    items.push(['NY state transfer tax (0.4%)', price * 0.004, price * 0.004]);
+                    items.push(["Seller's attorney", 1500, 3000]);
+                    items.push(['Title & closing adjustments', 500, 1500]);
+                    items.push(['Recording & payoff', 200, 500]);
+                    if (nyc) {
+                        var cityRate = price <= 500000 ? 0.01 : 0.01425;
+                        items.push(['NYC transfer tax (' + (cityRate * 100) + '%)', price * cityRate, price * cityRate]);
+                    }
+                    guide = nyc ? [2, 4] : [1, 3];
+                } else {
+                    items.push(['Transfer / recordation taxes (typical)', price * 0.003, price * 0.006]);
+                    items.push(["Owner's title policy", price * 0.003, price * 0.0045]);
+                    items.push(['Escrow / settlement', 800, 1800]);
+                    items.push(['Recording & release', 100, 250]);
+                    items.push(['Payoff, prorations & misc.', 250, 750]);
+                }
+            }
+            var tLo = 0, tHi = 0, i;
+            for (i = 0; i < items.length; i++) { tLo += items[i][1]; tHi += items[i][2]; }
+            el('ccLines').innerHTML = items.map(function (r) {
+                return '<div class="net-line"><span>' + r[0] + '</span><span class="amt">' +
+                    moneyRange(r[1], r[2]) + '</span></div>';
+            }).join('');
+            el('ccTotal').textContent = moneyRange(tLo, tHi);
+            el('ccTotalNote').textContent = role === 'buyer'
+                ? 'Fees & taxes only — prepaids and your down payment are additional cash to close.'
+                : 'Before agent compensation and any mortgage payoff — the Seller Net Sheet shows the full seller picture.';
+            el('ccPrepaid').textContent = prepaid ? moneyRange(prepaid[0], prepaid[1]) : '—';
+            el('ccCash').textContent = prepaid
+                ? moneyRange(tLo + prepaid[0], tHi + prepaid[1])
+                : moneyRange(tLo, tHi);
+            el('ccGuide').innerHTML = guide
+                ? '<strong>Guide check:</strong> our closing-costs guide puts a ' + stateLabel + ' ' + role +
+                  (nyc ? ' (NYC)' : '') + ' at about ' + guide[0] + '%–' + guide[1] + '% of price (' +
+                  moneyRange(price * guide[0] / 100, price * guide[1] / 100) +
+                  ') excluding agent compensation. This itemization should land in or near that band — if it does not, a line above deserves a second look.'
+                : '<strong>Guide check:</strong> our closing-costs guide covers WA, AZ and NY in detail. For other states this is a generic model — transfer and recordation taxes vary widely by state and county, so confirm locally.';
+            window.__lastCc = { price: price, state: state, stateLabel: stateLabel, role: role,
+                nyc: nyc, tLo: tLo, tHi: tHi, prepaid: prepaid };
+            if (window.vdiToolUse) vdiToolUse('closing-costs');
+        }
+        bind(['ccPrice', 'ccState', 'ccNyc'], calcCc);
+        document.querySelectorAll('input[name="ccRole"]').forEach(function (r) {
+            r.addEventListener('change', calcCc);
+        });
+
+        calcMp(); calcAff(); calcCc();
     })();
     </script>
 
