@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lot Check — Zoning, Setbacks & Buildable Area for Your Lot | VDI Realty</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>&#127968;</text></svg>">
+
+    <meta name="description" content="Free VDI Realty Lot Check: enter a Seattle, Bellevue or unincorporated King County address to see its zoning, setbacks, lot size and a schematic buildable envelope — a preliminary picture before you talk to a builder about an ADU, addition, pool or new home.">
+    <meta name="keywords" content="lot check, zoning lookup, setbacks, buildable area, ADU feasibility, Seattle zoning, Bellevue zoning, King County zoning, VDI Realty">
+
+    <link href="vendor/fontawesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="home-pro.css">
+    <style>
+        /* ---- Tools page components (site vars from home-pro.css) ---- */
+        .page-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+            color: #fff; padding: 72px 0 60px;
+        }
+        .page-hero h1 {
+            font-family: var(--serif); font-weight: 600; font-size: 2.7rem;
+            line-height: 1.12; margin: 14px 0 16px; max-width: 720px;
+        }
+        .page-hero h1 em { font-style: italic; color: var(--gold); }
+        .page-hero .lede { color: #dbe4ee; font-size: 1.08rem; max-width: 640px; margin: 0 0 30px; }
+        .hero-jump { display: flex; gap: 14px; flex-wrap: wrap; }
+        .btn-outline-light { background: transparent; color: #fff; border-color: rgba(255,255,255,.55); }
+        .btn-outline-light:hover { border-color: var(--gold); color: var(--gold-soft); }
+
+        .tool-card {
+            background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+            box-shadow: var(--shadow); padding: 34px; margin-bottom: 30px;
+        }
+        @media (max-width: 920px) { .tool-card { padding: 24px; } }
+        .tool-card h3 {
+            font-family: var(--serif); font-size: 1.45rem; color: var(--navy);
+            margin: 0 0 6px; display: flex; align-items: center; gap: 11px;
+        }
+        .tool-card h3 i { color: var(--gold-deep); }
+        .tool-sub { color: var(--muted); font-size: 0.95rem; margin: 0 0 22px; }
+
+        .fld { margin-bottom: 15px; }
+        .fld label { display: block; font-weight: 600; font-size: 0.9rem; color: var(--navy); margin-bottom: 6px; }
+        .fld .hint { font-weight: 400; color: var(--muted); font-size: 0.8rem; }
+        .fld input[type="number"], .fld input[type="text"], .fld input[type="email"], .fld select {
+            width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px;
+            font-family: var(--sans); font-size: 1rem; color: var(--ink); background: #fff;
+        }
+        .fld input:focus, .fld select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(193,154,61,.16); }
+        .fld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 520px) { .fld-row { grid-template-columns: 1fr; } }
+
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-bottom: 18px; }
+        @media (max-width: 520px) { .stat-grid { grid-template-columns: 1fr; } }
+        .stat-box { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 15px 17px; }
+        .stat-box .k { font-size: 0.78rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+        .stat-box .v { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-top: 3px; }
+        .stat-box .v.gold { color: var(--gold-deep); }
+        .stat-box .v small { font-size: 0.95rem; color: var(--muted); font-family: var(--sans); font-weight: 600; }
+
+        .verdict {
+            border-radius: 12px; padding: 18px 20px; font-size: 1.02rem; margin-bottom: 18px;
+        }
+        .verdict.buy { background: #eef7f1; border: 1px solid #bfe3cf; color: #14532d; }
+        .verdict.rent { background: #f4f6fa; border: 1px solid #d5dbe5; color: #334155; }
+        .verdict strong { font-family: var(--serif); }
+
+        .net-lines { border-top: 1px solid var(--line); }
+        .net-line { display: flex; justify-content: space-between; gap: 14px; padding: 10px 2px; border-bottom: 1px solid var(--line); font-size: 0.97rem; }
+        .net-line .amt { font-weight: 700; color: var(--navy); white-space: nowrap; }
+
+        .email-box {
+            margin-top: 26px; border: 1px solid var(--line); border-radius: 12px;
+            background: var(--paper); padding: 20px 22px;
+        }
+        .email-box h4 { font-family: var(--serif); color: var(--navy); font-size: 1.12rem; margin: 0 0 4px; }
+        .email-box p { color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
+        .email-box .fld { margin-bottom: 11px; }
+        .form-message { display: none; border-radius: 9px; padding: 11px 14px; font-size: 0.9rem; margin-top: 12px; }
+        .fine-print { color: var(--muted); font-size: 0.82rem; margin-top: 16px; }
+        .note-box {
+            border: 1px solid #ead9a8; background: #fff8e8; color: #5f4b12;
+            border-radius: 12px; padding: 15px 17px; font-size: 0.92rem; margin-top: 16px;
+        }
+
+        /* ---- Lot Check specific ---- */
+        .lc-status { display: none; margin-top: 14px; font-size: 0.95rem; color: var(--navy); }
+        .lc-status.error { color: #9c3d2e; }
+        .lc-results { display: none; margin-top: 26px; border-top: 1px dashed var(--line); padding-top: 24px; }
+        .lc-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; }
+        @media (max-width: 920px) { .lc-cols { grid-template-columns: 1fr; } }
+        .lc-plan {
+            border: 1px solid var(--line); border-radius: 12px; background: #fbfcfe; padding: 14px;
+        }
+        .lc-plan svg { width: 100%; height: auto; display: block; }
+        .lc-plan .cap { color: var(--muted); font-size: 0.82rem; margin-top: 10px; }
+        .lc-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
+        .lc-legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; }
+        .lc-legend .sw-lot { background: #dbe4ee; border: 1px solid var(--navy); }
+        .lc-legend .sw-env { background: rgba(193,154,61,.45); border: 1px solid var(--gold-deep); }
+        .lc-notes { color: var(--muted); font-size: 0.88rem; margin: 14px 0 0; padding-left: 18px; }
+        .lc-notes li { margin-bottom: 4px; }
+        .cta-band {
+            margin-top: 26px; text-align: center; background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+            border-radius: 14px; padding: 26px 18px; color: #fff;
+        }
+        .cta-band h4 { font-family: var(--serif); font-size: 1.35rem; margin: 0 0 6px; color: #fff; }
+        .cta-band p { color: #b9c6d6; font-size: 0.95rem; margin: 0 0 16px; }
+    </style>
+</head>
+<body>
+    <!-- Utility bar -->
+    <div class="utility-bar">
+        <div class="wrap">
+            <span>Serving Washington <span class="u-dot">·</span> Arizona <span class="u-dot">·</span> New York</span>
+            <span><a href="tel:+12068800637">(206) 880-0637</a> <span class="u-dot">·</span> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="masthead">
+        <div class="wrap">
+            <a class="wordmark" href="index.html">VDI<span class="wm-dot">·</span>REALTY</a>
+            <nav class="main-nav">
+                <a href="listings.html">Listings</a>
+                <a href="fsbo-listings.html">FSBO</a>
+                <a href="builder-listings.html">Builders</a>
+                <a href="free-tools.html">Free Tools</a>
+                <a href="tools.html" style="color: var(--gold-deep);">Tools</a>
+                <a href="index.html#guides">Guides</a>
+                <a href="relocation.html">Relocation</a>
+                <a href="index.html#contact" class="nav-cta">Contact</a>
+            </nav>
+            <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="listings.html">Listings</a>
+        <a href="fsbo-listings.html">FSBO</a>
+        <a href="builder-listings.html">Builders</a>
+        <a href="free-tools.html">Free Tools</a>
+        <a href="tools.html">Tools</a>
+        <a href="index.html#guides">Guides</a>
+        <a href="relocation.html">Relocation</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="page-hero">
+        <div class="wrap">
+            <span class="eyebrow eyebrow-light">Free tools</span>
+            <h1>Know your lot <em>before</em> you build</h1>
+            <p class="lede">Homeowners call a builder before they know what their property can actually support. Enter an address and see the zoning that applies to the lot, the setbacks you're working within, and a schematic of the buildable area — for an ADU, a pool, an addition, or a whole new home.</p>
+            <div class="hero-jump">
+                <a href="#lot-check" class="btn btn-gold">Check an address <i class="fas fa-arrow-down"></i></a>
+                <a href="tools.html" class="btn btn-outline-light">All calculators &amp; guides</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         TOOL: LOT CHECK
+         Client-side only, against free public data:
+         - Geocode + parcels: King County GIS ArcGIS REST
+           (Composite locator; Property/KingCo_Parcels).
+         - Zoning: City of Seattle (Current Land Use Zoning Detail),
+           City of Bellevue (Zoning), King County (Planning/KingCo_Zoning)
+           ArcGIS REST layers. Coverage v1: Seattle, Bellevue,
+           unincorporated King County.
+         - Setback/limit table encoded from SMC 23.44 (Seattle),
+           Bellevue LUC Chart 20.20.010, and KCC 21A.12.030.
+         Everything is a preliminary estimate — not a survey.
+         ============================================================ -->
+    <section class="section" id="lot-check" style="padding: 64px 0;">
+        <div class="wrap">
+            <div class="tool-card">
+                <h3><i class="fas fa-draw-polygon"></i> Lot Check</h3>
+                <p class="tool-sub">Enter a property address in <strong>Seattle</strong>, <strong>Bellevue</strong>, or <strong>unincorporated King County</strong> and get its zoning, setbacks, lot size, and a schematic buildable envelope. Free, instant, no sign-up. Coverage grows city by city — if your address is outside the covered area, we'll say so plainly and a feasibility check is still one tap away.</p>
+
+                <form id="lcForm">
+                    <div class="fld-row">
+                        <div class="fld">
+                            <label for="lcAddress">Property address</label>
+                            <input type="text" id="lcAddress" placeholder="e.g. 4555 34th Ave W, Seattle, WA 98199" autocomplete="street-address" required>
+                        </div>
+                        <div class="fld">
+                            <label for="lcProject">What are you thinking of building?</label>
+                            <select id="lcProject">
+                                <option value="ADU (accessory dwelling unit)">ADU (accessory dwelling unit)</option>
+                                <option value="Home addition">Home addition</option>
+                                <option value="Pool">Pool</option>
+                                <option value="New home">New home</option>
+                                <option value="Garage or shop">Garage or shop</option>
+                                <option value="Not sure yet">Not sure yet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-gold" id="lcBtn"><span>Run my Lot Check</span></button>
+                    <div class="lc-status" id="lcStatus"></div>
+                </form>
+
+                <div class="lc-results" id="lcResults">
+                    <div class="verdict rent" id="lcSummary"></div>
+                    <div class="lc-cols">
+                        <div>
+                            <div class="stat-grid">
+                                <div class="stat-box"><div class="k">Zoning</div><div class="v gold" id="lcZone">—</div><div class="k" style="text-transform:none; letter-spacing:0; font-size:0.85rem;" id="lcZoneDesc"></div></div>
+                                <div class="stat-box"><div class="k">Lot size</div><div class="v" id="lcLotSize">—</div></div>
+                                <div class="stat-box"><div class="k">Parcel (King County PIN)</div><div class="v" id="lcPin" style="font-size:1.15rem;">—</div></div>
+                                <div class="stat-box"><div class="k">Approx. buildable envelope</div><div class="v" id="lcEnvelope">—</div></div>
+                            </div>
+                            <h4 style="font-family: var(--serif); color: var(--navy); margin: 4px 0 8px;">Setbacks &amp; limits for this zone</h4>
+                            <div class="net-lines" id="lcRules"></div>
+                            <p class="fine-print" id="lcRuleSource" style="margin-top:10px;"></p>
+                            <ul class="lc-notes" id="lcNotes"></ul>
+                        </div>
+                        <div>
+                            <div class="lc-plan">
+                                <svg id="lcSvg" viewBox="0 0 640 470" role="img" aria-label="Schematic site plan"></svg>
+                                <div class="lc-legend">
+                                    <span><i class="sw-lot"></i>Parcel (county records)</span>
+                                    <span><i class="sw-env"></i>Buildable envelope after setbacks</span>
+                                </div>
+                                <p class="cap"><strong>Schematic — not a survey.</strong> Drawn from the county parcel map; the envelope is drawn on the lot's bounding rectangle and the front edge is assumed to be the side nearest the street address point. Actual lot lines, orientation and buildable area must be confirmed by a survey.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="note-box">
+                        <strong>Preliminary only.</strong> This Lot Check is an educational starting picture drawn from public records and the published development standards cited above. Easements, critical areas and their buffers, shoreline and other overlays, HOA rules, and the specific provisions of the municipal code can all change what is buildable on a given lot. It is not a survey, a permit review, or a legal determination. Verify with the city or county before designing or building.
+                    </div>
+
+                    <div class="cta-band">
+                        <h4>Want a real feasibility check on this lot?</h4>
+                        <p>VDI Realty helps buyers, sellers and builders across Washington, Arizona and New York — including lot feasibility, builder introductions and lender prequalification to size the budget.</p>
+                        <a href="index.html#contact" class="btn btn-gold">Get a feasibility check</a>
+                        <a href="tel:+12068800637" class="btn btn-outline-light">(206) 880-0637</a>
+                    </div>
+
+                    <div class="email-box">
+                        <h4>Email me this Lot Check</h4>
+                        <p>Optional — we'll send the zoning and setback summary for this address to your inbox.</p>
+                        <form id="lcLeadForm">
+                            <div class="fld"><input type="text" id="lcLeadName" placeholder="Your name *" required></div>
+                            <div class="fld"><input type="email" id="lcLeadEmail" placeholder="Email address *" required></div>
+                            <button type="submit" class="btn btn-gold" id="lcLeadBtn"><span>Send my Lot Check</span></button>
+                            <div class="form-message" id="lcLeadMsg"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <p class="fine-print">Data sources: King County GIS (parcels &amp; unincorporated zoning), City of Seattle zoning, City of Bellevue zoning — all public records, queried live when you run a check. Standards: Seattle Municipal Code ch. 23.44; Bellevue Land Use Code Chart 20.20.010; King County Code 21A.12.030. Zoning and code provisions change; the city or county of record is the final authority.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap">
+            <div class="foot-grid">
+                <div class="foot-brand">
+                    <a class="wordmark" href="index.html" style="text-decoration:none">VDI<span class="wm-dot">·</span>REALTY</a>
+                    <p class="areas">Serving Washington, Arizona &amp; New York</p>
+                    <p>A brokerage network for buyers, sellers, builders, and investors — listings, FSBO, property management, and relocation.</p>
+                    <div class="foot-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5>Explore</h5>
+                    <ul class="foot-links">
+                        <li><a href="listings.html">All listings</a></li>
+                        <li><a href="fsbo-listings.html">FSBO listings</a></li>
+                        <li><a href="builder-listings.html">New construction</a></li>
+                        <li><a href="property-management.html">Property management</a></li>
+                        <li><a href="relocation.html">Relocation</a></li>
+                        <li><a href="bills-that-survive-your-payoff.html">Bills after payoff</a></li>
+                        <li><a href="selling-your-first-home-timeline.html">First-home selling timeline</a></li>
+                        <li><a href="closing-costs-by-state.html">Closing costs by state</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5>Contact</h5>
+                    <ul class="foot-contact">
+                        <li><i class="fas fa-phone"></i> <a href="tel:+12068800637">(206) 880-0637</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:sales@vdirealty.com">sales@vdirealty.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Washington · Arizona · New York</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="foot-bottom">
+                <span>&copy; 2026 VDI Realty. All Rights Reserved. <span class="brokered">Brokered by Realty Connect</span></span>
+                <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></span>
+            </div>
+            <p style="font-size:0.8rem; color:#8fa3ba; margin:14px 0 0; text-align:center;"><i class="fas fa-house-chimney" style="color:var(--gold);"></i> Equal Housing Opportunity. We are committed to the letter and spirit of U.S. policy for the achievement of equal housing opportunity.</p>
+        </div>
+    </footer>
+
+    <script>
+    // Mobile Menu Toggle (same pattern as index.html)
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.menu-toggle i');
+        menu.classList.toggle('active');
+        if (menu.classList.contains('active')) {
+            toggle.classList.remove('fa-bars');
+            toggle.classList.add('fa-times');
+        } else {
+            toggle.classList.remove('fa-times');
+            toggle.classList.add('fa-bars');
+        }
+    }
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobileMenu');
+        const toggle = document.querySelector('.menu-toggle');
+        if (menu && menu.classList.contains('active')) {
+            if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+                toggleMobileMenu();
+            }
+        }
+    });
+    </script>
+
+    <script>
+    /* Tool-use beacon: counts the first result each calculator produces per page view, on our own API. Fire-and-forget; wrapped so it can never break or delay a calculator. */
+    window.vdiToolUse = (function () {
+        var fired = {};
+        var url = 'https://api.vdirealty.com/api/stats/tool-use';
+        return function (tool) {
+            try {
+                if (fired[tool]) return;
+                fired[tool] = true;
+                var payload = JSON.stringify({ tool: tool });
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+                } else if (window.fetch) {
+                    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(function () {});
+                }
+            } catch (e) {}
+        };
+    })();
+    </script>
+
+    <script>
+    (function () {
+        'use strict';
+        var $ = function (id) { return document.getElementById(id); };
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+        function fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }
+
+        var EP = {
+            locator: 'https://gismaps.kingcounty.gov/arcgis/rest/services/Address/Composite_locator/GeocodeServer/findAddressCandidates',
+            parcel: 'https://gismaps.kingcounty.gov/arcgis/rest/services/Property/KingCo_Parcels/MapServer/0/query',
+            seattle: 'https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/Current_Land_Use_Zoning_Detail_2/FeatureServer/0/query',
+            bellevue: 'https://services1.arcgis.com/EYzEZbDhXZjURPbP/arcgis/rest/services/Zoning/FeatureServer/7/query',
+            kingcounty: 'https://gismaps.kingcounty.gov/arcgis/rest/services/Planning/KingCo_Zoning/MapServer/1/query'
+        };
+
+        function fetchJSON(url, params) {
+            var qs = new URLSearchParams(params).toString();
+            var ctrl = ('AbortController' in window) ? new AbortController() : null;
+            var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 25000) : null;
+            return fetch(url + '?' + qs, ctrl ? { signal: ctrl.signal } : {})
+                .then(function (r) { if (timer) clearTimeout(timer); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                .catch(function (e) { if (timer) clearTimeout(timer); throw e; });
+        }
+        function pointParams(lon, lat, outFields, geom) {
+            return {
+                geometry: lon + ',' + lat, geometryType: 'esriGeometryPoint', inSR: 4326,
+                spatialRel: 'esriSpatialRelIntersects', outFields: outFields,
+                returnGeometry: geom ? 'true' : 'false', outSR: 4326, f: 'json'
+            };
+        }
+
+        /* ---------- Setback & limit tables (verified against the cited codes) ---------- */
+        // Seattle — SMC ch. 23.44, Neighborhood Residential yards/coverage/height as amended 2025.
+        var SEA_NR = {
+            front: 15, rear: 15, side: 5, side2: null, coverage: 50, height: 32,
+            source: 'Seattle Municipal Code 23.44.014 (yards), 23.44.010 (lot coverage), 23.44.012 (height).',
+            notes: [
+                'Front and rear yards shown are for a project with one or two dwelling units; three or more units reduce both to 10 ft (SMC 23.44.014, Table A).',
+                'No rear yard is required where the lot abuts an alley.',
+                'ADU and middle-housing rules can modify these standards for some projects.'
+            ]
+        };
+        // Bellevue — LUC Chart 20.20.010 (residential districts). Legacy R- codes map to successor districts.
+        var BEL = {
+            'LL-1': { front: 35, rear: 25, side: 5, side2: 20, coverage: 35, height: 30 },
+            'LL-2': { front: 30, rear: 25, side: 5, side2: 15, coverage: 35, height: 30 },
+            'SR-1': { front: 20, rear: 25, side: 5, side2: 15, coverage: 35, height: 30 },
+            'SR-2': { front: 20, rear: 25, side: 5, side2: 15, coverage: 35, height: 30 },
+            'SR-3': { front: 20, rear: 20, side: 5, side2: 15, coverage: 35, height: 30 },
+            'SR-4': { front: 20, rear: 20, side: 5, side2: 15, coverage: 40, height: 30 },
+            'LDR-1': { front: 20, rear: 20, side: 5, side2: 10, coverage: 40, height: 30 },
+            'LDR-2': { front: 20, rear: 20, side: 5, side2: 10, coverage: 40, height: 40 },
+            'LDR-3': { front: 20, rear: 20, side: 5, side2: 10, coverage: 40, height: 40 },
+            'MDR-1': { front: 20, rear: 20, side: 5, side2: 10, coverage: 40, height: 30 },
+            'MDR-2': { front: 20, rear: 20, side: 5, side2: 10, coverage: 40, height: 40 }
+        };
+        var BEL_ALIAS = {
+            'R-1': 'LL-1', 'R-1.8': 'LL-2', 'R-2.5': 'SR-1', 'R-3.5': 'SR-2', 'R-4': 'SR-3',
+            'R-5': 'SR-4', 'R-7.5': 'LDR-1', 'R-10': 'LDR-2', 'R-15': 'LDR-3', 'R-20': 'MDR-1', 'R-30': 'MDR-2'
+        };
+        var BEL_META = {
+            source: 'Bellevue Land Use Code, Chart 20.20.010 (residential dimensional requirements).',
+            notes: [
+                'Side yards must meet both the per-side minimum and the combined two-side minimum shown.',
+                'Middle-housing projects follow LUC 20.20.538, which can set different dimensions than the base district chart.',
+                'Heights shown are the base district limit; pitched roofs and other provisions in LUC 20.20.010 can allow more.'
+            ]
+        };
+        // King County (unincorporated) — KCC 21A.12.030: street setback + interior setback model.
+        var KC = {
+            'RA-2.5': { front: 30, interior: 5, height: 40 }, 'RA-5': { front: 30, interior: 10, height: 40 },
+            'RA-10': { front: 30, interior: 10, height: 40 }, 'RA-20': { front: 30, interior: 10, height: 40 },
+            'UR': { front: 30, interior: 5, height: 35 }, 'R-1': { front: 20, interior: 5, height: 35 },
+            'R-4': { front: 10, interior: 5, height: 35 }, 'R-6': { front: 10, interior: 5, height: 35 },
+            'R-8': { front: 10, interior: 5, height: 35 }, 'R-12': { front: 10, interior: 5, height: null },
+            'R-18': { front: 10, interior: 5, height: null }, 'R-24': { front: 10, interior: 5, height: null },
+            'R-48': { front: 10, interior: 5, height: null }
+        };
+        var KC_META = {
+            source: 'King County Code 21A.12.030 (densities and dimensions — residential zones).',
+            notes: [
+                'King County uses a minimum street setback plus a minimum interior setback; the interior figure applies to both side and rear lot lines.',
+                'Street setbacks can be larger along arterials, and garages or carports entered from the street can carry a larger setback.',
+                'Instead of lot coverage, King County caps impervious surface by zone — see KCC 21A.12.030.'
+            ]
+        };
+        var PROJECT_NOTES = {
+            'ADU (accessory dwelling unit)': 'Detached ADUs usually sit in the rear yard and carry their own size and placement rules on top of the base setbacks — the envelope is the starting picture, not the whole rulebook.',
+            'Home addition': 'An addition generally has to sit inside the same buildable envelope and height/coverage limits as the main house.',
+            'Pool': 'Pools are often allowed inside required yards under their own placement rules — the envelope shown is the one for structures, so a pool may have more room than the drawing suggests.',
+            'New home': 'A new home must fit inside the buildable envelope and under the height and lot-coverage limits for the zone.',
+            'Garage or shop': 'Detached garages and shops are accessory structures; their placement rules differ by city and are often more flexible in the rear yard.',
+            'Not sure yet': 'The envelope shows where structures can generally go on this lot; the right project starts from there.'
+        };
+
+        function rulesFor(jurisdiction, code, desc) {
+            var c = String(code || '').toUpperCase().trim();
+            if (jurisdiction === 'Seattle') {
+                if (/^NR[123]?$/.test(c)) {
+                    var r = {}; for (var k in SEA_NR) r[k] = SEA_NR[k];
+                    return r;
+                }
+                return null;
+            }
+            if (jurisdiction === 'Bellevue') {
+                var key = BEL[c] ? c : (BEL_ALIAS[c] || null);
+                if (!key) return null;
+                var b = {}; for (var k2 in BEL[key]) b[k2] = BEL[key][k2];
+                b.source = BEL_META.source; b.notes = BEL_META.notes.slice();
+                if (key !== c) b.notes.push('This lot carries the pre-2025 district name ' + c + '; figures shown are for its successor district, ' + key + ', under the current chart.');
+                return b;
+            }
+            if (jurisdiction === 'King County') {
+                var z = KC[c];
+                if (!z) return null;
+                return {
+                    front: z.front, rear: z.interior, side: z.interior, side2: null,
+                    coverage: null, height: z.height, source: KC_META.source, notes: KC_META.notes.slice()
+                };
+            }
+            return null;
+        }
+
+        /* ---------- geometry helpers (feet, local projection) ---------- */
+        function projectFeet(ring, lon0, lat0) {
+            var ftLon = 365228 * Math.cos(lat0 * Math.PI / 180), ftLat = 364567;
+            return ring.map(function (p) { return [(p[0] - lon0) * ftLon, (p[1] - lat0) * ftLat]; });
+        }
+        function ringAreaFt(pts) {
+            var a = 0;
+            for (var i = 0; i < pts.length - 1; i++) a += pts[i][0] * pts[i + 1][1] - pts[i + 1][0] * pts[i][1];
+            return a / 2;
+        }
+        function distToRingFt(pts, x, y) {
+            var best = Infinity;
+            for (var i = 0; i < pts.length - 1; i++) {
+                var ax = pts[i][0], ay = pts[i][1], bx = pts[i + 1][0], by = pts[i + 1][1];
+                var dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
+                var t = L2 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / L2)) : 0;
+                var px = ax + t * dx - x, py = ay + t * dy - y, d = Math.sqrt(px * px + py * py);
+                if (d < best) best = d;
+            }
+            return best;
+        }
+
+        function drawPlan(parcel, rules, lon, lat) {
+            var svg = $('lcSvg');
+            var NS = 'http://www.w3.org/2000/svg';
+            while (svg.firstChild) svg.removeChild(svg.firstChild);
+            var result = { envelopeSqft: null, widthFt: null, depthFt: null };
+            if (!parcel || !parcel.rings || !parcel.rings.length) return result;
+            // centroid of the largest ring becomes the projection origin
+            var bestRing = null, bestPts = null, bestAbs = -1, lon0 = 0, lat0 = 0;
+            parcel.rings.forEach(function (ring) {
+                var cx = 0, cy = 0;
+                ring.forEach(function (p) { cx += p[0]; cy += p[1]; });
+                cx /= ring.length; cy /= ring.length;
+                var pts = projectFeet(ring, cx, cy);
+                var a = Math.abs(ringAreaFt(pts));
+                if (a > bestAbs) { bestAbs = a; bestRing = ring; bestPts = pts; lon0 = cx; lat0 = cy; }
+            });
+            if (!bestPts) return result;
+            // principal-axis frame
+            var mx = 0, my = 0;
+            bestPts.forEach(function (p) { mx += p[0]; my += p[1]; });
+            mx /= bestPts.length; my /= bestPts.length;
+            var cxx = 0, cyy = 0, cxy = 0;
+            bestPts.forEach(function (p) {
+                var dx = p[0] - mx, dy = p[1] - my;
+                cxx += dx * dx; cyy += dy * dy; cxy += dx * dy;
+            });
+            var theta = 0.5 * Math.atan2(2 * cxy, cxx - cyy);
+            var cos = Math.cos(theta), sin = Math.sin(theta);
+            function rot(p) { return [p[0] * cos + p[1] * sin, -p[0] * sin + p[1] * cos]; }
+            function unrot(p) { return [p[0] * cos - p[1] * sin, p[0] * sin + p[1] * cos]; }
+            var uv = bestPts.map(rot);
+            var umin = Infinity, umax = -Infinity, vmin = Infinity, vmax = -Infinity;
+            uv.forEach(function (p) {
+                umin = Math.min(umin, p[0]); umax = Math.max(umax, p[0]);
+                vmin = Math.min(vmin, p[1]); vmax = Math.max(vmax, p[1]);
+            });
+            result.widthFt = umax - umin; result.depthFt = vmax - vmin;
+            // geocode point in the same frame → decides which long side is "front"
+            var gFt = projectFeet([[lon, lat]], lon0, lat0)[0];
+            var gUv = rot(gFt);
+            var frontAtMinV = (gUv[1] - (vmin + vmax) / 2) < 0;
+            // scale into the viewBox
+            var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            bestPts.forEach(function (p) {
+                minX = Math.min(minX, p[0]); maxX = Math.max(maxX, p[0]);
+                minY = Math.min(minY, p[1]); maxY = Math.max(maxY, p[1]);
+            });
+            var pad = 40, W = 640, H = 470;
+            var scale = Math.min((W - 2 * pad) / Math.max(1, maxX - minX), (H - 2 * pad) / Math.max(1, maxY - minY));
+            var offX = (W - (maxX - minX) * scale) / 2, offY = (H - (maxY - minY) * scale) / 2;
+            function toSvg(p) { return [offX + (p[0] - minX) * scale, H - offY - (p[1] - minY) * scale]; }
+            function poly(ptsArr, fill, stroke, wdt, dash) {
+                var el = document.createElementNS(NS, 'polygon');
+                el.setAttribute('points', ptsArr.map(function (p) { var s = toSvg(p); return s[0].toFixed(1) + ',' + s[1].toFixed(1); }).join(' '));
+                el.setAttribute('fill', fill); el.setAttribute('stroke', stroke); el.setAttribute('stroke-width', wdt);
+                if (dash) el.setAttribute('stroke-dasharray', dash);
+                svg.appendChild(el);
+            }
+            poly(bestPts, '#dbe4ee', '#0a2a4a', 2, null);
+            // envelope
+            if (rules) {
+                var iu0 = umin + rules.side, iu1 = umax - rules.side;
+                var iv0 = frontAtMinV ? vmin + rules.front : vmin + rules.rear;
+                var iv1 = frontAtMinV ? vmax - rules.rear : vmax - rules.front;
+                if (iu1 > iu0 && iv1 > iv0) {
+                    var corners = [[iu0, iv0], [iu1, iv0], [iu1, iv1], [iu0, iv1]].map(unrot);
+                    poly(corners, 'rgba(193,154,61,0.45)', '#8a6d2f', 2, '6 3');
+                    result.envelopeSqft = (iu1 - iu0) * (iv1 - iv0);
+                    // front label at the middle of the front edge
+                    var fm = unrot([(iu0 + iu1) / 2, frontAtMinV ? iv0 : iv1]);
+                    var fs = toSvg(fm);
+                    var t = document.createElementNS(NS, 'text');
+                    t.setAttribute('x', fs[0]); t.setAttribute('y', frontAtMinV ? fs[1] + 18 : fs[1] - 8);
+                    t.setAttribute('text-anchor', 'middle');
+                    t.setAttribute('style', 'font: 600 12px sans-serif; fill: #5b6b7f; letter-spacing: 0.08em;');
+                    t.textContent = 'FRONT (ASSUMED)';
+                    svg.appendChild(t);
+                }
+            }
+            // dimension labels (bounding rectangle)
+            var topMid = toSvg([(minX + maxX) / 2, maxY]);
+            var wt = document.createElementNS(NS, 'text');
+            wt.setAttribute('x', topMid[0]); wt.setAttribute('y', Math.max(14, topMid[1] - 8));
+            wt.setAttribute('text-anchor', 'middle');
+            wt.setAttribute('style', 'font: 600 12px sans-serif; fill: #5b6b7f;');
+            wt.textContent = '≈ ' + fmtInt(result.widthFt) + ' ft';
+            svg.appendChild(wt);
+            var leftMid = toSvg([minX, (minY + maxY) / 2]);
+            var dt = document.createElementNS(NS, 'text');
+            dt.setAttribute('x', Math.max(12, leftMid[0] - 8)); dt.setAttribute('y', leftMid[1]);
+            dt.setAttribute('text-anchor', 'middle');
+            dt.setAttribute('transform', 'rotate(-90 ' + Math.max(12, leftMid[0] - 8) + ' ' + leftMid[1] + ')');
+            dt.setAttribute('style', 'font: 600 12px sans-serif; fill: #5b6b7f;');
+            dt.textContent = '≈ ' + fmtInt(result.depthFt) + ' ft';
+            svg.appendChild(dt);
+            return result;
+        }
+
+        /* ---------- data lookups ---------- */
+        function geocode(address) {
+            return fetchJSON(EP.locator, {
+                SingleLine: address, f: 'json', outSR: 4326,
+                outFields: 'City,ZIP,Addr_type', maxLocations: 5
+            }).then(function (d) {
+                var cands = (d && d.candidates) || [];
+                if (!cands.length) return null;
+                cands.sort(function (a, b) { return b.score - a.score; });
+                if (cands[0].score < 80) return null;
+                return cands[0];
+            });
+        }
+        function parcelAt(lon, lat) {
+            var fields = 'PIN,Shape.STArea()';
+            return fetchJSON(EP.parcel, pointParams(lon, lat, fields, true)).then(function (d) {
+                var feats = (d && d.features) || [];
+                if (feats.length) return feats[0];
+                var p = pointParams(lon, lat, fields, true);
+                p.distance = 40; p.units = 'esriSRUnit_Meter';
+                return fetchJSON(EP.parcel, p).then(function (d2) {
+                    var fs = (d2 && d2.features) || [];
+                    if (!fs.length) return null;
+                    var bestF = null, bestD = Infinity;
+                    fs.forEach(function (f) {
+                        if (!f.geometry || !f.geometry.rings) return;
+                        f.geometry.rings.forEach(function (ring) {
+                            var cx = 0, cy = 0;
+                            ring.forEach(function (pt) { cx += pt[0]; cy += pt[1]; });
+                            var pts = projectFeet(ring, cx / ring.length, cy / ring.length);
+                            // distance from the geocode point, projected into this ring's frame
+                            var ftLon = 365228 * Math.cos((cy / ring.length) * Math.PI / 180);
+                            var px = (lon - cx / ring.length) * ftLon, py = (lat - cy / ring.length) * 364567;
+                            var dd = distToRingFt(pts, px, py);
+                            if (dd < bestD) { bestD = dd; bestF = f; }
+                        });
+                    });
+                    return bestD <= 130 ? bestF : null;
+                });
+            });
+        }
+        function zoningAt(lon, lat) {
+            var sea = fetchJSON(EP.seattle, pointParams(lon, lat, 'ZONING,BASE_ZONE,ZONELUT,ZONING_DESC,CATEGORY_DESC', false))
+                .then(function (d) {
+                    var f = ((d && d.features) || [])[0];
+                    if (!f) return null;
+                    var a = f.attributes;
+                    return { jurisdiction: 'Seattle', code: a.ZONING || a.BASE_ZONE || a.ZONELUT || '', desc: a.ZONING_DESC || a.CATEGORY_DESC || '' };
+                }).catch(function () { return null; });
+            var bel = fetchJSON(EP.bellevue, pointParams(lon, lat, 'Zoning,ZoningDescription', false))
+                .then(function (d) {
+                    var f = ((d && d.features) || [])[0];
+                    if (!f) return null;
+                    return { jurisdiction: 'Bellevue', code: f.attributes.Zoning || '', desc: f.attributes.ZoningDescription || '' };
+                }).catch(function () { return null; });
+            var kc = fetchJSON(EP.kingcounty, pointParams(lon, lat, 'CURRZONE,POTENTIAL', false))
+                .then(function (d) {
+                    var f = ((d && d.features) || [])[0];
+                    if (!f) return null;
+                    return { jurisdiction: 'King County', code: f.attributes.CURRZONE || '', desc: 'Unincorporated King County' };
+                }).catch(function () { return null; });
+            return sea.then(function (s) {
+                if (s) return s;
+                return bel.then(function (b) {
+                    if (b) return b;
+                    return kc;
+                });
+            });
+        }
+
+        /* ---------- rendering ---------- */
+        function row(label, value) {
+            return '<div class="net-line"><span>' + esc(label) + '</span><span class="amt">' + esc(value) + '</span></div>';
+        }
+        function ft(v) { return v == null ? '—' : v + ' ft'; }
+
+        function render(state) {
+            var res = $('lcResults');
+            res.style.display = 'block';
+            var summary = '', plain = '';
+            if (!state.zoning) {
+                summary = '<strong>' + esc(state.matched) + '</strong> is outside the area Lot Check covers today (Seattle, Bellevue and unincorporated King County)' +
+                    (state.parcel ? ' — though we did find its county parcel record below' : '') +
+                    '. Coverage grows city by city. A real feasibility check can still answer what this lot allows — use the form below or the contact button and we\'ll run it for you.';
+                plain = 'Lot Check for ' + state.inputAddress + ' (matched: ' + state.matched + '): outside current coverage (Seattle / Bellevue / unincorporated King County). Visitor asked about: ' + state.project + '. Please follow up with a feasibility check.';
+            } else {
+                var z = state.zoning;
+                summary = '<strong>' + esc(state.matched) + '</strong> — ' + esc(z.jurisdiction) + '. Zoning: <strong>' + esc(z.code) + '</strong>' +
+                    (z.desc ? ' (' + esc(z.desc) + ')' : '') +
+                    (state.parcel ? '. Lot size ' + fmtInt(state.parcel.area) + ' sq ft (' + (state.parcel.area / 43560).toFixed(2) + ' acres) per King County records' : '') +
+                    '.<br><span style="font-size:0.95rem;">For your project — ' + esc(state.project) + ': ' + esc(PROJECT_NOTES[state.project] || PROJECT_NOTES['Not sure yet']) + '</span>';
+                plain = 'Lot Check for ' + state.inputAddress + ' (matched: ' + state.matched + '), ' + z.jurisdiction + '. Zoning ' + z.code +
+                    (z.desc ? ' (' + z.desc + ')' : '') +
+                    (state.parcel ? '; lot ' + fmtInt(state.parcel.area) + ' sq ft; PIN ' + state.parcel.pin : '') +
+                    (state.rules ? '; setbacks front ' + ft(state.rules.front) + ', rear ' + ft(state.rules.rear) + ', side ' + ft(state.rules.side) +
+                        (state.rules.coverage ? '; max lot coverage ' + state.rules.coverage + '%' : '') +
+                        (state.rules.height ? '; max height ' + state.rules.height + ' ft' : '') : '; zone not in the quick-number table') +
+                    '. Project: ' + state.project + '. (Preliminary estimate only.) Please email me this Lot Check summary.';
+            }
+            $('lcSummary').innerHTML = summary;
+            window.__lastLot = plain;
+
+            $('lcZone').textContent = state.zoning ? (state.zoning.code || '—') : '—';
+            $('lcZoneDesc').textContent = state.zoning ? (state.zoning.desc || state.zoning.jurisdiction) : '';
+            $('lcLotSize').innerHTML = state.parcel ? fmtInt(state.parcel.area) + ' <small>sq ft · ' + (state.parcel.area / 43560).toFixed(2) + ' ac</small>' : '—';
+            $('lcPin').textContent = state.parcel ? state.parcel.pin : '—';
+
+            var rulesHtml = '', notes = [];
+            if (state.zoning && state.rules) {
+                var r = state.rules;
+                rulesHtml += row('Front setback', ft(r.front));
+                rulesHtml += row('Rear setback', ft(r.rear));
+                rulesHtml += row('Side setback (each side)', ft(r.side));
+                if (r.side2 != null) rulesHtml += row('Two side yards combined (min)', ft(r.side2));
+                rulesHtml += row('Max lot coverage by structures', r.coverage == null ? '—' : r.coverage + '%');
+                rulesHtml += row('Max building height', r.height == null ? '—' : r.height + ' ft');
+                $('lcRuleSource').textContent = 'Source: ' + r.source;
+                notes = r.notes.slice();
+            } else if (state.zoning) {
+                rulesHtml += row('Quick-number table', 'Not published for this zone yet');
+                $('lcRuleSource').textContent = 'The full development standards for the ' + state.zoning.code + ' zone are in the ' +
+                    (state.zoning.jurisdiction === 'Seattle' ? 'Seattle Municipal Code, Title 23' :
+                     state.zoning.jurisdiction === 'Bellevue' ? 'Bellevue Land Use Code' : 'King County Code, Title 21A') +
+                    '. We show the designation here rather than guess at numbers — a feasibility check applies the code to your lot.';
+                notes = ['Setback, coverage and height figures for this zone are verified by hand in a feasibility check.'];
+            } else {
+                rulesHtml += row('Quick-number table', 'Outside current coverage');
+                $('lcRuleSource').textContent = '';
+            }
+            $('lcRules').innerHTML = rulesHtml;
+            $('lcNotes').innerHTML = notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
+
+            var drawn = drawPlan(state.parcelGeom, state.rules, state.lon, state.lat);
+            $('lcEnvelope').innerHTML = drawn.envelopeSqft ? fmtInt(drawn.envelopeSqft) + ' <small>sq ft</small>' : '—';
+            if (window.vdiToolUse) vdiToolUse('lot-check');
+            res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function setStatus(msg, isError) {
+            var s = $('lcStatus');
+            s.style.display = msg ? 'block' : 'none';
+            s.className = 'lc-status' + (isError ? ' error' : '');
+            s.textContent = msg || '';
+        }
+
+        $('lcForm').addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            var address = $('lcAddress').value.trim();
+            var project = $('lcProject').value;
+            if (!address) return;
+            var btn = $('lcBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+            setStatus('Looking up the address…', false);
+            geocode(address).then(function (cand) {
+                if (!cand) {
+                    setStatus('We couldn\'t match that address to a King County property. Check the street address, city and ZIP — or use the feasibility-check option below and we\'ll run it by hand.', true);
+                    return null;
+                }
+                var lon = cand.location.x, lat = cand.location.y;
+                setStatus('Found ' + cand.address + '. Checking the parcel and zoning…', false);
+                return Promise.all([parcelAt(lon, lat), zoningAt(lon, lat)]).then(function (rs) {
+                    var parcelFeat = rs[0], zoning = rs[1];
+                    var parcel = null, parcelGeom = null;
+                    if (parcelFeat) {
+                        parcel = {
+                            pin: parcelFeat.attributes.PIN || '—',
+                            area: parseFloat(parcelFeat.attributes['Shape.STArea()']) || 0
+                        };
+                        parcelGeom = { rings: (parcelFeat.geometry && parcelFeat.geometry.rings) || [] };
+                    }
+                    var rules = zoning ? rulesFor(zoning.jurisdiction, zoning.code, zoning.desc) : null;
+                    setStatus('', false);
+                    render({
+                        inputAddress: address, matched: cand.address, project: project,
+                        lon: lon, lat: lat, parcel: parcel, parcelGeom: parcelGeom,
+                        zoning: zoning, rules: rules
+                    });
+                });
+            }).catch(function () {
+                setStatus('A public data source didn\'t respond just now, so we can\'t complete this check. Please try again in a moment — or use the feasibility-check option and we\'ll run it for you.', true);
+            }).finally(function () {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Run my Lot Check</span>';
+            });
+            return false;
+        });
+
+        /* ---------- lead capture (same pattern as the tools page) ---------- */
+        function leadMsg(ok, text) {
+            var m = $('lcLeadMsg');
+            m.style.display = 'block';
+            m.style.background = ok ? '#eef7f1' : '#fdecea';
+            m.style.color = ok ? '#14532d' : '#9c3d2e';
+            m.style.border = '1px solid ' + (ok ? '#bfe3cf' : '#f3c2ba');
+            m.textContent = text;
+        }
+        $('lcLeadForm').addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            var name = $('lcLeadName').value.trim();
+            var email = $('lcLeadEmail').value.trim();
+            if (!name || !email) return false;
+            var summary = window.__lastLot ||
+                ('Lot Check request from vdirealty.com/lot-check.html. Address entered: ' + $('lcAddress').value.trim() + '. Project: ' + $('lcProject').value + '. Please follow up with a feasibility check.');
+            var btn = $('lcLeadBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            fetch('https://api.vdirealty.com/api/contact/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ name: name, email: email, phone: '', interest: 'lot-check', message: summary })
+            }).then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.status === 204 ? { success: true } : r.json();
+            }).then(function (d) {
+                if (d && d.success) {
+                    leadMsg(true, '✓ Thank you! Your Lot Check is on its way — we\'ll reply to ' + email + ' shortly.');
+                    ev.target.reset();
+                } else {
+                    leadMsg(false, 'Sorry, something went wrong. Please email us directly at sales@vdirealty.com');
+                }
+            }).catch(function () {
+                leadMsg(false, 'Sorry, something went wrong. Please email us directly at sales@vdirealty.com');
+            }).finally(function () {
+                btn.disabled = false;
+                btn.innerHTML = '<span>Send my Lot Check</span>';
+            });
+            return false;
+        });
+    })();
+    </script>
+
+    <script>
+/* Deal Drop attribution: beacon UTM-tagged visits (video description links) to the API. */
+(function () {
+  try {
+    var q = new URLSearchParams(location.search);
+    if (!(q.get('utm_source') || q.get('utm_medium') || q.get('utm_campaign'))) return;
+    var payload = JSON.stringify({
+      page: location.pathname,
+      utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'),
+      utm_campaign: q.get('utm_campaign'), utm_content: q.get('utm_content'),
+      referrer: document.referrer || ''
+    });
+    var url = 'https://api.vdirealty.com/api/stats/attribution/pixel';
+    if (navigator.sendBeacon) {
+      var blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(url, blob);
+    } else {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: payload, keepalive: true }).catch(function () {});
+    }
+  } catch (e) {}
+})();
+</script>
+
+<script>
+/* Site traffic beacon: counts this page view (page + referrer source only) on our own API. Fire-and-forget; can never affect the page. */
+(function () {
+  try {
+    var payload = JSON.stringify({ page: location.pathname, ref: document.referrer || '' });
+    var url = 'https://api.vdirealty.com/api/stats/pageview';
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' }));
+    } else if (window.fetch) {
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(function () {});
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
