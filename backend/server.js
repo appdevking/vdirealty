@@ -126,7 +126,7 @@ app.get('/api/stats/attribution', (req, res) => {
 
 // --- Tool-use stats: calculators on tools.html beacon first result per page view ---
 const toolUsePath = path.join(__dirname, 'tool-use.json');
-const TOOL_SLUGS = ['rent-vs-buy', 'seller-net-sheet', 'free-and-clear', 'sell-or-hold-tax', 'sell-or-rent', 'exchange-1031', 'adu-payback', 'mortgage-payment', 'affordability', 'closing-costs'];
+const TOOL_SLUGS = ['rent-vs-buy', 'seller-net-sheet', 'free-and-clear', 'sell-or-hold-tax', 'sell-or-rent', 'exchange-1031', 'adu-payback', 'mortgage-payment', 'affordability', 'closing-costs', 'lot-check'];
 function readToolUseLog() {
     let log = [];
     try {
