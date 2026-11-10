@@ -535,6 +535,15 @@ const statements = {
 // Demo listings (seed-demo-prod.js) never expire: on every boot, restore any
 // demo rows the expiration cron flipped and pin their expiry far future.
 try {
+    const DEMO_EMAIL = 'demo-poster@vdirealty.example';
+    const dupeIds = db.prepare(`
+        SELECT id FROM listings WHERE email = ?
+        AND id NOT IN (SELECT MIN(id) FROM listings WHERE email = ? GROUP BY city, price, description)
+    `).all(DEMO_EMAIL, DEMO_EMAIL).map(r => r.id);
+    for (const dupeId of dupeIds) {
+        db.prepare(`DELETE FROM photos WHERE listingId = ?`).run(dupeId);
+        db.prepare(`DELETE FROM listings WHERE id = ?`).run(dupeId);
+    }
     db.prepare(`
         UPDATE listings
         SET status = 'active', moderationStatus = 'approved',
