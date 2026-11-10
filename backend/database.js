@@ -349,7 +349,7 @@ const statements = {
     expireOldListings: db.prepare(`
         UPDATE listings 
         SET status = 'expired', updatedAt = CURRENT_TIMESTAMP
-        WHERE status = 'active' AND expirationDate < datetime('now')
+        WHERE status = 'active' AND expirationDate < datetime('now') AND email != 'demo-poster@vdirealty.example'
     `),
 
     // Get listings needing reminders
@@ -531,6 +531,17 @@ const statements = {
             updatedAt = CURRENT_TIMESTAMP
     `)
 };
+
+// Demo listings (seed-demo-prod.js) never expire: on every boot, restore any
+// demo rows the expiration cron flipped and pin their expiry far future.
+try {
+    db.prepare(`
+        UPDATE listings
+        SET status = 'active', moderationStatus = 'approved',
+            expirationDate = '2099-12-31T23:59:59.000Z', updatedAt = CURRENT_TIMESTAMP
+        WHERE email = 'demo-poster@vdirealty.example'
+    `).run();
+} catch (e) { console.error('Demo listing keep-alive failed:', e.message); }
 
 module.exports = {
     db,
