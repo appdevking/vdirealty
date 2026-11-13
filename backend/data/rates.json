@@ -1,14 +1,14 @@
 {
   "rates": {
     "thirtyYear": {
-      "value": 7.18,
-      "weekOf": "2026-11-05"
+      "value": 7.11,
+      "weekOf": "2026-11-12"
     },
     "fifteenYear": {
-      "value": 6.57,
-      "weekOf": "2026-11-05"
+      "value": 6.45,
+      "weekOf": "2026-11-12"
     }
   },
   "source": "Freddie Mac Primary Mortgage Market Survey",
-  "updatedAt": "2026-11-06T17:23:06Z"
+  "updatedAt": "2026-11-13T17:23:03Z"
 }
